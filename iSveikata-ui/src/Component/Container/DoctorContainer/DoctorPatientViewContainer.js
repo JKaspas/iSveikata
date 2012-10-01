@@ -61,7 +61,7 @@ export default class DoctorPatientViewContainer extends Component{
                     listInfo:response.data,
                     listLength:response.data.content.length,
                 })
-                console.log(response.data)
+                console.log(response.status)
             }
         })
         .catch((erorr) =>{
@@ -86,28 +86,26 @@ export default class DoctorPatientViewContainer extends Component{
                     listLength:response.data.content.length,
                    
                 })
-                this.setState({
-                })
+                
             }
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) =>{
             console.log(erorr)
         })
     }
     composeRecords = (record,index) =>{
-        var date = new Date(record.appointment.date)
-        var newDate = 
-        date.getFullYear() 
-        + '-' + ((date.getMonth()+1)<10 ? 0 +''+ (date.getMonth()+1) : (date.getMonth()+1)) 
-        + '-' + (date.getDate()<10 ? 0 +''+ date.getDate() : date.getDate());
+        // var date = new Date(record.appointment.date)
+        // var newDate =  date.getFullYear() 
+        // + '-'+ (date.getMonth()<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1)) 
+        // + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate());
         return(
             <RecordListingItemDemo
                 key={index}
                 id={record.id}
-                appDate={newDate}
-                icd={record.icd.icdCode}
-                doctorName={record.doctor.firstName + ' ' +record.doctor.lastName }
+                appDate={record.appointmentDate}
+                icd={record.icdCode}
+                doctorName={record.doctorFullName}
                 showDetails={this.showRecordDetails}
             />
         )
@@ -126,9 +124,9 @@ export default class DoctorPatientViewContainer extends Component{
                 id={prescription.id}
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
-                ingredientName={prescription.api.title}
-                useAmount={prescription.useAmount}
-                viewUsageLink={<td>{usageLink}</td>}
+                ingredientName={prescription.apiTitle}
+                useAmount={prescription.amount}
+                viewUsageLink={usageLink}
                 showDetails={this.showPrescriptionDetails}
             />
         )
