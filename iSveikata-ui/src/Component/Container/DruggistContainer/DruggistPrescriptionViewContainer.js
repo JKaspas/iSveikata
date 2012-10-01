@@ -6,11 +6,12 @@ import {connect} from 'react-redux'
 //import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
+import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
-var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 
 
@@ -65,12 +66,13 @@ class DruggistViewContainer extends Component{
     }
     showDetails = (prescriptionId) =>{    
         this.loadSpecificPrescription(prescriptionId)
-        this.closeOpenDetails()
-        console.log(prescriptionId)
     }
 
     composePrescription = (prescription, index) =>{
- 
+        if(new Date(prescription.expirationDate) < new Date()){
+            return null
+        }
+
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -86,7 +88,7 @@ class DruggistViewContainer extends Component{
     }
     prescriptionUsageSubmit = (prescriptionId) =>{
         let currentDate = new Date();
-        axios.post('http://localhost:8080//api/prescription/'+prescriptionId+'/new/usage',{
+        axios.post('http://localhost:8080/api/prescription/'+prescriptionId+'/new/usage',{
             usage:{
                 usageDate:currentDate
             },
@@ -108,7 +110,7 @@ class DruggistViewContainer extends Component{
     }
 
     loadSpecificPrescription = (prescriptionId) =>{
-        axios.get('http://localhost:8080//api/prescription/'+prescriptionId)
+        axios.get('http://localhost:8080/api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId)
@@ -121,7 +123,7 @@ class DruggistViewContainer extends Component{
     }
     composeSpecificPrescription = (prescription, prescriptionId) => {
        
-        return (<div style={{padding:'30px' }}>
+        return (<div>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
@@ -144,14 +146,6 @@ class DruggistViewContainer extends Component{
        console.log("Searcrh search..."+ this.state.searchValue)
     }
 
-    closeOpenDetails = () =>{
-        let el = document.getElementById("recordDetails")
-        if(el.style.display === 'block'){
-            el.style.display = 'none'
-        }else{
-            el.style.display = 'block'
-        }
-    }
 
 
     
@@ -172,13 +166,12 @@ class DruggistViewContainer extends Component{
                                 {this.state.infoState}
 
                                 {this.state.prescriptionList}
-                                
-                                <div id="recordDetails" style={backgroundStyle}>
-                                <div  style={recordDetailWindowStyle}>
-                                <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
-                                {this.state.infoDetails}
-                                </div>
-                                </div>
+    
+                                <DetailsModalView
+                                    infoHeader={"Recepto informacija"}
+                                    infoDetails={this.state.infoDetails}
+                                />
+
                             </div>
                         </div> 
                     </div> 

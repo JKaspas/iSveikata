@@ -193,7 +193,7 @@ class DoctorViewContainer extends Component{
             }
         }else{
             this.setState({
-                patientListView:(<h3>Įveskite daugiau simbolių</h3>),
+                patientListView:(<h3>Įveskit bent 3 simbolius</h3>),
                 listIsEmpty:true
             })
         }

@@ -5,7 +5,7 @@ import React from 'react'
 const PrescriptionListingItem = (props) =>{
 
     return (
-    <tr onClick={() => props.showDetails(props.id)}>
+    <tr  data-toggle="modal" data-target="#myModal" onClick={() => props.showDetails(props.id)}>
             <td>{props.prescriptionDate}</td>
             <td>{props.expirationDate}</td>
             <td>{props.ingredientName}</td>
@@ -20,3 +20,4 @@ const PrescriptionListingItem = (props) =>{
 }
 
 export default PrescriptionListingItem;
+

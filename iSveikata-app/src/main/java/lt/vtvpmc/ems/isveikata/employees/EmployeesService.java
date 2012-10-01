@@ -28,7 +28,7 @@ public class EmployeesService {
 	/** The employees repository. */
 	@Autowired
 	private JpaEmployeesRepository<Employee> employeesRepository;
-	
+
 	/** The doctor Repository. */
 	@Autowired
 	private JpaEmployeesRepository<Doctor> doctorRepository;
@@ -39,16 +39,18 @@ public class EmployeesService {
 	/** The specialization repository */
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
-	
+
 	@Autowired
 	private DoctorMapper doctorMapper;
-	
+
 	@Autowired
 	private PatientMapper patientMapper;
 
 	/**
 	 * Adds new user.
-	 *  @param employee the employee
+	 * 
+	 * @param employee
+	 *            the employee
 	 * @param specialization
 	 */
 	public void addEmployee(Employee employee, Specialization specialization) {
@@ -70,8 +72,10 @@ public class EmployeesService {
 	/**
 	 * Binds doctor to patient.
 	 *
-	 * @param doctorId the doctor id
-	 * @param patientId the patient id
+	 * @param doctorId
+	 *            the doctor id
+	 * @param patientId
+	 *            the patient id
 	 */
 	public void bindDoctorToPatient(String doctorId, Long patientId) {
 		Patient patient = patientRepository.findOne(patientId);
@@ -88,7 +92,7 @@ public class EmployeesService {
 	 * @return the active doctors list
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		Page<Doctor> doctorPage = doctorRepository.findAllDoctor(request);
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
 		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
@@ -96,12 +100,14 @@ public class EmployeesService {
 
 	/**
 	 * Get active Doctor list (paged) by searchValue (firstName, lastName)
-	 * @param searchValue (firstName or lastName)
+	 * 
+	 * @param searchValue
+	 *            (firstName or lastName)
 	 *
 	 * @return the active doctor list by searchValue
 	 */
-	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable){
-		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
+	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		Page<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(searchValue, request);
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
 		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
@@ -110,17 +116,20 @@ public class EmployeesService {
 	/**
 	 * Update user password.
 	 *
-	 * @param oldPassword old password
-	 * @param newPassword new password
-	 * @param userName the user name
+	 * @param oldPassword
+	 *            old password
+	 * @param newPassword
+	 *            new password
+	 * @param userName
+	 *            the user name
 	 */
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		if(Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
+		if (Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
 			employee.setPassword(newPassword);
 			employeesRepository.save(employee);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -128,8 +137,10 @@ public class EmployeesService {
 	/**
 	 * user password validation.
 	 *
-	 * @param userName the user name
-	 * @param password the password
+	 * @param userName
+	 *            the user name
+	 * @param password
+	 *            the password
 	 * @return true, if valid
 	 */
 	public boolean userLogin(String userName, String password) {
@@ -140,7 +151,8 @@ public class EmployeesService {
 	/**
 	 * Gets the user type.
 	 *
-	 * @param userName the user name
+	 * @param userName
+	 *            the user name
 	 * @return the type
 	 */
 	public String getType(String userName) {
@@ -151,7 +163,8 @@ public class EmployeesService {
 	/**
 	 * Validate if user exists.
 	 *
-	 * @param employee the employee
+	 * @param employee
+	 *            the employee
 	 * @return false if is
 	 */
 	public boolean validateAddNewUser(Employee employee) {
@@ -162,8 +175,10 @@ public class EmployeesService {
 	/**
 	 * Validates if patient not bind to doctor.
 	 *
-	 * @param doctorId the doctor id
-	 * @param patientId the patient id
+	 * @param doctorId
+	 *            the doctor id
+	 * @param patientId
+	 *            the patient id
 	 * @return true, if not
 	 */
 	public boolean validateBindDoctrorToPatient(String doctorId, Long patientId) {
@@ -179,7 +194,8 @@ public class EmployeesService {
 	/**
 	 * Deactivate user.
 	 *
-	 * @param userName the user name
+	 * @param userName
+	 *            the user name
 	 */
 	public void deactivateUser(String userName) {
 		Employee emp = employeesRepository.findByUserName(userName);

@@ -44,7 +44,7 @@ public class EmployeesController {
 	/** The medical record service. */
 	@Autowired
 	private MedicalRecordService medicalRecordService;
-	
+
 	/** The patient service. */
 	@Autowired
 	private PatientService patientService;
@@ -52,7 +52,6 @@ public class EmployeesController {
 	/** The Prescription service */
 	@Autowired
 	private PrescriptionSevice prescriptionSevice;
-
 
 	/**
 	 * Insert user. Insert new user into data base with unique userName. Return
@@ -68,8 +67,9 @@ public class EmployeesController {
 	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
 		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
-		final Specialization specialization =  mapper.convertValue(map.get("specialization"), Specialization.class);
-//		final String drugStore = mapper.convertValue(map.get("drugStore"), String.class);
+		final Specialization specialization = mapper.convertValue(map.get("specialization"), Specialization.class);
+		// final String drugStore = mapper.convertValue(map.get("drugStore"),
+		// String.class);
 
 		if (employeesService.validateAddNewUser(employee)) {
 			employeesService.addEmployee(employee, specialization);
@@ -80,7 +80,6 @@ public class EmployeesController {
 		}
 
 	}
-
 
 	/**
 	 * Insert patient. Insert new patient into data base with unique patientId.
@@ -132,19 +131,21 @@ public class EmployeesController {
 	 * URL: /api/doctor/new/record
 	 *
 	 * @param map
-	 *            with 4 object : MedicalRecord, Appointment, Strin patientId, Strin userName
+	 *            with 4 object : MedicalRecord, Appointment, Strin patientId, Strin
+	 *            userName
 	 */
 	@PostMapping("/doctor/new/record")
 	@ResponseStatus(HttpStatus.CREATED)
 	private <T extends Object> void createRecord(@RequestBody Map<String, Object> map) {
 		medicalRecordService.createNewRecord(map);
 	}
+
 	/**
 	 *
 	 */
 	@PostMapping("/doctor/new/prescription")
 	@ResponseStatus(HttpStatus.CREATED)
-	private <T extends Object> void createPrescription(@RequestBody Map<String, Object> map){
+	private <T extends Object> void createPrescription(@RequestBody Map<String, Object> map) {
 		prescriptionSevice.createNewPrescription(map);
 	}
 
@@ -165,12 +166,13 @@ public class EmployeesController {
 	 * @return list of active doctor by searchValue
 	 */
 	@GetMapping("/doctor/{searchValue}/search")
-	private Page<DoctorDto> getAllDoctorBySearchValue(@PathVariable String searchValue, Pageable pageable){
+	private Page<DoctorDto> getAllDoctorBySearchValue(@PathVariable String searchValue, Pageable pageable) {
 		return employeesService.getActiveDoctorBySearchValue(searchValue, pageable);
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
+	 * Gets all active patient from given doctor URL:
+	 * /api/doctor/{userName}/patient.
 	 *
 	 * @param userName
 	 *            the user name
@@ -179,12 +181,13 @@ public class EmployeesController {
 	@GetMapping("/doctor/{userName}/patient")
 
 	@ResponseStatus(HttpStatus.OK)
-	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
+	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
+	 * Gets all active patient from given doctor URL:
+	 * /api/doctor/{userName}/patient.
 	 *
 	 * @param userName
 	 *            the user name
@@ -193,15 +196,9 @@ public class EmployeesController {
 	@GetMapping("/doctor/{userName}/patient/{searchValue}")
 	@ResponseStatus(HttpStatus.OK)
 	private Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(@PathVariable final String userName,
-															   @PathVariable final String searchValue,
-															   Pageable pageable){
+			@PathVariable final String searchValue, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
-
-//	private List<PatientDto> getAllDoctorPatient(@PathVariable String userName) {
-//		return employeesService.getDoctorPatientList(userName);
-
 	}
-
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
@@ -212,10 +209,13 @@ public class EmployeesController {
 	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
-		boolean passwordChangeIsValid = employeesService.updateUserPassword(fields.get("oldPassword"), fields.get("newPassword"), userName);
-		return passwordChangeIsValid ? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
-
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields,
+			@PathVariable final String userName) {
+		boolean passwordChangeIsValid = employeesService.updateUserPassword(fields.get("oldPassword"),
+				fields.get("newPassword"), userName);
+		return passwordChangeIsValid
+				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
+				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
 
 	/**
@@ -251,17 +251,6 @@ public class EmployeesController {
 		return employeesService.getType(userName);
 	}
 
-	// dubliuojasi su patient/notbind
-	/**
-	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
-	 *
-	 * @return all active and not bind with doctor patients
-	 */
-	@GetMapping("/doctor/notbind")
-	private Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
-		return patientService.getPatientListWithoutDoctor(pageable);
-	}
-	
 	/**
 	 * Delete user.
 	 *

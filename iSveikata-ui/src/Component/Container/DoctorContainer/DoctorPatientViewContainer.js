@@ -8,11 +8,12 @@ import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import RecordListingItemDemo from '../DoctorComponent/RecordListingItemDemo';
 import RecordListViewDemo from '../DoctorComponent/RecordListViewDemo';
+import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
-var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 export default class DoctorPatientViewContainer extends Component{
     constructor(props){
@@ -30,6 +31,9 @@ export default class DoctorPatientViewContainer extends Component{
             activePage:1,
             itemsPerPage:8,
             listLength:'',
+
+            infoHeader:'',
+            infoDetails:''
 
         }
     }
@@ -151,7 +155,7 @@ export default class DoctorPatientViewContainer extends Component{
         var compensable = record.compensable === true? yesValue:noValue;
         var repetitive = record.repetitive === true? yesValue:noValue;
 
-        return (<div style={{padding:'30px' }}>
+        return (<div>
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
                 <p>Ligos aprasymas: {record.icdDescription}</p>
@@ -180,7 +184,7 @@ export default class DoctorPatientViewContainer extends Component{
     //compose single object to spcific view object
     composeSpecificPrescription = (prescription) => {
        
-        return (<div style={{padding:'30px' }}>
+        return (<div>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
@@ -218,23 +222,13 @@ export default class DoctorPatientViewContainer extends Component{
     //on medical record row click show record details
     showRecordDetails = (rowId) =>{
         this.loadSpecificRecord(rowId);
-        this.closeOpenDetails();
     }
     //on prescription click show sprescription details
     showPrescriptionDetails = (rowId) =>{
         this.loadSpecificPrescription(rowId);
-        this.closeOpenDetails();
     }
 
-    //onClick on (medicalRecord or pracription) show or hide div with details
-    closeOpenDetails = () =>{
-        let el = document.getElementById("recordDetails")
-        if(el.style.display === 'block'){
-            el.style.display = 'none'
-        }else{
-            el.style.display = 'block'
-        }
-    }
+
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
@@ -295,12 +289,10 @@ export default class DoctorPatientViewContainer extends Component{
                                 {this.state.viewContent}
                                 {this.showPagination()}
 
-                                <div id="recordDetails" style={backgroundStyle}>
-                                    <div  style={recordDetailWindowStyle}>
-                                        <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
-                                        {this.state.infoDetails}
-                                    </div>
-                                </div>
+                                <DetailsModalView
+                                    infoHeader={this.state.infoHeader}
+                                    infoDetails={this.state.infoDetails}
+                                />
                             </div>
                         </div> 
                     </div> 

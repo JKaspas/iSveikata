@@ -6,6 +6,5 @@ import lombok.Data;
 public class SpecializationDto {
 	
 	private String title;
-	//private List<Doctor> doctor;
 	
 }

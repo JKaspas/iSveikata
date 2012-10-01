@@ -56,5 +56,5 @@ public abstract class Employee {
 	public void setPassword(String password) {
 		this.password = Passwords.hashString(password);
 	}
-	
+
 }

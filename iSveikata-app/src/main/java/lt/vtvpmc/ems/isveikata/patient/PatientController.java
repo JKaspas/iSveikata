@@ -31,10 +31,7 @@ public class PatientController {
 
 	@Autowired
 	private MedicalRecordService medicalRecordService;
-
-	// TODO get /api/patient/record/{record_id} to DTO
-	// TODO get /api/patient/{patientId}/prescription to DTO
-	// TODO get /api/patient/{patientId}/record to DTO
+	
 	/**
 	 * Gets all active patients URL: /api/patient
 	 *
@@ -54,13 +51,25 @@ public class PatientController {
 	@GetMapping("/search/{searchValue}")
 	private Page<PatientDto> getPagedPatientBySearchValue(@PathVariable String searchValue, Pageable pageable) {
 		return patientService.getAllPagedPatientBySearchValue(pageable, searchValue);
-
 	}
 
-	// dubliuojasi su doctor/notbind
-	@GetMapping("/notBind")
+	/**
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/notbind")
 	private Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
 		return patientService.getPatientListWithoutDoctor(pageable);
+	}
+	/**
+	 * Gets all active and not bind with doctor patients by searchValue (firstName, lastName, patientId)
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/notbind/{searchValue}/search")
+	private Page<PatientDto> getPatientListWithoutDoctor(@PathVariable String searchValue, Pageable pageable) {
+		return patientService.getPatientListWithoutDoctorBySearchValue(searchValue, pageable);
 	}
 
 	/**
@@ -85,13 +94,6 @@ public class PatientController {
 		return patientService.getPatientRecordList(patientId, pageable);
 	}
 
-	// Sort veikia, bet tada negrąžina medical record detalių.
-	// @GetMapping("/{patientId}/record")
-	// @ResponseStatus(HttpStatus.OK)
-	// private List<MedicalRecordDto> getAllSortedMedicalRecords(){
-	// return medicalRecordService.getSortedMedicalRecords();
-	// }
-
 	/**
 	 * Gets all records URL: api/{patientId}/prescription
 	 *
@@ -101,10 +103,6 @@ public class PatientController {
 	@GetMapping("/{patientId}/prescription")
 	private Page<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") Long patientId, Pageable pageable) {
 		return patientService.getPatientPrescriptionList(patientId, pageable);
-		// private List<PrescriptionDto> getPrescriptionList(@PathVariable("patientId")
-		// Long patientId) {
-		// return patientService.getPatientPrescriptionList(patientId);
-		// >>>>>>> dtos
 	}
 
 	// /**

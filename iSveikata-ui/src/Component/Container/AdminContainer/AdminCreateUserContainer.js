@@ -157,6 +157,7 @@ export default class AdminCreateUserContainer extends Component{
                 passwordMasked: true,
                 generatedNumericString: Math.random().toString().substr(2,3),
             })
+            this.getAllSpecialization()
         })
         .catch((erorr) => {
             console.log(erorr)

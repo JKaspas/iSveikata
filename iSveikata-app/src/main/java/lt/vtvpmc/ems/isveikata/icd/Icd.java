@@ -26,9 +26,5 @@ public class Icd implements Serializable {
 	@NotNull
 	private String title;
 
-//	@OneToMany(mappedBy = "icd")
-//	private List<MedicalRecord> medicalRecordList;
-	
-    
 }
 

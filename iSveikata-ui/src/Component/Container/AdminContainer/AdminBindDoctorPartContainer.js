@@ -112,7 +112,7 @@ export default class AdminBindDoctorPartContainer extends Component{
             this.getAllDoctor(1)
         }else{
             this.setState({
-                doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                doctorList:(<h3>Įveskit bent 3 simbolius</h3>),
                 listIsEmpty:true,
             })
         }
@@ -123,9 +123,13 @@ export default class AdminBindDoctorPartContainer extends Component{
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
-        
-        //sen request for specific page
-        this.getAllDoctor(activePage);
+        if(this.state.searchValue.length > 2){
+            //sen request for specific page when search value length more than 2
+            this.getAllDoctorBySearchValue(this.state.searchValue, activePage)
+        }else{
+            //send request for specific page when there is not search value
+            this.getAllDoctor(activePage);
+        }
         
         //change activePage state to new page number
         this.setState({
@@ -164,6 +168,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
+                            <h4 className="text-center" >Prašome įvesti bent 3 simbolius</h4>
                             <SearchFieldForm
                                     searchHandler={this.searchdHandler}
                                     fielddHandler={this.fielddHandler}

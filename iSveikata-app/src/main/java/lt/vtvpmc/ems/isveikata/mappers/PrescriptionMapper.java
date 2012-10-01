@@ -24,7 +24,6 @@ public interface PrescriptionMapper {
 	@InheritInverseConfiguration
 	Prescription dtoToPrescription(PrescriptionDto prescriptionDto);
 
-
 	List<PrescriptionDto> prescriptionsToDto(List<Prescription> prescriptions);
 
 }

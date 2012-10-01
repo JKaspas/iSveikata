@@ -2,14 +2,13 @@ package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.List;
 
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
-import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.springframework.data.domain.Page;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 
 public interface JpaPatientRepository extends JpaRepository<Patient, Long> {
 
@@ -45,5 +44,11 @@ public interface JpaPatientRepository extends JpaRepository<Patient, Long> {
 	Page<Patient> findAllActivePatientBySearchValue(@Param("searchValue") String searchValue,
 														 Pageable pageRequest);
 
-
+	@Query("SELECT t FROM Patient t WHERE " +
+			"(t.isActive = true AND  " +
+			"t.doctor IS NULL) AND" +
+			"(LOWER(t.firstName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
+			"LOWER(t.lastName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
+			"LOWER(t.patientId) LIKE LOWER(CONCAT('%',:searchValue, '%')))")
+	Page<Patient> findAllActiveNotBindPatientBySearchValue(@Param("searchValue") String searchValue, Pageable pageable);
 }
