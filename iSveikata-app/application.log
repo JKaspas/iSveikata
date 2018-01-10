@@ -1,0 +1,25 @@
+2018-01-10 11:19:59 [restartedMain] INFO  l.v.e.isveikata.IsveikataApplication - Starting IsveikataApplication on JK with PID 6319 (/home/jonas/Desktop/sps/iSveikata-app/target/classes started by jonas in /home/jonas/Desktop/sps/iSveikata-app)
+2018-01-10 11:19:59 [restartedMain] INFO  l.v.e.isveikata.IsveikataApplication - No active profile set, falling back to default profiles: default
+2018-01-10 11:19:59 [restartedMain] INFO  o.s.b.c.e.AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@1ee02f: startup date [Wed Jan 10 11:19:59 EET 2018]; root of context hierarchy
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.b.c.e.t.TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 8080 (http)
+2018-01-10 11:20:00 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2018-01-10 11:20:00 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.15
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean - Mapping servlet: 'webServlet' to [/console/*]
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-01-10 11:20:00 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-01-10 11:20:00 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-01-10 11:20:00 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2018-01-10 11:20:00 [restartedMain] INFO  o.h.tool.hbm2ddl.SchemaUpdate - HHH000228: Running hbm2ddl schema update
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.j.e.a.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2018-01-10 11:20:00 [restartedMain] INFO  o.s.b.c.e.t.TomcatEmbeddedServletContainer - Tomcat started on port(s): 8080 (http)
+2018-01-10 11:20:00 [restartedMain] INFO  l.v.e.isveikata.IsveikataApplication - Started IsveikataApplication in 1.651 seconds (JVM running for 953.287)
+2018-01-10 11:20:29 [http-nio-8080-exec-5] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring FrameworkServlet 'dispatcherServlet'
