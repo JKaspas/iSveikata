@@ -11,7 +11,9 @@ public class Druggist extends Employee {
 	@NotNull
 	private String DrugStore;
 	
-	
+	public Druggist() {
+		
+	}
 	public Druggist(String drugStore) {
 		super();
 		DrugStore = drugStore;

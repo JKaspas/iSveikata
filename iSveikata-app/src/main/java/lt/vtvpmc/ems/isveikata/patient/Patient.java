@@ -5,9 +5,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 
 
 @Entity
@@ -27,7 +30,16 @@ public class Patient {
 	@NotNull
 	private String  password;
 	
+	@ManyToOne
+	private Doctor doctor;
 	
+	
+	public Doctor getDoctor() {
+		return doctor;
+	}
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
 	public String getPersonalCode() {
 		return personalCode;
 	}
