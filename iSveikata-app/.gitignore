@@ -1,4 +1,6 @@
 target/
+application.log
+
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
