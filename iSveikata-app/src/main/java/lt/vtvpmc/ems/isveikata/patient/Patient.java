@@ -39,4 +39,11 @@ public class Patient implements Serializable {
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords;
 
+	public List<MedicalRecord> getMedicalRecords() {
+		return medicalRecords;
+	}
+
+	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
+		this.medicalRecords = medicalRecords;
+	}
 }
