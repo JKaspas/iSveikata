@@ -7,8 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+<<<<<<< HEAD
 import lombok.Data;
+=======
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+>>>>>>> Gina
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
@@ -23,6 +26,8 @@ public class Doctor extends Employee {
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patient;
 
+<<<<<<< HEAD
+=======
 	@OneToMany(mappedBy = "doctor")
 	private List<MedicalRecord> medicalRecords;
 
@@ -52,4 +57,5 @@ public class Doctor extends Employee {
 		this.patient = patient;
 	}
 
+>>>>>>> Gina
 }

@@ -20,6 +20,45 @@ public class Specialization {
 	private Long specializationId;
 	private String specialization;
 	@OneToMany(mappedBy = "specialization")
+<<<<<<< HEAD
 	private List<Doctor> doctor;
+=======
+	private List <Doctor> doctor;
+	
+	public Specialization() {
+		}
+	
+
+	public Specialization(Long specializationId, String specialization, List<Doctor> doctor) {
+		super();
+		this.specializationId = specializationId;
+		this.specialization = specialization;
+		this.doctor = doctor;
+	}
+
+	public List<Doctor> getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(List<Doctor> doctor) {
+		this.doctor = doctor;
+	}
+
+	public Long getSpecializationId() {
+		return specializationId;
+	}
+
+	public void setSpecializationId(Long specializationId) {
+		this.specializationId = specializationId;
+	}
+
+	public String getSpecialization() {
+		return specialization;
+	}
+
+	public void setSpecialization(String specialization) {
+		this.specialization = specialization;
+	}
+>>>>>>> Gina
 
 }
