@@ -21,11 +21,10 @@ public abstract class Employee {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	public Employee() {
-		
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;

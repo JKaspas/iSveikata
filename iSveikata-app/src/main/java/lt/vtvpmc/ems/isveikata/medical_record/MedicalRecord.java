@@ -1,7 +1,11 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
@@ -14,27 +18,24 @@ import lt.vtvpmc.ems.isveikata.patient.Patient;
 
 public class MedicalRecord {
 
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.AUTO)
-	 private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
 
-	 @OneToOne
-	 private Appointment appointment;
+	@OneToOne
+	private Appointment appointment;
 
-	 @ManyToOne
-	 private Doctor doctor;
+	@ManyToOne
+	private Doctor doctor;
 
-	 @ManyToOne
-	 private Patient patient;
-	 
-	 @ManyToOne
-	 private InternationalClassificationOfDiseases icd;
+	@ManyToOne
+	private Patient patient;
 
-	 private boolean isCompensable;
-	 
-	 private boolean isRepetitive;
-	 
+	@ManyToOne
+	private InternationalClassificationOfDiseases icd;
 
-	 
+	private boolean isCompensable;
+
+	private boolean isRepetitive;
 
 }
