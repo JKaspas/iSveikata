@@ -1,15 +1,16 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import lombok.Data;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Entity
-@Table (name = "International_Classification_Of_Diseases")
+@Data
 public class InternationalClassificationOfDiseases {
 	
 	@Id
@@ -21,36 +22,11 @@ public class InternationalClassificationOfDiseases {
 	
 	@NotNull
 	private String icdCodeDescription;
-	
-	
-	
-	
-	public InternationalClassificationOfDiseases(String icdCode, String category) {
-	      this.icdCode = icdCode;
-	      this.icdCodeDescription = category;
-	   }
 
-	   public InternationalClassificationOfDiseases() {
-	   }
-
-	
+//	@OneToMany(mappedBy = "icd")
+//	private List<MedicalRecord> medicalRecords;
 
 	   
-	public String getIcdCode() {
-		return icdCode;
-	}
-
-	public void setIcdCode(String icdCode) {
-		this.icdCode = icdCode;
-	}
-
-	public String getCategory() {
-		return icdCodeDescription;
-	}
-
-	public void setCategory(String category) {
-		this.icdCodeDescription = category;
-	}
 
 }
 

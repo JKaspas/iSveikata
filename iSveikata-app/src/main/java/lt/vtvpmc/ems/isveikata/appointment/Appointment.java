@@ -1,80 +1,43 @@
 package lt.vtvpmc.ems.isveikata.appointment;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 
+import javax.persistence.*;
+import javax.xml.crypto.Data;
+import java.util.Date;
+
 @Entity
-@Table
-public class Appointment {
+public class Appointment{
 	
-	 @Id 
-	 @GeneratedValue (strategy = GenerationType.AUTO)
-	 private long id;
-	
-	 @ManyToOne
-	 private Doctor doctor;
-	 
-	 @ManyToOne
-	 private Patient patient;
-	 
-	 private String currentDate;
-	 
-	 @Transient
-	 private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-	 
-	 
-	 
-	 
-	 public Appointment(long id) {
-	      this.id = id;
-	   }
+	@Id
+	@GeneratedValue
+	private long id;
 
-	 public Appointment() {	 
-	   }
+	private String description;
 
-	 
-	 
-	 
-	public long getId() {
-		return id;
-	}
+	private String duration;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+	private String doctor_name;
 
-	public Doctor getDoctor() {
-		return doctor;
-	}
+	private Date date;
 
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
+	@OneToOne(mappedBy = "appointment")
+	private MedicalRecord medicalRecord;
 
-	public Patient getPatient() {
-		return patient;
-	}
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
 
-	public String getCurrentDate() {
-		LocalDateTime now = LocalDateTime.now();
-		return DTF.format(now);
-	}
-	 
+
+
+
+//	 @Transient
+//	 private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+
+
+
 	 
 	 
 

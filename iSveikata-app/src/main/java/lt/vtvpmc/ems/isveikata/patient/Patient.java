@@ -1,13 +1,12 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
@@ -32,6 +31,9 @@ public class Patient {
 	
 	@ManyToOne
 	private Doctor doctor;
+
+	@OneToMany(mappedBy = "patient")
+	private List<MedicalRecord> medicalRecords;
 	
 	
 	public Doctor getDoctor() {
