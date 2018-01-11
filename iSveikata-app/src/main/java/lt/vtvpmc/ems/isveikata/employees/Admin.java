@@ -13,5 +13,8 @@ public class Admin extends Employee {
 	public Admin(String name, String surname, String username, String password) {
 		super(name, surname, username, password);
 	}
+	public Admin(){
+		super();
+	}
 
 }

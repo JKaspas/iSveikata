@@ -13,10 +13,12 @@ import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.icd.InternationalClassificationOfDiseases;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 
-public class MedicalRecord {
+public class MedicalRecord implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

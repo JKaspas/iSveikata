@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.specialization;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -13,12 +14,12 @@ import lt.vtvpmc.ems.isveikata.employees.Doctor;
 
 @Entity
 @Data
-public class Specialization {
+public class Specialization implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long specializationId;
-	private String specialization;
+	private Long id;
+	private String description;
 
 	@OneToMany(mappedBy = "specialization")
 	private List<Doctor> doctor;

@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.appointment;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,7 +11,7 @@ import javax.persistence.OneToOne;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
 @Entity
-public class Appointment {
+public class Appointment implements Serializable {
 
 	@Id
 	@GeneratedValue
@@ -19,8 +20,6 @@ public class Appointment {
 	private String description;
 
 	private String duration;
-
-	private String doctor_name;
 
 	private Date date;
 

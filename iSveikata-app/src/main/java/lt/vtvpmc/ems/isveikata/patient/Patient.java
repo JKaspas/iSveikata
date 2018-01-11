@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
 @Entity
 @Data
-public class Patient {
+public class Patient implements Serializable {
 
 	@Id
 	@Length(min = 11, max = 11)

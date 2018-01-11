@@ -7,11 +7,12 @@ import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Data
-public class InternationalClassificationOfDiseases {
+public class InternationalClassificationOfDiseases implements Serializable {
 	
 	@Id
 	@Length(min = 3, max = 7)
@@ -23,8 +24,7 @@ public class InternationalClassificationOfDiseases {
 	@NotNull
 	private String icdCodeDescription;
 
-//	@OneToMany(mappedBy = "icd")
-//	private List<MedicalRecord> medicalRecords;
+
 
 	   
 
