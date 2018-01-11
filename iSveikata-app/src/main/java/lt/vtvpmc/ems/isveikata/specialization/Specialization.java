@@ -19,11 +19,10 @@ public class Specialization {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long specializationId;
 	private String specialization;
+
 	@OneToMany(mappedBy = "specialization")
-<<<<<<< HEAD
 	private List<Doctor> doctor;
-=======
-	private List <Doctor> doctor;
+
 	
 	public Specialization() {
 		}
@@ -59,6 +58,6 @@ public class Specialization {
 	public void setSpecialization(String specialization) {
 		this.specialization = specialization;
 	}
->>>>>>> Gina
+
 
 }

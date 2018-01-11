@@ -1,17 +1,17 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.Date;
-<<<<<<< HEAD
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-=======
+
 import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
->>>>>>> Gina
+
 import org.hibernate.validator.constraints.Length;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
@@ -34,8 +34,7 @@ public class Patient {
 
 	@ManyToOne
 	private Doctor doctor;
-<<<<<<< HEAD
-=======
+
 
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords;
@@ -80,7 +79,6 @@ public class Patient {
 
 	
 	
-	
->>>>>>> Gina
+
 
 }
