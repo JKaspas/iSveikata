@@ -17,7 +17,7 @@ public class Specialization {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long specializationId;
 	private String specialization;
-	 @OneToMany
+	 @OneToMany(mappedBy = "specialization")
 	 private List <Doctor> doctor;
 	
 	 public Specialization() {
