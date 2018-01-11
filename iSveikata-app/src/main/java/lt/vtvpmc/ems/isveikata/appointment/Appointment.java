@@ -26,6 +26,14 @@ public class Appointment implements Serializable {
 	@OneToOne(mappedBy = "appointment")
 	private MedicalRecord medicalRecord;
 
+	public MedicalRecord getMedicalRecord() {
+		return medicalRecord;
+	}
+
+	public void setMedicalRecord(MedicalRecord medicalRecord) {
+		this.medicalRecord = medicalRecord;
+	}
+
 	// @Transient
 	// private static final DateTimeFormatter DTF =
 	// DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
