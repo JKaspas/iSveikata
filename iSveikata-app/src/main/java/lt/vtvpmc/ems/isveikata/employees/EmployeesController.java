@@ -27,7 +27,18 @@ public class EmployeesController {
     private SpecializationService specializationService;
     @Autowired
     private PatientService patientService;
+    
+//	ToDo
+//	user: /api
+//	
+	
+//	POST:
+//		“/new/user”→ return new User 
+//		“/bind/{doctor_id}/{patient_id} → relate Doctor with Patient
 
-
+//	doctor: /api
+//		
+//	POST:
+//		“/doctor/{doctor_id}/record/{patient_id}” → return new Record for Patient with Doctor
 
 }
