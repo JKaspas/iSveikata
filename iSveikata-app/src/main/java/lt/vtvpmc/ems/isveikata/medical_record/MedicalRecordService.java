@@ -12,4 +12,8 @@ public class MedicalRecordService {
 
     @Autowired
     private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+
+	public void createNewRecord(MedicalRecord record) {
+		// TODO Auto-generated method stub
+	}
 }
