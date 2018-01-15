@@ -19,31 +19,34 @@ import lombok.Data;
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonTypeInfo(include = As.PROPERTY, property = "type", use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME)
-@JsonSubTypes({ 
-		@JsonSubTypes.Type(value = Admin.class, name = "admin"),
+@JsonSubTypes({ @JsonSubTypes.Type(value = Admin.class, name = "admin"),
 		@JsonSubTypes.Type(value = Doctor.class, name = "doctor"),
 		@JsonSubTypes.Type(value = Druggist.class, name = "druggist") })
-public abstract class Employee  {
+public abstract class Employee {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	@NotNull
-	private String name;
-	@NotNull
-	private String surname;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long userId;
+
 	@Column(unique = true, nullable = false)
-	private String username;
+	private String userName;
+
+	@NotNull
+	private String firstName;
+
+	@NotNull
+	private String lastName;
+
 	@NotNull
 	private String password;
-	
+
 	public Employee() {
 	}
-	
-	public Employee(String name, String surname, String username, String password) {
-		this.name = name;
-		this.surname = surname;
-		this.username = username;
+
+	public Employee(String firstName, String lastName, String userName, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
 		this.password = password;
 	}
 

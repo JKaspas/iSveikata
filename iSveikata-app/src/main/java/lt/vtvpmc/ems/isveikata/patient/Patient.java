@@ -36,9 +36,14 @@ public class Patient implements Serializable {
 	@ManyToOne
 	private Doctor doctor;
 
+
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords;
 
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+	
 	public List<MedicalRecord> getMedicalRecords() {
 		return medicalRecords;
 	}

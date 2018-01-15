@@ -11,5 +11,9 @@ import javax.transaction.Transactional;
 public class PatientService {
 
     @Autowired
-    private JpaPatientRepository jpaPatientRepository;
+    private JpaPatientRepository patientRepository;
+
+	public void addNewPatient(Patient patient) {
+		patientRepository.save(patient);	
+	}
 }
