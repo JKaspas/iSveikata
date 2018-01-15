@@ -15,7 +15,7 @@ public class AdminInit {
 		if (repo.findAll().size() > 0) {
 			return null;
 		} else {
-			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", "202cb962ac59075b964b07152d234b70"));
+			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3"));
 		}
 	}
 }

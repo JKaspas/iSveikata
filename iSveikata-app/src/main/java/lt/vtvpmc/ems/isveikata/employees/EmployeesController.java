@@ -7,47 +7,58 @@ import org.springframework.web.bind.annotation.*;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 
+/**
+ * The Class EmployeesController.
+ */
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class EmployeesController {
 
+	/** The employees service. */
 	@Autowired
 	private EmployeesService employeesService;
+	
+	/** The medical record service. */
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 
-	// ToDo
-	// user: /api
-	//
-
-	// POST:
-	// “/new/user”→ return new User
-	// visgi dar pakeisčiau kad admin panelė atsiskirtu tai tipo adresas
-	// "/admin/new/user"
-
+	/**
+	 * Insert employee.
+	 * Insert new employee into data base. 
+	 * URL: /api/admin/new/user
+	 *	
+	 * @param <T> the generic type of users
+	 * @param employee the employee information
+	 */
 	@PostMapping("/admin/new/user")
 	@ResponseStatus(HttpStatus.CREATED)
-	private @ResponseBody <T extends Employee> T insertEmployee(@RequestBody T employee) {
+	private <T extends Employee> void insertEmployee(@RequestBody T employee) {
 		employeesService.addEmployee(employee);
-		return employee;
 	}
 
-	// “/doctor/{doctor_id}/to/{patient_id} → relate Doctor with Patient
-	// ir čia į "/admin/new/bind/{dId}/to/{pId}" tipo gal paskiau lengviau būtų per
-	// security atskirti.
-
+	/**
+	 * Binding.
+	 * Adds new bind between doctor and patient.
+	 * URL: /api/admin/new/bind/{doctor_id}/to/{patient_id}
+	 * 
+	 * @param docId the doctor id
+	 * @param patId the patient id
+	 */
 	@PostMapping("/admin/new/bind/{doctor_id}/to/{patient_id}")
 	@ResponseStatus(HttpStatus.OK)
 	private void binding(@PathVariable("doctor_id") String docId, @PathVariable("patient_id") String patId) {
 		employeesService.bindDoctroToPatient(docId, patId);
 	}
 
-	// “/doctor/{doctor_id}/record/{patient_id}” → return new Record for Patient
-	// with Doctor
-	// o visgi gal recordas pareina su jau imontuotu patient_id ir doctor_id ir tada
-	// reiktų tiesiog add new record tipo taip:
-
+	/**
+	 * Creates the record.
+	 * Creates appointment record, using data from request body. In body additional must be specified doctro ID, patient ID and appoitment duration time.
+	 * 
+	 * URL: /api/doctor/new/record
+	 *
+	 * @param record the record from UI
+	 */
 	@PostMapping("/doctor/new/record")
 	@ResponseStatus(HttpStatus.CREATED)
 	private void createRecord(@RequestBody MedicalRecord record) {
