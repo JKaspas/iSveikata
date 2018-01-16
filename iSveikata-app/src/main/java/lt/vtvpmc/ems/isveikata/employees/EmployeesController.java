@@ -104,4 +104,16 @@ public class EmployeesController {
 	private List<Doctor> getAllDoctors(){
 		return employeesService.getDoctorsList();
 	}
+
+	/**
+	 * Gets all doctors
+	 * URL: /api/doctor
+	 *
+	 * @return list of all patient of  current doctor
+	 */
+	@GetMapping("/doctor/{doctor_id}")
+	private List<Patient> getAllDoctorPatient(@PathVariable long doctor_id){
+
+		return employeesService.getDoctorPatientList(doctor_id);
+	}
 }

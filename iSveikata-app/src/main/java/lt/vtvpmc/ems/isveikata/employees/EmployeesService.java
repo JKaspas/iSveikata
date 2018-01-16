@@ -46,4 +46,9 @@ public class EmployeesService {
 
 	}
 
+	public List<Patient> getDoctorPatientList(long doctor_id) {
+		Doctor doctor = (Doctor)employeesRepository.findOne(doctor_id);
+
+		return doctor.getPatient();
+	}
 }
