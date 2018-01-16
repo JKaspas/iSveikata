@@ -1,12 +1,14 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -14,6 +16,15 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 @Transactional
 public class PatientService {
 
+<<<<<<< HEAD
+    @Autowired
+    private JpaPatientRepository patientRepository;
+
+	public void addNewPatient(Patient patient) {
+		patientRepository.save(patient);	
+	}
+}
+=======
 	@Autowired
 	private JpaPatientRepository jpaPatientRepository;
 
@@ -54,6 +65,7 @@ public class PatientService {
 
 	// 4
 	public MedicalRecord getPatientRecordById(Long id) {
+		// Patient pat =jpaPatientRepository.findOne(patientId);
 		return jpaMedicalRecordRepository.findOne(id);
 	}
 
@@ -64,8 +76,5 @@ public class PatientService {
 		jpaPatientRepository.save(pat);
 	}
 
-	public void addNewPatient(Patient patient) {
-		jpaPatientRepository.save(patient);
-	}
-
 }
+>>>>>>> patient

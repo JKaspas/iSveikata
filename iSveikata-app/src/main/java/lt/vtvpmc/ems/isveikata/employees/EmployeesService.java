@@ -21,7 +21,7 @@ public class EmployeesService {
 		employeesRepository.save(employee);
 	}
 
-	public void bindDoctroToPatient(String docId, String patId) {
+	public void bindDoctroToPatient(String docId, Long patId) {
 		Patient patient = patientRepository.findOne(patId);
 		Doctor doctor = (Doctor) employeesRepository.findByUserName(docId);
 		if (doctor instanceof Doctor) {

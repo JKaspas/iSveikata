@@ -73,7 +73,7 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/bind/{doctor_id}/to/{patient_id}")
 	@ResponseStatus(HttpStatus.OK)
-	private void binding(@PathVariable("doctor_id") String docId, @PathVariable("patient_id") String patId) {
+	private void binding(@PathVariable("doctor_id") String docId, @PathVariable("patient_id") Long patId) {
 		employeesService.bindDoctroToPatient(docId, patId);
 	}
 	/**
