@@ -24,7 +24,7 @@ public class Patient implements Serializable {
 	@Id
 	@Length(min = 11, max = 11)
 	@Column(unique = true, nullable = false)
-	private String personalCode;
+	private Long patientId; // personal code
 	private Date birthDate;
 	@NotNull
 	private String firstName;
@@ -32,6 +32,8 @@ public class Patient implements Serializable {
 	private String lastName;
 	@NotNull
 	private String password;
+	private boolean isActive=true;
+	
 
 	@ManyToOne
 	private Doctor doctor;
@@ -51,4 +53,53 @@ public class Patient implements Serializable {
 	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
+
+	public Long getPatientId() {
+		return patientId;
+	}
+
+	public void setPatientId(Long patientId) {
+		this.patientId = patientId;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+
 }

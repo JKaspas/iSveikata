@@ -37,7 +37,7 @@ public class EmployeesController {
 	/** The patient service. */
 	@Autowired
 	private PatientService patientService;
-
+    
 	/**
 	 * Insert employee. Insert new employee into data base. URL: /api/admin/new/user
 	 * 
@@ -51,7 +51,6 @@ public class EmployeesController {
 	private <T extends Employee> void insertEmployee(@RequestBody T employee) {
 		employeesService.addEmployee(employee);
 	}
-
 	/**
 	 * Insert patient. Insert new patient into data base. URL: /api/admin/new/patient
 	 *
@@ -77,7 +76,6 @@ public class EmployeesController {
 	private void binding(@PathVariable("doctor_id") String docId, @PathVariable("patient_id") String patId) {
 		employeesService.bindDoctroToPatient(docId, patId);
 	}
-
 	/**
 	 * Creates the record. Creates appointment record, using data from request body.
 	 * In body additional must be specified doctro ID, patient ID and appoitment
