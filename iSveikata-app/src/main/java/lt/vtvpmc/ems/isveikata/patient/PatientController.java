@@ -1,6 +1,5 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,64 +21,60 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 @RequestMapping(value = "/api/patient")
 public class PatientController {
 
-    @Autowired
-    private PatientService patientService;
-    
-    private PatientService getPatientService() {
- 		return patientService;
- 	}
+	@Autowired
+	private PatientService patientService;
 
- 	private void setPatientService(PatientService patientService) {
- 		this.patientService = patientService;
- 	}
+	private PatientService getPatientService() {
+		return patientService;
+	}
 
+	private void setPatientService(PatientService patientService) {
+		this.patientService = patientService;
+	}
 
-//    PATIENT: /api/patient
-//
-//	GET:
-//		“/”  → return List<Patient> (DOCTOR, ADMIN) 
-//		“/{patient_id}/" → return Patient
-//		“/{patient_id}/record” → return List<Record>
- 	
-//		“/{patient_id}/doctor/{doctor_id}/” → return List<Patient> 
-//		“/{patient_id}/record/{record_id}” → return Record with appointmet with doctor
-//		“/{patient_id}/recipe" → return List<Recipe>  // kolkas nereikia
+	// PATIENT: /api/patient
+	//
+	// GET:
+	// 1. “/” → return List<Patient> (DOCTOR, ADMIN)
+	// 2. “/{patient_id}/" → return Patient
+	// 3. “/{patient_id}/record” → return List<Record>
+	// 4. “/{patient_id}/record/{record_id}” → return Record with appointmet with
+	// doctor
 
-//	PUT:
-//		“/{patient_id}/password” → update Patient password
-    
- // 1 Gauti Pacientu sarasa -> List<Patient> (DOCTOR, ADMIN)
- 	@GetMapping("/")
- 	private List<Patient> getPatientList() {
- 	return getPatientService().getPatientList();
- 	}
+	// 5. “/{patient_id}/recipe" → return List<Recipe> // kolkas nereikia
 
- 	//2 Gauti Pacienta pagal id → return Patient
- 	@GetMapping("/{personalCode}")
- 	private Patient getPatientById(@PathVariable String personalCode) {
- 		return patientService.getPatient(personalCode);
- 	}
+	// PUT:
+	// 6. “/{patient_id}/password” → update Patient password
 
- 	//3 Gauti Med.irasu sarasa pagal paciento id → return List<Record>"
- 	@GetMapping("/{personalCode}/record")
- 	private List<MedicalRecord> getRecordList(@PathVariable("personalCode") String personalCode) {
- 		return patientService.getPatientRecordList(personalCode);
- 	}
- 	
- 	//5“/{patient_id}/record/{record_id}” → return Record with appointmet with doctor?
- 	@GetMapping("/record/{record_id}")
- 	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
- 		return patientService.getPatientRecordById(id);   
- 	}
- 	
+	// 1 -> List<Patient> (DOCTOR, ADMIN)
+	@GetMapping("/")
+	private List<Patient> getPatientList() {
+		return getPatientService().getPatientList();
+	}
 
- 	@PutMapping("/{personalCode}/password")
- 	private void update(@RequestBody final Patient patient, @PathVariable final String personalCode) {
- 		patientService.updatePatientPassword(patient, personalCode);
- 	}
+	// 2 → return Patient
+	@GetMapping("/{patientId}")
+	private Patient getPatientById(@PathVariable Long patientId) {
+		return patientService.getPatient(patientId);
+	}
 
+	// 3 → return List<Record>"
+	@GetMapping("/{patientId}/record")
+	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
+		return patientService.getPatientRecordList(patientId);
+	}
 
- 	
- 	
- }
+	// 4“/{patient_id}/record/{record_id}” → return Record with appointmet with
+	// doctor
+	@GetMapping("/record/{record_id}")
+	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
+		return patientService.getPatientRecordById(id);
+	}
 
+	// 6. “/{patient_id}/password” → update Patient password
+	@PutMapping("/{patientId}/password")
+	private void update(@RequestBody final Patient patient, @PathVariable final Long patientId) {
+		patientService.updatePatientPassword(patient, patientId);
+	}
+
+}
