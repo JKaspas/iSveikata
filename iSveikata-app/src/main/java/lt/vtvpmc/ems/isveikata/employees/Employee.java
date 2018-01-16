@@ -39,6 +39,8 @@ public abstract class Employee {
 
 	@NotNull
 	private String password;
+	
+	private boolean isAcitve = true;
 
 	public Employee() {
 	}

@@ -3,6 +3,8 @@ package lt.vtvpmc.ems.isveikata.employees;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 
 @Service
+@Transactional
 public class EmployeesService {
 
 	@Autowired
@@ -25,7 +28,9 @@ public class EmployeesService {
 		Patient patient = patientRepository.findOne(patId);
 		Doctor doctor = (Doctor) employeesRepository.findByUserName(docId);
 		if (doctor instanceof Doctor) {
+			doctor.getPatient().add(patient);
 			patient.setDoctor(doctor);
+			
 		}
 	}
 
