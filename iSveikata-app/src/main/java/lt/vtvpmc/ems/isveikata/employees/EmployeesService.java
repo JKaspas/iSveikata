@@ -2,6 +2,7 @@ package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -35,13 +36,14 @@ public class EmployeesService {
 	}
 
 	public List<Doctor> getDoctorsList() {
-		List<Employee> allEmployees = employeesRepository.findAll();
-		List<Doctor> allDoctors = new ArrayList<Doctor>();
-		for (Employee ae : allEmployees) {
-			if (ae instanceof Doctor) {
-				allDoctors.add((Doctor) ae);
-			}
-		}
-		return allDoctors;
+
+		return employeesRepository.findAll()
+				.stream()
+				.filter((employee -> employee instanceof Doctor))
+				.map(employee -> (Doctor) employee)
+				.filter((doctor) -> doctor.isAcitve())
+				.collect(Collectors.toList());
+
 	}
+
 }

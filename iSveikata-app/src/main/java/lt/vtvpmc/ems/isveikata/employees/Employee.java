@@ -52,4 +52,11 @@ public abstract class Employee {
 		this.password = password;
 	}
 
+	public boolean isAcitve() {
+		return isAcitve;
+	}
+
+	public void setAcitve(boolean acitve) {
+		isAcitve = acitve;
+	}
 }

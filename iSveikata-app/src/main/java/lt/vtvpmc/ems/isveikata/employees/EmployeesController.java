@@ -2,6 +2,7 @@ package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
 
+import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -88,8 +89,8 @@ public class EmployeesController {
 	 */
 	@PostMapping("/doctor/new/record")
 	@ResponseStatus(HttpStatus.CREATED)
-	private void createRecord(@RequestBody MedicalRecord record) {
-		medicalRecordService.createNewRecord(record);
+	private void createRecord(@RequestBody RecordAppointment recordAppointment) {
+		medicalRecordService.createNewRecord(recordAppointment);
 	}
 	
 
