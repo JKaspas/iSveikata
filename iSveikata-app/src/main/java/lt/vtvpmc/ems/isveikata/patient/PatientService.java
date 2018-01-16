@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -38,7 +39,10 @@ public class PatientService {
 
 	// 1
 	public List<Patient> getPatientList() {
-		return jpaPatientRepository.findAll();
+		return 	 jpaPatientRepository.findAll()
+				.stream()
+				.filter(pat -> pat.isActive())
+				.collect(Collectors.toList());
 	}
 
 	// 2

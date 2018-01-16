@@ -38,7 +38,7 @@ public class PatientController {
 	//
 	// GET:
 	// 1. “/” → return List<Patient> (DOCTOR, ADMIN)
-	// 2. “/{patient_id}/" → return Patient
+	// 2. “/{patient_id}/" → return active Patient
 	// 3. “/{patient_id}/record” → return List<Record>
 	// 4. “/{patient_id}/record/{record_id}” → return Record with appointmet with
 	// doctor
@@ -48,32 +48,56 @@ public class PatientController {
 	// PUT:
 	// 6. “/{patient_id}/password” → update Patient password
 
-	// 1 -> List<Patient> (DOCTOR, ADMIN)
+	/**
+	 * Gets all active patients
+	 * URL: /api/patient
+	 *
+	 * @return list of all patient
+	 */
 	@GetMapping("/")
 	private List<Patient> getPatientList() {
 		return getPatientService().getPatientList();
 	}
 
-	// 2 → return Patient
+	/**
+	 * Gets patient by patientId
+	 * @param patientId
+	 * @return patient by patientId
+	 */
 	@GetMapping("/{patientId}")
 	private Patient getPatientById(@PathVariable Long patientId) {
 		return patientService.getPatient(patientId);
 	}
 
-	// 3 → return List<Record>"
+	/**
+	 * Gets all records
+	 * URL: api/{patientId}/record
+	 * @param patientId
+	 * @return list of all patient
+	 */
 	@GetMapping("/{patientId}/record")
 	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
 		return patientService.getPatientRecordList(patientId);
 	}
 
-	// 4“/{patient_id}/record/{record_id}” → return Record with appointmet with
-	// doctor
+	/**
+	 * Gets record with appointmet and with doctor by record id
+	 * URL: "/record/{record_id}"
+	 * @param id
+	 * @return record with appointmet and with doctor by record id
+	 */
 	@GetMapping("/record/{record_id}")
 	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
 		return patientService.getPatientRecordById(id);
 	}
 
-	// 6. “/{patient_id}/password” → update Patient password
+	/**
+	 * Change patient password in data base. URL: /{patient_id}/password
+	 * 
+	 * @param patient
+	 *            
+	 * @param patientId
+	 */
 	@PutMapping("/{patientId}/password")
 	private void update(@RequestBody final Patient patient, @PathVariable final Long patientId) {
 		patientService.updatePatientPassword(patient, patientId);
