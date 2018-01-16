@@ -40,7 +40,7 @@ public class Patient implements Serializable {
 	
 	@NotNull
 	private String password;
-
+	
 	private boolean isActive = true;
 
 	@ManyToOne
@@ -49,6 +49,16 @@ public class Patient implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords = new ArrayList<>();
+	
+	
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 
 	public Long getPatientId() {
 		return patientId;
@@ -101,5 +111,10 @@ public class Patient implements Serializable {
 	public List<MedicalRecord> getMedicalRecords() {
 		return this.medicalRecords;
 	}
+
+	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
+		this.medicalRecords = medicalRecords;
+	}
+	
 
 }
