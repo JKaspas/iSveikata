@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Transactional
-public interface JpaEmployeesRepository extends JpaRepository<Employee, String> {
+public interface JpaEmployeesRepository extends JpaRepository<Employee, Long> {
 	
 	Employee findByUserName(String username);
 	
