@@ -72,4 +72,15 @@ public class PatientService {
 		jpaPatientRepository.save(patient);
 	}
 
+	public List<Patient> getPatientListWithoutDoctor() {
+		return getPatientList()
+				.stream()
+				.filter(pat -> pat.getDoctor()==null)
+				.collect(Collectors.toList());
+	}
+
+//	public static boolean getActivePatientWithoutDoctor() {
+//		Patient pat=patient.isActive();
+//		return patient;
+	
 }
