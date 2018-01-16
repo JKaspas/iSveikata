@@ -54,7 +54,7 @@ public class PatientController {
 	 *
 	 * @return list of all patient
 	 */
-	@GetMapping("/withoutdoctor")
+	@GetMapping("/")
 	private List<Patient> getPatientList() {
 		return getPatientService().getPatientList();
 	}
@@ -65,7 +65,7 @@ public class PatientController {
 	 *
 	 * @return all active and not bind with doctor patients
 	 */
-	@GetMapping("/")
+	@GetMapping("/notBind")
 	private List<Patient> getPatientListWithoutDoctor() {
 		return getPatientService().getPatientListWithoutDoctor();
 	}

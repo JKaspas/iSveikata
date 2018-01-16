@@ -8,9 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
 @Entity
+@Data
 public class Appointment implements Serializable {
 
 	@Id
