@@ -84,7 +84,7 @@ public class EmployeesController {
 	 * 
 	 * URL: /api/doctor/new/record
 	 *
-	 * @param record
+	 * @param recordAppointment
 	 *            the record from UI
 	 */
 	@PostMapping("/doctor/new/record")
@@ -95,7 +95,7 @@ public class EmployeesController {
 	
 
 	/**
-	 * Gets all doctors
+	 * Gets all active doctors
 	 * URL: /api/doctor
 	 *
 	 * @return list of all doctors
@@ -106,14 +106,14 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all doctors
+	 * Gets all actyve patient from given doctor
 	 * URL: /api/doctor
 	 *
+	 * @param doctor_id
 	 * @return list of all patient of  current doctor
 	 */
 	@GetMapping("/doctor/{doctor_id}")
 	private List<Patient> getAllDoctorPatient(@PathVariable long doctor_id){
-
 		return employeesService.getDoctorPatientList(doctor_id);
 	}
 }

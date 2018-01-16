@@ -4,9 +4,28 @@ import lt.vtvpmc.ems.isveikata.appointment.Appointment;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
 public class RecordAppointment {
-    
+
     private MedicalRecord medicalRecord;
     private Appointment appointment;
+
+    private long doctorId;
+    private long patientId;
+
+    public long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(long doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(long patientId) {
+        this.patientId = patientId;
+    }
 
     public MedicalRecord getMedicalRecord() {
         return medicalRecord;

@@ -49,6 +49,6 @@ public class EmployeesService {
 	public List<Patient> getDoctorPatientList(long doctor_id) {
 		Doctor doctor = (Doctor)employeesRepository.findOne(doctor_id);
 
-		return doctor.getPatient();
+		return doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList());
 	}
 }
