@@ -134,7 +134,7 @@ public class EmployeesController {
 	 * @throws NoSuchAlgorithmException
 	 * 
 	 */
-	@PutMapping("/user/login")
+	@PostMapping("/user/login")
 	@ResponseBody
 	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) throws NoSuchAlgorithmException {
 		if (employeesService.userLogin(fields.get("userName"), fields.get("password"))) {
