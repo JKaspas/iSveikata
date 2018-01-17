@@ -142,6 +142,16 @@ public class EmployeesController {
 		}
 	}
 	
+	/**
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/doctor/notbind")
+	private List<Patient> getPatientListWithoutDoctor() {
+		return patientService.getPatientListWithoutDoctor();
+	}
+	
 	private String getUserType(String userName) {
 		return employeesService.getType(userName);
 	}

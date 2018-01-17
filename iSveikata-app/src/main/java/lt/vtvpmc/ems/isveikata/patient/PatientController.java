@@ -57,15 +57,7 @@ public class PatientController {
 		return getPatientService().getPatientList();
 	}
 
-	/**
-	 * Gets all active and not bind with doctor patients URL: /api/patient
-	 *
-	 * @return all active and not bind with doctor patients
-	 */
-	@GetMapping("/notBind")
-	private List<Patient> getPatientListWithoutDoctor() {
-		return getPatientService().getPatientListWithoutDoctor();
-	}
+
 
 	/**
 	 * Gets patient by patientId
