@@ -32,7 +32,7 @@ public class MedicalRecordService {
 	    MedicalRecord medicalRecord = recordAppointment.getMedicalRecord();
         Appointment appointment = recordAppointment.getAppointment();
         medicalRecord.setAppointment(appointment);
-        medicalRecord.setDoctor((Doctor)jpaEmployeesRepository.findOne(recordAppointment.getDoctorId()));
+        medicalRecord.setDoctor((Doctor)jpaEmployeesRepository.findByUserName(recordAppointment.getUserName()));
         medicalRecord.setPatient(jpaPatientRepository.findOne(recordAppointment.getPatientId()));
         jpaMedicalRecordRepository.save(medicalRecord);
         jpaAppointmentRepository.save(appointment);
