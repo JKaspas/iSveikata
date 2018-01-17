@@ -23,22 +23,6 @@ public class PatientService {
 	@Autowired
 	private JpaMedicalRecordRepository jpaMedicalRecordRepository;
 
-	public JpaPatientRepository getJpaPatientRepository() {
-		return jpaPatientRepository;
-	}
-
-	public void setJpaPatientRepository(JpaPatientRepository jpaPatientRepository) {
-		this.jpaPatientRepository = jpaPatientRepository;
-	}
-
-	public JpaMedicalRecordRepository getJpaMedicalRecordRepository() {
-		return jpaMedicalRecordRepository;
-	}
-
-	public void setJpaMedicalRecordRepository(JpaMedicalRecordRepository jpaMedicalRecordRepository) {
-		this.jpaMedicalRecordRepository = jpaMedicalRecordRepository;
-	}
-
 	// 1
 	public List<Patient> getPatientList() {
 		return 	 jpaPatientRepository.findAll()
@@ -66,14 +50,16 @@ public class PatientService {
 	// 6
 	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = jpaPatientRepository.findOne(patientId);
-		pat.setPassword(Passwords.hashString(password));
+		pat.setPassword(password);
 		jpaPatientRepository.save(pat);
 	}
-
+	
+	//7
 	public void addNewPatient(Patient patient) {
 		jpaPatientRepository.save(patient);
 	}
-
+	
+	//8
 	public List<Patient> getPatientListWithoutDoctor() {
 		return getPatientList()
 				.stream()
@@ -81,8 +67,11 @@ public class PatientService {
 				.collect(Collectors.toList());
 	}
 
-//	public static boolean getActivePatientWithoutDoctor() {
-//		Patient pat=patient.isActive();
-//		return patient;
+	//9
+	public boolean patientLogin(String patientId, String password) {
+		byte [] dbPassword = jpaPatientRepository.findOne(Long.parseLong(patientId)).getPassword();
+		return Passwords.isValid(Passwords.hashString(password), dbPassword);
+	}
+
 	
 }

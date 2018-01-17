@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -112,8 +113,8 @@ public class Patient implements Serializable {
 		return password;
 	}
 
-	public void setPassword(byte[] password) {
-		this.password = password;
+	public void setPassword(String password) {
+		this.password = Passwords.hashString(password);
 	}
 
 

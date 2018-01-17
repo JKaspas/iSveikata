@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,14 +27,6 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	private PatientService getPatientService() {
-		return patientService;
-	}
-
-	private void setPatientService(PatientService patientService) {
-		this.patientService = patientService;
-	}
-
 	// PATIENT: /api/patient
 	//
 	// GET:
@@ -42,7 +36,7 @@ public class PatientController {
 	// 4. “/{patient_id}/record/{record_id}” → return Record with appointmet with
 	// doctor
 
-	// 5. “/{patient_id}/recipe" → return List<Recipe> // kolkas nereikia
+	// . “/{patient_id}/recipe" → return List<Recipe> // kolkas nereikia
 
 	// PUT:
 	// 6. “/{patient_id}/password” → update Patient password
@@ -54,7 +48,7 @@ public class PatientController {
 	 */
 	@GetMapping("/")
 	private List<Patient> getPatientList() {
-		return getPatientService().getPatientList();
+		return patientService.getPatientList();
 	}
 
 	/**
@@ -64,7 +58,7 @@ public class PatientController {
 	 */
 	@GetMapping("/notBind")
 	private List<Patient> getPatientListWithoutDoctor() {
-		return getPatientService().getPatientListWithoutDoctor();
+		return patientService.getPatientListWithoutDoctor();
 	}
 
 	/**
@@ -107,11 +101,29 @@ public class PatientController {
 	 * @param patient
 	 * 
 	 * @param patientId
-	 * @throws NoSuchAlgorithmException 
+	 * @throws NoSuchAlgorithmException
 	 */
 	@PutMapping("/{patientId}/password")
-	private void update(@RequestBody final Map<String, String> fields,@PathVariable final Long patientId) throws NoSuchAlgorithmException {
+	private void update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
+			throws NoSuchAlgorithmException {
 		patientService.updatePatientPassword(fields.get("password"), patientId);
+	}
+
+	/**
+	 * Login. URL: /patient/login
+	 * 
+	 * @param fields
+	 */
+	@PostMapping("/login")
+	@ResponseBody
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields){
+		if (patientService.patientLogin(fields.get("patientId"), fields.get("password"))) {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+		}
 	}
 
 }
