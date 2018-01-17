@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
@@ -23,6 +24,7 @@ public class Doctor extends Employee {
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patient;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<MedicalRecord> medicalRecords;
 
