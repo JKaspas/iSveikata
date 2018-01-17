@@ -1,5 +1,7 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 import lombok.Data;
+import lt.vtvpmc.ems.isveikata.Passwords;
 
 @Entity
 @Data
@@ -40,8 +43,8 @@ public abstract class Employee {
 	@NotNull
 	private byte[] password;
 	
-	public void setPassword(byte[] password) {
-		this.password = password;
+	public void setPassword(String password) {
+		this.password = Passwords.hashString(password);
 	}
 
 	private boolean isAcitve = true;

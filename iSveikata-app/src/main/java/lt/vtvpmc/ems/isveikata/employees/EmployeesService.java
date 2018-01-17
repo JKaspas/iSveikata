@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javassist.expr.Instanceof;
 import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
@@ -52,14 +53,19 @@ public class EmployeesService {
 		return doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList());
 	}
 
-	public void updateUserPassword(final String password, String userName) throws NoSuchAlgorithmException {
+	public void updateUserPassword(final String password, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		employee.setPassword(Passwords.hashString(password));
+		employee.setPassword(password);
 		employeesRepository.save(employee);
 	}
 
-	public boolean userLogin(String userNanme, String password) throws NoSuchAlgorithmException {
+	public boolean userLogin(String userNanme, String password) {
 		byte [] dbPassword = employeesRepository.findByUserName(userNanme).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
+	}
+
+	public String getType(String userName) {
+		Employee user = employeesRepository.findByUserName(userName);
+		return user.getClass().getSimpleName();
 	}
 }

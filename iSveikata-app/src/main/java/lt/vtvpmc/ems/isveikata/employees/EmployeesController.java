@@ -119,29 +119,30 @@ public class EmployeesController {
 	 * @param fields
 	 * 
 	 * @param userName
-	 * @throws NoSuchAlgorithmException
 	 */
 	@PutMapping("/{userName}/password")
-	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName)
-			throws NoSuchAlgorithmException {
+	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
 		employeesService.updateUserPassword(fields.get("password"), userName);
 	}
 
 	/**
 	 * Login. URL: /user/login
 	 * 
-	 * @param fields
-	 * @throws NoSuchAlgorithmException
-	 * 
+	 * @param fields	 
 	 */
 	@PostMapping("/user/login")
 	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) throws NoSuchAlgorithmException {
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields)
+			throws NoSuchAlgorithmException {
 		if (employeesService.userLogin(fields.get("userName"), fields.get("password"))) {
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Būk sveikas, vartotojau " +  fields.get("userName"));
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
 		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
-
+	
+	private String getUserType(String userName) {
+		return employeesService.getType(userName);
+	}
 }
