@@ -6,15 +6,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
@@ -121,7 +114,7 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Change patient password in data base. URL: /{patient_id}/password
+	 * Change employee password in data base. URL: /{userName}/password
 	 * 
 	 * @param fields
 	 * 
@@ -133,21 +126,22 @@ public class EmployeesController {
 			throws NoSuchAlgorithmException {
 		employeesService.updateUserPassword(fields.get("password"), userName);
 	}
-	
+
 	/**
 	 * Login. URL: /user/login
-	 *  
-	 * @param fields
-	 * @throws NoSuchAlgorithmException 
 	 * 
-	 * 	 */
+	 * @param fields
+	 * @throws NoSuchAlgorithmException
+	 * 
+	 */
 	@PutMapping("/user/login")
-	private void update(@RequestBody final Map<String, String> fields) throws NoSuchAlgorithmException {
-		if (employeesService.userLogin(fields.get("userName"), fields.get("password") )) {
-			//todo responsestatus ok
+	@ResponseBody
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) throws NoSuchAlgorithmException {
+		if (employeesService.userLogin(fields.get("userName"), fields.get("password"))) {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Būk sveikas, vartotojau " +  fields.get("userName"));
 		} else {
-			//todo responsestatus false
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
-	
+
 }

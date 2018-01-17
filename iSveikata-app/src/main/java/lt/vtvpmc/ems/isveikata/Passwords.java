@@ -11,8 +11,9 @@ public class Passwords {
 		byte[] passHash = sha256.digest(passBytes);
 		return passHash;
 	}
-	
+
 	static public boolean isValid(byte[] testPassword, byte[] dbPassword) {
-		return testPassword.equals(dbPassword);
+		return MessageDigest.isEqual(testPassword, dbPassword);
 	}
+	
 }
