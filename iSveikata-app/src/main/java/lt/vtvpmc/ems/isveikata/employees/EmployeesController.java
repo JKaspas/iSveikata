@@ -108,7 +108,7 @@ public class EmployeesController {
 	 * @param userName
 	 * @return list of all patient of current doctor
 	 */
-	@GetMapping("/doctor/{userName}")
+	@GetMapping("/doctor/{userName}/patient")
 	private List<Patient> getAllDoctorPatient(@PathVariable String userName) {
 		return employeesService.getDoctorPatientList(userName);
 	}
@@ -140,6 +140,16 @@ public class EmployeesController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
+	}
+	
+	/**
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/doctor/notbind")
+	private List<Patient> getPatientListWithoutDoctor() {
+		return patientService.getPatientListWithoutDoctor();
 	}
 	
 	private String getUserType(String userName) {

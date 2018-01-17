@@ -27,14 +27,6 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	private PatientService getPatientService() {
-		return patientService;
-	}
-
-	private void setPatientService(PatientService patientService) {
-		this.patientService = patientService;
-	}
-
 	// PATIENT: /api/patient
 	//
 	// GET:
@@ -59,7 +51,7 @@ public class PatientController {
 		return patientService.getPatientList();
 	}
 
-
+<<<<<<< HEAD
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/patient
 	 *
@@ -69,6 +61,9 @@ public class PatientController {
 	private List<Patient> getPatientListWithoutDoctor() {
 		return patientService.getPatientListWithoutDoctor();
 	}
+=======
+
+>>>>>>> 75e3927ff930e91844ec45445f592aa78c7d538c
 
 	/**
 	 * Gets patient by patientId
