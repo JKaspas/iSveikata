@@ -127,8 +127,8 @@ public class EmployeesController {
 
 	/**
 	 * Login. URL: /user/login
-	 * 
-	 * @param fields	 
+	 *
+	 * @param fields
 	 */
 	@PostMapping("/user/login")
 	@ResponseBody
@@ -141,7 +141,7 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
-	
+
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
 	 *
@@ -151,7 +151,7 @@ public class EmployeesController {
 	private List<Patient> getPatientListWithoutDoctor() {
 		return patientService.getPatientListWithoutDoctor();
 	}
-	
+
 	private String getUserType(String userName) {
 		return employeesService.getType(userName);
 	}
