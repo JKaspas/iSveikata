@@ -10,7 +10,7 @@ import lombok.Data;
 @DiscriminatorValue(value = "Admin")
 public class Admin extends Employee {
 
-	public Admin(String name, String surname, String username, String password) {
+	public Admin(String name, String surname, String username, byte[] password) {
 		super(name, surname, username, password);
 	}
 	

@@ -38,14 +38,18 @@ public abstract class Employee {
 	private String lastName;
 
 	@NotNull
-	private String password;
+	private byte[] password;
 	
+	public void setPassword(byte[] password) {
+		this.password = password;
+	}
+
 	private boolean isAcitve = true;
 
 	public Employee() {
 	}
 
-	public Employee(String firstName, String lastName, String userName, String password) {
+	public Employee(String firstName, String lastName, String userName, byte[] password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
@@ -59,4 +63,9 @@ public abstract class Employee {
 	public void setAcitve(boolean acitve) {
 		isAcitve = acitve;
 	}
+
+	public byte[] getPassword() {
+		return password;
+	}
+
 }

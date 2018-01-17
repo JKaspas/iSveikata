@@ -39,7 +39,7 @@ public class Patient implements Serializable {
 	private String lastName;
 	
 	@NotNull
-	private String password;
+	private byte[] password;
 	
 	private boolean isActive = true;
 
@@ -92,14 +92,6 @@ public class Patient implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public Doctor getDoctor() {
 		return doctor;
 	}
@@ -115,6 +107,15 @@ public class Patient implements Serializable {
 	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
-	
+
+	public byte[] getPassword() {
+		return password;
+	}
+
+	public void setPassword(byte[] password) {
+		this.password = password;
+	}
+
+
 
 }

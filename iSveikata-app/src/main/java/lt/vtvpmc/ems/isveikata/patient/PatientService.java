@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -62,9 +64,9 @@ public class PatientService {
 	}
 
 	// 6
-	public void updatePatientPassword(Patient patient, Long patientId) {
+	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = jpaPatientRepository.findOne(patientId);
-		pat.setPassword(patient.getPassword());
+		pat.setPassword(Passwords.hashString(password));
 		jpaPatientRepository.save(pat);
 	}
 
