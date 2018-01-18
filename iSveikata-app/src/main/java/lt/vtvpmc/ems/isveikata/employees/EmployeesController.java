@@ -35,46 +35,65 @@ public class EmployeesController {
 	private PatientService patientService;
 
 	/**
-	 * Insert employee. Insert new employee into data base. URL: /api/admin/new/user
-	 * 
-	 * @param <T>
-	 *            the generic type of users
-	 * @param employee
-	 *            the employee information
+	 * Insert user. Insert new user into data base with unique userName.
+	 * Return response if userName is not unique. URL: /api/admin/new/user
+	 *
+	 * @param user
+	 *            the new user info from UI
 	 */
 	@PostMapping("/admin/new/user")
-	@ResponseStatus(HttpStatus.CREATED)
-	private <T extends Employee> void insertEmployee(@RequestBody T employee) {
-		employeesService.addEmployee(employee);
+	private <T extends Employee> ResponseEntity<String> insertUserValid(@RequestBody Employee employee) {
+		if (employeesService.validateAddNewUser(employee)) {
+			employeesService.addEmployee(employee);
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body("Sukurtas naujas vartotojas"); 
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Vartotojas su tokiu prisijungimo ID jau egzistuoja");
+		}
 	}
-
+	
+	
 	/**
-	 * Insert patient. Insert new patient into data base. URL:
-	 * /api/admin/new/patient
+	 * Insert patient. Insert new patient into data base with unique patientId.
+	 * Return response if patientId is not unique. URL: /api/admin/new/patient
 	 *
 	 * @param patient
 	 *            the new patient info from UI
 	 */
 	@PostMapping("/admin/new/patient")
-	@ResponseStatus(HttpStatus.CREATED)
-	private void insertPatient(@RequestBody Patient patient) {
-		patientService.addNewPatient(patient);
+	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
+		if (patientService.validateAddNewPatient(patient)) {
+			patientService.addNewPatient(patient);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas pacientas");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Pacientas su tokiu asmens kodu jau egzistuoja");
+		}
 	}
 
+//	Validuoti kad naujai priskiriami pacientai gydytojui neturi priskirto paciento ir kad gydytojui nera priskirtas tas pacientas.
 	/**
-	 * Binding. Adds new bind between doctor and patient. URL:
-	 * /api/admin/new/bind/{userName}/to/{patient_id}
+	 * Binding. Adds new bind between doctor and patient with validation is patient not bind to doctor. 
+	 * URL: /api/admin/new/bind/{userName}/to/{patient_id}
 	 * 
 	 * @param userName
 	 *            the doctor id
 	 * @param patId
 	 *            the patient id
 	 */
-	@PostMapping("/admin/new/bind/{userName}/to/{patient_id}")
-	@ResponseStatus(HttpStatus.OK)
-	private void binding(@PathVariable("userName") String userName, @PathVariable("patient_id") Long patId) {
+	@PostMapping("/admin/new/bind/{userName}/to/{patient_id}/valid")
+	private ResponseEntity<String> bindingValid(@PathVariable("userName") String userName, @PathVariable("patient_id") Long patId) {
 		employeesService.bindDoctroToPatient(userName, patId);
+		if (employeesService.validateBindDoctroToPatient(userName, patId)) {
+			employeesService.bindDoctroToPatient(userName, patId);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Pacientas jau buvo priskirtas daktarui anksciau");
+		}
 	}
+	
 
 	/**
 	 * Creates the record. Creates appointment record, using data from request body.
@@ -128,7 +147,7 @@ public class EmployeesController {
 	/**
 	 * Login. URL: /user/login
 	 * 
-	 * @param fields	 
+	 * @param fields
 	 */
 	@PostMapping("/user/login")
 	@ResponseBody
@@ -141,7 +160,7 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
-	
+
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
 	 *
@@ -151,8 +170,12 @@ public class EmployeesController {
 	private List<Patient> getPatientListWithoutDoctor() {
 		return patientService.getPatientListWithoutDoctor();
 	}
-	
+
 	private String getUserType(String userName) {
 		return employeesService.getType(userName);
 	}
+
+
+
+
 }

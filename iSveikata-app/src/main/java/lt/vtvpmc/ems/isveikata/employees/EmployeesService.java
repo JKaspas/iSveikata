@@ -35,21 +35,16 @@ public class EmployeesService {
 		if (doctor instanceof Doctor) {
 			doctor.getPatient().add(patient);
 			patient.setDoctor(doctor);
-			
 		}
 	}
 
 	public List<Doctor> getDoctorsList() {
-		return employeesRepository.findAll()
-				.stream()
-				.filter((employee -> employee instanceof Doctor))
-				.map(employee -> (Doctor) employee)
-				.filter((doctor) -> doctor.isAcitve())
-				.collect(Collectors.toList());
+		return employeesRepository.findAll().stream().filter((employee -> employee instanceof Doctor))
+				.map(employee -> (Doctor) employee).filter((doctor) -> doctor.isAcitve()).collect(Collectors.toList());
 	}
 
 	public List<Patient> getDoctorPatientList(String userName) {
-		Doctor doctor = (Doctor)employeesRepository.findByUserName(userName);
+		Doctor doctor = (Doctor) employeesRepository.findByUserName(userName);
 		return doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList());
 	}
 
@@ -60,12 +55,27 @@ public class EmployeesService {
 	}
 
 	public boolean userLogin(String userNanme, String password) {
-		byte [] dbPassword = employeesRepository.findByUserName(userNanme).getPassword();
+		byte[] dbPassword = employeesRepository.findByUserName(userNanme).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
 	}
 
 	public String getType(String userName) {
 		Employee user = employeesRepository.findByUserName(userName);
 		return user.getClass().getSimpleName();
+	}
+
+	public boolean validateAddNewUser(Employee employee) {
+		Employee employeeDb = employeesRepository.findByUserName(employee.getUserName());
+		return employeeDb != null ? false : true;
+	}
+
+	public boolean validateBindDoctroToPatient(String docId, Long patId) {
+		Patient patient = patientRepository.findOne(patId);
+		Doctor doctor = (Doctor) employeesRepository.findByUserName(docId);
+		if (doctor instanceof Doctor) {
+			return patient.getDoctor() == null;
+		} else {
+			return false;
+		}
 	}
 }
