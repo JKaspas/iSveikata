@@ -71,4 +71,10 @@ public abstract class Employee {
 		return password;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+	
+	
+
 }

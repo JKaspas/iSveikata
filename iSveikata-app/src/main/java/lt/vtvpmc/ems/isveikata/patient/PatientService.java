@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +26,7 @@ public class PatientService {
 
 	// 1
 	public List<Patient> getPatientList() {
-		return 	 jpaPatientRepository.findAll()
-				.stream()
-				.filter(pat -> pat.isActive())
-				.collect(Collectors.toList());
+		return jpaPatientRepository.findAll().stream().filter(pat -> pat.isActive()).collect(Collectors.toList());
 	}
 
 	// 2
@@ -53,25 +51,30 @@ public class PatientService {
 		pat.setPassword(password);
 		jpaPatientRepository.save(pat);
 	}
-	
-	//7
+
+	// 7
 	public void addNewPatient(Patient patient) {
 		jpaPatientRepository.save(patient);
 	}
-	
-	//8
+
+	// 8
 	public List<Patient> getPatientListWithoutDoctor() {
-		return getPatientList()
-				.stream()
-				.filter(pat -> pat.getDoctor()==null)
-				.collect(Collectors.toList());
+		return getPatientList().stream().filter(pat -> pat.getDoctor() == null).collect(Collectors.toList());
 	}
 
-	//9
+	// 9
 	public boolean patientLogin(String patientId, String password) {
-		byte [] dbPassword = jpaPatientRepository.findOne(Long.parseLong(patientId)).getPassword();
+		byte[] dbPassword = jpaPatientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
 	}
 
-	
+	// 10 new
+	public boolean validateAddNewPatient(Patient patient) {
+		if (jpaPatientRepository.exists(patient.getPatientId())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }
