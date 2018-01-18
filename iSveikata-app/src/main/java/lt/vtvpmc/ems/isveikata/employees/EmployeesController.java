@@ -7,6 +7,8 @@ import java.util.Map;
 import lt.vtvpmc.ems.isveikata.icd.IcdService;
 import lt.vtvpmc.ems.isveikata.icd.InternationalClassificationOfDiseases;
 import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
+import lt.vtvpmc.ems.isveikata.specialization.SpecializationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,9 @@ public class EmployeesController {
 
 	@Autowired
 	private IcdService icdService;
+
+	@Autowired
+	private SpecializationService specializationService;
 
 	/**
 	 * Insert employee. Insert new employee into data base. URL: /api/admin/new/user
@@ -164,7 +169,7 @@ public class EmployeesController {
 	/**
 	 *	Creates new ICD
 	 *
-	 * @return all active and not bind with doctor patients
+	 *	@param icd
 	 */
 	@PostMapping("/icd")
 	private void createIcd(@RequestBody InternationalClassificationOfDiseases icd) {
@@ -174,7 +179,7 @@ public class EmployeesController {
 	/**
 	 *	Gets all icd
 	 *
-	 * @return all active and not bind with doctor patients
+	 * @return all icd
 	 */
 	@GetMapping("/icd")
 	private List<InternationalClassificationOfDiseases> getAllIcd() {
@@ -184,12 +189,35 @@ public class EmployeesController {
 	/**
 	 *	Gets specific idc by it's id
 	 *
-	 * @return all active and not bind with doctor patients
+	 * @param icdCode
+	 * @return icd title by given icdCode
 	 */
 	@GetMapping("/icd/{icdCode}")
 	private String getIcdTitle(@PathVariable final String icdCode) {
 		return icdService.getIcdTitle(icdCode);
 	}
+
+	/**
+	 *	Creates new Specializacion
+	 *
+	 * @param specialization
+	 */
+	@PostMapping("/specialization")
+	private void createIcd(@RequestBody Specialization specialization) {
+		specializationService.createSpecialization(specialization);
+	}
+
+	/**
+	 *	Gets all specialization
+	 *
+	 * @return all specialization
+	 */
+	@GetMapping("/specialization")
+	private List<Specialization> getAllSpecialization() {
+		return specializationService.getAllSpecialization();
+	}
+
+
 
 
 }
