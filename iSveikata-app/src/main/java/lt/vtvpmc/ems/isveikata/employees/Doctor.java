@@ -15,7 +15,7 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 @Entity
 @Data
-@DiscriminatorValue(value = "Doctor")
+@DiscriminatorValue(value = "doctor")
 public class Doctor extends Employee {
 
 	@ManyToOne

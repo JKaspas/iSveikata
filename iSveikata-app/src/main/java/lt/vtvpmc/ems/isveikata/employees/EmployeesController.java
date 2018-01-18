@@ -4,11 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import lt.vtvpmc.ems.isveikata.icd.IcdService;
-import lt.vtvpmc.ems.isveikata.icd.InternationalClassificationOfDiseases;
-import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
-import lt.vtvpmc.ems.isveikata.specialization.SpecializationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +19,7 @@ import lt.vtvpmc.ems.isveikata.patient.PatientService;
  */
 @RestController
 @RequestMapping(value = "/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class EmployeesController {
 
 	/** The employees service. */
@@ -39,38 +34,34 @@ public class EmployeesController {
 	@Autowired
 	private PatientService patientService;
 
-	@Autowired
-	private IcdService icdService;
-
-	@Autowired
-	private SpecializationService specializationService;
-
 	/**
-	 * Insert user. Insert new user into data base with unique userName.
-	 * Return response if userName is not unique. URL: /api/admin/new/user
+	 * Insert user. Insert new user into data base with unique userName. Return
+	 * response if userName is not unique. URL: /api/admin/new/user
 	 *
-	 * @param user
-	 *            the new user info from UI
+	 * @param <T>
+	 *            the generic type
+	 * @param employee
+	 *            the employee
+	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/user")
 	private <T extends Employee> ResponseEntity<String> insertUserValid(@RequestBody Employee employee) {
 		if (employeesService.validateAddNewUser(employee)) {
 			employeesService.addEmployee(employee);
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body("Sukurtas naujas vartotojas"); 
+			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
 					.body("Vartotojas su tokiu prisijungimo ID jau egzistuoja");
 		}
 	}
-	
-	
+
 	/**
 	 * Insert patient. Insert new patient into data base with unique patientId.
 	 * Return response if patientId is not unique. URL: /api/admin/new/patient
 	 *
 	 * @param patient
 	 *            the new patient info from UI
+	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/patient")
 	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
@@ -83,28 +74,29 @@ public class EmployeesController {
 		}
 	}
 
-//	Validuoti kad naujai priskiriami pacientai gydytojui neturi priskirto paciento ir kad gydytojui nera priskirtas tas pacientas.
+	// Validuoti kad naujai priskiriami pacientai gydytojui neturi priskirto
+	// paciento ir kad gydytojui nera priskirtas tas pacientas.
 	/**
-	 * Binding. Adds new bind between doctor and patient with validation is patient not bind to doctor. 
-	 * URL: /api/admin/new/bind/{userName}/to/{patient_id}
-	 * 
+	 * Binding. Adds new bind between doctor and patient with validation is patient
+	 * not bind to doctor. URL: /api/admin/new/bind/{userName}/to/{patientId}
+	 *
 	 * @param userName
 	 *            the doctor id
 	 * @param patId
 	 *            the patient id
+	 * @return the response entity
 	 */
-	@PostMapping("/admin/new/bind/{userName}/to/{patient_id}/valid")
-	private ResponseEntity<String> bindingValid(@PathVariable("userName") String userName, @PathVariable("patient_id") Long patId) {
-		employeesService.bindDoctroToPatient(userName, patId);
-		if (employeesService.validateBindDoctroToPatient(userName, patId)) {
-			employeesService.bindDoctroToPatient(userName, patId);
+	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
+	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
+		employeesService.bindDoctroToPatient(userName, patientId);
+		if (employeesService.validateBindDoctroToPatient(userName, patientId)) {
+			employeesService.bindDoctroToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
 					.body("Pacientas jau buvo priskirtas daktarui anksciau");
 		}
 	}
-	
 
 	/**
 	 * Creates the record. Creates appointment record, using data from request body.
@@ -123,7 +115,7 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active doctors URL: /api/doctor
+	 * Gets all active doctors URL: /api/doctor.
 	 *
 	 * @return list of all doctors
 	 */
@@ -133,9 +125,10 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}.
 	 *
 	 * @param userName
+	 *            the user name
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
@@ -145,10 +138,11 @@ public class EmployeesController {
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
-	 * 
+	 *
 	 * @param fields
-	 * 
+	 *            the fields
 	 * @param userName
+	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
 	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
@@ -159,6 +153,10 @@ public class EmployeesController {
 	 * Login. URL: /user/login
 	 *
 	 * @param fields
+	 *            the fields
+	 * @return the response entity
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
 	 */
 	@PostMapping("/user/login")
 	@ResponseBody
@@ -171,12 +169,20 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
+
+	/**
+	 * Gets the user type.
+	 *
+	 * @param userName
+	 *            the user name
+	 * @return the user type
+	 */
 	private String getUserType(String userName) {
 		return employeesService.getType(userName);
 	}
 
 	/**
-	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
 	 *
 	 * @return all active and not bind with doctor patients
 	 */
@@ -186,57 +192,25 @@ public class EmployeesController {
 	}
 
 	/**
-	 *	Creates new ICD
+	 * Delete user.
 	 *
-	 *	@param icd
+	 * @param userName
+	 *            the user name
 	 */
-	@PostMapping("/icd")
-	private void createIcd(@RequestBody InternationalClassificationOfDiseases icd) {
-		icdService.createIcd(icd);
+	@DeleteMapping("/admin/delete/user/{userName}")
+	private void deleteUser(@PathVariable String userName) {
+		employeesService.deactivateUser(userName);
 	}
 
 	/**
-	 *	Gets all icd
+	 * Delete patient.
 	 *
-	 * @return all icd
+	 * @param patientId
+	 *            the patient id
 	 */
-	@GetMapping("/icd")
-	private List<InternationalClassificationOfDiseases> getAllIcd() {
-		return icdService.getAllIcd();
+	@DeleteMapping("/admin/delete/patient/{patientId}")
+	private void deletePatient(@PathVariable Long patientId) {
+		patientService.deactivatePatient(patientId);
 	}
-
-	/**
-	 *	Gets specific idc by it's id
-	 *
-	 * @param icdCode
-	 * @return icd title by given icdCode
-	 */
-	@GetMapping("/icd/{icdCode}")
-	private String getIcdTitle(@PathVariable final String icdCode) {
-		return icdService.getIcdTitle(icdCode);
-	}
-
-	/**
-	 *	Creates new Specializacion
-	 *
-	 * @param specialization
-	 */
-	@PostMapping("/specialization")
-	private void createIcd(@RequestBody Specialization specialization) {
-		specializationService.createSpecialization(specialization);
-	}
-
-	/**
-	 *	Gets all specialization
-	 *
-	 * @return all specialization
-	 */
-	@GetMapping("/specialization")
-	private List<Specialization> getAllSpecialization() {
-		return specializationService.getAllSpecialization();
-	}
-
-
-
 
 }

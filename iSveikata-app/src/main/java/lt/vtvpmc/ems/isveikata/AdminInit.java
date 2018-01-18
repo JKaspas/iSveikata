@@ -13,7 +13,7 @@ import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 public class AdminInit {
 
 	@Bean
-	public CommandLineRunner naujasP1(JpaEmployeesRepository repo) throws NoSuchAlgorithmException {
+	public CommandLineRunner createAdminOnCleanInstall(JpaEmployeesRepository repo) throws NoSuchAlgorithmException {
 		if (repo.findAll().size() > 0) {
 			return null;
 		} else {

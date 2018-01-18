@@ -1,17 +1,13 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.plaf.BorderUIResource.EmptyBorderUIResource;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javassist.expr.Instanceof;
 import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
@@ -29,9 +25,9 @@ public class EmployeesService {
 		employeesRepository.save(employee);
 	}
 
-	public void bindDoctroToPatient(String docId, Long patId) {
-		Patient patient = patientRepository.findOne(patId);
-		Doctor doctor = (Doctor) employeesRepository.findByUserName(docId);
+	public void bindDoctroToPatient(String doctorId, Long patientId) {
+		Patient patient = patientRepository.findOne(patientId);
+		Doctor doctor = (Doctor) employeesRepository.findByUserName(doctorId);
 		if (doctor instanceof Doctor) {
 			doctor.getPatient().add(patient);
 			patient.setDoctor(doctor);
@@ -66,16 +62,22 @@ public class EmployeesService {
 
 	public boolean validateAddNewUser(Employee employee) {
 		Employee employeeDb = employeesRepository.findByUserName(employee.getUserName());
-		return employeeDb != null ? false : true;
+		return employeeDb == null;
 	}
 
-	public boolean validateBindDoctroToPatient(String docId, Long patId) {
-		Patient patient = patientRepository.findOne(patId);
-		Doctor doctor = (Doctor) employeesRepository.findByUserName(docId);
+	public boolean validateBindDoctroToPatient(String doctorId, Long patientId) {
+		Patient patient = patientRepository.findOne(patientId);
+		Doctor doctor = (Doctor) employeesRepository.findByUserName(doctorId);
 		if (doctor instanceof Doctor) {
 			return patient.getDoctor() == null;
 		} else {
 			return false;
 		}
+	}
+
+	public void deactivateUser(String userName) {
+		Employee emp = employeesRepository.findByUserName(userName);
+		emp.setAcitve(false);
+		employeesRepository.save(emp);
 	}
 }
