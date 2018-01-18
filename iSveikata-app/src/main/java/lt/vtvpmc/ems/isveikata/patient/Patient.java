@@ -45,6 +45,7 @@ public class Patient implements Serializable {
 	private boolean isActive = true;
 
 	@ManyToOne
+	@JsonIgnore
 	private Doctor doctor;
 
 	@JsonIgnore

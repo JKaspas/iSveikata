@@ -28,7 +28,7 @@ import lt.vtvpmc.ems.isveikata.Passwords;
 public abstract class Employee {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long userId;
 
 	@Column(unique = true, nullable = false)

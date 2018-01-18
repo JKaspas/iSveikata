@@ -8,15 +8,15 @@ public class RecordAppointment {
     private MedicalRecord medicalRecord;
     private Appointment appointment;
 
-    private long doctorId;
+    private String userName;
     private long patientId;
 
-    public long getDoctorId() {
-        return doctorId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setDoctorId(long doctorId) {
-        this.doctorId = doctorId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public long getPatientId() {

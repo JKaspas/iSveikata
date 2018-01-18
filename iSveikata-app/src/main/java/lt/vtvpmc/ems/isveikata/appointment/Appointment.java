@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -25,6 +26,7 @@ public class Appointment implements Serializable {
 
 	private Date date;
 
+	@JsonIgnore
 	@OneToOne(mappedBy = "appointment")
 	private MedicalRecord medicalRecord;
 

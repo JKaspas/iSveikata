@@ -157,7 +157,11 @@ public class EmployeesController {
 
 	/**
 	 * Login. URL: /user/login
+<<<<<<< HEAD
+	 * 
+=======
 	 *
+>>>>>>> 22dbb80a10313ea69e8056d345df4e75323636f6
 	 * @param fields
 	 */
 	@PostMapping("/user/login")
@@ -171,9 +175,12 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
+<<<<<<< HEAD
+=======
 	private String getUserType(String userName) {
 		return employeesService.getType(userName);
 	}
+>>>>>>> 22dbb80a10313ea69e8056d345df4e75323636f6
 
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
@@ -185,6 +192,12 @@ public class EmployeesController {
 		return patientService.getPatientListWithoutDoctor();
 	}
 
+<<<<<<< HEAD
+	private String getUserType(String userName) {
+		return employeesService.getType(userName);
+	}
+
+=======
 	/**
 	 *	Creates new ICD
 	 *
@@ -236,6 +249,7 @@ public class EmployeesController {
 		return specializationService.getAllSpecialization();
 	}
 
+>>>>>>> 22dbb80a10313ea69e8056d345df4e75323636f6
 
 
 

@@ -19,7 +19,7 @@ public class Specialization implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String description;
+	private String title;
 
 	@OneToMany(mappedBy = "specialization")
 	private List<Doctor> doctor;
