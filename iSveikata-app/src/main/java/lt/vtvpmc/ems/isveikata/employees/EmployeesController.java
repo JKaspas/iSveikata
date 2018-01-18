@@ -4,6 +4,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
+import lt.vtvpmc.ems.isveikata.icd.IcdService;
+import lt.vtvpmc.ems.isveikata.icd.InternationalClassificationOfDiseases;
+import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,9 @@ public class EmployeesController {
 	/** The patient service. */
 	@Autowired
 	private PatientService patientService;
+
+	@Autowired
+	private IcdService icdService;
 
 	/**
 	 * Insert employee. Insert new employee into data base. URL: /api/admin/new/user
@@ -141,6 +147,9 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
 		}
 	}
+	private String getUserType(String userName) {
+		return employeesService.getType(userName);
+	}
 
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
@@ -152,7 +161,35 @@ public class EmployeesController {
 		return patientService.getPatientListWithoutDoctor();
 	}
 
-	private String getUserType(String userName) {
-		return employeesService.getType(userName);
+	/**
+	 *	Creates new ICD
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@PostMapping("/icd")
+	private void createIcd(@RequestBody InternationalClassificationOfDiseases icd) {
+		icdService.createIcd(icd);
 	}
+
+	/**
+	 *	Gets all icd
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/icd")
+	private List<InternationalClassificationOfDiseases> getAllIcd() {
+		return icdService.getAllIcd();
+	}
+
+	/**
+	 *	Gets specific idc by it's id
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/icd/{icdCode}")
+	private String getIcdTitle(@PathVariable final String icdCode) {
+		return icdService.getIcdTitle(icdCode);
+	}
+
+
 }
