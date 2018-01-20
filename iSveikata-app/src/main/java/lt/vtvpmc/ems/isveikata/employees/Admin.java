@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@DiscriminatorValue(value = "Admin")
+@DiscriminatorValue(value = "admin")
 public class Admin extends Employee {
 
 	public Admin(String name, String surname, String username, byte[] password) {
