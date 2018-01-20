@@ -13,65 +13,127 @@ import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
+/**
+ * The Class PatientService.
+ */
 @Service
 @Transactional
 public class PatientService {
 
+	/** The patient repository. */
 	@Autowired
-	private JpaPatientRepository jpaPatientRepository;
+	private JpaPatientRepository patientRepository;
 
+	/** The medical record repository. */
 	@Autowired
-	private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+	private JpaMedicalRecordRepository medicalRecordRepository;
 
-	// 1
+	/**
+	 * Gets the patient list.
+	 *
+	 * @return the patient list
+	 */
 	public List<Patient> getPatientList() {
-		return 	 jpaPatientRepository.findAll()
-				.stream()
-				.filter(pat -> pat.isActive())
-				.collect(Collectors.toList());
+		return patientRepository.findAll().stream().filter(pat -> pat.isActive()).collect(Collectors.toList());
 	}
 
-	// 2
+	/**
+	 * Gets the patient.
+	 *
+	 * @param patientId the patient id
+	 * @return the patient
+	 */
 	public Patient getPatient(Long patientId) {
-		return jpaPatientRepository.findOne(patientId);
+		return patientRepository.findOne(patientId);
 	}
 
-	// 3
+	/**
+	 * Gets the patient record list.
+	 *
+	 * @param patientId the patient id
+	 * @return the patient record list
+	 */
 	public List<MedicalRecord> getPatientRecordList(Long patientId) {
-		Patient pat = jpaPatientRepository.findOne(patientId);
+		Patient pat = patientRepository.findOne(patientId);
 		return pat.getMedicalRecords();
 	}
 
-	// 4
+	/**
+	 * Gets the patient record by id.
+	 *
+	 * @param id the id
+	 * @return the patient record by id
+	 */
 	public MedicalRecord getPatientRecordById(Long id) {
-		return jpaMedicalRecordRepository.findOne(id);
+		return medicalRecordRepository.findOne(id);
 	}
 
-	// 6
+	/**
+	 * Update patient password.
+	 *
+	 * @param password the password
+	 * @param patientId the patient id
+	 * @throws NoSuchAlgorithmException the no such algorithm exception
+	 */
 	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
-		Patient pat = jpaPatientRepository.findOne(patientId);
+		Patient pat = patientRepository.findOne(patientId);
 		pat.setPassword(password);
-		jpaPatientRepository.save(pat);
-	}
-	
-	//7
-	public void addNewPatient(Patient patient) {
-		jpaPatientRepository.save(patient);
-	}
-	
-	//8
-	public List<Patient> getPatientListWithoutDoctor() {
-		return getPatientList()
-				.stream()
-				.filter(pat -> pat.getDoctor()==null)
-				.collect(Collectors.toList());
+		patientRepository.save(pat);
 	}
 
-	//9
+	/**
+	 * Adds the new patient.
+	 *
+	 * @param patient the patient
+	 */
+	public void addNewPatient(Patient patient) {
+		patientRepository.save(patient);
+	}
+
+	/**
+	 * Gets the patient list without doctor.
+	 *
+	 * @return the patient list without doctor
+	 */
+	public List<Patient> getPatientListWithoutDoctor() {
+		return getPatientList().stream().filter(pat -> pat.getDoctor() == null).collect(Collectors.toList());
+	}
+
+	/**
+	 * Patient login.
+	 *
+	 * @param patientId the patient id
+	 * @param password the password
+	 * @return true, if successful
+	 */
 	public boolean patientLogin(String patientId, String password) {
-		byte [] dbPassword = jpaPatientRepository.findOne(Long.parseLong(patientId)).getPassword();
+		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
 	}
 
-	
+	/**
+	 * Validate add new patient.
+	 *
+	 * @param patient the patient
+	 * @return true, if successful
+	 */
+	public boolean validateAddNewPatient(Patient patient) {
+		if (patientRepository.exists(patient.getPatientId())) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Deactivate patient.
+	 *
+	 * @param patient_id the patient id
+	 */
+	public void deactivatePatient(Long patient_id) {
+		Patient patient = patientRepository.findOne(patient_id);
+		patient.setActive(false);
+		patientRepository.save(patient);	
+	}
+
 }

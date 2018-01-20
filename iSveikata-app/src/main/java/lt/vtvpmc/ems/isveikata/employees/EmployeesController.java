@@ -19,7 +19,7 @@ import lt.vtvpmc.ems.isveikata.patient.PatientService;
  */
 @RestController
 @RequestMapping(value = "/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class EmployeesController {
 
 	/** The employees service. */
@@ -35,45 +35,67 @@ public class EmployeesController {
 	private PatientService patientService;
 
 	/**
-	 * Insert employee. Insert new employee into data base. URL: /api/admin/new/user
-	 * 
+	 * Insert user. Insert new user into data base with unique userName. Return
+	 * response if userName is not unique. URL: /api/admin/new/user
+	 *
 	 * @param <T>
-	 *            the generic type of users
+	 *            the generic type
 	 * @param employee
-	 *            the employee information
+	 *            the employee
+	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/user")
-	@ResponseStatus(HttpStatus.CREATED)
-	private <T extends Employee> void insertEmployee(@RequestBody T employee) {
-		employeesService.addEmployee(employee);
+	private <T extends Employee> ResponseEntity<String> insertUserValid(@RequestBody Employee employee) {
+		if (employeesService.validateAddNewUser(employee)) {
+			employeesService.addEmployee(employee);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Vartotojas su tokiu prisijungimo ID jau egzistuoja");
+		}
 	}
 
 	/**
-	 * Insert patient. Insert new patient into data base. URL:
-	 * /api/admin/new/patient
+	 * Insert patient. Insert new patient into data base with unique patientId.
+	 * Return response if patientId is not unique. URL: /api/admin/new/patient
 	 *
 	 * @param patient
 	 *            the new patient info from UI
+	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/patient")
-	@ResponseStatus(HttpStatus.CREATED)
-	private void insertPatient(@RequestBody Patient patient) {
-		patientService.addNewPatient(patient);
+	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
+		if (patientService.validateAddNewPatient(patient)) {
+			patientService.addNewPatient(patient);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas pacientas");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Pacientas su tokiu asmens kodu jau egzistuoja");
+		}
 	}
 
+	// Validuoti kad naujai priskiriami pacientai gydytojui neturi priskirto
+	// paciento ir kad gydytojui nera priskirtas tas pacientas.
 	/**
-	 * Binding. Adds new bind between doctor and patient. URL:
-	 * /api/admin/new/bind/{userName}/to/{patient_id}
-	 * 
+	 * Binding. Adds new bind between doctor and patient with validation is patient
+	 * not bind to doctor. URL: /api/admin/new/bind/{userName}/to/{patientId}
+	 *
 	 * @param userName
 	 *            the doctor id
 	 * @param patId
 	 *            the patient id
+	 * @return the response entity
 	 */
-	@PostMapping("/admin/new/bind/{userName}/to/{patient_id}")
-	@ResponseStatus(HttpStatus.OK)
-	private void binding(@PathVariable("userName") String userName, @PathVariable("patient_id") Long patId) {
-		employeesService.bindDoctroToPatient(userName, patId);
+	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
+	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
+		employeesService.bindDoctroToPatient(userName, patientId);
+		if (employeesService.validateBindDoctroToPatient(userName, patientId)) {
+			employeesService.bindDoctroToPatient(userName, patientId);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
+		} else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+					.body("Pacientas jau buvo priskirtas daktarui anksciau");
+		}
 	}
 
 	/**
@@ -93,7 +115,7 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active doctors URL: /api/doctor
+	 * Gets all active doctors URL: /api/doctor.
 	 *
 	 * @return list of all doctors
 	 */
@@ -103,9 +125,10 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}.
 	 *
 	 * @param userName
+	 *            the user name
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
@@ -115,10 +138,11 @@ public class EmployeesController {
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
-	 * 
+	 *
 	 * @param fields
-	 * 
+	 *            the fields
 	 * @param userName
+	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
 	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
@@ -129,6 +153,10 @@ public class EmployeesController {
 	 * Login. URL: /user/login
 	 *
 	 * @param fields
+	 *            the fields
+	 * @return the response entity
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
 	 */
 	@PostMapping("/user/login")
 	@ResponseBody
@@ -143,7 +171,18 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind
+	 * Gets the user type.
+	 *
+	 * @param userName
+	 *            the user name
+	 * @return the user type
+	 */
+	private String getUserType(String userName) {
+		return employeesService.getType(userName);
+	}
+
+	/**
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
 	 *
 	 * @return all active and not bind with doctor patients
 	 */
@@ -152,7 +191,26 @@ public class EmployeesController {
 		return patientService.getPatientListWithoutDoctor();
 	}
 
-	private String getUserType(String userName) {
-		return employeesService.getType(userName);
+	/**
+	 * Delete user.
+	 *
+	 * @param userName
+	 *            the user name
+	 */
+	@DeleteMapping("/admin/delete/user/{userName}")
+	private void deleteUser(@PathVariable String userName) {
+		employeesService.deactivateUser(userName);
 	}
+
+	/**
+	 * Delete patient.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 */
+	@DeleteMapping("/admin/delete/patient/{patientId}")
+	private void deletePatient(@PathVariable Long patientId) {
+		patientService.deactivatePatient(patientId);
+	}
+
 }
