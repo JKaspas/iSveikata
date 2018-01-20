@@ -101,7 +101,7 @@ public class EmployeesController {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body("Pacientas jau buvo priskirtas daktarui anksciau");
+					.body("Pacientas jau buvo priskirtas daktarui anksciau, arba bandote priskirti pacienta ne daktarui");
 		}
 	}
 	
