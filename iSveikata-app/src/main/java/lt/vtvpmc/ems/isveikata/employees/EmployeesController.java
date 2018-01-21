@@ -93,8 +93,8 @@ public class EmployeesController {
 			employeesService.bindDoctroToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
 		} else {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body("Pacientas jau buvo priskirtas daktarui anksciau, arba bandote priskirti pacienta ne daktarui");
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+					"Pacientas jau buvo priskirtas daktarui anksciau, arba bandote priskirti pacienta ne daktarui");
 		}
 	}
 
@@ -162,11 +162,12 @@ public class EmployeesController {
 	@ResponseBody
 	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields)
 			throws NoSuchAlgorithmException {
-		if (employeesService.userLogin(fields.get("userName"), fields.get("password"))) {
+		if ((employeesService.isUserActive(fields.get("userName")))
+				&& (employeesService.userLogin(fields.get("userName"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+					.body("Vartotojas nerastas arba yra neaktyvuotas, patikrinkit prisijungimo duomenis");
 		}
 	}
 

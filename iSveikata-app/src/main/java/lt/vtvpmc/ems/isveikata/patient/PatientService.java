@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.employees.Employee;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -40,7 +41,8 @@ public class PatientService {
 	/**
 	 * Gets the patient.
 	 *
-	 * @param patientId the patient id
+	 * @param patientId
+	 *            the patient id
 	 * @return the patient
 	 */
 	public Patient getPatient(Long patientId) {
@@ -50,7 +52,8 @@ public class PatientService {
 	/**
 	 * Gets the patient record list.
 	 *
-	 * @param patientId the patient id
+	 * @param patientId
+	 *            the patient id
 	 * @return the patient record list
 	 */
 	public List<MedicalRecord> getPatientRecordList(Long patientId) {
@@ -61,7 +64,8 @@ public class PatientService {
 	/**
 	 * Gets the patient record by id.
 	 *
-	 * @param id the id
+	 * @param id
+	 *            the id
 	 * @return the patient record by id
 	 */
 	public MedicalRecord getPatientRecordById(Long id) {
@@ -71,9 +75,12 @@ public class PatientService {
 	/**
 	 * Update patient password.
 	 *
-	 * @param password the password
-	 * @param patientId the patient id
-	 * @throws NoSuchAlgorithmException the no such algorithm exception
+	 * @param password
+	 *            the password
+	 * @param patientId
+	 *            the patient id
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
 	 */
 	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
@@ -84,7 +91,8 @@ public class PatientService {
 	/**
 	 * Adds the new patient.
 	 *
-	 * @param patient the patient
+	 * @param patient
+	 *            the patient
 	 */
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
@@ -102,8 +110,10 @@ public class PatientService {
 	/**
 	 * Patient login.
 	 *
-	 * @param patientId the patient id
-	 * @param password the password
+	 * @param patientId
+	 *            the patient id
+	 * @param password
+	 *            the password
 	 * @return true, if successful
 	 */
 	public boolean patientLogin(String patientId, String password) {
@@ -114,7 +124,8 @@ public class PatientService {
 	/**
 	 * Validate add new patient.
 	 *
-	 * @param patient the patient
+	 * @param patient
+	 *            the patient
 	 * @return true, if successful
 	 */
 	public boolean validateAddNewPatient(Patient patient) {
@@ -128,12 +139,24 @@ public class PatientService {
 	/**
 	 * Deactivate patient.
 	 *
-	 * @param patient_id the patient id
+	 * @param patient_id
+	 *            the patient id
 	 */
 	public void deactivatePatient(Long patient_id) {
 		Patient patient = patientRepository.findOne(patient_id);
 		patient.setActive(false);
-		patientRepository.save(patient);	
+		patientRepository.save(patient);
+	}
+
+	/**
+	 * Return patient status: active or not.
+	 *
+	 * @param patient_id
+	 *            the patient id
+	 */
+	public boolean isPatientActive(String patientId) {
+		Patient patient = patientRepository.findOne(Long.parseLong(patientId));
+		return patient.isActive();
 	}
 
 }

@@ -59,7 +59,6 @@ public class PatientController {
 		return patientService.getPatientList();
 	}
 
-
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/patient
 	 *
@@ -125,13 +124,14 @@ public class PatientController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields){
-		if (patientService.patientLogin(fields.get("patientId"), fields.get("password"))) {
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
+		if ((patientService.isPatientActive(fields.get("patientId")))
+				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
 					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+					.body("Pacientas nerastas arba yra neaktyvuotas, patikrinkite prisijungimo duomenis");
 		}
 	}
 

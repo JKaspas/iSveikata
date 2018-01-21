@@ -80,4 +80,9 @@ public class EmployeesService {
 		emp.setAcitve(false);
 		employeesRepository.save(emp);
 	}
+
+	public boolean isUserActive(String userNanme) {
+		Employee employee = employeesRepository.findByUserName(userNanme);
+		return employee.isAcitve();
+	}
 }
