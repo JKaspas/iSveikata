@@ -145,8 +145,10 @@ public class EmployeesController {
 	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
-	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
-		employeesService.updateUserPassword(fields.get("password"), userName);
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
+		boolean passwordChangeIsValid = employeesService.updateUserPassword(fields.get("oldPassword"), fields.get("newPassword"), userName);
+		return passwordChangeIsValid ? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
+
 	}
 
 	/**

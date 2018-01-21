@@ -44,10 +44,15 @@ public class EmployeesService {
 		return doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList());
 	}
 
-	public void updateUserPassword(final String password, String userName) {
+	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		employee.setPassword(password);
-		employeesRepository.save(employee);
+		if(Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
+			employee.setPassword(newPassword);
+			employeesRepository.save(employee);
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public boolean userLogin(String userNanme, String password) {

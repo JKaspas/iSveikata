@@ -77,17 +77,17 @@ public class PatientService {
 	 *
 	 *
      * @param oldPassword
-     * @param password
+     * @param newPassword
      *            the password
      * @param patientId
      *            the patient id
      * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	public boolean updatePatientPassword(String oldPassword, final String password, Long patientId) throws NoSuchAlgorithmException {
+	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
 		if(pat.getPassword().equals(Passwords.hashString(oldPassword))){
-			pat.setPassword(password);
+			pat.setPassword(newPassword);
 			patientRepository.save(pat);
 			return true;
 		}else{
