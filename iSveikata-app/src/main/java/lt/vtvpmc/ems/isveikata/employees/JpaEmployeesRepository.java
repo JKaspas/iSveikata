@@ -1,13 +1,20 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 @Transactional
-public interface JpaEmployeesRepository extends JpaRepository<Employee, Long> {
+public interface JpaEmployeesRepository<T extends Employee> extends JpaRepository<T, Long> {
 	
-	Employee findByUserName(String username);
+	T findByUserName(String username);
 	
+	@Query(value = "SELECT * FROM EMPLOYEE WHERE DTYPE = LOWER(?1)", nativeQuery = true)
+	//@Query("select e from Employee e where e.dtype = :type")
+	List<T> findAllByType(String type);
 }
 // galima ir taip:
 // public interface JpaEmployeesRepository<T extends Employee> extends JpaRepository<T, Long>{

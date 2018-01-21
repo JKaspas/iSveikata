@@ -88,9 +88,9 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
 	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
-		employeesService.bindDoctroToPatient(userName, patientId);
-		if (employeesService.validateBindDoctroToPatient(userName, patientId)) {
-			employeesService.bindDoctroToPatient(userName, patientId);
+		employeesService.bindDoctorToPatient(userName, patientId);
+		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
+			employeesService.bindDoctorToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -121,7 +121,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor")
 	private List<Doctor> getAllDoctors() {
-		return employeesService.getDoctorsList();
+		return employeesService.getActiveDoctorsList();
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets the user type.
+	 * Returns the user type.
 	 *
 	 * @param userName
 	 *            the user name

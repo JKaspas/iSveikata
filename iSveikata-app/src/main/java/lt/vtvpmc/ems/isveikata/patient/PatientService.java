@@ -2,7 +2,6 @@ package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -33,10 +32,9 @@ public class PatientService {
 	 *
 	 * @return the patient list
 	 */
-	public List<Patient> getPatientList() {
-		return patientRepository.findAll().stream().filter(pat -> pat.isActive()).collect(Collectors.toList());
+	public List<Patient> getActivePatientList() {
+		return patientRepository.findByIsActiveTrue();
 	}
-
 	/**
 	 * Gets the patient.
 	 *
@@ -75,6 +73,7 @@ public class PatientService {
 	 * @param patientId the patient id
 	 * @throws NoSuchAlgorithmException the no such algorithm exception
 	 */
+	// 6
 	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
 		pat.setPassword(password);
@@ -86,6 +85,7 @@ public class PatientService {
 	 *
 	 * @param patient the patient
 	 */
+	// 7
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
 	}
@@ -95,10 +95,10 @@ public class PatientService {
 	 *
 	 * @return the patient list without doctor
 	 */
+	// 8
 	public List<Patient> getPatientListWithoutDoctor() {
-		return getPatientList().stream().filter(pat -> pat.getDoctor() == null).collect(Collectors.toList());
+		return patientRepository.findByIsActiveTrueAndDoctorIsNull();
 	}
-
 	/**
 	 * Patient login.
 	 *
@@ -106,6 +106,7 @@ public class PatientService {
 	 * @param password the password
 	 * @return true, if successful
 	 */
+	// 9
 	public boolean patientLogin(String patientId, String password) {
 		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
@@ -117,6 +118,7 @@ public class PatientService {
 	 * @param patient the patient
 	 * @return true, if successful
 	 */
+	// 10 new
 	public boolean validateAddNewPatient(Patient patient) {
 		if (patientRepository.exists(patient.getPatientId())) {
 			return false;

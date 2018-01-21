@@ -27,14 +27,6 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	private PatientService getPatientService() {
-		return patientService;
-	}
-
-	private void setPatientService(PatientService patientService) {
-		this.patientService = patientService;
-	}
-
 	// PATIENT: /api/patient
 	//
 	// GET:
@@ -56,9 +48,8 @@ public class PatientController {
 	 */
 	@GetMapping("/")
 	private List<Patient> getPatientList() {
-		return patientService.getPatientList();
+		return patientService.getActivePatientList();
 	}
-
 
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/patient
@@ -125,7 +116,7 @@ public class PatientController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields){
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
 		if (patientService.patientLogin(fields.get("patientId"), fields.get("password"))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
 					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
