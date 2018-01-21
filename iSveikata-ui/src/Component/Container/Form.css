@@ -1,0 +1,9 @@
+.demoForm {
+	width: 500px;
+	margin: auto;
+}
+
+.formErrors {
+	color: red;
+	font-weight: bold;
+}
