@@ -75,17 +75,25 @@ public class PatientService {
 	/**
 	 * Update patient password.
 	 *
-	 * @param password
-	 *            the password
-	 * @param patientId
-	 *            the patient id
-	 * @throws NoSuchAlgorithmException
+	 *
+     * @param oldPassword
+     * @param password
+     *            the password
+     * @param patientId
+     *            the patient id
+     * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
+	public boolean updatePatientPassword(String oldPassword, final String password, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
-		pat.setPassword(password);
-		patientRepository.save(pat);
+		if(pat.getPassword().equals(Passwords.hashString(oldPassword))){
+			pat.setPassword(password);
+			patientRepository.save(pat);
+			return true;
+		}else{
+			return false;
+		}
+
 	}
 
 	/**
@@ -151,7 +159,7 @@ public class PatientService {
 	/**
 	 * Return patient status: active or not.
 	 *
-	 * @param patient_id
+	 * @param patientId
 	 *            the patient id
 	 */
 	public boolean isPatientActive(String patientId) {

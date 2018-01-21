@@ -106,15 +106,17 @@ public class PatientController {
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
 	 * 
-	 * @param patient
+	 * @param fields
 	 * 
 	 * @param patientId
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PutMapping("/{patientId}/password")
-	private void update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
 			throws NoSuchAlgorithmException {
-		patientService.updatePatientPassword(fields.get("password"), patientId);
+		boolean passwordChangeIsValid = patientService.updatePatientPassword(fields.get("oldPassword"),fields.get("newPassword"), patientId);
+		return passwordChangeIsValid ?
+				ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
 
 	/**
