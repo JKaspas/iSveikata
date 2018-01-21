@@ -22,7 +22,7 @@ public class IcdController {
 	 * @param icd
 	 */
 	@PostMapping("/icd")
-	private void createIcd(@RequestBody InternationalClassificationOfDiseases icd) {
+	private void createIcd(@RequestBody Icd icd) {
 		icdService.createIcd(icd);
 	}
 
@@ -32,7 +32,7 @@ public class IcdController {
 	 * @return all icd
 	 */
 	@GetMapping("/icd")
-	private List<InternationalClassificationOfDiseases> getAllIcd() {
+	private List<Icd> getAllIcd() {
 		return icdService.getAllIcd();
 	}
 

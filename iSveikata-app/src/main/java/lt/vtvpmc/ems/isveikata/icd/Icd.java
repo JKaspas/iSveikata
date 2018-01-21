@@ -1,18 +1,19 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
-import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
-import java.io.Serializable;
-import java.util.List;
+import lombok.Data;
 
 @Entity
 @Data
-public class InternationalClassificationOfDiseases implements Serializable {
+public class Icd implements Serializable {
 	
 	@Id
 	@Length(min = 3, max = 7)

@@ -13,11 +13,11 @@ public class IcdService {
     @Autowired
     private JpaIcdRepository jpaIcdRepository;
 
-    public void createIcd(InternationalClassificationOfDiseases icd) {
+    public void createIcd(Icd icd) {
         jpaIcdRepository.save(icd);
     }
 
-    public List<InternationalClassificationOfDiseases> getAllIcd() {
+    public List<Icd> getAllIcd() {
         return jpaIcdRepository.findAll();
     }
 

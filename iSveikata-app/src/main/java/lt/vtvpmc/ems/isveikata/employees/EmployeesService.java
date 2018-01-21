@@ -81,10 +81,15 @@ public class EmployeesService {
 	 * @param password the password
 	 * @param userName the user name
 	 */
-	public void updateUserPassword(final String password, String userName) {
+	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		employee.setPassword(password);
-		employeesRepository.save(employee);
+		if(Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
+			employee.setPassword(newPassword);
+			employeesRepository.save(employee);
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
@@ -147,5 +152,10 @@ public class EmployeesService {
 		Employee emp = employeesRepository.findByUserName(userName);
 		emp.setAcitve(false);
 		employeesRepository.save(emp);
+	}
+
+	public boolean isUserActive(String userNanme) {
+		Employee employee = employeesRepository.findByUserName(userNanme);
+		return employee.isAcitve();
 	}
 }
