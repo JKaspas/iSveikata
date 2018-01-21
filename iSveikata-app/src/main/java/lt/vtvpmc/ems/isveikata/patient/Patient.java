@@ -14,6 +14,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -26,22 +28,23 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 public class Patient implements Serializable {
 
 	@Id
-    @Min(10_001_010_000L)
+	@Min(10_001_010_000L)
 	@Max(89_912_319_999L)
 	@Column(unique = true, nullable = false)
 	private Long patientId; // personal code
 
+	@Type(type = "date")
 	private Date birthDate;
-	
+
 	@NotNull
 	private String firstName;
-	
+
 	@NotNull
 	private String lastName;
-	
+
 	@NotNull
 	private byte[] password;
-	
+
 	private boolean isActive = true;
 
 	@ManyToOne
@@ -51,8 +54,6 @@ public class Patient implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords = new ArrayList<>();
-	
-	
 
 	public boolean isActive() {
 		return isActive;
@@ -117,7 +118,5 @@ public class Patient implements Serializable {
 	public void setPassword(String password) {
 		this.password = Passwords.hashString(password);
 	}
-
-
 
 }

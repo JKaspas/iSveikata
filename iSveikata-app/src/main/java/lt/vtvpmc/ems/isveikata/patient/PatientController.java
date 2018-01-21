@@ -27,14 +27,6 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	private PatientService getPatientService() {
-		return patientService;
-	}
-
-	private void setPatientService(PatientService patientService) {
-		this.patientService = patientService;
-	}
-
 	// PATIENT: /api/patient
 	//
 	// GET:
@@ -56,7 +48,7 @@ public class PatientController {
 	 */
 	@GetMapping("/")
 	private List<Patient> getPatientList() {
-		return patientService.getPatientList();
+		return patientService.getActivePatientList();
 	}
 
 	/**
