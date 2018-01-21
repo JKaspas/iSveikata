@@ -82,7 +82,7 @@ public class EmployeesController {
 	 *
 	 * @param userName
 	 *            the doctor id
-	 * @param patId
+	 * @param patientId
 	 *            the patient id
 	 * @return the response entity
 	 */

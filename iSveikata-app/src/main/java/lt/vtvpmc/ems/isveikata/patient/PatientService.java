@@ -86,7 +86,7 @@ public class PatientService {
 	 */
 	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
-		if(pat.getPassword().equals(Passwords.hashString(oldPassword))){
+		if(Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))){
 			pat.setPassword(newPassword);
 			patientRepository.save(pat);
 			return true;
