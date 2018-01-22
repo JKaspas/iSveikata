@@ -82,19 +82,18 @@ public class EmployeesController {
 	 *
 	 * @param userName
 	 *            the doctor id
-	 * @param patId
+	 * @param patientId
 	 *            the patient id
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
 	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
-		employeesService.bindDoctroToPatient(userName, patientId);
-		if (employeesService.validateBindDoctroToPatient(userName, patientId)) {
-			employeesService.bindDoctroToPatient(userName, patientId);
+		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
+			employeesService.bindDoctorToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
 		} else {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body("Pacientas jau buvo priskirtas daktarui anksciau");
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+					"Pacientas jau buvo priskirtas daktarui anksciau, arba bandote priskirti pacienta ne daktarui");
 		}
 	}
 
@@ -121,7 +120,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor")
 	private List<Doctor> getAllDoctors() {
-		return employeesService.getDoctorsList();
+		return employeesService.getActiveDoctorsList();
 	}
 
 	/**
@@ -145,8 +144,10 @@ public class EmployeesController {
 	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
-	private void update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
-		employeesService.updateUserPassword(fields.get("password"), userName);
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final String userName) {
+		boolean passwordChangeIsValid = employeesService.updateUserPassword(fields.get("oldPassword"), fields.get("newPassword"), userName);
+		return passwordChangeIsValid ? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
+
 	}
 
 	/**
@@ -162,16 +163,17 @@ public class EmployeesController {
 	@ResponseBody
 	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields)
 			throws NoSuchAlgorithmException {
-		if (employeesService.userLogin(fields.get("userName"), fields.get("password"))) {
+		if ((employeesService.isUserActive(fields.get("userName")))
+				&& (employeesService.userLogin(fields.get("userName"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+					.body("Vartotojas nerastas arba yra neaktyvuotas, patikrinkit prisijungimo duomenis");
 		}
 	}
 
 	/**
-	 * Gets the user type.
+	 * Returns the user type.
 	 *
 	 * @param userName
 	 *            the user name

@@ -2,7 +2,6 @@ package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -33,14 +32,14 @@ public class PatientService {
 	 *
 	 * @return the patient list
 	 */
-	public List<Patient> getPatientList() {
-		return patientRepository.findAll().stream().filter(pat -> pat.isActive()).collect(Collectors.toList());
+	public List<Patient> getActivePatientList() {
+		return patientRepository.findByIsActiveTrue();
 	}
-
 	/**
 	 * Gets the patient.
 	 *
-	 * @param patientId the patient id
+	 * @param patientId
+	 *            the patient id
 	 * @return the patient
 	 */
 	public Patient getPatient(Long patientId) {
@@ -50,7 +49,8 @@ public class PatientService {
 	/**
 	 * Gets the patient record list.
 	 *
-	 * @param patientId the patient id
+	 * @param patientId
+	 *            the patient id
 	 * @return the patient record list
 	 */
 	public List<MedicalRecord> getPatientRecordList(Long patientId) {
@@ -61,7 +61,8 @@ public class PatientService {
 	/**
 	 * Gets the patient record by id.
 	 *
-	 * @param id the id
+	 * @param id
+	 *            the id
 	 * @return the patient record by id
 	 */
 	public MedicalRecord getPatientRecordById(Long id) {
@@ -71,21 +72,34 @@ public class PatientService {
 	/**
 	 * Update patient password.
 	 *
-	 * @param password the password
-	 * @param patientId the patient id
-	 * @throws NoSuchAlgorithmException the no such algorithm exception
+	 *
+     * @param oldPassword
+     * @param newPassword
+     *            the password
+     * @param patientId
+     *            the patient id
+     * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
 	 */
-	public void updatePatientPassword(final String password, Long patientId) throws NoSuchAlgorithmException {
+	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) throws NoSuchAlgorithmException {
 		Patient pat = patientRepository.findOne(patientId);
-		pat.setPassword(password);
-		patientRepository.save(pat);
+		if(Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))){
+			pat.setPassword(newPassword);
+			patientRepository.save(pat);
+			return true;
+		}else{
+			return false;
+		}
+
 	}
 
 	/**
 	 * Adds the new patient.
 	 *
-	 * @param patient the patient
+	 * @param patient
+	 *            the patient
 	 */
+	// 7
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
 	}
@@ -95,17 +109,20 @@ public class PatientService {
 	 *
 	 * @return the patient list without doctor
 	 */
+	// 8
 	public List<Patient> getPatientListWithoutDoctor() {
-		return getPatientList().stream().filter(pat -> pat.getDoctor() == null).collect(Collectors.toList());
+		return patientRepository.findByIsActiveTrueAndDoctorIsNull();
 	}
-
 	/**
 	 * Patient login.
 	 *
-	 * @param patientId the patient id
-	 * @param password the password
+	 * @param patientId
+	 *            the patient id
+	 * @param password
+	 *            the password
 	 * @return true, if successful
 	 */
+	// 9
 	public boolean patientLogin(String patientId, String password) {
 		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
@@ -114,9 +131,11 @@ public class PatientService {
 	/**
 	 * Validate add new patient.
 	 *
-	 * @param patient the patient
+	 * @param patient
+	 *            the patient
 	 * @return true, if successful
 	 */
+	// 10 new
 	public boolean validateAddNewPatient(Patient patient) {
 		if (patientRepository.exists(patient.getPatientId())) {
 			return false;
@@ -128,12 +147,24 @@ public class PatientService {
 	/**
 	 * Deactivate patient.
 	 *
-	 * @param patient_id the patient id
+	 * @param patient_id
+	 *            the patient id
 	 */
 	public void deactivatePatient(Long patient_id) {
 		Patient patient = patientRepository.findOne(patient_id);
 		patient.setActive(false);
-		patientRepository.save(patient);	
+		patientRepository.save(patient);
+	}
+
+	/**
+	 * Return patient status: active or not.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 */
+	public boolean isPatientActive(String patientId) {
+		Patient patient = patientRepository.findOne(Long.parseLong(patientId));
+		return patient.isActive();
 	}
 
 }

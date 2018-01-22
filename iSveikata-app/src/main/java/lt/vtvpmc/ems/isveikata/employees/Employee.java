@@ -1,7 +1,5 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
-import java.security.NoSuchAlgorithmException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +27,7 @@ public abstract class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private long id;
 
 	@Column(unique = true, nullable = false)
 	private String userName;
@@ -42,10 +40,6 @@ public abstract class Employee {
 
 	@NotNull
 	private byte[] password;
-	
-	public void setPassword(String password) {
-		this.password = Passwords.hashString(password);
-	}
 
 	private boolean isAcitve = true;
 
@@ -66,7 +60,11 @@ public abstract class Employee {
 	public void setAcitve(boolean acitve) {
 		isAcitve = acitve;
 	}
-
+	
+	public void setPassword(String password) {
+		this.password = Passwords.hashString(password);
+	}
+	
 	public byte[] getPassword() {
 		return password;
 	}
@@ -75,6 +73,4 @@ public abstract class Employee {
 		return userName;
 	}
 	
-	
-
 }

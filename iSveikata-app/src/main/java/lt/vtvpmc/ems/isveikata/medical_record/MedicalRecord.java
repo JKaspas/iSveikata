@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
-import lt.vtvpmc.ems.isveikata.icd.InternationalClassificationOfDiseases;
+import lt.vtvpmc.ems.isveikata.icd.Icd;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class MedicalRecord implements Serializable {
 	private Patient patient;
 
 	@ManyToOne
-	private InternationalClassificationOfDiseases icd;
+	private Icd icd;
 
 	private boolean isCompensable;
 
@@ -64,11 +64,11 @@ public class MedicalRecord implements Serializable {
 		this.patient = patient;
 	}
 
-	public InternationalClassificationOfDiseases getIcd() {
+	public Icd getIcd() {
 		return icd;
 	}
 
-	public void setIcd(InternationalClassificationOfDiseases icd) {
+	public void setIcd(Icd icd) {
 		this.icd = icd;
 	}
 }

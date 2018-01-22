@@ -27,14 +27,6 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	private PatientService getPatientService() {
-		return patientService;
-	}
-
-	private void setPatientService(PatientService patientService) {
-		this.patientService = patientService;
-	}
-
 	// PATIENT: /api/patient
 	//
 	// GET:
@@ -56,9 +48,8 @@ public class PatientController {
 	 */
 	@GetMapping("/")
 	private List<Patient> getPatientList() {
-		return patientService.getPatientList();
+		return patientService.getActivePatientList();
 	}
-
 
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/patient
@@ -107,15 +98,17 @@ public class PatientController {
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
 	 * 
-	 * @param patient
+	 * @param fields
 	 * 
 	 * @param patientId
 	 * @throws NoSuchAlgorithmException
 	 */
 	@PutMapping("/{patientId}/password")
-	private void update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
 			throws NoSuchAlgorithmException {
-		patientService.updatePatientPassword(fields.get("password"), patientId);
+		boolean passwordChangeIsValid = patientService.updatePatientPassword(fields.get("oldPassword"),fields.get("newPassword"), patientId);
+		return passwordChangeIsValid ?
+				ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
 
 	/**
@@ -125,13 +118,14 @@ public class PatientController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields){
-		if (patientService.patientLogin(fields.get("patientId"), fields.get("password"))) {
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
+		if ((patientService.isPatientActive(fields.get("patientId")))
+				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
 					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, patikrinkit prisijungimo duomenis");
+					.body("Pacientas nerastas arba yra neaktyvuotas, patikrinkite prisijungimo duomenis");
 		}
 	}
 

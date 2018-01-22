@@ -1,7 +1,9 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
-import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaIcdRepository extends JpaRepository<InternationalClassificationOfDiseases, String> {
+public interface JpaIcdRepository extends JpaRepository<Icd, String> {
+	List<Icd> findByTitleContaining(String title);
 }
