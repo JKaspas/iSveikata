@@ -1,10 +1,8 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
-import PatientForm from './AdminComponent/PatientForm'
 import { FormErrors } from './Form_errors';
 import './Form.css';
-
 
 export default class AdminCreatePatientContainer extends Component{
 
@@ -42,10 +40,10 @@ export default class AdminCreatePatientContainer extends Component{
         e.preventDefault();
         axios.post('http://localhost:8080/api/admin/new/patient', {
             patientId:this.state.patientId,
-            birthDate:this.state.birthDate,
-            firstName:this.state.firstName,
-            lastName:this.state.lastName,
-            password:this.state.password, 
+            birthDate:this.state.birthDate,  //this.generateBirthDate(),  (?)
+            firstName:this.state.firstName,  //this.capitalizeFirstLetter(this.state.firstName),  (?)  
+            lastName:this.state.lastName,    //this.capitalizeFirstLetter(this.state.lastName),  (?)
+            password:this.state.password,    //this.generatePassword(),  (?) 
         })
         .then((response)=>{
             console.log(response.status)
@@ -92,6 +90,7 @@ export default class AdminCreatePatientContainer extends Component{
         return birthDateAutoInput;  
     }
     
+    //Slaptažodis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio dviženklio skaičiaus. 
     generatePassword() {
         let generatedPassword = ''; 
         if(this.state.formValid) {
@@ -100,10 +99,12 @@ export default class AdminCreatePatientContainer extends Component{
         return generatedPassword;
     }
     
+    //Paspaudus ant slaptažodžio įvesties langelio (read only), galima pamatyti slaptažodį; vėl paspaudus - paslėpti.
     handlePasswordMasking() {
         this.setState(prevState => ({passwordMasked: !prevState.passwordMasked}));
     }
     
+    //Formos laukų validacija:
     validateField(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
         let firstNameValid = this.state.firstNameValid;
@@ -123,12 +124,9 @@ export default class AdminCreatePatientContainer extends Component{
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
                 break;
             case 'patientId':
-                if(value.match(/^([3-6]{1})([0-9]{2})(([0]{1})([0-9]{1})|([1]{1})([0-2]{1}))(([0-2]{1})([0-9]{1})|([3]{1})([0-1]{1}))([0-9]{4})$/g)) {
-                // ^ Tikrina ar įrašyta 11 skaitmenų. Pirmas skaičius gali būti tik 3, 4, 5 arba 6. Ketvirtas ir penktas - 00-12.  Šeštas ir septintas - 00-31.
+                if(value.match(/^([3-6]{1})([0-9]{2})(((([0]{1})([013-9]{1})|([1]{1})([0-2]{1}))(([0-2]{1})([0-9]{1})|([3]{1})([0-1]{1})))|(([0]{1})([2]{1})([0-2]{1})([0-9]{1})))([0-9]{4})$/g)) {
+                // ^ Tikrina ar įrašyta 11 skaitmenų. Pirmas skaičius gali būti tik 3, 4, 5 arba 6. Ketvirtas ir penktas - 00-12.  Šeštas ir septintas - 00-31. Jei Ketvirtas ir penktas - 02.  Šeštas ir septintas - 00-29.
                 //Pastaba: jei asmuo neprisimena savo gimimo mėnesio ar dienos, tokiuose koduose vietoje mėnesio ar dienos skaitmenų įrašomi 0. Tai labai reta išimtis.
-        
-                // value.match(/^[0-9]{11}$/g);
-                // ^ Tikrina ar įrašyta 11 skaitmenų.
         
                     //Toliau patikrinama ar gimimo data "ne ateityje": 
                     let patientIdAsString = value.toString();
@@ -169,13 +167,16 @@ export default class AdminCreatePatientContainer extends Component{
                         patientIdValid: patientIdValid
                       }, this.validateForm);
     }
-      
+    
+    //Paspausti "submit" leidžiama tik jei visi laukai įvesti teisingai.
     validateForm() {
         this.setState({formValid: this.state.firstNameValid && this.state.lastNameValid && this.state.patientIdValid});
     }
     
+    //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
+    //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
     errorClass(error) {
-        return(error.length === 0 ? 'form-control is-valid' : 'form-control is-invalid');
+        return(error.length === 0 ? 'is-valid' : 'is-invalid');
     }
     
     render(){
@@ -188,39 +189,53 @@ export default class AdminCreatePatientContainer extends Component{
                             <h4>Naujo paciento registravimo forma</h4>
                         </div>
                         <div className="panel-body">
-                            <FormErrors 
-                            formErrors={this.state.formErrors}/>
-                            <PatientForm 
-                            patientId={this.state.patientId}
-                            birthDate={this.state.birthDate}
-                            firstName={this.state.firstName}
-                            lastName={this.state.lastName}
-                            password={this.state.password}
-
-                            formValid={this.state.formValid}
-                            formErrors={this.state.formErrors}
-                            passwordMasked={this.state.passwordMasked}
-
-                            fieldHandler={this.fieldHandler}
-                            submitHandler={this.submitHandler}
-
-                            errorClass={this.errorClass}
-                            capitalizeFirstLetter={this.capitalizeFirstLetter}
-                            generateBirthDate={this.generateBirthDate}
-                            generatePassword={this.generatePassword}
-                            handlePasswordMasking={this.handlePasswordMasking}
-                            />
+                            <div className="col-sm-10">
+                                <div className="col-sm-9 col-sm-offset-3"> 
+                                    <FormErrors formErrors={this.state.formErrors}/>
+                                </div>
+                                <form onSubmit={this.submitHandler} className="form-horizontal" >
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-3">Asmens kodas:</label>
+                                        <div className="col-sm-9">
+                                            <input type="text" className="form-control" id={this.errorClass(this.state.formErrors.patientId)} value={this.state.patientId} required maxLength="11" onChange={(event) => this.fieldHandler(event)} placeholder="Asmens kodas" name="patientId" />
+                                        </div>
+                                    </div>
+                                        <div className="form-group">
+                                        <label className="control-label col-sm-3">Gimimo data:</label>
+                                        <div className="col-sm-9">
+                                            <input type="text" readOnly className="form-control" value={this.generateBirthDate()} required onChange={(event) => this.fieldHandler(event)} placeholder="yyyy-MM-dd" name="birthDate" />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-3">Vardas:</label>
+                                        <div className="col-sm-9">          
+                                            <input type="text" className="form-control" id={this.errorClass(this.state.formErrors.firstName)} value={this.capitalizeFirstLetter(this.state.firstName)} required onChange={(event) => this.fieldHandler(event)} placeholder="Paciento vardas" name="firstName" />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-3" >Pavardė:</label>
+                                        <div className="col-sm-9">          
+                                            <input type="text" className="form-control" id={this.errorClass(this.state.formErrors.lastName)} value={this.capitalizeFirstLetter(this.state.lastName)} required onChange={(event) => this.fieldHandler(event)} placeholder="Paciento pavardė" name="lastName" />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-3" >Slaptažodis:</label>
+                                        <div className="col-sm-9">          
+                                            <input type={this.state.passwordMasked ? "password" : "text"} readOnly className="form-control" value={this.generatePassword()} required onChange={(event) => this.fieldHandler(event)} onClick={this.handlePasswordMasking} placeholder="Slaptažodis" name="password"/>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">        
+                                        <div className="col-sm-offset-3 col-sm-9">
+                                            <button className="btn btn-default" type="submit" disabled={!this.state.formValid}>Registruoti</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>   
                         </div> 
                     </div> 
                 </div>           
             </section>
-        </div>
-        
-            
-
-               
-            
+        </div>     
         )
     }
 }
-
