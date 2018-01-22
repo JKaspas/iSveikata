@@ -88,7 +88,6 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
 	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
-		employeesService.bindDoctorToPatient(userName, patientId);
 		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
 			employeesService.bindDoctorToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
