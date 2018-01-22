@@ -21,4 +21,5 @@ public class SpecializationService {
     public List<Specialization> getAllSpecialization() {
         return jpaSpecializationRepository.findAll();
     }
+
 }

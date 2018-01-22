@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,20 +36,25 @@ public class EmployeesController {
 	@Autowired
 	private PatientService patientService;
 
+
 	/**
 	 * Insert user. Insert new user into data base with unique userName. Return
 	 * response if userName is not unique. URL: /api/admin/new/user
 	 *
 	 * @param <T>
 	 *            the generic type
-	 * @param employee
-	 *            the employee
+	 * @param map
+	 *            map with two object Employee and Specialization
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/user")
-	private <T extends Employee> ResponseEntity<String> insertUserValid(@RequestBody Employee employee) {
+	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
+		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
+		final Specialization specialization = map.get("specialization") == null ? null : mapper.convertValue(map.get("specialization"), Specialization.class);
+
 		if (employeesService.validateAddNewUser(employee)) {
-			employeesService.addEmployee(employee);
+			employeesService.addEmployee(employee, specialization);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -104,13 +111,13 @@ public class EmployeesController {
 	 * 
 	 * URL: /api/doctor/new/record
 	 *
-	 * @param recordAppointment
-	 *            the record from UI
+	 * @param map
+	 *            with 4 object : MedicalRecord, Appointment, Strin patientId, Strin userName
 	 */
 	@PostMapping("/doctor/new/record")
 	@ResponseStatus(HttpStatus.CREATED)
-	private void createRecord(@RequestBody RecordAppointment recordAppointment) {
-		medicalRecordService.createNewRecord(recordAppointment);
+	private <T extends Object> void createRecord(@RequestBody Map<String, Object> map) {
+		medicalRecordService.createNewRecord(map);
 	}
 
 	/**

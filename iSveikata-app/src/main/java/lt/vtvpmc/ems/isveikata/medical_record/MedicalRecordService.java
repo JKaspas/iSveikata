@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
 import lt.vtvpmc.ems.isveikata.appointment.JpaAppointmentRepository;
 import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -28,12 +30,15 @@ public class MedicalRecordService {
     @Autowired
     private JpaPatientRepository jpaPatientRepository;
 
-	public void createNewRecord(RecordAppointment recordAppointment) {
-	    MedicalRecord medicalRecord = recordAppointment.getMedicalRecord();
-        Appointment appointment = recordAppointment.getAppointment();
+
+
+	public void createNewRecord(Map<String, Object> map) {
+        final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+        MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
+        Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
         medicalRecord.setAppointment(appointment);
-        medicalRecord.setDoctor((Doctor)jpaEmployeesRepository.findByUserName(recordAppointment.getUserName()));
-        medicalRecord.setPatient(jpaPatientRepository.findOne(recordAppointment.getPatientId()));
+        medicalRecord.setDoctor((Doctor)jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
+        medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), Long.class)));
         jpaMedicalRecordRepository.save(medicalRecord);
         jpaAppointmentRepository.save(appointment);
 

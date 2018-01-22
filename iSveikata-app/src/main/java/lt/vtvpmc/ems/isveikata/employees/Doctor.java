@@ -44,4 +44,12 @@ public class Doctor extends Employee {
 	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
 		this.medicalRecords = medicalRecords;
 	}
+
+	public Specialization getSpecialization() {
+		return specialization;
+	}
+
+	public void setSpecialization(Specialization specialization) {
+		this.specialization = specialization;
+	}
 }
