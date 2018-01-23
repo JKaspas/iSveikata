@@ -24,7 +24,7 @@ public class Appointment implements Serializable {
 	private Date date;
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private MedicalRecord medicalRecord;
 
 	public MedicalRecord getMedicalRecord() {

@@ -15,7 +15,7 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 @DiscriminatorValue(value = "doctor")
 public class Doctor extends Employee {
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Specialization specialization;
 	
 	@JsonIgnore
