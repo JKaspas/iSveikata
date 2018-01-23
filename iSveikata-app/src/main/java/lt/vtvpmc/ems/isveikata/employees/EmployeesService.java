@@ -38,25 +38,24 @@ public class EmployeesService {
 
 	/**
 	 * Adds new user.
-	 *
-	 * @param employee the employee
+	 *  @param employee the employee
 	 * @param specialization
+	 * @param drugStore
 	 */
-	public void addEmployee(Employee employee, Specialization specialization) {
-		if(employee instanceof Doctor){
+	public void addEmployee(Employee employee, Specialization specialization, String drugStore) {
+		if (employee instanceof Doctor) {
 			Specialization spec = null;
-			if(specializationRepository.findByTitle(specialization.getTitle()) == null) {
+			if (specializationRepository.findByTitle(specialization.getTitle()) == null) {
 				spec = specializationRepository.save(specialization);
-			}else{
+			} else {
 				spec = specializationRepository.findByTitle(specialization.getTitle());
 			}
 
 			Doctor doctor = (Doctor) employeesRepository.save(employee);
 			doctor.setSpecialization(spec);
-//			spec.getDoctor().add(doctor);
-
+		} else {
+			employeesRepository.save(employee);
 		}
-		employeesRepository.save(employee);
 	}
 
 	/**

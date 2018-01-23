@@ -19,7 +19,7 @@ public class MedicalRecord implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	private Appointment appointment;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -28,7 +28,7 @@ public class MedicalRecord implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Patient patient;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Icd icd;
 
 	private boolean isCompensable;

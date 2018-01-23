@@ -19,11 +19,11 @@ public class Doctor extends Employee {
 	private Specialization specialization;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patient;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "doctor")
 	private List<MedicalRecord> medicalRecords;
 
 	public List<Patient> getPatient() {

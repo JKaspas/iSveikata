@@ -20,7 +20,7 @@ public class Specialization implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String title;
 
-	@OneToMany(mappedBy = "specialization", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "specialization")
 	@JsonIgnore
 	private List<Doctor> doctor;
 

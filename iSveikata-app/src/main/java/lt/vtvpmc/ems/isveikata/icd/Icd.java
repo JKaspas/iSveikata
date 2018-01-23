@@ -1,12 +1,12 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
 import lombok.Data;
@@ -24,6 +24,9 @@ public class Icd implements Serializable {
 	
 	@NotNull
 	private String title;
+
+//	@OneToMany(mappedBy = "icd")
+//	private List<MedicalRecord> medicalRecordList;
 
 
 	public String getTitle() {

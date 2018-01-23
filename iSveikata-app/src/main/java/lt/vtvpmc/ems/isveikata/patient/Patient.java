@@ -43,12 +43,12 @@ public class Patient implements Serializable {
 
 	private boolean isActive = true;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JsonIgnore
 	private Doctor doctor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
 	public boolean isActive() {
