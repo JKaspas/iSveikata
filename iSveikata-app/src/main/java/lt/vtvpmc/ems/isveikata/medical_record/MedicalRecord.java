@@ -1,11 +1,6 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
@@ -24,16 +19,16 @@ public class MedicalRecord implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Appointment appointment;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Doctor doctor;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Patient patient;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Icd icd;
 
 	private boolean isCompensable;

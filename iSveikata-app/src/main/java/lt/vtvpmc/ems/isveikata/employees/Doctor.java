@@ -2,10 +2,7 @@ package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -18,15 +15,15 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 @DiscriminatorValue(value = "doctor")
 public class Doctor extends Employee {
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Specialization specialization;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "doctor")
+	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
 	private List<Patient> patient;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "doctor")
+	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
 	private List<MedicalRecord> medicalRecords;
 
 	public List<Patient> getPatient() {

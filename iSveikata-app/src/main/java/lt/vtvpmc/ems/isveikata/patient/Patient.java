@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -47,12 +43,12 @@ public class Patient implements Serializable {
 
 	private boolean isActive = true;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Doctor doctor;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "patient")
+	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
 	private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
 	public boolean isActive() {
