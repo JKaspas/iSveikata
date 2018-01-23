@@ -21,3 +21,8 @@
 	box-shadow: none !important;
     outline: none !important;
 }
+
+textarea {
+	resize: vertical;
+	overflow: auto;
+}
