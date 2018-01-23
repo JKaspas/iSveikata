@@ -3,10 +3,7 @@ package lt.vtvpmc.ems.isveikata.appointment;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -27,7 +24,7 @@ public class Appointment implements Serializable {
 	private Date date;
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "appointment")
+	@OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private MedicalRecord medicalRecord;
 
 	public MedicalRecord getMedicalRecord() {

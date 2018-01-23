@@ -32,4 +32,5 @@ public class SpecializationController {
 	private List<Specialization> getAllSpecialization() {
 		return specializationService.getAllSpecialization();
 	}
+
 }

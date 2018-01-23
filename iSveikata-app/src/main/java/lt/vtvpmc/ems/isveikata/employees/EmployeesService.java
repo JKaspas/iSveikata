@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +32,30 @@ public class EmployeesService {
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
+	/** The specialization repository */
+	@Autowired
+	private JpaSpecializationRepository specializationRepository;
 
 	/**
 	 * Adds new user.
 	 *
 	 * @param employee the employee
+	 * @param specialization
 	 */
-	public void addEmployee(Employee employee) {
+	public void addEmployee(Employee employee, Specialization specialization) {
+		if(employee instanceof Doctor){
+			Specialization spec = null;
+			if(specializationRepository.findByTitle(specialization.getTitle()) == null) {
+				spec = specializationRepository.save(specialization);
+			}else{
+				spec = specializationRepository.findByTitle(specialization.getTitle());
+			}
+
+			Doctor doctor = (Doctor) employeesRepository.save(employee);
+			doctor.setSpecialization(spec);
+//			spec.getDoctor().add(doctor);
+
+		}
 		employeesRepository.save(employee);
 	}
 
@@ -78,7 +97,8 @@ public class EmployeesService {
 	/**
 	 * Update user password.
 	 *
-	 * @param password the password
+	 * @param oldPassword old password
+	 * @param newPassword new password
 	 * @param userName the user name
 	 */
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
