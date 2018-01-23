@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const DoctorListView = (props) =>{
-
+   
 
     return (
     <div> 

@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router'
 
 
 const DoctorListingItem = (props) =>{
@@ -9,7 +8,7 @@ const DoctorListingItem = (props) =>{
             <td>{props.lastName}</td>
             <td>{props.userName}</td>
             <td>{props.specialization}</td>
-            <td><Link to={'/admin/bind/'+props.userName} className='btn btn-primary'>View</Link></td>
+            <td>{props.doctorBindLink}</td>
 
     </tr>)
 }

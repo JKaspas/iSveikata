@@ -8,7 +8,6 @@ var PatientInfoCard = (props) =>{
             <div className="panel-heading">
             <p>Patient: {props.patientFullName}</p>
             <p>Asmens kodas: {props.patientId}</p>
-            <p>Doctor: {props.userName}</p>
             </div>
                 <div className="panel-body">
                 

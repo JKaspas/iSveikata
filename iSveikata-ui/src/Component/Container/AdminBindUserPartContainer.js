@@ -1,27 +1,35 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
+
 import PatientListView from './AdminComponent/PatientListView'
 import PatientListingItem from './AdminComponent/PatientListingItem'
+import { PatientBindLink } from './LinksAndButtons/PatientBindLink';
 
 export default class AdminBindUserPartContainer extends Component{
     constructor(){
         super();
-        
+        this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
-            patients:'',
+            patients:null,
             infoNoPatient:'',
-            infoBind:''
+            infoState:''
         }
     }
 
     fieldHandler = (e) =>{
         this.setState({[e.target.name]: e.target.value})
-        console.log("Input field name: " + e.target.name)
-        console.log("Input field value: " + e.target.value)
+    
     }
-    componentWillMount= () =>{
-        this.getPatientList();
+  
+  
+    componentWillMount = () =>{
+        
+        if(this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
+            this.props.router.push('/vartotojams');
+            return '';
+        }
+        this.getPatientList();  
     }
 
     getPatientList = () =>{
@@ -44,16 +52,20 @@ export default class AdminBindUserPartContainer extends Component{
 
     bindClick = (patient_id) =>{
         axios.post("http://localhost:8080/api/admin/new/bind/"+this.props.params.userName+"/to/"+patient_id)
-        .then((response) => {
+        .then((response)=>{
             console.log(response.status)
             this.getPatientList();
             this.setState({
-                infoBind:(<p>Pacientas: {patient_id}, buvo apjungtas su daktaru: {this.props.params.userName}</p>)
+                infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
             })
         })
         .catch((erorr) => {
             console.log(erorr)
+            this.setState({
+                infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
+            })
         })
+
     }
 
     composePatient = (patient, index) =>{
@@ -64,10 +76,7 @@ export default class AdminBindUserPartContainer extends Component{
                 birthDate={patient.birthDate}
                 firstName={patient.firstName}
                 lastName={patient.lastName}
-                recordLinkStatus={{display:'none'}}
-                bindLinkStatus={{display:'block'}}
-                bindLinkValue={"Apjungti"}
-                bindClick={this.bindClick}
+                patientBindLink={<PatientBindLink bindClick={this.bindClick} patientId={patient.patientId}/>}
                 
             />
         )
@@ -83,20 +92,21 @@ export default class AdminBindUserPartContainer extends Component{
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h4>Prijunkyte pacienta</h4>
-                            <h4>Doctor user name = {this.props.params.userName}</h4>
                         </div>
                         <div className="panel-body">
+                            {this.state.infoState}
                             <div className="col-sm-12">
                                 <div className="col-sm-4 col-sm-offset-4">
                                     <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieska" name="search" />
                                 </div>
                             </div>
+                            
                             <div className="col-sm-12">
                                 <PatientListView 
                                     patients={this.state.patients}
                                 />
                                 {this.state.infoNoPatient}
-                                {this.state.infoBind}
+                                
                             </div>
                         </div> 
                     </div> 
@@ -105,4 +115,3 @@ export default class AdminBindUserPartContainer extends Component{
         </div>)
     }
 }
-

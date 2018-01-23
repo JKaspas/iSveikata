@@ -1,23 +1,37 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux'
 
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
+import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink';
+import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
 
-export default class DoctorViewContainer extends Component{
+class DoctorViewContainer extends Component{
     constructor(props){
         super(props)
+        this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
-            patients:'',
-            userName:'',
-            info:''
+            patients:null,
+            searchValue:'',
+            info:'',
+            patientTypeName:'Visi pacientai',
+            patientType:true,
+
+            listBegin:0,
+            listEnd:5,
         }
     }
 
+
     componentWillMount = () =>{
-        // this.getDoctorPatient(this.state.userName);
+        if(this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
+            this.props.router.push('/vartotojams');
+            return '';
+        }  
+
+        this.getDoctorPatient(this.session.user.userName);
     }
 
     getDoctorPatient = (userName) =>{
@@ -36,39 +50,99 @@ export default class DoctorViewContainer extends Component{
         })
         .catch((erorr) => {
             console.log(erorr)
+
+        })
+    }
+    getAllPatient = () =>{
+        axios.get('http://localhost:8080/api/patient/')
+        .then((response)=>{
+            this.setState({
+                patients:response.data.map(this.composePatient)
+            })
+            // this.setPatientAmount(this.state.patients,0, 20)
+
+            if(response.data.length === 0){
+                this.setState({
+                    info:(<h3>No patient found</h3>)
+                })
+            }
+                  
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            
+            //console.log(erorr)
         })
     }
 
+    // setPatientAmount = (patient, start, end) =>{
+    //     var value=0;
+    //     this.setState({
+    //         patients:patient.filter()
+    //     })
+    // }
+
     composePatient = (patient, index) =>{
+        var date = new Date(patient.birthDate)
+        var newDate = date.getFullYear() + '-'+ date.getMonth()+1 + '-' + date.getDate();
+        // if(index > this.state.listEnd || index < this.state.listBegin){
+        //     return null;
+        // }
         return (
             <PatientListingItem
                 key={index}
                 patientId={patient.patientId}
-                birthDate={patient.birthDate}
+                birthDate={newDate}
                 firstName={patient.firstName}
                 lastName={patient.lastName}
-                recordLinkStatus={{display:'block'}}
-                patientLinkStatus={{display:'block'}}
-                bindLinkStatus={{display:'none'}}
-                recordLinkValue={"Naujas įrašas"}
-                patientLinkValue={"View"}
-                userName={this.state.userName}            
+    
+                recordLink={<NewRecordLink userName={this.session.user.userName} patientId={patient.patientId}/>}
+                doctorViewPatient={<DoctorViewPatientLink patientId={patient.patientId} />}          
             />
         )
     }
 
     fielddHandler = (e) =>{
         this.setState({
-            userName:e.target.value
+            searchValue:e.target.value
         })
-       
     }
     searchHandler = (e) =>{
         e.preventDefault()
-        if(this.state.userName.length > 3){
-            this.getDoctorPatient(this.state.userName);
+       console.log("Searcrh search..."+ this.state.searchValue)
+    }
+
+    changePatients = () =>{
+        if(this.state.patientType){
+            this.getAllPatient()
+            this.setState({
+                patientType:!this.state.patientType,
+                patientTypeName:"Mano pacientai"
+            })
+        }else{
+            this.getDoctorPatient(this.session.user.userName)
+            this.setState({
+                patientType:!this.state.patientType,
+                patientTypeName:"Visi pacientai"
+            })
         }
     }
+
+    forward = () =>{
+        this.setState({
+            listBegin:this.state.listBegin+5,
+            listEnd:this.state.listEnd+5
+        })
+        this.getAllPatient()
+    }
+    backward = () =>{
+        this.setState({
+            listBegin:this.state.listBegin-5,
+            listEnd:this.state.listEnd-5
+        })
+        this.getAllPatient()
+    }
+
 
 
 
@@ -80,15 +154,15 @@ export default class DoctorViewContainer extends Component{
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h4>Pacientu sarasas</h4>
-                            <h4>Doctor user name = {this.state.userName}</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
                                 <SearchFieldForm 
                                     searchHandler={this.searchHandler}
                                     fielddHandler={this.fielddHandler}
-                                    userName={this.state.userName}
+                                    searchValue={this.state.searchValue}
                                 />
+                                <button className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                             </div>
                             
                             <div className="col-sm-12">
@@ -96,6 +170,9 @@ export default class DoctorViewContainer extends Component{
                                     patients={this.state.patients}
                                 />
                                 {this.state.info}
+                                {/* <button className='btn btn-success pull-right' onClick={this.forward}>Pirmyn</button>
+                                <button className='btn btn-success pull-right' onClick={this.backward}>Atgal</button> */}
+
                             </div>
                         </div> 
                     </div> 
@@ -105,6 +182,10 @@ export default class DoctorViewContainer extends Component{
     }
 }
 
-DoctorViewContainer.contextTypes = {
-    userName: PropTypes.string
-  };
+const mapStateToProps = (state) =>{
+    return{
+        user:state.user
+    }
+}
+
+export default connect(mapStateToProps)(DoctorViewContainer)

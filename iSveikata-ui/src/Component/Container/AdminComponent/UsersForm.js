@@ -41,21 +41,13 @@ const UsersForm = (props) => {
             <div className="form-group">
                 <label className="control-label col-sm-3" >Slaptažodis:</label>
                 <div className="col-sm-9">          
-                <input type="password" className="form-control" value={props.password } onChange={props.fieldHandler} placeholder="Slaptažodis" name="password" />
+                <input type="password" className="form-control" value={props.password } 
+                onChange={props.fieldHandler} placeholder="Slaptažodis" 
+                name="password" autoComplete="off"/>
                 </div>
             </div>
-            {/* <div className="form-group">
-                <label className="control-label col-sm-3" >Daktaro specelizacija:</label>
-                <div className="col-sm-9">          
-                <input type="text" className="form-control" value={props.specialization } onChange={props.fieldHandler} placeholder="Specelizacija" name="specialization"/>
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="control-label col-sm-3" >Vaistininko įmonės pavadinimas</label>
-                <div className="col-sm-9">          
-                <input type="text" className="form-control" value={props.drugStore } onChange={props.fieldHandler} placeholder="Įmonės pavadinimas" name="drugStore" />
-                </div>
-            </div> */}
+           {props.specializationInput}
+           {props.drugStoreInput}
             <div className="form-group">        
                 <div className="col-sm-offset-3 col-sm-9">
                     <button className="btn btn-default">Submit</button>

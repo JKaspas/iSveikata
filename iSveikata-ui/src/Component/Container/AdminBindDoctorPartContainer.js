@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import DoctorListView from './AdminComponent/DoctorListView'
 import DoctorListingItem from './AdminComponent/DoctorListingItem'
-
+import {DoctorBindLink} from '../Container/LinksAndButtons/DoctorBindLink'
 
 
 export default class AdminBindDoctorPartContainer extends Component{
@@ -11,17 +11,27 @@ export default class AdminBindDoctorPartContainer extends Component{
         super(props);
         this.state = {
             search:'',
-            doctors:'',
+            doctors:null,
+            notFound:''
         }
     }
 
 
+
     componentWillMount = () =>{
+
+        var session =  JSON.parse(sessionStorage.getItem('session'))
+        if(session.user.loggedIn !== true || session.user.userType !== 'admin'){
+            this.props.router.push('/vartotojams');
+            return '';
+        }
+
         axios.get('http://localhost:8080/api/doctor')
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
-                    doctors:(<h3>No doctor found</h3>)
+                    notFound:(<h3>No doctor found</h3>),
+                    doctor:(<td><th><h3>No doctor found</h3></th></td>)
                 })
             }else{
                 this.setState({
@@ -42,6 +52,8 @@ export default class AdminBindDoctorPartContainer extends Component{
                 firstName={doctor.firstName}
                 lastName={doctor.lastName}
                 userName={doctor.userName}
+                specialization={doctor.specialization.title}
+                doctorBindLink={<DoctorBindLink userName={doctor.userName}/>}
             />)
     }
     
@@ -74,6 +86,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                                 <DoctorListView 
                                     doctors={this.state.doctors}
                                 />
+                                {this.state.notFound}
                             </div>
                         </div> 
                     </div> 
@@ -82,4 +95,5 @@ export default class AdminBindDoctorPartContainer extends Component{
         </div>)
     }
 }
+
 

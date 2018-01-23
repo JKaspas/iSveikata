@@ -1,11 +1,11 @@
 import React ,{Component} from 'react'
 import axios from 'axios'
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-
+import {connect} from 'react-redux'
 
 import LoginForm from '../LoginForm/LoginForm'
+import { patientLoggedIn } from './_action/index';
 
-export default class PatientLoginContainer extends Component{
+class PatientLoginContainer extends Component{
     constructor(){
         super()
         this.state = {
@@ -20,6 +20,7 @@ export default class PatientLoginContainer extends Component{
             password:this.state.password
         })
         .then((response) => {
+            this.props.dispatch(patientLoggedIn(this.state.patientId))
             this.props.router.push('/patient/');
             console.log(response.status)
         })
@@ -32,8 +33,6 @@ export default class PatientLoginContainer extends Component{
 
     fieldHandler = (e) =>{
         this.setState({[e.target.name]: e.target.value})
-        console.log("Input field name: " + e.target.name)
-        console.log("Input field value: " + e.target.value)
     }
 
     
@@ -51,3 +50,11 @@ export default class PatientLoginContainer extends Component{
     }
 }
 
+
+const mapStateToProps = (state) =>{
+    return{
+        patient:state.patient
+    }
+}
+
+export default connect(mapStateToProps)(PatientLoginContainer)

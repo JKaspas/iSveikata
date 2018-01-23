@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-import PropTypes from 'prop-types';
 
+import {connect} from 'react-redux'
 
 import LoginForm from '../LoginForm/LoginForm'
+import { userLoggedIn } from './_action/index';
 
-export default class UserLoginContainer extends Component{
+class UserLoginContainer extends Component{
     constructor(){
         super()
         this.state = {
@@ -14,6 +14,8 @@ export default class UserLoginContainer extends Component{
             password:''
         }
     }
+    
+
     submitHandler = (e) =>{
         e.preventDefault();
         axios.post('http://localhost:8080/api/user/login', {
@@ -21,8 +23,10 @@ export default class UserLoginContainer extends Component{
             password:this.state.password
         })
         .then((response) => {
+            this.props.dispatch(userLoggedIn(response.data, this.state.userName))
+            console.log(response.data)            
             this.props.router.push('/'+response.data+'/');
-            console.log(response.data)
+
         })
         .catch((error) => {
             console.log(error.response.data)
@@ -30,12 +34,9 @@ export default class UserLoginContainer extends Component{
         })
     }
 
-   
 
     fieldHandler = (e) =>{
         this.setState({[e.target.name]: e.target.value})
-        console.log("Input field name: " + e.target.name)
-        console.log("Input field value: " + e.target.value)
       }
 
 
@@ -52,5 +53,12 @@ export default class UserLoginContainer extends Component{
     }
 }
 
-
+const mapStateToProps = (state) =>{
+    return{
+        user:state.user
+    }
+}
+  
+export default connect(mapStateToProps)(UserLoginContainer);
+  
   

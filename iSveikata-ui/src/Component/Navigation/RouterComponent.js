@@ -12,8 +12,11 @@ import AdminBindDoctorPartContainer from '../Container/AdminBindDoctorPartContai
 import AdminBindUserPartContainer from '../Container/AdminBindUserPartContainer'
 import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
-
+import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer'
+import PatientPasswordContainer from '../Container/PasswordComponent/PatientPasswordContainer'
+import UserPasswordContainer from '../Container/PasswordComponent/UserPasswordContainer'
 import {InitialAdminApp, InitialPublicApp, InitialDoctorApp, InitialDruggistApp, InitialPatientApp, NoMatch} from './InitialAppComponents'
+import LogoutContainer from '../Container/LogoutContainer';
 
 
 var RouteComponent = () =>{
@@ -24,6 +27,7 @@ var RouteComponent = () =>{
             <Route path="/" component={PublicViewContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
             <Route path="/vartotojams" component={UserLoginContainer} />
+            <Route path="/atsijungti" component={LogoutContainer} />
           </Route>
           <Route path="/admin" component={InitialAdminApp} >
             <IndexRoute component={AdminCreatePatientContainer} />
@@ -32,7 +36,7 @@ var RouteComponent = () =>{
             <Route path="/admin/edit" component={NoMatch} />
             <Route path="/admin/bind" component={AdminBindDoctorPartContainer} />
             <Route path="/admin/bind/:userName" component={AdminBindUserPartContainer} />
-            <Route path="/admin/password" component={NoMatch} />
+            <Route path="/admin/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
           <Route path="/doctor" component={InitialDoctorApp} >
@@ -40,19 +44,19 @@ var RouteComponent = () =>{
             <Route path="/doctor/patient" component={DoctorViewContainer} />
             <Route path="/doctor/:userName/patient/:patientId" component={DoctorRecordContainer} />
             <Route path="/doctor/patient/:patientId/view" component={DoctorPatientViewContainer} />
-            <Route path="/doctor/password" component={NoMatch} />
+            <Route path="/doctor/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
           <Route path="/druggist" component={InitialDruggistApp} >
             <IndexRoute component={DruggistViewContainer} />
             <Route path="/druggist" component={DruggistViewContainer} />
-            <Route path="/druggist/password" component={NoMatch} />
+            <Route path="/druggist/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
           <Route path="/patient" component={InitialPatientApp} >
-            <IndexRoute component={NoMatch} />
-            <Route path="/patient" component={NoMatch} />
-            <Route path="/patient/password" component={NoMatch} />
+            <IndexRoute component={PatientViewContainer} />
+            <Route path="/patient" component={PatientViewContainer} />
+            <Route path="/patient/password" component={PatientPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
       </Router>)

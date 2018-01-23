@@ -4,13 +4,17 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import RouteComponent from './Component/Navigation/RouterComponent'
 
-
+import {connect} from 'react-redux'
 
 
 
 
 
 class App extends Component {
+  componentWillMount = () =>{
+    
+  }
+
   render() {
     return (
       <div>
@@ -20,4 +24,11 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return{
+    user:state.user
+  }
+}
+
+
+export default connect(mapStateToProps)(App);

@@ -8,12 +8,12 @@ var AdminNavigation = (props) =>{
             <ul className="nav navbar-nav navbar-left">
               <li><a className="" href="#admin/create/patient">Kurti pacienta</a></li>
               <li><a className="" href="#admin/create/user">Kurti vartotoja</a></li>
-              <li><a className="" href="#admin/edit">Redaguoti</a></li>
+              {/* <li><a className="" href="#admin/edit">Redaguoti</a></li> */}
               <li><a className="" href="#admin/bind">Apjungti</a></li>
-              <li><a className="" href="#admin/password">Slaptažodio keitimas</a></li>
+              <li><a className="" href="#admin/password">Slaptažodis</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
-            <li><a className="" href="#">Atsijungti</a></li>
+            <li><a className="" href="#atsijungti">Atsijungti</a></li>
             </ul>
         </div>
     </nav>
@@ -27,10 +27,10 @@ var AdminNavigation = (props) =>{
         <a className="navbar-brand" href="#doctor">iSveikata</a>
         <ul className="nav navbar-nav navbar-left">
             <li><a className="" href="#doctor/patient">Pacientai</a></li>
-            <li><a className="" href="#doctor/password">Slaptažodio keitimas</a></li>
+            <li><a className="" href="#doctor/password">Slaptažodis</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
-        	<li><a className="" href="#">Atsijungti</a></li>
+        	<li><a className="" href="#atsijungti">Atsijungti</a></li>
         </ul>
       </div>
     </nav>
@@ -44,10 +44,10 @@ var AdminNavigation = (props) =>{
       <div className="container">
         <a className="navbar-brand" href="#druggist">iSveikata</a>
         <ul className="nav navbar-nav navbar-left">
-            <li><a className="" href="#druggist/password">Slaptažodio keitimas</a></li>
+            <li><a className="" href="#druggist/password">Slaptažodis</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
-        	<li><a className="" href="#">Atsijungti</a></li>
+        	<li><a className="" href="#atsijungti">Atsijungti</a></li>
         </ul>
       </div>
     </nav>
@@ -59,11 +59,11 @@ var PatientNavigation = (props) =>{
     <div className="container">
       <a className="navbar-brand" href="#patient">iSveikata</a>
       <ul className="nav navbar-nav navbar-left">
-            <li><a className="" href="#patient">Kiti pasirinkimai?</a></li>
-            <li><a className="" href="#patient/password">Slaptažodio keitimas</a></li>
+            <li><a className="" href="#patient">Pagrindinis</a></li>
+            <li><a className="" href="#patient/password">Slaptažodis</a></li>
       </ul>
       <ul className="nav navbar-nav navbar-right">
-        <li><a className="" href="#">Atsijungti</a></li>
+        <li><a className="" href="#atsijungti">Atsijungti</a></li>
       </ul>
     </div>
   </nav>
