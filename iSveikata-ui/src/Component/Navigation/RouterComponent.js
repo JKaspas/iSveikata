@@ -27,7 +27,7 @@ var RouteComponent = () =>{
           </Route>
           <Route path="/admin" component={InitialAdminApp} >
             <IndexRoute component={AdminCreatePatientContainer} />
-            <Route path="/admin/create/user" component={AdminCreateUserContainer} />
+            <Route path="/admin/create/user" component={AdminCreateUserContainer} /> 
             <Route path="/admin/create/patient" component={AdminCreatePatientContainer} />
             <Route path="/admin/edit" component={NoMatch} />
             <Route path="/admin/bind" component={AdminBindDoctorPartContainer} />
