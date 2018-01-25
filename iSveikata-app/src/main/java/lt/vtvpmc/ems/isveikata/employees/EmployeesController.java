@@ -51,7 +51,7 @@ public class EmployeesController {
 	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
 		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
-		final Specialization specialization = map.get("specialization") == null ? null : mapper.convertValue(map.get("specialization"), Specialization.class);
+		final Specialization specialization =  mapper.convertValue(map.get("specialization"), Specialization.class);
 		final String drugStore = mapper.convertValue(map.get("drugStore"), String.class);
 
 		if (employeesService.validateAddNewUser(employee)) {
