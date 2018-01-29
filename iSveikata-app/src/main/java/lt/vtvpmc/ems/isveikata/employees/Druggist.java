@@ -7,10 +7,10 @@ import lombok.Data;
 
 @Entity
 @Data
-@DiscriminatorValue(value = "Druggist")
+@DiscriminatorValue(value = "druggist")
 public class Druggist extends Employee {
 
 	@NotNull
-	private String DrugStore;
+	private String drugStore;
 
 }

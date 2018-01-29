@@ -1,0 +1,28 @@
+.formErrors {
+	color: #cc0000;
+	font-weight: bold;
+	text-align: left;
+}
+
+.form-control:focus {
+	border-color: #6600cc;
+	box-shadow: none !important;
+    outline: none !important;
+}
+
+#is-valid {
+	border-color: #00b300;
+	box-shadow: none !important;
+    outline: none !important;
+}
+
+#is-invalid {
+	border-color: #cc0000;
+	box-shadow: none !important;
+    outline: none !important;
+}
+
+textarea {
+	resize: vertical;
+	overflow: auto;
+}
