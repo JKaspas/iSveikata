@@ -16,7 +16,7 @@ export default class DoctorPatientViewContainer extends Component{
     componentWillMount = () =>{
 
         var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session.user.loggedIn !== true || session.user.userType !== 'doctor'){
+        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
         } 

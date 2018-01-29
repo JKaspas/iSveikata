@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import axios from 'axios'
 
 
-import PatientListView from './AdminComponent/PatientListView'
-import PatientListingItem from './AdminComponent/PatientListingItem'
-import { PatientBindLink } from './LinksAndButtons/PatientBindLink';
+import PatientListView from '../AdminComponent/PatientListView'
+import PatientListingItem from '../AdminComponent/PatientListingItem'
+import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';
 
 export default class AdminBindUserPartContainer extends Component{
     constructor(){
@@ -25,7 +25,7 @@ export default class AdminBindUserPartContainer extends Component{
   
     componentWillMount = () =>{
         
-        if(this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
+        if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }

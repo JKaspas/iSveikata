@@ -8,23 +8,23 @@ import RecordForm from '../DoctorComponent/RecordForm'
 export default class DoctorRecordContainer extends Component{
     constructor(props){
         super(props)
+        this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patient:'',
-            icds:'',
             patientFullName:'',
+            icds:'',
 
-            icdCode:'',
+            icdCode:'A01',
             isCompensable:false,
             isRepetitive:false,
             duration:'',
             description:'',
-            date:'2018-01-17',
 
             patientId:props.params.patientId,
-            userName:'',
+            userName:this.session.user.userName,
 
             formErrors: {icd: '', description: '', duration: ''},
-            icdValid: false,
+            icdValid: true,
             descriptionValid: false,
             durationValid: false,                   
             formValid: false,
@@ -35,8 +35,7 @@ export default class DoctorRecordContainer extends Component{
     }
 
     componentWillMount = () =>{
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session.user.loggedIn !== true || session.user.userType !== 'doctor'){
+        if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
         }  
@@ -71,12 +70,15 @@ export default class DoctorRecordContainer extends Component{
     }
     
     submitHandler = (e) =>{
+        let date = new Date()
+        let newDate = date.getFullYear() + '-'+ date.getMonth()+1 + '-' + date.getDate();
         e.preventDefault();
+        console.log(newDate)
         axios.post('http://localhost:8080/api/doctor/new/record', {
             appointment:{
                 duration:this.state.duration,
                 description:this.state.description,
-                date:this.state.date
+                date:newDate
             },
             medicalRecord:{
                 compensable:this.state.isCompensable,
@@ -89,7 +91,16 @@ export default class DoctorRecordContainer extends Component{
         .then((response)=>{
             console.log(response.status)
             this.setState({
-                infoState:<div className="alert alert-success"><strong>Naujas įrašas sekmingai sukurtas </strong></div>
+                infoState:<div className="alert alert-success"><strong>Naujas įrašas sekmingai sukurtas </strong></div>,
+                isCompensable:false,
+                isRepetitive:false,
+                duration:'',
+                description:'',
+                formErrors: {icd: '', description: '', duration: ''},
+                icdValid: true,
+                descriptionValid: false,
+                durationValid: false,                   
+                formValid: false,
             })
         })
         .catch((erorr) => {
@@ -197,7 +208,7 @@ export default class DoctorRecordContainer extends Component{
                     fieldHandler={this.fieldHandler}
                 />}
                 />
-                
+                {this.state.date}
                 </section>
             </div>
         )

@@ -15,11 +15,14 @@ export default class PatientViewContainer extends Component{
             notFound:''
         }
     }
-
+    componentDidCatch = (erorr, info) =>{
+        console.log(erorr)
+        console.log(info)
+    }
    
     componentWillMount = () =>{
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session.patient.loggedIn !== true){
+        var session =  JSON.parse(sessionStorage.getItem('session'));
+        if(session === null || session.patient.loggedIn !== true){
             this.props.router.push('/pacientams');
             return '';
         }
@@ -53,6 +56,7 @@ export default class PatientViewContainer extends Component{
                 key={index}
                 id={record.id}
                 appDate={newDate}
+                icd={record.icd.icdCode}
                 doctorName={record.doctor.firstName + ' ' +record.doctor.lastName }
                 appDescription={record.appointment.description}
                 appDuration={record.appointment.duration}

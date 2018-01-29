@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
-import DoctorListView from './AdminComponent/DoctorListView'
-import DoctorListingItem from './AdminComponent/DoctorListingItem'
-import {DoctorBindLink} from '../Container/LinksAndButtons/DoctorBindLink'
+import DoctorListView from '../AdminComponent/DoctorListView'
+import DoctorListingItem from '../AdminComponent/DoctorListingItem'
+import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
 
 
 export default class AdminBindDoctorPartContainer extends Component{
@@ -21,7 +21,7 @@ export default class AdminBindDoctorPartContainer extends Component{
     componentWillMount = () =>{
 
         var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session.user.loggedIn !== true || session.user.userType !== 'admin'){
+        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }
@@ -41,7 +41,7 @@ export default class AdminBindDoctorPartContainer extends Component{
             console.log(response.status)
         })
         .catch((erorr) => {
-            console.log(erorr)
+            console.log(erorr.response.data)
         })
     }
 

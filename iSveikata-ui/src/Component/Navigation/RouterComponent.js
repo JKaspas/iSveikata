@@ -4,12 +4,12 @@ import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import PublicViewContainer from '../Container/PublicViewContainer';
 import UserLoginContainer from '../Container/UserLoginContainer'
 import PatientLoginContainer from '../Container/PatientLoginContainer'
-import AdminCreateUserContainer from '../Container/AdminCreateUserContainer';
+import AdminCreateUserContainer from '../Container/AdminContainer/AdminCreateUserContainer';
 import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
 import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
-import AdminCreatePatientContainer from '../Container/AdminCreatePatientContainer'
-import AdminBindDoctorPartContainer from '../Container/AdminBindDoctorPartContainer'
-import AdminBindUserPartContainer from '../Container/AdminBindUserPartContainer'
+import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer'
+import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer'
+import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer'
 import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
 import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer'

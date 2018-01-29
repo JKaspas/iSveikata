@@ -44,7 +44,7 @@ const PatientForm = (props) => {
                                         <div className="col-sm-9">          
                                             <input type="text" className="form-control"  value={props.firstName} 
                                             required onChange={props.fieldHandler} placeholder="Paciento vardas" 
-                                            name="firstName" id={props.erorrClassFirstName} />
+                                            name="firstName" id={props.erorrClassFirstName} maxLength="225"/>
                                         </div>
                                     </div>
                                     <div className="form-group">
@@ -52,7 +52,7 @@ const PatientForm = (props) => {
                                         <div className="col-sm-9">          
                                             <input type="text" className="form-control"  value={props.lastName} 
                                             required onChange={props.fieldHandler} placeholder="Paciento pavardė" 
-                                            name="lastName" id={props.erorrClassLastName}/>
+                                            name="lastName" id={props.erorrClassLastName} maxLength="225"/>
                                         </div>
                                     </div>
                                     <div className="form-group">
@@ -62,7 +62,7 @@ const PatientForm = (props) => {
                                             readOnly className="form-control" value={props.generatePassword} 
                                             required onChange={props.fieldHandler} onClick={props.handlePasswordMasking} 
                                             placeholder="Slaptažodis" name="password"
-                                            autoComplete="off"/>
+                                            autoComplete="off" />
                                         </div>
                                     </div>
                                     <div className="form-group">        

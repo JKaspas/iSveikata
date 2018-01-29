@@ -6,7 +6,7 @@ var PatientInfoCard = (props) =>{
         <div className="panel-group">
             <div className="panel panel-default">
             <div className="panel-heading">
-            <p>Patient: {props.patientFullName}</p>
+            <p>Pacientas: {props.patientFullName}</p>
             <p>Asmens kodas: {props.patientId}</p>
             </div>
                 <div className="panel-body">

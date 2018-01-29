@@ -26,7 +26,7 @@ class DoctorViewContainer extends Component{
 
 
     componentWillMount = () =>{
-        if(this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
+        if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
         }  
@@ -153,7 +153,7 @@ class DoctorViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Pacientu sarasas</h4>
+                            <h4>Pacientų sąrašas</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

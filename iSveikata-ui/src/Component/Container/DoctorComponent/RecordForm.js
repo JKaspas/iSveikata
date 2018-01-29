@@ -17,16 +17,11 @@ var RecordForm = (props) =>{
                           <select type="text" className="form-control"  name="icdCode"
                             placeholder="X##(.###) arba specialus kodas" maxLength="8" value={props.icdCode.toUpperCase()} required
                             onChange={props.fieldHandler} 
-                            id={props.errorClassIcd}
-                            >
+                            id={props.errorClassIcd} >
                             {props.icds}
                             </select>
                       </div>
                   </div>
-{/* 
-                    id={this.errorClass(this.state.formErrors.icd)}
-                    id={this.errorClass(this.state.formErrors.description)}
-                    id={this.errorClass(this.state.formErrors.duration)} */}
                     <div className="form-group">
                         <label className="control-label col-sm-2">Vizito aprašymas:</label>
                         <div className="col-sm-10"> 
@@ -35,6 +30,7 @@ var RecordForm = (props) =>{
                             onChange={props.fieldHandler}
                             value={props.description}
                             id={props.errorClassDescription}
+                            maxLength="225"
                             ></textarea>
                         </div> 
                     </div>
@@ -55,8 +51,8 @@ var RecordForm = (props) =>{
                         <div className="col-sm-10">
                             <input type="number" className="form-control"  name="duration"
                             placeholder="Trukmė" maxLength="3" value={props.duration} required 
-                            onChange={props.fieldHandler}
-                            id={props.errorClassDuration}/>
+                            onChange={props.fieldHandler} 
+                            id={props.errorClassDuration} />
                         </div>
                     </div>
                     <div className="form-group">        

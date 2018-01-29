@@ -1,18 +1,17 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
-import PatientForm from './AdminComponent/PatientForm'
+import PatientForm from '../AdminComponent/PatientForm'
 
 
 export default class AdminCreatePatientContainer extends Component{
     constructor(){
         super();
         this.state = {
-            patientId:3970115092,
-            birthDate:'2018-02-01',
+            patientId:'',
             firstName:'',
             lastName:'',
-            password:1970,
+
             formErrors: {firstName: '', lastName: '', patientId: ''},
             firstNameValid: false,
             lastNameValid: false,
@@ -26,16 +25,12 @@ export default class AdminCreatePatientContainer extends Component{
 
     componentWillMount = () =>{
         var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session.user.loggedIn !== true || session.user.userType !== 'admin'){
+        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }  
     }
 
-
-    fieldHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
-    }
 
     fieldHandler = (e) => {
         const name = e.target.name;
@@ -45,20 +40,28 @@ export default class AdminCreatePatientContainer extends Component{
           () => { this.validateField(name, value) });
     }
 
+   
+
     submitHandler = (e) =>{
         e.preventDefault();
+        
         axios.post('http://localhost:8080/api/admin/new/patient', {
             patientId:this.state.patientId,
-            birthDate:this.state.birthDate,  //this.generateBirthDate(),  (?)
+            birthDate:this.generateBirthDate(),  //this.generateBirthDate(),  (?)
             firstName:this.state.firstName,  //this.capitalizeFirstLetter(this.state.firstName),  (?)  
             lastName:this.state.lastName,    //this.capitalizeFirstLetter(this.state.lastName),  (?)
-            password:this.state.password,    //this.generatePassword(),  (?) 
+            password:this.generatePassword(),    //this.generatePassword(),  (?) 
         })
         .then((response)=>{
             console.log(response.status)
             this.setState({
-                infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
+                infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
+                patientId:'',
+                firstName:'',
+                lastName:'',
+                formValid:false
             })
+
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -86,9 +89,10 @@ export default class AdminCreatePatientContainer extends Component{
                 birthDateAutoInput = "19" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
             } else if(patientIdAsString.charAt(0) === "5" || patientIdAsString.charAt(0) === "6") {
                 birthDateAutoInput = "20" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
-            } else {
-                birthDateAutoInput = "18" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
             } 
+            // else {
+            //     birthDateAutoInput = "18" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
+            // } 
         }
         return birthDateAutoInput;  
     }
@@ -194,15 +198,13 @@ export default class AdminCreatePatientContainer extends Component{
             formErrors={this.state.formErrors}
             generateBirthDate={this.generateBirthDate()}
             generatePassword={this.generatePassword()}
-            passwordMasked={this.passwordMasked}
+            passwordMasked={this.state.passwordMasked}
             formValid={this.state.formValid}
             handlePasswordMasking={this.handlePasswordMasking}
 
             patientId={this.state.patientId}
-            birthDate={this.state.birthDate}
             firstName={this.capitalizeFirstLetter(this.state.firstName)}
             lastName={this.capitalizeFirstLetter(this.state.lastName)}
-            password={this.state.password}
             fieldHandler={this.fieldHandler}
             submitHandler={this.submitHandler}/>)
     }

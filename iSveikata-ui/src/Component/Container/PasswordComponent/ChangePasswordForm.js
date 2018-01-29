@@ -7,7 +7,7 @@ export const ChangePasswordForm = (props) =>{
         <section>
             {props.infoState}
             <form onSubmit={props.submitHandler} className="form-signin">
-                <h2 className="form-signin-heading">Slaptazodzio keitimas</h2>
+                <h2 className="form-signin-heading">Slaptažodžio keitimas</h2>
                 <input className="form-control" type="password" 
                 name="oldPassword" onChange={props.fieldHandler} 
                 placeholder="Senas slaptažodis" required 

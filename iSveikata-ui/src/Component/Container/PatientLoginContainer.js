@@ -13,21 +13,30 @@ class PatientLoginContainer extends Component{
             password:''
         }
     }
+    componentDidCatch = (erorr, info) =>{
+        console.log(erorr)
+        console.log(info)
+    }
+    
     submitHandler = (e) =>{
         e.preventDefault();
-        axios.post('http://localhost:8080/api/patient/login', {
-            patientId:this.state.patientId,
-            password:this.state.password
-        })
-        .then((response) => {
-            this.props.dispatch(patientLoggedIn(this.state.patientId))
-            this.props.router.push('/patient/');
-            console.log(response.status)
-        })
-        .catch((error) => {
-            console.log(error.response.data)
-            console.log(error)
-        })
+        try{
+            axios.post('http://localhost:8080/api/patient/login', {
+                patientId:this.state.patientId,
+                password:this.state.password
+            })
+            .then((response) => {
+                this.props.dispatch(patientLoggedIn(this.state.patientId))
+                this.props.router.push('/patient/');
+                console.log(response.status)
+            })
+            .catch((error) => {
+                console.log(error.response.data)
+                console.log(error)
+            })
+        }catch(er){
+            console.log("Erorr?")
+        }
     }
     
 
