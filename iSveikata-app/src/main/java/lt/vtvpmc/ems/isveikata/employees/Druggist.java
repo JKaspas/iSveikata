@@ -2,6 +2,7 @@ package lt.vtvpmc.ems.isveikata.employees;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,5 +13,6 @@ public class Druggist extends Employee {
 
 	@NotNull
 	private String drugStore;
+
 
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,6 +51,10 @@ public class Patient implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "patient")
+	private List<Prescription> prescriptions;
 
 	public boolean isActive() {
 		return isActive;

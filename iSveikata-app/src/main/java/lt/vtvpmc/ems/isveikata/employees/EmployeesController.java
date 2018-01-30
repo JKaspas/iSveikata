@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
@@ -35,6 +35,10 @@ public class EmployeesController {
 	/** The patient service. */
 	@Autowired
 	private PatientService patientService;
+
+	/** The Prescription service */
+	@Autowired
+	private PrescriptionSevice prescriptionSevice;
 
 
 	/**
@@ -119,6 +123,14 @@ public class EmployeesController {
 	@ResponseStatus(HttpStatus.CREATED)
 	private <T extends Object> void createRecord(@RequestBody Map<String, Object> map) {
 		medicalRecordService.createNewRecord(map);
+	}
+	/**
+	 *
+	 */
+	@PostMapping("/doctor/new/prescription")
+	@ResponseStatus(HttpStatus.CREATED)
+	private <T extends Object> void createPrescription(@RequestBody Map<String, Object> map){
+		prescriptionSevice.createNewPrescription(map);
 	}
 
 	/**
