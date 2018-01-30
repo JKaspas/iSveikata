@@ -11,7 +11,8 @@ class UserLoginContainer extends Component{
         super()
         this.state = {
             userName:'',
-            password:''
+            password:'',
+            infoState:''
         }
     }
     
@@ -26,11 +27,13 @@ class UserLoginContainer extends Component{
             this.props.dispatch(userLoggedIn(response.data, this.state.userName))
             console.log(response.data)            
             this.props.router.push('/'+response.data+'/');
-
+           
         })
         .catch((error) => {
-            console.log(error.response.data)
-            //console.log(response)
+            //console.log(error.response.data)
+            this.setState({
+                infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
+            })
         })
     }
 
@@ -43,6 +46,7 @@ class UserLoginContainer extends Component{
     render() {
         return (
             <LoginForm 
+            infoState={this.state.infoState}
             fieldHandler={this.fieldHandler}
             submitHandler={this.submitHandler}
 

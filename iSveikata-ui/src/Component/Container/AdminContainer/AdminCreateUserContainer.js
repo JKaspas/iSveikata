@@ -296,7 +296,7 @@ export default class AdminCreateUserContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Naujo vartotoja registravimo forma</h4>
+                            <h4>Registruoti naują sistemos vartotoją</h4>
                         </div>
                         <div className="panel-body">
                         {this.state.infoState}

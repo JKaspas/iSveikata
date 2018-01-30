@@ -10,6 +10,7 @@ import RecordListView from '../DoctorComponent/RecordListView';
 export default class PatientViewContainer extends Component{
     constructor(props){
         super(props)
+        this.session =  JSON.parse(sessionStorage.getItem('session'));
         this.state = {
             records:null,
             notFound:''
@@ -21,14 +22,14 @@ export default class PatientViewContainer extends Component{
     }
    
     componentWillMount = () =>{
-        var session =  JSON.parse(sessionStorage.getItem('session'));
-        if(session === null || session.patient.loggedIn !== true){
+        
+        if(this.session === null || this.session.patient.loggedIn !== true){
             this.props.router.push('/pacientams');
             return '';
         }
       
      
-        axios.get('http://localhost:8080/api/patient/'+session.patient.patientId+'/record')
+        axios.get('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/record')
         .then((response) => {
             if(response.data.length === 0){
                 this.setState({
@@ -46,11 +47,11 @@ export default class PatientViewContainer extends Component{
         })
     }
 
+
     composeRecord = (record,index) =>{
         var date = new Date(record.appointment.date)
         var newDate = date.getFullYear() + '-'+ date.getMonth()+1 + '-' + date.getDate();
         
-
         return(
             <RecordListingItem
                 key={index}

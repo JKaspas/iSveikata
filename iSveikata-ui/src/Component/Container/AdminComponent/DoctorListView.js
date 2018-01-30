@@ -10,8 +10,8 @@ const DoctorListView = (props) =>{
             <thead>
                 <tr>
                     <th>Vardas</th>
-                    <th>Pavarde</th>
-                    <th>Slapyvardis</th>
+                    <th>Pavardė</th>
+                    <th>Vartotojo vardas</th>
                     <th>Specializacija</th>
                 </tr>
             </thead>

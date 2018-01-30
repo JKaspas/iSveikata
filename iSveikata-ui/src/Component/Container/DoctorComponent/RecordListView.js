@@ -9,11 +9,11 @@ const RecordListView = (props) =>{
         <table className="table table-hover">
             <thead>
                 <tr>
-                    <th>Iraso data</th>
+                    <th>Įrašo data</th>
                     <th>Daktaras</th>
-                    <th>Lygos kodas</th>
-                    <th>Vizito aprasymas</th>
-                    <th>Vizito trukme</th>
+                    <th>Ligos kodas</th>
+                    <th>Vizito aprašymas</th>
+                    <th>Vizito trukmė</th>
                     <th>Vizitas kompensuojamas</th>
                     <th>Vizitas pakartotinas</th>
                 </tr>

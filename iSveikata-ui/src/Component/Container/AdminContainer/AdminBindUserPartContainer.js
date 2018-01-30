@@ -91,13 +91,13 @@ export default class AdminBindUserPartContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Prijunkyte pacienta</h4>
+                            <h4>Priskirkyte pacientą gydytojui</h4>
                         </div>
                         <div className="panel-body">
                             {this.state.infoState}
                             <div className="col-sm-12">
                                 <div className="col-sm-4 col-sm-offset-4">
-                                    <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieska" name="search" />
+                                    <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
                                 </div>
                             </div>
                             

@@ -11,10 +11,8 @@ import {connect} from 'react-redux'
 
 
 class App extends Component {
-  componentWillMount = () =>{
-    
-  }
 
+  
   render() {
     return (
       <div>

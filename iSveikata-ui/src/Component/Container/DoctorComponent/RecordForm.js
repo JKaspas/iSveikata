@@ -26,7 +26,7 @@ var RecordForm = (props) =>{
                         <label className="control-label col-sm-2">Vizito aprašymas:</label>
                         <div className="col-sm-10"> 
                             <textarea className="form-control"  name="description"
-                            rows="3" maxLength="500" required 
+                            rows="3" required 
                             onChange={props.fieldHandler}
                             value={props.description}
                             id={props.errorClassDescription}

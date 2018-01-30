@@ -163,8 +163,12 @@ public class PatientService {
 	 *            the patient id
 	 */
 	public boolean isPatientActive(String patientId) {
-		Patient patient = patientRepository.findOne(Long.parseLong(patientId));
-		return patient.isActive();
+		if(patientId.matches("\\d+")) {
+			Patient patient = patientRepository.findOne(Long.parseLong(patientId));
+			return patient != null ? patient.isActive() : false;
+		}else{
+			return false;
+		}
 	}
 
 }

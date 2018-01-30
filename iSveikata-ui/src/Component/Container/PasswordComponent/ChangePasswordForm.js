@@ -18,7 +18,7 @@ export const ChangePasswordForm = (props) =>{
                 autoComplete="off"/>
                 <input className="form-control" type="password" 
                 name="newPasswordRepeat" onChange={props.fieldHandler} 
-                placeholder="Naujas slaptažodis" required
+                placeholder="Pakartoti naują slaptažodį" required
                 autoComplete="off" />
                 <div className="checkbox">
                 </div>

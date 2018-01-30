@@ -12,7 +12,7 @@ const UsersForm = (props) => {
         <form onSubmit={props.submitHandler} className="form-horizontal" >
             <div className="form-group">
                 <div className="radio col-sm-9 col-sm-offset-3">
-                    <label><input onChange={props.fieldHandler} type="radio" value="doctor" name="type"/>Daktaras</label>
+                    <label><input onChange={props.fieldHandler} type="radio" value="doctor" name="type"/>Gydytojas</label>
                 </div>
                 <div className="radio col-sm-9 col-sm-offset-3">
                     <label><input onChange={props.fieldHandler} type="radio" value="admin" name="type"/>Administratorius</label>

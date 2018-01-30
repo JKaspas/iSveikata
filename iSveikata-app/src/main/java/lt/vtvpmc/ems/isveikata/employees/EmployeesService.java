@@ -175,6 +175,6 @@ public class EmployeesService {
 
 	public boolean isUserActive(String userNanme) {
 		Employee employee = employeesRepository.findByUserName(userNanme);
-		return employee.isAcitve();
+		return employee != null ? employee.isAcitve() : false;
 	}
 }

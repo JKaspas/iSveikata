@@ -119,13 +119,13 @@ public class PatientController {
 	@PostMapping("/login")
 	@ResponseBody
 	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
-		if ((patientService.isPatientActive(fields.get("patientId")))
+		if (patientService.isPatientActive(fields.get("patientId"))
 				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
 					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Pacientas nerastas arba yra neaktyvuotas, patikrinkite prisijungimo duomenis");
+					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
 		}
 	}
 

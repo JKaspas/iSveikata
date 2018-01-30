@@ -98,7 +98,7 @@ public class EmployeesController {
 	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
 		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
 			employeesService.bindDoctorToPatient(userName, patientId);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas daktarui");
+			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas gydytojui");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
 					"Pacientas jau buvo priskirtas daktarui anksciau, arba bandote priskirti pacienta ne daktarui");
@@ -176,7 +176,7 @@ public class EmployeesController {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas arba yra neaktyvuotas, patikrinkit prisijungimo duomenis");
+					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
 		}
 	}
 

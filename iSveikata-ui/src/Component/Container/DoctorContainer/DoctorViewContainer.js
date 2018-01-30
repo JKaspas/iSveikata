@@ -63,7 +63,7 @@ class DoctorViewContainer extends Component{
 
             if(response.data.length === 0){
                 this.setState({
-                    info:(<h3>No patient found</h3>)
+                    info:(<h3>Priskirtų pacientų nerasta</h3>)
                 })
             }
                   
@@ -83,16 +83,12 @@ class DoctorViewContainer extends Component{
     // }
 
     composePatient = (patient, index) =>{
-        var date = new Date(patient.birthDate)
-        var newDate = date.getFullYear() + '-'+ date.getMonth()+1 + '-' + date.getDate();
-        // if(index > this.state.listEnd || index < this.state.listBegin){
-        //     return null;
-        // }
+       
         return (
             <PatientListingItem
                 key={index}
                 patientId={patient.patientId}
-                birthDate={newDate}
+                birthDate={patient.birthDate}
                 firstName={patient.firstName}
                 lastName={patient.lastName}
     
@@ -153,7 +149,7 @@ class DoctorViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Pacientų sąrašas</h4>
+                            <h4>Priskirtų pacientų sąrašas</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

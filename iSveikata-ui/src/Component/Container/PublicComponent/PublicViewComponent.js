@@ -10,7 +10,7 @@ var PublicViewComponent = () =>{
             <header className="bg-primary text-white">
                 <div className="container text-center">
                     <h1>iSveikata</h1>
-                    <p className="lead">Sveikatos prieziuros sistema</p>
+                    <p className="lead">Sveikatos prižiūros sistema</p>
                 </div>
             </header>
 

@@ -10,17 +10,14 @@ class PatientLoginContainer extends Component{
         super()
         this.state = {
             patientId:'',
-            password:''
+            password:'',
+            infoState:''
         }
     }
-    componentDidCatch = (erorr, info) =>{
-        console.log(erorr)
-        console.log(info)
-    }
+    
     
     submitHandler = (e) =>{
         e.preventDefault();
-        try{
             axios.post('http://localhost:8080/api/patient/login', {
                 patientId:this.state.patientId,
                 password:this.state.password
@@ -28,15 +25,16 @@ class PatientLoginContainer extends Component{
             .then((response) => {
                 this.props.dispatch(patientLoggedIn(this.state.patientId))
                 this.props.router.push('/patient/');
+                console.log(this.props)
                 console.log(response.status)
             })
             .catch((error) => {
-                console.log(error.response.data)
-                console.log(error)
+                //console.log(error.response.data)
+                this.setState({
+                    infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
+                })
             })
-        }catch(er){
-            console.log("Erorr?")
-        }
+        
     }
     
 
@@ -49,6 +47,7 @@ class PatientLoginContainer extends Component{
     render() {
         return (
             <LoginForm 
+            infoState={this.state.infoState}
             fieldHandler={this.fieldHandler}
             submitHandler={this.submitHandler}
 
