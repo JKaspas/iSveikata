@@ -42,7 +42,7 @@ public class Prescription {
     @OneToMany(mappedBy = "prescription")
     private List<PrescriptionUsage> prescriptionUsage;
 
-    private long substanceAmount;
+    private long ingredientAmount;
     private String description;
     private long useAmount;
 

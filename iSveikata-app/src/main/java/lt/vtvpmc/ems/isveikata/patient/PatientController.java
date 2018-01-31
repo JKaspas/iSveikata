@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +82,17 @@ public class PatientController {
 	@GetMapping("/{patientId}/record")
 	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
 		return patientService.getPatientRecordList(patientId);
+	}
+
+	/**
+	 * Gets all records URL: api/{patientId}/prescription
+	 *
+	 * @param patientId
+	 * @return list of all patient
+	 */
+	@GetMapping("/{patientId}/prescription")
+	private List<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId) {
+		return patientService.getPatientPrescriptionList(patientId);
 	}
 
 	/**
