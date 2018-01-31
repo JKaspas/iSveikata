@@ -17,28 +17,28 @@ public class Api {
 	private String description;
 	private String measurements;
 
-//	public String getTitle() {
-//		return title;
-//	}
-//
-//	public void setTitle(String title) {
-//		this.title = title;
-//	}
-//
-//	public String getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
-//
-//	public String getMeasurements() {
-//		return measurements;
-//	}
-//
-//	public void setMeasurements(String measurements) {
-//		this.measurements = measurements;
-//	}
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getMeasurements() {
+		return measurements;
+	}
+
+	public void setMeasurements(String measurements) {
+		this.measurements = measurements;
+	}
 
 }
