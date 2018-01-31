@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,17 @@ public class PatientService {
 	public List<MedicalRecord> getPatientRecordList(Long patientId) {
 		Patient pat = patientRepository.findOne(patientId);
 		return pat.getMedicalRecords();
+	}
+
+	/**
+	 * Gets the patient prescription list.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 * @return the patient prescription list
+	 */
+	public List<Prescription> getPatientPrescriptionList(Long patientId) {
+		return patientRepository.findOne(patientId).getPrescriptions();
 	}
 
 	/**

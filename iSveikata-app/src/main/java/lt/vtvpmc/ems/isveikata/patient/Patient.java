@@ -120,4 +120,7 @@ public class Patient implements Serializable {
 		this.password = Passwords.hashString(password);
 	}
 
+	public List<Prescription> getPrescriptions() {
+		return prescriptions;
+	}
 }
