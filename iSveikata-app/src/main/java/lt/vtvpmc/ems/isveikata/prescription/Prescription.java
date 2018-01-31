@@ -35,9 +35,7 @@ public class Prescription {
     private List<PrescriptionUsage> prescriptionUsage;
 
     private long substanceAmount;
-
     private String description;
-
     private long useAmount;
 
     public void setPatient(Patient patient) {
