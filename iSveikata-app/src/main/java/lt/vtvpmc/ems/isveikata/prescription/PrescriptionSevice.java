@@ -1,14 +1,17 @@
 package lt.vtvpmc.ems.isveikata.prescription;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.vtvpmc.ems.isveikata.api.Api;
-import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
-import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lt.vtvpmc.ems.isveikata.api.ApiDto;
+import lt.vtvpmc.ems.isveikata.mappers.ApiMapper;
+import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 
 @Service
 @Transactional
@@ -18,22 +21,19 @@ public class PrescriptionSevice {
     private JpaPrescriptionRepository prescriptionRepository;
 
     @Autowired
-    private JpaApiRepository apiRepository;
-
-    @Autowired
     private JpaPatientRepository patientRepository;
 
     public void createNewPrescription(Map<String, Object> map) {
         ObjectMapper mapper = new ObjectMapper();
         Prescription prescription = mapper.convertValue(map.get("prescription"), Prescription.class);
-        Api api = mapper.convertValue(map.get("api"), Api.class);
+        ApiDto apiDto = mapper.convertValue(map.get("api"), ApiDto.class);
         Long patientId = mapper.convertValue(map.get("patientId"), Long.class);
 
         if(patientId != null) {
             prescription.setPatient(patientRepository.findOne(patientId));
         }
-        if(api != null) {
-            prescription.setApi(api);
+        if(apiDto != null) {
+            prescription.setApi(ApiMapper.MAPPER.toApi(apiDto));
         }
 
         prescriptionRepository.save(prescription);

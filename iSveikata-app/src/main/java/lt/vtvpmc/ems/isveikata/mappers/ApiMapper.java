@@ -24,7 +24,7 @@ public interface ApiMapper {
 
 	@InheritInverseConfiguration
 	ApiDto fromApi(Api api);
-	
+
 	List<ApiDto> fromApis(List<Api> apis);
 
 }

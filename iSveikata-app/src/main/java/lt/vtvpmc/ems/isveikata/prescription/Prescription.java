@@ -1,18 +1,26 @@
 package lt.vtvpmc.ems.isveikata.prescription;
 
 
-import lombok.Data;
-import lt.vtvpmc.ems.isveikata.api.Api;
-import lt.vtvpmc.ems.isveikata.patient.Patient;
-import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Type;
+
+import lombok.Getter;
+import lombok.Setter;
+import lt.vtvpmc.ems.isveikata.api.Api;
+import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
+
 @Entity
-@Data
+@Setter
+@Getter
 public class Prescription {
 
     @Id

@@ -5,9 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Api {
 
 	@Id
@@ -16,29 +19,5 @@ public class Api {
 	private String title;
 	private String description;
 	private String measurements;
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getMeasurements() {
-		return measurements;
-	}
-
-	public void setMeasurements(String measurements) {
-		this.measurements = measurements;
-	}
 
 }
