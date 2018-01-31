@@ -10,11 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Data
-public class PrescriptionUsage {
+public class PrescriptionUsage implements Serializable {
 
     @Id
     @GeneratedValue

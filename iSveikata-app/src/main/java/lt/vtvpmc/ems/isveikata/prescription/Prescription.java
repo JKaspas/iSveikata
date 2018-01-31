@@ -1,15 +1,13 @@
 package lt.vtvpmc.ems.isveikata.prescription;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import org.hibernate.annotations.Type;
 
 import lombok.Getter;
@@ -21,7 +19,7 @@ import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 @Entity
 @Setter
 @Getter
-public class Prescription {
+public class Prescription implements Serializable {
 
     @Id
     @GeneratedValue
@@ -35,6 +33,9 @@ public class Prescription {
 
     @ManyToOne
     private Patient patient;
+
+    @ManyToOne
+    private Doctor doctor;
 
     @ManyToOne
     private Api api;
@@ -54,5 +55,11 @@ public class Prescription {
         this.api = api;
     }
 
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
+    public List<PrescriptionUsage> getPrescriptionUsage() {
+        return prescriptionUsage;
+    }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 @Entity
@@ -25,6 +26,10 @@ public class Doctor extends Employee {
 	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<MedicalRecord> medicalRecords;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "doctor")
+	private List<Prescription> prescriptions;
 
 	public List<Patient> getPatient() {
 		return patient;
