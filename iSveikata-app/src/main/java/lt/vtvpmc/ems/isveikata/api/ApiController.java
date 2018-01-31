@@ -19,7 +19,7 @@ public class ApiController {
      * @param api
      */
     @PostMapping("/api")
-    private void createApi(@RequestBody Api api) {
+    private void createApi(@RequestBody ApiDto api) {
         apiService.createApi(api);
     }
 
@@ -29,7 +29,7 @@ public class ApiController {
      * @return all specialization
      */
     @GetMapping("/api")
-    private List<Api> getAllApi() {
+    private List<ApiDto> getAllApi() {
         return apiService.getAllApi();
     }
 }
