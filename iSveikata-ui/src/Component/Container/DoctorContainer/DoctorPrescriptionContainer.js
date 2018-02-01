@@ -24,7 +24,7 @@ export default class DoctorPrescriptionContainer extends Component{
             substanceUnit: 'mg',
             description: '',
 
-            patientId: props.params.patientId,
+            patientId: this.props.params.patientId,
             userName: this.session.user.userName,
             
             infoState: '',
@@ -88,7 +88,7 @@ export default class DoctorPrescriptionContainer extends Component{
   
         // console.log("Input field name: " + name);
         // console.log("Input field value: " + value);
-    }
+    
 
     submitHandler = (e) =>{
         let date = new Date()
@@ -158,9 +158,9 @@ export default class DoctorPrescriptionContainer extends Component{
                 fieldValidationErrors.description = descriptionValid ? '' : 'Nurodyti kokią vaisto dozę, kiek kartų ir kaip vartoti..';
                 break;
             case 'substanceAmount':
-                durationValid = value.match(/^\d{1,10}$/g);
+                substanceAmountValid = value.match(/^\d{1,10}$/g);
                 // ^ Tikrina ar įrašytas teigiamas skaičius.
-                fieldValidationErrors.duration = durationValid ? '': 'Įveskite veikliosios medžiagos kiekį.';
+                fieldValidationErrors.duration = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį.';
                 break;
             default:
                 break;
