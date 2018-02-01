@@ -6,5 +6,4 @@ import lombok.Data;
 public class ApiDto {
 	String ingredientName;
 	String description;
-	String units;
 }

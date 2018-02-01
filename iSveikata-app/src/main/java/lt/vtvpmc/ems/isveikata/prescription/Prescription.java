@@ -44,6 +44,7 @@ public class Prescription implements Serializable {
     private List<PrescriptionUsage> prescriptionUsage;
 
     private long ingredientAmount;
+    private String ingredientUnit;
     private String description;
     private long useAmount;
 

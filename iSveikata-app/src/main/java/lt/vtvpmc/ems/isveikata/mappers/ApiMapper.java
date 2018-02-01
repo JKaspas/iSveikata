@@ -18,7 +18,6 @@ public interface ApiMapper {
 	@Mappings({ 
 		@Mapping(source = "ingredientName", target = "title"),
 		@Mapping(source = "description", target = "description"),
-		@Mapping(source = "units", target = "measurements"), 
 		@Mapping(target = "id", ignore = true) })
 	Api toApi(ApiDto apiDto);
 

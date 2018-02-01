@@ -23,6 +23,5 @@ public class Api implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String title;
 	private String description;
-	private String measurements;
 
 }
