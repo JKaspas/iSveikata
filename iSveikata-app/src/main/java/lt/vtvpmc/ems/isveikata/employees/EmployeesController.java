@@ -31,7 +31,7 @@ public class EmployeesController {
 	/** The medical record service. */
 	@Autowired
 	private MedicalRecordService medicalRecordService;
-
+	
 	/** The patient service. */
 	@Autowired
 	private PatientService patientService;

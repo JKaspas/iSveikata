@@ -1,19 +1,16 @@
 package lt.vtvpmc.ems.isveikata.api;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Api implements Serializable {
 
 	@Id
@@ -23,5 +20,6 @@ public class Api implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String title;
 	private String description;
+	private String measurements;
 
 }

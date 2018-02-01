@@ -5,17 +5,18 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import lt.vtvpmc.ems.isveikata.api.Api;
-import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
-import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
-import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lt.vtvpmc.ems.isveikata.api.Api;
+import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
+import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @Service
 @Transactional
@@ -32,6 +33,9 @@ public class PrescriptionSevice {
 
     @Autowired
     private JpaApiRepository apiRepository;
+    
+    @Autowired
+    private PrescriptionMapper mapper;
 
     public void createNewPrescription(Map<String, Object> map) {
         ObjectMapper mapper = new ObjectMapper();
@@ -52,16 +56,16 @@ public class PrescriptionSevice {
 
         prescriptionRepository.save(prescription);
     }
-
-    public List<Prescription> getAllPrescriptions() {
-        return prescriptionRepository.findAll();
+    
+    public List<PrescriptionDto> getAllPrescriptions() {
+        return mapper.fromPrescriptions(prescriptionRepository.findAll());
     }
 
     public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
         return prescriptionRepository.findOne(prescriptionId).getPrescriptionUsage();
     }
 
-    public Prescription getPrescription(Long prescriptionId) {
-        return prescriptionRepository.findOne(prescriptionId);
+    public PrescriptionDto getPrescription(Long prescriptionId) {
+        return mapper.fromPrescription(prescriptionRepository.findOne(prescriptionId));
     }
 }

@@ -1,12 +1,18 @@
 package lt.vtvpmc.ems.isveikata.prescription;
 
 
-import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @RestController
 @RequestMapping(value = "/api/prescription")
@@ -23,12 +29,11 @@ public class PrescriptionController {
      * @return List of all prescriptions
      */
 
-    @GetMapping(value = "")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    private List<Prescription> getAllPrescriptions(){
+    private List<PrescriptionDto> getAllPrescriptions(){
         return prescriptionSevice.getAllPrescriptions();
     }
-
 
     /**
      * Get all specific prescription prescriptionUsages
@@ -53,7 +58,7 @@ public class PrescriptionController {
 
     @GetMapping(value = "/{prescriptionId}")
     @ResponseStatus(HttpStatus.OK)
-    private Prescription getPrescription(@PathVariable final Long prescriptionId){
+    private PrescriptionDto getPrescription(@PathVariable final Long prescriptionId){
         return prescriptionSevice.getPrescription(prescriptionId);
     }
 }

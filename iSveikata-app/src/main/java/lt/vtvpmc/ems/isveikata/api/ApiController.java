@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class ApiController {
 
     @Autowired
@@ -33,4 +33,5 @@ public class ApiController {
     private List<ApiDto> getAllApi() {
         return apiService.getAllApi();
     }
+
 }

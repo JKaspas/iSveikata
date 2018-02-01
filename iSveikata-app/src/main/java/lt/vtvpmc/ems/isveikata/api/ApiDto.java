@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ApiDto {
-	String ingredientName;
-	String description;
+	private String ingredientName;
+	private String description;
+	private String unit;
 }

@@ -16,12 +16,16 @@ public class ApiService {
 
     @Autowired
     private JpaApiRepository apiRepository;
+    
+    @Autowired
+    private ApiMapper mapper;
 
     public void createApi(ApiDto api) {
-        apiRepository.save(ApiMapper.MAPPER.toApi(api));
+        apiRepository.save(mapper.toApi(api));
     }
 
     public List<ApiDto> getAllApi() {
-        return ApiMapper.MAPPER.fromApis(apiRepository.findAll());
+        return mapper.fromApis(apiRepository.findAll());
     }
+
 }

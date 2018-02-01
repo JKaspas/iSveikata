@@ -1,29 +1,25 @@
 package lt.vtvpmc.ems.isveikata.prescription;
 
-import lombok.Data;
-
 import java.util.Date;
 
+import lombok.Data;
+import lt.vtvpmc.ems.isveikata.api.ApiDto;
 
 @Data
 public class PrescriptionDto {
 
-    String doctorUserName;
-    Long patientId;
-    String apiTitle;
+    private String doctorUserName;
+    private Long patientId;
+    private ApiDto apiDto;
+    private Date expirationDate;
+    private Date prescriptionDate;
+    private Long ingredientAmount;
+    private String description;
+    private Long useAmount;
+    private String units;
 
-    //prescription
-
-    Date expirationDate;
-
-    Date prescriptionDate;
-
-    Long ingredientAmount;
-
-    String description;
-
-    Long useAmount;
-
-    String units;
+//    @OneToMany(mappedBy = "prescription")
+//    private List<PrescriptionUsage> prescriptionUsage;
+//
 
 }

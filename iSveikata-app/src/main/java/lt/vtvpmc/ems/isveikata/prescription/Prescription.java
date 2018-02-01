@@ -5,20 +5,22 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import org.hibernate.annotations.Type;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lt.vtvpmc.ems.isveikata.api.Api;
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @Entity
-@Setter
-@Getter
+@Data
 public class Prescription implements Serializable {
 
     @Id
@@ -44,7 +46,6 @@ public class Prescription implements Serializable {
     private List<PrescriptionUsage> prescriptionUsage;
 
     private long ingredientAmount;
-    private String ingredientUnit;
     private String description;
     private long useAmount;
 
