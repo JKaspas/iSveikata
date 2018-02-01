@@ -2,20 +2,21 @@ import React from 'react'
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 import PublicViewContainer from '../Container/PublicViewContainer';
-import UserLoginContainer from '../Container/UserLoginContainer'
-import PatientLoginContainer from '../Container/PatientLoginContainer'
+import UserLoginContainer from '../Container/UserLoginContainer';
+import PatientLoginContainer from '../Container/PatientLoginContainer';
 import AdminCreateUserContainer from '../Container/AdminContainer/AdminCreateUserContainer';
-import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
-import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
-import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer'
-import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer'
-import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer'
-import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
-import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
-import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer'
-import PatientPasswordContainer from '../Container/PasswordComponent/PatientPasswordContainer'
-import UserPasswordContainer from '../Container/PasswordComponent/UserPasswordContainer'
-import {InitialAdminApp, InitialPublicApp, InitialDoctorApp, InitialDruggistApp, InitialPatientApp, NoMatch} from './InitialAppComponents'
+import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer';
+import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer';
+import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer';
+import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer';
+import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer';
+import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer';
+import DoctorPrescriptionContainer from '../Container/DoctorContainer/DoctorPrescriptionContainer';
+import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer';
+import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer';
+import PatientPasswordContainer from '../Container/PasswordComponent/PatientPasswordContainer';
+import UserPasswordContainer from '../Container/PasswordComponent/UserPasswordContainer';
+import {InitialAdminApp, InitialPublicApp, InitialDoctorApp, InitialDruggistApp, InitialPatientApp, NoMatch} from './InitialAppComponents';
 import LogoutContainer from '../Container/LogoutContainer';
 
 
@@ -43,6 +44,7 @@ var RouteComponent = () =>{
             <IndexRoute component={DoctorViewContainer} />
             <Route path="/doctor/patient" component={DoctorViewContainer} />
             <Route path="/doctor/:userName/patient/:patientId" component={DoctorRecordContainer} />
+            <Route path="/doctor/:userName/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
             <Route path="/doctor/patient/:patientId/view" component={DoctorPatientViewContainer} />
             <Route path="/doctor/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
