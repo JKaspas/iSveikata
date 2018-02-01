@@ -94,17 +94,6 @@ export default class DoctorPrescriptionContainer extends Component{
         let currentDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
         let expDate = date.getFullYear() + '-'+ (date.getMonth()+3) + '-' + date.getDate();
         e.preventDefault();
-        console.log({
-            prescription:{
-            expirationDate:expDate,
-            prescriptionDate:currentDate,
-            description:this.state.description,
-            ingredientAmount:this.state.substanceAmount,
-            ingredientUnit:this.state.substanceUnit,
-        },
-        patientId: this.state.patientId,
-        userName: this.state.userName,
-        apiTitle:this.state.substance})
         axios.post('http://localhost:8080/api/doctor/new/prescription', {
            
     
@@ -113,7 +102,7 @@ export default class DoctorPrescriptionContainer extends Component{
                 prescriptionDate:currentDate,
                 description:this.state.description,
                 ingredientAmount:this.state.substanceAmount,
-                ingredientUnit:this.state.substanceUnit,
+                // ingredientUnit:this.state.substanceUnit,
             },
             patientId: this.state.patientId,
             userName: this.state.userName,
@@ -139,7 +128,7 @@ export default class DoctorPrescriptionContainer extends Component{
         .catch((erorr) => {
             console.log(erorr)
             this.setState({
-                infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas {erorr.response.data}</strong></div>
+                infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas </strong></div>
             })
         })
     }

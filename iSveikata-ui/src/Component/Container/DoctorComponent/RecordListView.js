@@ -6,7 +6,7 @@ const RecordListView = (props) =>{
 
     return (
     <div> 
-        <table className="table table-hover">
+        <table  className="table table-hover">
             <thead>
                 <tr>
                     <th>Įrašo data</th>
@@ -18,7 +18,7 @@ const RecordListView = (props) =>{
                     <th>Vizitas pakartotinas</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="recorTableBody">
                 {props.records}
             </tbody>
         </table>

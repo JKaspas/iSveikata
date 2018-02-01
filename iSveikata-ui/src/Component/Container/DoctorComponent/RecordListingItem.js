@@ -10,7 +10,7 @@ const RecordListingItem = (props) =>{
     var repetitive = props.repetitive === true? yesValue:noValue;
 
     return (
-    <tr  className="record" onClick={() => props.showDetails(props.index)} >
+    <tr  >
             <td>{props.appDate}</td>
             <td>{props.doctorName}</td>
             <td>{props.icd}</td>

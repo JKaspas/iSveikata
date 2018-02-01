@@ -4,16 +4,17 @@ import {Link} from 'react-router'
 
 
 const PrescriptionListingItem = (props) =>{
+
     return (
-    <tr >
+    <tr onClick={() => props.showDetails(props.id)}>
             <td>{props.prescriptionDate}</td>
             <td>{props.expirationDate}</td>
             <td>{props.ingredientName}</td>
-            <td>{props.ingredientAmount}</td>
+            {/* <td>{props.ingredientAmount}</td>
             <td>{props.units}</td>
-            <td>{props.description}</td>
-            <td>{props.useAmount}</td>
-            <td><Link to={'/gydytojas/pacientas/receptas/'+props.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link></td>
+            <td>{props.description}</td> */}
+            <td>{props.useAmount} kartų</td>
+            <td>{props.viewUsageLink}</td>
     </tr>
     )
 }

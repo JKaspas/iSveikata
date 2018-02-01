@@ -49,6 +49,7 @@ var RouteComponent = () =>{
             <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
             <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
             <Route path="/gydytojas/pacientas/receptas/:prescriptionId/panaudojimai" component={NoMatch} />
+            {/* <Route path="/gydytojas/pacientas/ligos-irasas/:recordId" component={NoMatch} /> */}
             <Route path="/doctor/patient/:patientId/view" component={DoctorPatientViewContainer} />
             <Route path="/doctor/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>

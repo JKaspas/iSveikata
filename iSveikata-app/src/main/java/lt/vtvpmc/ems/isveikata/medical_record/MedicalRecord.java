@@ -25,7 +25,7 @@ public class MedicalRecord implements Serializable {
 	@ManyToOne
 	private Doctor doctor;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private Patient patient;
 
 	@ManyToOne
