@@ -5,13 +5,17 @@ import PublicViewContainer from '../Container/PublicViewContainer';
 import UserLoginContainer from '../Container/UserLoginContainer'
 import PatientLoginContainer from '../Container/PatientLoginContainer'
 import AdminCreateUserContainer from '../Container/AdminContainer/AdminCreateUserContainer';
-import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
-import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
 import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer'
 import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer'
 import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer'
+
+import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
 import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
+import DoctorPrescriptionContainer from '../Container/DoctorContainer/DoctorPrescriptionContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
+
+import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
+
 import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer'
 import PatientPasswordContainer from '../Container/PasswordComponent/PatientPasswordContainer'
 import UserPasswordContainer from '../Container/PasswordComponent/UserPasswordContainer'
@@ -42,7 +46,9 @@ var RouteComponent = () =>{
           <Route path="/doctor" component={InitialDoctorApp} >
             <IndexRoute component={DoctorViewContainer} />
             <Route path="/doctor/patient" component={DoctorViewContainer} />
-            <Route path="/doctor/:userName/patient/:patientId" component={DoctorRecordContainer} />
+            <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
+            <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
+            <Route path="/gydytojas/pacientas/receptas/:prescriptionId/panaudojimai" component={NoMatch} />
             <Route path="/doctor/patient/:patientId/view" component={DoctorPatientViewContainer} />
             <Route path="/doctor/password" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>

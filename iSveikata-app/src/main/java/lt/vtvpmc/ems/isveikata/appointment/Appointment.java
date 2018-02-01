@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Data
@@ -20,7 +21,8 @@ public class Appointment implements Serializable {
 	private String description;
 
 	private String duration;
-
+	
+	@Type(type = "date")
 	private Date date;
 
 	@JsonIgnore

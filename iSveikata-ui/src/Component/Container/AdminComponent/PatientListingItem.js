@@ -10,6 +10,7 @@ const PatientListingItem = (props) =>{
             <td>{props.doctorViewPatient}</td>
             <td>{props.recordLink}</td>
             <td>{props.patientBindLink}</td>
+            <td>{props.prescriptionLink}</td>
 
 
     </tr>)

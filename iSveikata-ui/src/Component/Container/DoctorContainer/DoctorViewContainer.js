@@ -7,6 +7,7 @@ import PatientListView from '../AdminComponent/PatientListView'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink';
 import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
+import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 
 class DoctorViewContainer extends Component{
     constructor(props){
@@ -21,6 +22,7 @@ class DoctorViewContainer extends Component{
 
             listBegin:0,
             listEnd:5,
+            
         }
     }
 
@@ -92,8 +94,11 @@ class DoctorViewContainer extends Component{
                 firstName={patient.firstName}
                 lastName={patient.lastName}
     
-                recordLink={<NewRecordLink userName={this.session.user.userName} patientId={patient.patientId}/>}
-                doctorViewPatient={<DoctorViewPatientLink patientId={patient.patientId} />}          
+                recordLink={<NewRecordLink  patientId={patient.patientId}/>}
+                prescriptionLink={<NewPrescriptionLink  patientId={patient.patientId}/>}
+                doctorViewPatient={<DoctorViewPatientLink patientId={patient.patientId} />}    
+                  
+                    
             />
         )
     }
@@ -139,6 +144,11 @@ class DoctorViewContainer extends Component{
         this.getAllPatient()
     }
 
+    
+
+
+
+
 
 
 
@@ -165,6 +175,7 @@ class DoctorViewContainer extends Component{
                                 <PatientListView 
                                     patients={this.state.patients}
                                 />
+                                
                                 {this.state.info}
                                 {/* <button className='btn btn-success pull-right' onClick={this.forward}>Pirmyn</button>
                                 <button className='btn btn-success pull-right' onClick={this.backward}>Atgal</button> */}

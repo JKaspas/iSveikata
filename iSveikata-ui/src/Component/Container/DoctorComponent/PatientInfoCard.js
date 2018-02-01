@@ -12,7 +12,7 @@ var PatientInfoCard = (props) =>{
                 <div className="panel-body">
                 
                     <div>
-                        {props.recordForm}
+                        {props.form}
                     </div>
                 </div>
             </div>

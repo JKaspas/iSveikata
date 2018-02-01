@@ -71,7 +71,7 @@ export default class DoctorRecordContainer extends Component{
     
     submitHandler = (e) =>{
         let date = new Date()
-        let newDate = date.getFullYear() + '-'+ date.getMonth()+1 + '-' + date.getDate();
+        let newDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
         e.preventDefault();
         console.log(newDate)
         axios.post('http://localhost:8080/api/doctor/new/record', {
@@ -189,7 +189,7 @@ export default class DoctorRecordContainer extends Component{
                 <PatientInfoCard 
                 patientFullName={this.state.patientFullName}
                 patientId={this.state.patient.patientId}
-                recordForm={
+                form={
                 <RecordForm 
                     erorrClassIcd={this.errorClass(this.state.formErrors.icd)}
                     errorClassDescription={this.errorClass(this.state.formErrors.description)}

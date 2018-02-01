@@ -9,7 +9,7 @@ var AdminNavigation = (props) =>{
               <li><a className="" href="#admin/create/patient">Registruoti naują pacientą</a></li>
               <li><a className="" href="#admin/create/user">Registruoti naują vartotoją</a></li>
               {/* <li><a className="" href="#admin/edit">Redaguoti</a></li> */}
-              <li><a className="" href="#admin/bind">Registruoti naują vartotoją</a></li>
+              <li><a className="" href="#admin/bind">Priskirti gydytojui pacienta</a></li>
               <li><a className="" href="#admin/password">Keisti slaptažodį</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">

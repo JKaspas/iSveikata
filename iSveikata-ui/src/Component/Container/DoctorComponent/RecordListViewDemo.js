@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const RecordListView = (props) =>{
+const RecordListViewDemo = (props) =>{
 
 
     return (
@@ -12,10 +12,6 @@ const RecordListView = (props) =>{
                     <th>Įrašo data</th>
                     <th>Daktaras</th>
                     <th>Ligos kodas</th>
-                    <th>Vizito aprašymas</th>
-                    <th>Vizito trukmė</th>
-                    <th>Vizitas kompensuojamas</th>
-                    <th>Vizitas pakartotinas</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,4 +22,4 @@ const RecordListView = (props) =>{
 </div>)
 }
 
-export default RecordListView;
+export default RecordListViewDemo;

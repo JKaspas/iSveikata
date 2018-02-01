@@ -2,7 +2,7 @@ import React from 'react'
 
 
 
-const RecordListingItem = (props) =>{
+const RecordListingItemDemo = (props) =>{
     var yesValue = 'Taip';
     var noValue = 'Ne';
 
@@ -14,11 +14,7 @@ const RecordListingItem = (props) =>{
             <td>{props.appDate}</td>
             <td>{props.doctorName}</td>
             <td>{props.icd}</td>
-            <td>{props.appDescription.substring(0, 30)}...</td>
-            <td>{props.appDuration} min</td>
-            <td>{compensable}</td>
-            <td>{repetitive}</td>
     </tr>)
 }
 
-export default RecordListingItem;
+export default RecordListingItemDemo;
