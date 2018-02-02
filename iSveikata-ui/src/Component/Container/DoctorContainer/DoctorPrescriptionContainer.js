@@ -13,6 +13,7 @@ export default class DoctorPrescriptionContainer extends Component{
             patient:'',
             patientFullName:'',
             apis:'',
+            apiUnits:'',
 
             patientId:props.params.patientId,
             userName:this.session.user.userName,
@@ -56,7 +57,8 @@ export default class DoctorPrescriptionContainer extends Component{
         axios.get('http://localhost:8080/api/api')
         .then((response)=>{
             this.setState({
-                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>))
+                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
+                apiUnits:response.data.map(this.mapApiUnitsWithTitle)
             })
             console.log(response.status)
         })
@@ -64,6 +66,14 @@ export default class DoctorPrescriptionContainer extends Component{
             console.log(erorr)
         })
     }
+
+    mapApiUnitsWithTitle = (api, index) =>{
+        return {
+            "title":api.ingredientName,
+            "units":api.unit
+        }
+    }
+    
 
     loadPatient = () =>{
         axios.get('http://localhost:8080/api/patient/'+ this.props.params.patientId)
@@ -83,9 +93,16 @@ export default class DoctorPrescriptionContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    
-        this.setState({[name]: value},
-          () => { this.validateField(name, value) });
+
+        if(name === "substance"){
+            this.setState({
+                substance:e.target.value,
+                substanceUnit:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units)
+            })
+        }else{
+            this.setState({[name]: value},
+            () => { this.validateField(name, value) });
+        }
     
     }
 
@@ -189,6 +206,7 @@ export default class DoctorPrescriptionContainer extends Component{
         return (
             <div className='container'>
                 <section>
+                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
                 <h2>Naujas receptas</h2>
                 <PatientInfoCard 
                 patientFullName={this.state.patientFullName}

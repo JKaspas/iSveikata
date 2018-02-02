@@ -48,11 +48,15 @@ var PrescriptionForm = (props) =>{
                         id={props.errorClassSubstanceAmount} />
                     </div>
                     <div className="col-sm-2">  
-                        <select className="form-control" name="substanceUnit" value={props.substanceUnit} onChange={props.fieldHandler}>
+                            <input type="text" readOnly className="form-control" 
+                            value={props.substanceUnit} 
+                            required
+                             />
+                        {/* <select readOnly className="form-control" name="substanceUnit" value={props.substanceUnit} onChange={props.fieldHandler}>
                             <option value="mg" selected>mg</option>
                             <option value="mcg">mcg</option>
                             <option value="tv">t.v.</option>
-                        </select>
+                        </select> */}
                     </div>
                 </div>
                 <div className="form-group">

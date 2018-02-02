@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import lombok.Data;
@@ -42,12 +43,17 @@ public class Prescription implements Serializable {
     @ManyToOne
     private Api api;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "prescription")
     private List<PrescriptionUsage> prescriptionUsage;
 
     private long ingredientAmount;
     private String description;
     private long useAmount;
+
+    public void addUsage(){
+        useAmount++;
+    }
 
     public void setPatient(Patient patient) {
         this.patient = patient;

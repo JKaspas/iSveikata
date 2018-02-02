@@ -185,6 +185,7 @@ export default class DoctorRecordContainer extends Component{
         return (
             <div className='container'>
                 <section>
+                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
                 <h2>Naujas ligos įrašas</h2>
                 <PatientInfoCard 
                 patientFullName={this.state.patientFullName}

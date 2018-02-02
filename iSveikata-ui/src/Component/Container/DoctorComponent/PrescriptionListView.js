@@ -15,7 +15,7 @@ const PrescriptionListView = (props) =>{
                     {/* <th>Aktyvios medžiagos kiekis</th>
                     <th>Aktyvios medžiagos matavimo vienetai</th> */}
                     {/* <th>Recepto aprašymas</th> */}
-                    <th>Panaudojimai</th>
+                    <th>Recepto panaudojimai</th>
                 </tr>
             </thead>
             <tbody>

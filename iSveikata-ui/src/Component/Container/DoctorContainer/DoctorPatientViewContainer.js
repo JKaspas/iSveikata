@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router'
 
-import RecordListingItem from '../DoctorComponent/RecordListingItem'
-import RecordListView from '../DoctorComponent/RecordListView'
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import RecordListingItemDemo from '../DoctorComponent/RecordListingItemDemo';
@@ -50,7 +48,7 @@ export default class DoctorPatientViewContainer extends Component{
                 records:response.data.map(this.composeRecord),
                 viewContent:<RecordListViewDemo records={response.data.map(this.composeRecord)} notFound={this.state.notFoundRecord}/>
             })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -59,12 +57,10 @@ export default class DoctorPatientViewContainer extends Component{
     showRecordDetails = (rowId) =>{
         this.loadSpecificRecord(rowId);
         this.closeOpenDetails();
-        console.log(rowId)
     }
     showPrescriptionDetails = (rowId) =>{
-        this. loadSpecificPrescription(rowId);
+        this.loadSpecificPrescription(rowId);
         this.closeOpenDetails();
-        console.log(rowId)
     }
 
     composeRecord = (record,index) =>{
@@ -153,11 +149,8 @@ export default class DoctorPatientViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.api.title}
-                // ingredientAmount={prescription.ingredientAmount}
-                // units={prescription.ingredientUnit}
-                // description={prescription.description}
                 useAmount={prescription.useAmount}
-                viewUsageLink={usageLink}
+                viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
             />
         )
@@ -212,6 +205,8 @@ export default class DoctorPatientViewContainer extends Component{
         return (
             <div className="container">
             <section>
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+            <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">

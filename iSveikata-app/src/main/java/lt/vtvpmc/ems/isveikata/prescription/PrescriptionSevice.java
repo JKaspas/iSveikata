@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.employees.Druggist;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class PrescriptionSevice {
 
     @Autowired
     private JpaPrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    private JpaPrescriptionUsageRepository prescriptionUsageRepository;
 
     @Autowired
     private JpaPatientRepository patientRepository;
@@ -67,5 +72,22 @@ public class PrescriptionSevice {
 
     public PrescriptionDto getPrescription(Long prescriptionId) {
         return mapper.fromPrescription(prescriptionRepository.findOne(prescriptionId));
+    }
+
+    public boolean createUsageForPrescription(Map<String, Object> map, Long prescriptionId) {
+        ObjectMapper mapper = new ObjectMapper();
+        PrescriptionUsage prescriptionUsage = mapper.convertValue(map.get("usage"), PrescriptionUsage.class);
+        String userName = mapper.convertValue(map.get("userName"), String.class);
+
+        if(prescriptionUsage != null && prescriptionId != null && userName != null) {
+            Prescription prescription = prescriptionRepository.findOne(prescriptionId);
+            prescriptionUsage.setPrescription(prescription);
+            prescription.addUsage();
+            prescriptionUsage.setDruggist((Druggist)employeesRepository.findByUserName(userName));
+            prescriptionUsageRepository.save(prescriptionUsage);
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -77,13 +77,7 @@ class DoctorViewContainer extends Component{
         })
     }
 
-    // setPatientAmount = (patient, start, end) =>{
-    //     var value=0;
-    //     this.setState({
-    //         patients:patient.filter()
-    //     })
-    // }
-
+  
     composePatient = (patient, index) =>{
        
         return (
@@ -94,9 +88,9 @@ class DoctorViewContainer extends Component{
                 firstName={patient.firstName}
                 lastName={patient.lastName}
     
-                recordLink={<NewRecordLink  patientId={patient.patientId}/>}
-                prescriptionLink={<NewPrescriptionLink  patientId={patient.patientId}/>}
-                doctorViewPatient={<DoctorViewPatientLink patientId={patient.patientId} />}    
+                recordLink={<td><NewRecordLink  patientId={patient.patientId}/></td>}
+                prescriptionLink={<td><NewPrescriptionLink  patientId={patient.patientId}/></td>}
+                doctorViewPatient={<td><DoctorViewPatientLink patientId={patient.patientId} /></td>}    
                   
                     
             />
@@ -129,25 +123,6 @@ class DoctorViewContainer extends Component{
         }
     }
 
-    forward = () =>{
-        this.setState({
-            listBegin:this.state.listBegin+5,
-            listEnd:this.state.listEnd+5
-        })
-        this.getAllPatient()
-    }
-    backward = () =>{
-        this.setState({
-            listBegin:this.state.listBegin-5,
-            listEnd:this.state.listEnd-5
-        })
-        this.getAllPatient()
-    }
-
-    
-
-
-
 
 
 
@@ -177,8 +152,7 @@ class DoctorViewContainer extends Component{
                                 />
                                 
                                 {this.state.info}
-                                {/* <button className='btn btn-success pull-right' onClick={this.forward}>Pirmyn</button>
-                                <button className='btn btn-success pull-right' onClick={this.backward}>Atgal</button> */}
+                              
 
                             </div>
                         </div> 
