@@ -67,6 +67,7 @@ public class EmployeesController {
 		}
 	}
 
+
 	/**
 	 * Insert patient. Insert new patient into data base with unique patientId.
 	 * Return response if patientId is not unique. URL: /api/admin/new/patient
