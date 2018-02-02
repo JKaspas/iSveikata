@@ -1,0 +1,24 @@
+import React from 'react'
+
+
+var PatientInfoCard = (props) =>{
+    return (
+        <div className="panel-group">
+            <div className="panel panel-default">
+            <div className="panel-heading">
+            <p>Pacientas: {props.patientFullName}</p>
+            <p>Asmens kodas: {props.patientId}</p>
+            </div>
+                <div className="panel-body">
+                
+                    <div>
+                        {props.form}
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    )
+}
+
+export default PatientInfoCard;
