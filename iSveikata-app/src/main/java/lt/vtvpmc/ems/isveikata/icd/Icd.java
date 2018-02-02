@@ -1,12 +1,12 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.hibernate.validator.constraints.Length;
 
 import lombok.Data;
@@ -14,7 +14,8 @@ import lombok.Data;
 @Entity
 @Data
 public class Icd implements Serializable {
-	
+	private static final long serialVersionUID = 7861150299726485665L;
+
 	@Id
 	@Length(min = 3, max = 7)
 	@NotNull

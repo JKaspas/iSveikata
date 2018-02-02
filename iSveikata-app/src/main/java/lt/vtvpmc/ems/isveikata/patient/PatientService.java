@@ -5,13 +5,15 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
+import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 
 /**
  * The Class PatientService.
@@ -27,14 +29,20 @@ public class PatientService {
 	/** The medical record repository. */
 	@Autowired
 	private JpaMedicalRecordRepository medicalRecordRepository;
+	
+	@Autowired
+	private PatientMapper patientMapper;
+	
+	@Autowired
+	private PrescriptionMapper prescriptionMapper;
 
 	/**
 	 * Gets the patient list.
 	 *
 	 * @return the patient list
 	 */
-	public List<Patient> getActivePatientList() {
-		return patientRepository.findByIsActiveTrue();
+	public List<PatientDto> getActivePatientList() {
+		return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
 	}
 	/**
 	 * Gets the patient.
@@ -43,8 +51,8 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient
 	 */
-	public Patient getPatient(Long patientId) {
-		return patientRepository.findOne(patientId);
+	public PatientDto getPatient(Long patientId) {
+		return patientMapper.patientToDto(patientRepository.findOne(patientId));
 	}
 
 	/**
@@ -66,8 +74,8 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
-	public List<Prescription> getPatientPrescriptionList(Long patientId) {
-		return patientRepository.findOne(patientId).getPrescriptions();
+	public List<PrescriptionDto> getPatientPrescriptionList(Long patientId) {
+		return prescriptionMapper.prescriptionsToDto(patientRepository.findOne(patientId).getPrescriptions());
 	}
 
 	/**
@@ -111,7 +119,6 @@ public class PatientService {
 	 * @param patient
 	 *            the patient
 	 */
-	// 7
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
 	}
@@ -121,9 +128,8 @@ public class PatientService {
 	 *
 	 * @return the patient list without doctor
 	 */
-	// 8
-	public List<Patient> getPatientListWithoutDoctor() {
-		return patientRepository.findByIsActiveTrueAndDoctorIsNull();
+	public List<PatientDto> getPatientListWithoutDoctor() {
+		return patientMapper.patiensToDto(patientRepository.findByIsActiveTrueAndDoctorIsNull());
 	}
 	/**
 	 * Patient login.
@@ -134,7 +140,6 @@ public class PatientService {
 	 *            the password
 	 * @return true, if successful
 	 */
-	// 9
 	public boolean patientLogin(String patientId, String password) {
 		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
@@ -147,7 +152,6 @@ public class PatientService {
 	 *            the patient
 	 * @return true, if successful
 	 */
-	// 10 new
 	public boolean validateAddNewPatient(Patient patient) {
 		if (patientRepository.exists(patient.getPatientId())) {
 			return false;

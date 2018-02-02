@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 
 public class MedicalRecord implements Serializable {
+	private static final long serialVersionUID = -5096487620147474408L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

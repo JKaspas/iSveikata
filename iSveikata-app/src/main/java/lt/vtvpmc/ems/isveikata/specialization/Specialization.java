@@ -12,6 +12,7 @@ import lt.vtvpmc.ems.isveikata.employees.Doctor;
 @Entity
 @Data
 public class Specialization implements Serializable {
+	private static final long serialVersionUID = 7247219250826893188L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

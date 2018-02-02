@@ -1,20 +1,22 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
 
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
 import lt.vtvpmc.ems.isveikata.appointment.JpaAppointmentRepository;
-import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.icd.Icd;
 import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -27,7 +29,7 @@ public class MedicalRecordService {
     private JpaAppointmentRepository jpaAppointmentRepository;
 
     @Autowired
-    private JpaEmployeesRepository jpaEmployeesRepository;
+    private JpaEmployeesRepository<Doctor> jpaEmployeesRepository;
 
     @Autowired
     private JpaPatientRepository jpaPatientRepository;

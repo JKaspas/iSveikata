@@ -12,6 +12,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 @Entity
 @Data
 public class Appointment implements Serializable {
+	private static final long serialVersionUID = -5787787986684616099L;
 
 	@Id
 	@GeneratedValue

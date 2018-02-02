@@ -23,6 +23,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 @Entity
 @Data
 public class Patient implements Serializable {
+	private static final long serialVersionUID = 416974951348630192L;
 
 	@Id
 	@Min(10_001_010_000L)

@@ -22,8 +22,9 @@ import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 @Entity
 @Data
 public class Prescription implements Serializable {
+	private static final long serialVersionUID = -3936968052423037625L;
 
-    @Id
+	@Id
     @GeneratedValue
     private long id;
 

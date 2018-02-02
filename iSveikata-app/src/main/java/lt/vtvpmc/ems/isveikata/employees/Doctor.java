@@ -2,17 +2,21 @@ package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+
+import lombok.EqualsAndHashCode;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 @Entity
-@Data
+@EqualsAndHashCode(callSuper=true)
 @DiscriminatorValue(value = "doctor")
 public class Doctor extends Employee {
 

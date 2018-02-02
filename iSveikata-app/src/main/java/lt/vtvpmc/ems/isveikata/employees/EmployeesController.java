@@ -4,17 +4,29 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.patient.PatientDto;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesController.
@@ -139,7 +151,7 @@ public class EmployeesController {
 	 * @return list of all doctors
 	 */
 	@GetMapping("/doctor")
-	private List<Doctor> getAllDoctors() {
+	private List<DoctorDto> getAllDoctors() {
 		return employeesService.getActiveDoctorsList();
 	}
 
@@ -151,7 +163,7 @@ public class EmployeesController {
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
-	private List<Patient> getAllDoctorPatient(@PathVariable String userName) {
+	private List<PatientDto> getAllDoctorPatient(@PathVariable String userName) {
 		return employeesService.getDoctorPatientList(userName);
 	}
 
@@ -209,7 +221,7 @@ public class EmployeesController {
 	 * @return all active and not bind with doctor patients
 	 */
 	@GetMapping("/doctor/notbind")
-	private List<Patient> getPatientListWithoutDoctor() {
+	private List<PatientDto> getPatientListWithoutDoctor() {
 		return patientService.getPatientListWithoutDoctor();
 	}
 

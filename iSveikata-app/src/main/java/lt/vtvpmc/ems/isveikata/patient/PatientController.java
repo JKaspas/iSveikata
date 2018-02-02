@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 
 @RestController
 @RequestMapping(value = "/api/patient")
@@ -28,27 +28,16 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-	// PATIENT: /api/patient
-	//
-	// GET:
-	// 1. “/” → return List<Patient> (DOCTOR, ADMIN)
-	// 2. “/{patient_id}/" → return active Patient
-	// 3. “/{patient_id}/record” → return List<Record>
-	// 4. “/{patient_id}/record/{record_id}” → return Record with appointmet with
-	// doctor
-
-	// . “/{patient_id}/recipe" → return List<Recipe> // kolkas nereikia
-
-	// PUT:
-	// 6. “/{patient_id}/password” → update Patient password
-
+// ToDo 	get /api/patient/record/{record_id} to DTO
+// 			get /api/patient/{patientId}/prescription to DTO
+// 			get /api/patient/{patientId}/record to DTO
 	/**
 	 * Gets all active patients URL: /api/patient
 	 *
 	 * @return list of all patient
 	 */
 	@GetMapping("/")
-	private List<Patient> getPatientList() {
+	private List<PatientDto> getPatientList() {
 		return patientService.getActivePatientList();
 	}
 
@@ -58,7 +47,7 @@ public class PatientController {
 	 * @return all active and not bind with doctor patients
 	 */
 	@GetMapping("/notBind")
-	private List<Patient> getPatientListWithoutDoctor() {
+	private List<PatientDto> getPatientListWithoutDoctor() {
 		return patientService.getPatientListWithoutDoctor();
 	}
 
@@ -69,7 +58,7 @@ public class PatientController {
 	 * @return patient by patientId
 	 */
 	@GetMapping("/{patientId}")
-	private Patient getPatientById(@PathVariable Long patientId) {
+	private PatientDto getPatientById(@PathVariable Long patientId) {
 		return patientService.getPatient(patientId);
 	}
 
@@ -91,7 +80,7 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/prescription")
-	private List<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId) {
+	private List<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") Long patientId) {
 		return patientService.getPatientPrescriptionList(patientId);
 	}
 
@@ -134,7 +123,7 @@ public class PatientController {
 		if (patientService.isPatientActive(fields.get("patientId"))
 				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
+					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFullName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");

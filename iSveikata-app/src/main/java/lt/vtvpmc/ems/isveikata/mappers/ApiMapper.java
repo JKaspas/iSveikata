@@ -15,17 +15,23 @@ public interface ApiMapper {
 
 	//ApiMapper MAPPER = Mappers.getMapper(ApiMapper.class);
 
+	/**
+	 * Converts from apiDto form UI to api for entity.<Br>
+	 * source = dto; target - entity
+	 * 
+	 * @param apiDto the api dto
+	 * @return the api
+	 */
 	@Mappings({ 
 		@Mapping(source = "ingredientName", target = "title"),
 		@Mapping(source = "description", target = "description"),
 		@Mapping(source = "unit", target = "measurements"),
 		@Mapping(target = "id", ignore = true) })	
-	Api toApi(ApiDto apiDto) ;
+	Api dtoToApi(ApiDto apiDto) ;
 
-	
 	@InheritInverseConfiguration
-	ApiDto fromApi(Api api);
+	ApiDto apiToDto (Api api);
 
-	List<ApiDto> fromApis(List<Api> apis);
+	List<ApiDto> apisToDto(List<Api> apis);
 
 }

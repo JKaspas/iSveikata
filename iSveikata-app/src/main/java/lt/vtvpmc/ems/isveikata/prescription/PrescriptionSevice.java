@@ -29,7 +29,7 @@ public class PrescriptionSevice {
     private JpaPatientRepository patientRepository;
 
     @Autowired
-    private JpaEmployeesRepository employeesRepository;
+    private JpaEmployeesRepository<Doctor> employeesRepository;
 
     @Autowired
     private JpaApiRepository apiRepository;
@@ -58,7 +58,7 @@ public class PrescriptionSevice {
     }
     
     public List<PrescriptionDto> getAllPrescriptions() {
-        return mapper.fromPrescriptions(prescriptionRepository.findAll());
+        return mapper.prescriptionsToDto(prescriptionRepository.findAll());
     }
 
     public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
@@ -66,6 +66,6 @@ public class PrescriptionSevice {
     }
 
     public PrescriptionDto getPrescription(Long prescriptionId) {
-        return mapper.fromPrescription(prescriptionRepository.findOne(prescriptionId));
+        return mapper.prescriptionToDto(prescriptionRepository.findOne(prescriptionId));
     }
 }
