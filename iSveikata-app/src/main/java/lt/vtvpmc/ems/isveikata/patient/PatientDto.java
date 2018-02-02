@@ -8,4 +8,7 @@ public class PatientDto {
 	private String Id;
 	private String fullName;
 
+	public String getFullName() {
+		return fullName;
+	}
 }
