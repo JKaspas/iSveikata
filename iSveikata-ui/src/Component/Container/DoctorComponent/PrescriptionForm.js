@@ -16,9 +16,9 @@ var PrescriptionForm = (props) =>{
                         <select className="form-control" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler}>
                             <option value="5">5 dienos</option>
                             <option value="10">10 dienų</option>
-                            <option value="30" selected>30 dienų</option>
+                            <option value="30">30 dienų</option>
                             <option value="180">180 dienų</option>
-                            <option value="termless">neterminuotas</option>
+                            <option value="360">neterminuotas</option>
                         </select>
                     </div>
                 </div>
@@ -26,8 +26,8 @@ var PrescriptionForm = (props) =>{
                     <label className="control-label col-sm-3">Galioja iki:</label>
                     <div className="col-sm-9">
                         <input type="text" readOnly className="form-control" 
-                        // value={props.generateExpirationDate} 
-                        required onChange={props.fieldHandler} 
+                        value={props.daysToExpiration === "360" ? "neterminuotas" : props.generateExpirationDate} 
+                        required 
                         placeholder="yyyy-MM-dd" name="expirationDate" />
                     </div>
                 </div>
@@ -35,7 +35,7 @@ var PrescriptionForm = (props) =>{
                     <label className="control-label col-sm-3" >Vaisto veiklioji medžiaga:</label>
                     <div className="col-sm-9">  
                         <select className="form-control" name="substance" value={props.substance} onChange={props.fieldHandler}>
-                            {props.substances}
+                            {props.substances} 
                         </select>
                     </div>
                 </div>
@@ -44,12 +44,13 @@ var PrescriptionForm = (props) =>{
                     <div className="col-sm-7">
                         <input type="number" className="form-control"  name="substanceAmount"
                         placeholder="Veikliosios medž. kiekis dozėje" value={props.substanceAmount} required 
-                        onChange={props.fieldHandler} 
+                        onChange={props.fieldHandler}
+                        onBlur={props.fieldValidationHandler}
                         id={props.errorClassSubstanceAmount} />
                     </div>
                     <div className="col-sm-2">  
                         <select className="form-control" name="substanceUnit" value={props.substanceUnit} onChange={props.fieldHandler}>
-                            <option value="mg" selected>mg</option>
+                            <option value="mg">mg</option>
                             <option value="mcg">mcg</option>
                             <option value="tv">t.v.</option>
                         </select>
@@ -62,6 +63,7 @@ var PrescriptionForm = (props) =>{
                             rows="3" required 
                             placeholder="Nurodyti kokią vaisto dozę, kiek kartų ir kaip vartoti."
                             onChange={props.fieldHandler}
+                            onBlur={props.fieldValidationHandler}
                             value={props.description}
                             id={props.errorClassDescription}
                             maxLength="225"

@@ -30,7 +30,9 @@ var RouteComponent = () =>{
             <IndexRoute component={PublicViewContainer} />
             <Route path="/" component={PublicViewContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
-            <Route path="/vartotojams" component={UserLoginContainer} />
+
+            <Route path="/vartotojams" component={UserLoginContainer} /> 
+    
             <Route path="/atsijungti" component={LogoutContainer} />
           </Route>
           <Route path="/admin" component={InitialAdminApp} >
@@ -40,7 +42,10 @@ var RouteComponent = () =>{
             <Route path="/admin/edit" component={NoMatch} />
             <Route path="/admin/bind" component={AdminBindDoctorPartContainer} />
             <Route path="/admin/bind/:userName" component={AdminBindUserPartContainer} />
-            <Route path="/admin/password" component={UserPasswordContainer} />
+
+            <Route path="/admin/password" component={UserPasswordContainer} /> 
+         
+
             <Route path="*" component={NoMatch}/>
           </Route>
           <Route path="/doctor" component={InitialDoctorApp} >
