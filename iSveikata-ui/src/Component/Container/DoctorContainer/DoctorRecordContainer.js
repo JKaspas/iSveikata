@@ -209,7 +209,6 @@ export default class DoctorRecordContainer extends Component{
                     fieldHandler={this.fieldHandler}
                 />}
                 />
-                {this.state.date}
                 </section>
             </div>
         )

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.prescription.JpaPrescriptionRepository;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,10 @@ public class PatientService {
 	@Autowired
 	private JpaPatientRepository patientRepository;
 
+	/** The patient repository. */
+	@Autowired
+	private JpaEmployeesRepository<Doctor> doctorRepository;
+
 	/** The medical record repository. */
 	@Autowired
 	private JpaMedicalRecordRepository medicalRecordRepository;
@@ -46,6 +52,16 @@ public class PatientService {
 	public Page<Patient> getAllPagedActivePatient(Pageable pageable){
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		return patientRepository.findByIsActiveTrue(request);
+	}
+
+	/**
+	 * Get all patient (paged list)
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Patient> getAllPatientByPatientId(Long patientId, Pageable pageable){
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllPatientByPatientId(patientId, request);
 	}
 
 	/**
@@ -215,5 +231,41 @@ public class PatientService {
 			return false;
 		}
 	}
+
+	/**
+	 * Return all active paged patient list by doctor userName and searchValue (firstName, lastName, patientId)
+	 *
+	 * @param pageable
+	 *
+	 * @param userName
+	 * 			  doctor userName
+	 * @param searchValue
+	 * 			  searchable value (firstName, lastName, patientId)
+	 *
+	 * @return paged list of patient
+	 */
+
+	public Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName, String searchValue) {
+		Doctor doctor = doctorRepository.findByUserName(userName);
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor, request );
+	}
+
+	/**
+	 * Return all active paged patient list by searchValue (firstName, lastName, patientId)
+	 *
+	 * @param pageable
+	 *
+	 * @param searchValue
+	 * 			  searchable value (firstName, lastName, patientId)
+	 *
+	 * @return paged list of patient
+	 */
+
+	public Page<Patient> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllActivePatientBySearchValue(searchValue, request );
+	}
+
 
 }

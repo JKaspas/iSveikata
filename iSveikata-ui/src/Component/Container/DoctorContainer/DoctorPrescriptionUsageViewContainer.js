@@ -10,6 +10,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
            usage:null,
+           info:''
         }
     }
 
@@ -20,7 +21,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
             return '';
         }  
 
-       
+       this.getPrescriptionUsage();
     }
 
     getPrescriptionUsage = () =>{
@@ -29,7 +30,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
             this.setState({
                 usage:response.data.map(this.composeUsage)
             })
-            // this.setPatientAmount(this.state.patients,0, 20)
+          
 
             if(response.data.length === 0){
                 this.setState({
@@ -50,7 +51,10 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
        
         return (
             <PrescriptionUsageListingItem
-
+                key={index}
+                date={usage.usageDate}
+                druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
+               
             />
         )
     }
@@ -63,6 +67,8 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
         return (
             <div className="container">
             <section>
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+            <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
@@ -72,6 +78,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
                             <PrescriptionUsageListView 
                                 usage={this.state.usage}
                             />
+                            {this.state.info}
                         </div> 
                     </div> 
                 </div>           

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import Pagination from "react-js-pagination"
+
 
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
@@ -21,6 +23,11 @@ class DruggistViewContainer extends Component{
             listBegin:0,
             listEnd:5,
             
+            listInfo:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:'',
         }
     }
 
@@ -31,14 +38,16 @@ class DruggistViewContainer extends Component{
             return '';
         }  
 
-        this.getAllPatient()
+        this.getAllPatient(this.state.activePage)
     }
 
-    getAllPatient = () =>{
-        axios.get('http://localhost:8080/api/patient/')
+    getAllPatient = (activePage) =>{
+        axios.get('http://localhost:8080/api/patient/?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             this.setState({
-                patients:response.data.map(this.composePatient)
+                patients:response.data.content.map(this.composePatient),
+                listInfo:response.data,
+                listLength:response.data.content.length,
             })
             // this.setPatientAmount(this.state.patients,0, 20)
 
@@ -48,7 +57,7 @@ class DruggistViewContainer extends Component{
                 })
             }
                   
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             
@@ -58,7 +67,8 @@ class DruggistViewContainer extends Component{
 
 
     composePatient = (patient, index) =>{
-       
+        
+
         return (
             <PatientListingItem
                 key={index}
@@ -82,6 +92,31 @@ class DruggistViewContainer extends Component{
     searchHandler = (e) =>{
         e.preventDefault()
        console.log("Searcrh search..."+ this.state.searchValue)
+    }
+
+    //handle paggination page changes 
+    handlePageChange = (activePage) => {
+        //on page number change send request for new page of patient
+        this.getAllPatient(activePage)
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })
+    }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+            <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemsPerPage}
+            totalItemsCount={this.state.listInfo.totalElements}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+            />
+        </div>
+        )
     }
 
     
@@ -110,7 +145,7 @@ class DruggistViewContainer extends Component{
                                 <PatientListView 
                                     patients={this.state.patients}
                                 />
-                                
+                                {this.showPagination()}                                
                                 {this.state.info}
                                 
 

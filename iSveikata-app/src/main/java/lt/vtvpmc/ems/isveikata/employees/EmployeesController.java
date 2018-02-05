@@ -147,7 +147,7 @@ public class EmployeesController {
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}.
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
 	 *
 	 * @param userName
 	 *            the user name
@@ -158,6 +158,22 @@ public class EmployeesController {
 	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
+
+	/**
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
+	 *
+	 * @param userName
+	 *            the user name
+	 * @return list of all patient of current doctor
+	 */
+	@GetMapping("/doctor/{userName}/patient/{searchValue}")
+	@ResponseStatus(HttpStatus.OK)
+	private Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(@PathVariable final String userName,
+															   @PathVariable final String searchValue,
+															   Pageable pageable){
+		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
+	}
+
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password

@@ -7,6 +7,12 @@ import {connect} from 'react-redux'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 
+var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+
+
 
 class DruggistViewContainer extends Component{
     constructor(props){
@@ -14,8 +20,14 @@ class DruggistViewContainer extends Component{
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             prescriptions:null,
-            infoState:''
-            
+            infoState:'',
+            info:(<h3>Pacientui išrašytų receptų nerasta</h3>),
+
+            listInfo:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:'',
         }
     }
 
@@ -25,21 +37,25 @@ class DruggistViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-        this.getPatientPrescriptions()
+        this.getPatientPrescriptions(this.state.activePage)
        
     }
 
-    getPatientPrescriptions = (userName) =>{
-        axios.get('http://localhost:8080/api/patient/'+this.props.params.patientId+'/prescription')
+    getPatientPrescriptions = (activePage) =>{
+        axios.get('http://localhost:8080/api/patient/'
+        +this.props.params.patientId+'/prescription?page='
+        +activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
-            this.setState({
-                prescriptions:response.data.map(this.composePrescription)
-            })
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
-                    info:(<h3>Receptų nerasta</h3>)
+                    prescriptionList:this.state.info
+                })
+            }else{
+                this.setState({
+                    prescriptionList:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>
                 })
             }
+           
             console.log(response.status)
         })
         .catch((erorr) => {
@@ -77,11 +93,11 @@ class DruggistViewContainer extends Component{
             userName:this.session.user.userName,
         })
         .then((response) => {
-            console.log(response.status)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
-            this.getPatientPrescriptions()
+            this.getPatientPrescriptions(this.state.activePage)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             this.setState({
@@ -97,7 +113,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId)
                 })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -111,7 +127,7 @@ class DruggistViewContainer extends Component{
                 <p>Recepto panaudojmų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
                 <p>Aktyviosios medžiagos kiekis dozeje: {prescription.ingredientAmount}</p>
-                <p>Matavimo vienetai: {prescription.unit}</p>
+                <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
                 <p>Aprašymas: {prescription.description}</p>
                 <button onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
                 
@@ -154,11 +170,9 @@ class DruggistViewContainer extends Component{
                         <div className="panel-body">
                             <div className="col-sm-12">
                                 {this.state.infoState}
-                                <PrescriptionListView 
-                                    prescription={this.state.prescriptions}
-                                />
+
+                                {this.state.prescriptionList}
                                 
-                                {this.state.info}
                                 <div id="recordDetails" style={backgroundStyle}>
                                 <div  style={recordDetailWindowStyle}>
                                 <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
@@ -180,23 +194,7 @@ const mapStateToProps = (state) =>{
     }
 }
 
+
+
 export default connect(mapStateToProps)(DruggistViewContainer)
 
-var backgroundStyle = {     height: '100%',
-                            width: '100%',
-                            border: '2px solid black',
-                            zIndex: '1',
-                            position: 'fixed',
-                            top: '0',
-                            left: '0',
-                            background: 'rgba(255,255,255,0.8)',
-                            display:'none'}
-var recordDetailWindowStyle = {  height: '60%',
-                                width: '60%',
-                                border: '2px solid black',
-                                zIndex: '2',
-                                position: 'fixed',
-                                top: '20%',
-                                left: '20%',
-                                background: 'white',
-                                display:'block'}

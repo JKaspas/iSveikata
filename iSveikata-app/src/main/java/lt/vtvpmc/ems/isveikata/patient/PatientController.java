@@ -42,8 +42,18 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/")
-	private Page<Patient> getPatientList(Pageable pageable) {
+	private Page<Patient> getPagedPatient(Pageable pageable) {
 		return patientService.getAllPagedActivePatient(pageable);
+	}
+
+	/**
+	 * Gets all active patients by searchValue(firstName, lastName, patientId) URL: /api/patient/search/{searchValue}
+	 *
+	 * @return list of all patient
+	 */
+	@GetMapping("/search/{searchValue}")
+	private Page<Patient> getPagedPatientBySearchValue(@PathVariable String searchValue, Pageable pageable) {
+		return patientService.getAllPagedPatientBySearchValue(pageable,searchValue);
 	}
 
 	/**

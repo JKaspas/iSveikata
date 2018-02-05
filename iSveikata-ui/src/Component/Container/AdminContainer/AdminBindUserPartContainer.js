@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import Pagination from "react-js-pagination"
+
 
 
 import PatientListView from '../AdminComponent/PatientListView'
@@ -13,7 +15,13 @@ export default class AdminBindUserPartContainer extends Component{
         this.state = {
             patients:null,
             infoNoPatient:'',
-            infoState:''
+            infoState:'',
+            
+            listInfo:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:''
         }
     }
 
@@ -29,14 +37,16 @@ export default class AdminBindUserPartContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }
-        this.getPatientList();  
+        this.getPatientList(this.state.activePage);  
     }
 
-    getPatientList = () =>{
-        axios.get('http://localhost:8080/api/doctor/notbind')
+    getPatientList = (activePage) =>{
+        axios.get('http://localhost:8080/api/doctor/notbind?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             this.setState({
-                patients:response.data.map(this.composePatient)
+                patients:response.data.content.map(this.composePatient),
+                listInfo:response.data,
+                listLength:response.data.content.length
             })
             if(response.data.length === 0){
                 this.setState({
@@ -54,7 +64,7 @@ export default class AdminBindUserPartContainer extends Component{
         axios.post("http://localhost:8080/api/admin/new/bind/"+this.props.params.userName+"/to/"+patient_id)
         .then((response)=>{
             console.log(response.status)
-            this.getPatientList();
+            this.getPatientList(this.state.activePage);  
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
             })
@@ -81,6 +91,37 @@ export default class AdminBindUserPartContainer extends Component{
             />
         )
     }
+
+     //handle paggination page changes 
+    handlePageChange = (activePage) => {
+        
+        //sen request for specific page
+        this.getPatientList(activePage);
+        
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })
+    }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        if(this.state.listLength < this.state.itemsPerPage && !this.state.listInfo.last){
+            return ''
+        }
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+            <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemsPerPage}
+            totalItemsCount={this.state.listInfo.totalElements}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+            />
+        </div>
+        )
+    }
+
     
 
     
@@ -105,6 +146,7 @@ export default class AdminBindUserPartContainer extends Component{
                                 <PatientListView 
                                     patients={this.state.patients}
                                 />
+                                 {this.showPagination()}
                                 {this.state.infoNoPatient}
                                 
                             </div>

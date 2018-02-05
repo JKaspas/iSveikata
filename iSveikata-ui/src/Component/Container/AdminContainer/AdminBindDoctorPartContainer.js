@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import Pagination from "react-js-pagination"
+
 
 import DoctorListView from '../AdminComponent/DoctorListView'
 import DoctorListingItem from '../AdminComponent/DoctorListingItem'
@@ -12,7 +14,13 @@ export default class AdminBindDoctorPartContainer extends Component{
         this.state = {
             search:'',
             doctors:null,
-            notFound:''
+            listInfo:'',
+            notFound:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:''
+
         }
     }
 
@@ -26,16 +34,22 @@ export default class AdminBindDoctorPartContainer extends Component{
             return '';
         }
 
-        axios.get('http://localhost:8080/api/doctor')
+        this.getAllDoctor(this.state.activePage)
+       
+    }
+
+    getAllDoctor = (activeNumber) =>{
+        axios.get('http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
                     notFound:(<h3>No doctor found</h3>),
-                    doctor:(<td><th><h3>No doctor found</h3></th></td>)
                 })
             }else{
                 this.setState({
-                    doctors:response.data.map(this.composeDoctor)
+                    doctors:response.data.content.map(this.composeDoctor),
+                    listInfo:response.data,
+                    listLength:response.data.content.length
                 })
             }
             console.log(response.status)
@@ -64,6 +78,35 @@ export default class AdminBindDoctorPartContainer extends Component{
         this.setState({[e.target.name]: e.target.value})
     }
 
+     //handle paggination page changes 
+     handlePageChange = (activePage) => {
+        
+        //sen request for specific page
+        this.getAllDoctor(activePage);
+        
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })
+      }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        if(this.state.listLength < this.state.itemsPerPage && !this.state.listInfo.last){
+            return ''
+        }
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+            <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemsPerPage}
+            totalItemsCount={this.state.listInfo.totalElements}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+            />
+        </div>
+        )
+    }
 
 
     
@@ -86,6 +129,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                                 <DoctorListView 
                                     doctors={this.state.doctors}
                                 />
+                                {this.showPagination()}
                                 {this.state.notFound}
                             </div>
                         </div> 
