@@ -20,7 +20,6 @@ export default class DoctorPrescriptionContainer extends Component{
             infoState:'',
 
             daysToExpiration: '10',
-            expirationDate: '',
             substance: 'Lumefantrine',
             substanceAmount: '',
             substanceUnit: 'mg',
@@ -81,13 +80,10 @@ export default class DoctorPrescriptionContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-        this.setState({[name]: value}); 
-        if(name === "daysToExpiration") {
-            this.setState({expirationDate: this.generateExpirationDate()});
-        }
-        //console.log(this.state.daysToExpiration);
-        //console.log(this.state.expirationDate);
+        
+            this.setState({[name]: value});
     }
+
 
     fieldValidationHandler = (e) => {
         // e === event
@@ -97,15 +93,16 @@ export default class DoctorPrescriptionContainer extends Component{
         this.validateField(name, value);
     }
 
-    submitHandler = (e) =>{
+    submitHandler = (e) => {
         let date = new Date()
-        let currentDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
+        let currentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        let expDate = this.generateExpirationDate();
         e.preventDefault();
         axios.post('http://localhost:8080/api/doctor/new/prescription', {
            
     
             prescription:{
-                expirationDate:this.state.expirationDate,
+                expirationDate:expDate,
                 prescriptionDate:currentDate,
                 description:this.state.description,
                 ingredientAmount:this.state.substanceAmount,
@@ -115,7 +112,7 @@ export default class DoctorPrescriptionContainer extends Component{
             userName: this.state.userName,
             apiTitle:this.state.substance
         })
-        .then((response)=>{
+        .then((response)=> {
             console.log(response.status)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>Naujas receptas sėkmingai sukurtas. </strong></div>,
