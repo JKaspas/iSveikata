@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,6 +17,9 @@ public interface JpaEmployeesRepository<T extends Employee> extends JpaRepositor
 	@Query(value = "SELECT * FROM EMPLOYEE WHERE DTYPE = LOWER(?1)", nativeQuery = true)
 	//@Query("select e from Employee e where e.dtype = :type")
 	List<T> findAllByType(String type);
+
+	@Query("select e from Doctor e")
+	Page<Doctor> findAllDoctor(Pageable pageable);
 }
 // galima ir taip:
 // public interface JpaEmployeesRepository<T extends Employee> extends JpaRepository<T, Long>{

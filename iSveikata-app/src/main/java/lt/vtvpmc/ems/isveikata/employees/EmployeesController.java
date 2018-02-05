@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -140,8 +142,8 @@ public class EmployeesController {
 	 * @return list of all doctors
 	 */
 	@GetMapping("/doctor")
-	private List<Doctor> getAllDoctors() {
-		return employeesService.getActiveDoctorsList();
+	private Page<Doctor> getAllDoctors(Pageable pageable) {
+		return employeesService.getActiveDoctorsList(pageable);
 	}
 
 	/**
@@ -152,8 +154,9 @@ public class EmployeesController {
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
-	private List<Patient> getAllDoctorPatient(@PathVariable String userName) {
-		return employeesService.getDoctorPatientList(userName);
+	@ResponseStatus(HttpStatus.OK)
+	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
+		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
 
 	/**
@@ -210,8 +213,8 @@ public class EmployeesController {
 	 * @return all active and not bind with doctor patients
 	 */
 	@GetMapping("/doctor/notbind")
-	private List<Patient> getPatientListWithoutDoctor() {
-		return patientService.getPatientListWithoutDoctor();
+	private Page<Patient> getPatientListWithoutDoctor(Pageable pageable) {
+		return patientService.getPatientListWithoutDoctor(pageable);
 	}
 
 	/**

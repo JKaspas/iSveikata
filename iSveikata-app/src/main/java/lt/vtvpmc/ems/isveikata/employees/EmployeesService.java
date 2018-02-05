@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
@@ -28,7 +31,7 @@ public class EmployeesService {
 	/** The doctor Repository. */
 	@Autowired
 	private JpaEmployeesRepository<Doctor> doctorRepository;
-	
+
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
@@ -78,8 +81,9 @@ public class EmployeesService {
 	 *
 	 * @return the active doctors list
 	 */
-	public List<Doctor> getActiveDoctorsList() {
-		return doctorRepository.findAllByType(Doctor.class.getSimpleName());
+	public Page<Doctor> getActiveDoctorsList(Pageable pageable) {
+		//return doctorRepository.findAllByType(Doctor.class.getSimpleName());
+		return employeesRepository.findAllDoctor( new PageRequest(pageable.getPageNumber() - 1,pageable.getPageSize()));
 	}
 
 	/**

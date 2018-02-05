@@ -6,17 +6,11 @@ import java.util.Map;
 
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 
@@ -48,18 +42,8 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/")
-	private List<Patient> getPatientList() {
-		return patientService.getActivePatientList();
-	}
-
-	/**
-	 * Gets all active and not bind with doctor patients URL: /api/patient
-	 *
-	 * @return all active and not bind with doctor patients
-	 */
-	@GetMapping("/notBind")
-	private List<Patient> getPatientListWithoutDoctor() {
-		return patientService.getPatientListWithoutDoctor();
+	private Page<Patient> getPatientList(Pageable pageable) {
+		return patientService.getAllPagedActivePatient(pageable);
 	}
 
 	/**
@@ -80,8 +64,8 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/record")
-	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
-		return patientService.getPatientRecordList(patientId);
+	private Page<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+		return patientService.getPatientRecordList(patientId, pageable);
 	}
 
 	/**
@@ -91,8 +75,8 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/prescription")
-	private List<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId) {
-		return patientService.getPatientPrescriptionList(patientId);
+	private Page<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+		return patientService.getPatientPrescriptionList(patientId, pageable);
 	}
 
 	/**
@@ -140,5 +124,12 @@ public class PatientController {
 					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
 		}
 	}
+
+
+
+
+
+
+
 
 }
