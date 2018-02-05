@@ -28,9 +28,9 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
-// ToDo 	get /api/patient/record/{record_id} to DTO
-// 			get /api/patient/{patientId}/prescription to DTO
-// 			get /api/patient/{patientId}/record to DTO
+// TODO 	get /api/patient/record/{record_id} to DTO
+// TODO		get /api/patient/{patientId}/prescription to DTO
+// TODO		get /api/patient/{patientId}/record to DTO
 	/**
 	 * Gets all active patients URL: /api/patient
 	 *
