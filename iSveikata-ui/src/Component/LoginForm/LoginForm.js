@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { FormErrors } from '../Container/AdminComponent/Form_errors';
+import '../../Form.css';
 
 
 var LoginForm = (props) =>{
@@ -8,16 +10,24 @@ var LoginForm = (props) =>{
             {props.infoState}
             <form onSubmit={props.submitHandler} className="form-signin">
                 <h2 className="form-signin-heading">Prašome prisijungti</h2>
-                <input className="form-control" type="text" name={props.loginValueName} 
-                onChange={props.fieldHandler} placeholder={props.loginPlaceholder} required />
-                <input className="form-control" type="password" name="password" 
-                onChange={props.fieldHandler} placeholder="Slaptažodis" required
-                autoComplete="off"/>
+                <div> 
+                    <FormErrors formErrors={props.formErrors}/>
+                </div>
+                <input className={props.errorClassLoginValue} type="text" name={props.loginValueName} 
+                placeholder={props.loginPlaceholder} value={props.loginValue} required
+                onChange={props.fieldHandler}
+                onBlur={props.fieldValidationHandler} />
+                <br />
+                <input className={props.errorClassPassword} type="password" name="password" 
+                placeholder="Slaptažodis" value={props.password} required autoComplete="off"
+                onChange={props.fieldHandler}
+                onBlur={props.fieldValidationHandler} />
+
                 <div className="checkbox">
                 <label>
                 </label>
                 </div>
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Prisijungti</button>
+                <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={!props.formValid}>Prisijungti</button>
             </form>
         </section>
     </div> 

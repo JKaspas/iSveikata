@@ -41,7 +41,7 @@ public abstract class Employee {
 	@NotNull
 	private byte[] password;
 
-	private boolean isAcitve = true;
+	private boolean isActive = true;
 
 	public Employee() {
 	}
@@ -53,24 +53,8 @@ public abstract class Employee {
 		this.password = password;
 	}
 
-	public boolean isAcitve() {
-		return isAcitve;
-	}
-
-	public void setAcitve(boolean acitve) {
-		isAcitve = acitve;
-	}
-	
 	public void setPassword(String password) {
 		this.password = Passwords.hashString(password);
-	}
-	
-	public byte[] getPassword() {
-		return password;
-	}
-
-	public String getUserName() {
-		return userName;
 	}
 	
 }

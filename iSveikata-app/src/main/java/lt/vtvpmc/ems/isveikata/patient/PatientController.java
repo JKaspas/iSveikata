@@ -1,11 +1,10 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,47 +18,49 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @RestController
 @RequestMapping(value = "/api/patient")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private MedicalRecordService medicalRecordService;
 
-	// PATIENT: /api/patient
-	//
-	// GET:
-	// 1. “/” → return List<Patient> (DOCTOR, ADMIN)
-	// 2. “/{patient_id}/" → return active Patient
-	// 3. “/{patient_id}/record” → return List<Record>
-	// 4. “/{patient_id}/record/{record_id}” → return Record with appointmet with
-	// doctor
-
-	// . “/{patient_id}/recipe" → return List<Recipe> // kolkas nereikia
-
-	// PUT:
-	// 6. “/{patient_id}/password” → update Patient password
-
+// TODO 	get /api/patient/record/{record_id} to DTO
+// TODO		get /api/patient/{patientId}/prescription to DTO
+// TODO		get /api/patient/{patientId}/record to DTO
 	/**
 	 * Gets all active patients URL: /api/patient
 	 *
 	 * @return list of all patient
 	 */
 	@GetMapping("/")
-	private List<Patient> getPatientList() {
-		return patientService.getActivePatientList();
+	private Page<Patient> getPagedPatient(Pageable pageable) {
+		return patientService.getAllPagedActivePatient(pageable);
+//=======
+//	private List<PatientDto> getPatientList() {
+//		return patientService.getActivePatientList();
+//>>>>>>> dtos
 	}
 
 	/**
-	 * Gets all active and not bind with doctor patients URL: /api/patient
+	 * Gets all active patients by searchValue(firstName, lastName, patientId) URL: /api/patient/search/{searchValue}
 	 *
-	 * @return all active and not bind with doctor patients
+	 * @return list of all patient
 	 */
-	@GetMapping("/notBind")
-	private List<Patient> getPatientListWithoutDoctor() {
-		return patientService.getPatientListWithoutDoctor();
+	@GetMapping("/search/{searchValue}")
+	private Page<Patient> getPagedPatientBySearchValue(@PathVariable String searchValue, Pageable pageable) {
+		return patientService.getAllPagedPatientBySearchValue(pageable,searchValue);
+//	@GetMapping("/notBind")
+//	private List<PatientDto> getPatientListWithoutDoctor() {
+//		return patientService.getPatientListWithoutDoctor();
+//>>>>>>> dtos
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class PatientController {
 	 * @return patient by patientId
 	 */
 	@GetMapping("/{patientId}")
-	private Patient getPatientById(@PathVariable Long patientId) {
+	private PatientDto getPatientById(@PathVariable Long patientId) {
 		return patientService.getPatient(patientId);
 	}
 
@@ -80,10 +81,19 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/record")
-	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
-		return patientService.getPatientRecordList(patientId);
+	private Page<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+		return patientService.getPatientRecordList(patientId, pageable);
 	}
-
+	
+//	Sort veikia, bet tada negrąžina medical record detalių.
+//	@GetMapping("/{patientId}/record")
+//    @ResponseStatus(HttpStatus.OK)
+//    private List<MedicalRecordDto> getAllSortedMedicalRecords(){
+//        return medicalRecordService.getSortedMedicalRecords();
+//    }
+	
+	
+	
 	/**
 	 * Gets all records URL: api/{patientId}/prescription
 	 *
@@ -91,33 +101,35 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/prescription")
-	private List<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId) {
-		return patientService.getPatientPrescriptionList(patientId);
+	private Page<Prescription> getPrescriptionList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+		return patientService.getPatientPrescriptionList(patientId, pageable);
+//	private List<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") Long patientId) {
+//		return patientService.getPatientPrescriptionList(patientId);
+//>>>>>>> dtos
 	}
 
-	/**
-	 * Gets record with appointmet and with doctor by record id URL:
-	 * "/record/{record_id}"
-	 * 
-	 * @param id
-	 * @return record with appointmet and with doctor by record id
-	 */
-	@GetMapping("/record/{record_id}")
-	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
-		return patientService.getPatientRecordById(id);
-	}
+//	/**
+//	 * Gets record with appointmet and with doctor by record id URL:
+//	 * "/record/{record_id}"
+//	 * 
+//	 * @param id
+//	 * @return record with appointmet and with doctor by record id
+//	 */
+//	@GetMapping("/record/{record_id}")
+//	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
+//		return patientService.getPatientRecordById(id);
+//	}
 
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
 	 * 
-	 * @param fields
+	 * @param Map with oldPassword and newPssword keys
 	 * 
-	 * @param patientId
-	 * @throws NoSuchAlgorithmException
+	 * @param patientId as path variable
+	 * 
 	 */
 	@PutMapping("/{patientId}/password")
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId)
-			throws NoSuchAlgorithmException {
+	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields, @PathVariable final Long patientId) {
 		boolean passwordChangeIsValid = patientService.updatePatientPassword(fields.get("oldPassword"),fields.get("newPassword"), patientId);
 		return passwordChangeIsValid ?
 				ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai") : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
@@ -125,8 +137,11 @@ public class PatientController {
 
 	/**
 	 * Login. URL: /patient/login
+	 * Checks if entered password matches saved in db.
 	 * 
-	 * @param fields
+	 * @param Map with patientId and password keys
+	 * 
+	 * @return HttpStatus with message
 	 */
 	@PostMapping("/login")
 	@ResponseBody
@@ -134,7 +149,7 @@ public class PatientController {
 		if (patientService.isPatientActive(fields.get("patientId"))
 				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFirstName());
+					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFullName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");

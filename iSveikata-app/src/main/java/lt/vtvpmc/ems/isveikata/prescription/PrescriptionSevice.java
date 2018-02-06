@@ -13,9 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vtvpmc.ems.isveikata.api.Api;
 import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.employees.Druggist;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @Service
@@ -26,10 +28,13 @@ public class PrescriptionSevice {
     private JpaPrescriptionRepository prescriptionRepository;
 
     @Autowired
+    private JpaPrescriptionUsageRepository prescriptionUsageRepository;
+
+    @Autowired
     private JpaPatientRepository patientRepository;
 
     @Autowired
-    private JpaEmployeesRepository employeesRepository;
+    private JpaEmployeesRepository<?> employeesRepository;
 
     @Autowired
     private JpaApiRepository apiRepository;
@@ -58,7 +63,7 @@ public class PrescriptionSevice {
     }
     
     public List<PrescriptionDto> getAllPrescriptions() {
-        return mapper.fromPrescriptions(prescriptionRepository.findAll());
+        return mapper.prescriptionsToDto(prescriptionRepository.findAll());
     }
 
     public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
@@ -66,6 +71,23 @@ public class PrescriptionSevice {
     }
 
     public PrescriptionDto getPrescription(Long prescriptionId) {
-        return mapper.fromPrescription(prescriptionRepository.findOne(prescriptionId));
+        return mapper.prescriptionToDto(prescriptionRepository.findOne(prescriptionId));
+    }
+
+    public boolean createUsageForPrescription(Map<String, Object> map, Long prescriptionId) {
+        ObjectMapper mapper = new ObjectMapper();
+        PrescriptionUsage prescriptionUsage = mapper.convertValue(map.get("usage"), PrescriptionUsage.class);
+        String userName = mapper.convertValue(map.get("userName"), String.class);
+
+        if(prescriptionUsage != null && prescriptionId != null && userName != null) {
+            Prescription prescription = prescriptionRepository.findOne(prescriptionId);
+            prescriptionUsage.setPrescription(prescription);
+            prescription.addUsage();
+            prescriptionUsage.setDruggist((Druggist) employeesRepository.findByUserName(userName));
+            prescriptionUsageRepository.save(prescriptionUsage);
+            return true;
+        }else{
+            return false;
+        }
     }
 }

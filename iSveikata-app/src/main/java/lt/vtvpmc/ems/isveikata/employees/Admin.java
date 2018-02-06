@@ -3,10 +3,10 @@ package lt.vtvpmc.ems.isveikata.employees;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
-@Data
+@EqualsAndHashCode(callSuper=true)
 @DiscriminatorValue(value = "admin")
 public class Admin extends Employee {
 
@@ -14,8 +14,7 @@ public class Admin extends Employee {
 		super(name, surname, username, password);
 	}
 	
-	public Admin(){
+	public Admin() {
 		super();
 	}
-
 }

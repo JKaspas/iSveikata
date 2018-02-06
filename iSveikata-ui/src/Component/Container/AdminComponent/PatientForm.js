@@ -22,47 +22,48 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Asmens kodas:</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control"  
-                                            value={props.patientId} required maxLength="11" 
-                                            onChange={props.fieldHandler} placeholder="Asmens kodas" 
-                                            name="patientId" id={props.erorrClassPatientId} />
+                                            <input type="text" className={props.erorrClassPatientId} name="patientId" 
+                                            value={props.patientId} required maxLength="11" placeholder="Asmens kodas"
+                                            onChange={props.fieldHandler}
+                                            onBlur={props.fieldValidationHandler} />
                                         </div>
                                     </div>
                                     {/* id={this.errorClass(this.state.formErrors.patientId)}
                                     id={this.errorClass(this.state.formErrors.firstName)}
                                     id={this.errorClass(this.state.formErrors.lastName)} */}
-                                        <div className="form-group">
+                                    <div className="form-group">
                                         <label className="control-label col-sm-3">Gimimo data:</label>
                                         <div className="col-sm-9">
-                                            <input type="text" readOnly className="form-control" 
-                                            value={props.generateBirthDate} required onChange={props.fieldHandler} 
-                                            placeholder="yyyy-MM-dd" name="birthDate" />
+                                            <input type="text" readOnly className="form-control" name="birthDate"
+                                            value={props.generateBirthDate} required placeholder="yyyy-MM-dd"
+                                            onChange={props.fieldHandler} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Vardas:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className="form-control"  value={props.firstName} 
-                                            required onChange={props.fieldHandler} placeholder="Paciento vardas" 
-                                            name="firstName" id={props.erorrClassFirstName} maxLength="225"/>
+                                            <input type="text" className={props.erorrClassFirstName} name="firstName"
+                                            value={props.firstName} required maxLength="225" placeholder="Paciento vardas"
+                                            onChange={props.fieldHandler}
+                                            onBlur={props.fieldValidationHandler} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="control-label col-sm-3" >Pavardė:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className="form-control"  value={props.lastName} 
-                                            required onChange={props.fieldHandler} placeholder="Paciento pavardė" 
-                                            name="lastName" id={props.erorrClassLastName} maxLength="225"/>
+                                            <input type="text" className={props.erorrClassLastName} name="lastName"
+                                            value={props.lastName} required maxLength="225" placeholder="Paciento pavardė"
+                                            onChange={props.fieldHandler}
+                                            onBlur={props.fieldValidationHandler} />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <label className="control-label col-sm-3" >Slaptažodis:</label>
                                         <div className="col-sm-9">          
-                                            <input type={props.passwordMasked ? "password" : "text"} 
-                                            readOnly className="form-control" value={props.generatePassword} 
-                                            required onChange={props.fieldHandler} onClick={props.handlePasswordMasking} 
-                                            placeholder="Slaptažodis" name="password"
-                                            autoComplete="off" />
+                                            <input type={props.passwordMasked ? "password" : "text"} readOnly className="form-control" name="password"
+                                            value={props.generatePassword} required placeholder="Slaptažodis" autoComplete="off"
+                                            onChange={props.fieldHandler}
+                                            onClick={props.handlePasswordMasking} />
                                         </div>
                                     </div>
                                     <div className="form-group">        

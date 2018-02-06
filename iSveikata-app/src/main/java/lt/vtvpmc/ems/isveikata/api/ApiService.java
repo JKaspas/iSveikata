@@ -21,11 +21,11 @@ public class ApiService {
     private ApiMapper mapper;
 
     public void createApi(ApiDto api) {
-        apiRepository.save(mapper.toApi(api));
+        apiRepository.save(mapper.dtoToApi(api));
     }
 
     public List<ApiDto> getAllApi() {
-        return mapper.fromApis(apiRepository.findAll());
+        return mapper.apisToDto(apiRepository.findAll());
     }
 
 }

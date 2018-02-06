@@ -1,19 +1,26 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
-import LoginForm from '../LoginForm/LoginForm'
+import LoginForm from '../LoginForm/LoginForm';
 import { userLoggedIn } from './_action/index';
 
 class UserLoginContainer extends Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props);
         this.state = {
             userName:'',
             password:'',
-            infoState:''
-        }
+
+            infoState:'',
+
+            formErrors: {userName: '', password: ''},
+            fieldState: {userName: 'form-control is-empty', password: 'form-control is-empty'},
+            userNameValid: false,
+            passwordValid: false,    
+            formValid: false,
+        };
     }
     
 
@@ -38,15 +45,73 @@ class UserLoginContainer extends Component{
     }
 
 
-    fieldHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
-      }
+    fieldHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+        const value = e.target.value;
+    
+            this.setState({[name]: value});
+    }
+
+    fieldValidationHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+        const value = e.target.value;
+      
+        this.validateField(name, value);
+    }
+
+    validateField = (fieldName, value) => {
+        let fieldValidationErrors = this.state.formErrors;
+        let fieldValidationState = this.state.fieldState;
+        let userNameValid = this.state.userNameValid;
+        let passwordValid = this.state.passwordValid;
+      
+        switch (fieldName) {
+            case 'userName':
+                userNameValid = value.match(/^(([A-Z]{1})([a-z]{2})){2}(\d{3})$/g) || (value === "root");
+                // ^ Tikrina ar įrašytas teisingo formato vartotojo vardas. Sistemoje jis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus.
+                //Išimtis: administratoriaus vartotojo vardas.
+                fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą. Atkreipkite dėmesį į didžiąsias raides.';
+                fieldValidationState.userName = userNameValid ? 'form-control is-valid' : 'form-control is-invalid';
+                //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
+                //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
+                break;
+            case 'password':
+                passwordValid = ((value.length >= 8) && (value.length <= 15)) || (value === "123");
+                // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. Išimtis: administratoriaus slaptažodis.
+                fieldValidationErrors.password = passwordValid ? '' : (value.length < 8 ? 'Slaptažodis per trumpas.' : 'Slaptažodis per ilgas.');
+                fieldValidationState.password = passwordValid ? 'form-control is-valid' : 'form-control is-invalid';
+                break;
+            default:
+                break;
+        }
+        this.setState({formErrors: fieldValidationErrors,
+                    fieldState: fieldValidationState,
+                    userNameValid: userNameValid,
+                    passwordValid: passwordValid,
+                    }, this.validateForm);
+    }
+
+    //Paspausti "submit" leidžiama tik jei visi laukai įvesti teisingai.
+    validateForm = () => {
+        this.setState({formValid: this.state.userNameValid && this.state.passwordValid});
+    }
 
 
     render() {
         return (
             <LoginForm 
+            errorClassLoginValue={this.state.fieldState.userName}
+            errorClassPassword={this.state.fieldState.password}
             infoState={this.state.infoState}
+            formErrors={this.state.formErrors}
+            formValid={this.state.formValid}
+
+            loginValue={this.state.userName}
+            password={this.state.password}
+
+            fieldValidationHandler={this.fieldValidationHandler}
             fieldHandler={this.fieldHandler}
             submitHandler={this.submitHandler}
 

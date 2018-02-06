@@ -7,12 +7,13 @@ import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
 
 export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
-        super(props)
-        this.session =  JSON.parse(sessionStorage.getItem('session'))
+        super(props);
+        this.session =  JSON.parse(sessionStorage.getItem('session'));
         this.state = {
             patient:'',
             patientFullName:'',
             apis:'',
+            apiUnits:'',
 
             patientId:props.params.patientId,
             userName:this.session.user.userName,
@@ -24,7 +25,7 @@ export default class DoctorPrescriptionContainer extends Component{
             substanceAmount: '',
             substanceUnit: 'mg',
             description: '',
-    
+
             formErrors: {substanceAmount: '', description: ''},
             fieldState: {substanceAmount: 'is-empty', description: 'is-empty'},
             substanceAmountValid: false,
@@ -36,24 +37,25 @@ export default class DoctorPrescriptionContainer extends Component{
       
             formValid: false,
 
-        }
+        };
     }
 
-     componentWillMount = () =>{
+    componentWillMount = () =>{
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
         }  
         this.loadPatient();
         this.loadApi();
-    } 
+    }
 
 
     loadApi = () =>{
         axios.get('http://localhost:8080/api/api')
         .then((response)=>{
             this.setState({
-                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>))
+                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
+                apiUnits:response.data.map(this.mapApiUnitsWithTitle)
             })
             console.log(response.status)
         })
@@ -61,6 +63,14 @@ export default class DoctorPrescriptionContainer extends Component{
             console.log(erorr)
         })
     }
+
+    mapApiUnitsWithTitle = (api, index) =>{
+        return {
+            "title":api.ingredientName,
+            "units":api.unit
+        }
+    }
+    
 
     loadPatient = () =>{
         axios.get('http://localhost:8080/api/patient/'+ this.props.params.patientId)
@@ -80,11 +90,17 @@ export default class DoctorPrescriptionContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-        
+    
+        if(name === "substance"){
+            this.setState({
+                substance:e.target.value,
+                substanceUnit:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units)
+            })
+        }else{
             this.setState({[name]: value});
+        }
     }
-
-
+    
     fieldValidationHandler = (e) => {
         // e === event
         const name = e.target.name;
@@ -93,9 +109,9 @@ export default class DoctorPrescriptionContainer extends Component{
         this.validateField(name, value);
     }
 
-    submitHandler = (e) => {
+    submitHandler = (e) =>{
         let date = new Date()
-        let currentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        let currentDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
         let expDate = this.generateExpirationDate();
         e.preventDefault();
         axios.post('http://localhost:8080/api/doctor/new/prescription', {
@@ -106,13 +122,13 @@ export default class DoctorPrescriptionContainer extends Component{
                 prescriptionDate:currentDate,
                 description:this.state.description,
                 ingredientAmount:this.state.substanceAmount,
-                ingredientUnit:this.state.substanceUnit,
+                // ingredientUnit:this.state.substanceUnit,
             },
             patientId: this.state.patientId,
             userName: this.state.userName,
             apiTitle:this.state.substance
         })
-        .then((response)=> {
+        .then((response)=>{
             console.log(response.status)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>Naujas receptas sėkmingai sukurtas. </strong></div>,
@@ -193,6 +209,7 @@ export default class DoctorPrescriptionContainer extends Component{
         return (
             <div className='container'>
                 <section>
+                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
                 <h2>Naujas receptas</h2>
                 <PatientInfoCard 
                 patientFullName={this.state.patientFullName}
@@ -224,6 +241,6 @@ export default class DoctorPrescriptionContainer extends Component{
                 </section>
             </div>
         )
-    } 
-                              
+    }
+
 }

@@ -13,30 +13,15 @@ import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 @Mapper(componentModel = "spring", uses = { ApiMapper.class })
 public interface PrescriptionMapper {
 
-	// kaire is UI (DTO) desne Entity
 	@Mappings({
 			// @Mapping(source = "doctorUserName", target = "doctor"),
 			// @Mapping(source = "patientId", target = "patient"),
-			@Mapping(source = "apiDto", target = "api"), 
-			@Mapping(source = "expirationDate", target = "expirationDate"),
-			@Mapping(source = "prescriptionDate", target = "prescriptionDate"),
-			@Mapping(source = "ingredientAmount", target = "ingredientAmount"),
-			@Mapping(source = "description", target = "description"),
-			@Mapping(source = "useAmount", target = "useAmount") })
-	Prescription toPrescription(PrescriptionDto prescriptionDto);
+			@Mapping(source = "apiDto", target = "api") })
+	Prescription dtoToPrescription(PrescriptionDto prescriptionDto);
 
 	@InheritInverseConfiguration
-	PrescriptionDto fromPrescription(Prescription prescription);
+	PrescriptionDto prescriptionToDto(Prescription prescription);
 
-	List<PrescriptionDto> fromPrescriptions(List<Prescription> prescriptions);
+	List<PrescriptionDto> prescriptionsToDto(List<Prescription> prescriptions);
 
-	// String doctorUserName;
-	// Long patientId;
-	// String apiTitle;
-	// Date expirationDate;
-	// Date prescriptionDate;
-	// Long ingredientAmount;
-	// String description;
-	// Long useAmount;
-	// String units;
 }

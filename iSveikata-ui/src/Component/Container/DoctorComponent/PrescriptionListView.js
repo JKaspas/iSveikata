@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const PrescriptionListView = (props) =>{
 
 
@@ -19,7 +18,9 @@ const PrescriptionListView = (props) =>{
                 </tr>
             </thead>
             <tbody>
+       
                 {props.prescription}
+                
             </tbody>
         </table>
         {props.notFound}

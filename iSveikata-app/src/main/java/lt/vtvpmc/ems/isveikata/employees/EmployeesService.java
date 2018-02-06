@@ -3,16 +3,21 @@ package lt.vtvpmc.ems.isveikata.employees;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
-import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
+import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.patient.PatientDto;
+import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesService.
@@ -28,13 +33,19 @@ public class EmployeesService {
 	/** The doctor Repository. */
 	@Autowired
 	private JpaEmployeesRepository<Doctor> doctorRepository;
-	
+
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
 	/** The specialization repository */
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
+	
+	@Autowired
+	private DoctorMapper doctorMapper;
+	
+	@Autowired
+	private PatientMapper patientMapper;
 
 	/**
 	 * Adds new user.
@@ -78,8 +89,13 @@ public class EmployeesService {
 	 *
 	 * @return the active doctors list
 	 */
-	public List<Doctor> getActiveDoctorsList() {
-		return doctorRepository.findAllByType(Doctor.class.getSimpleName());
+	public Page<Doctor> getActiveDoctorsList(Pageable pageable) {
+		//return doctorRepository.findAllByType(Doctor.class.getSimpleName());
+		return employeesRepository.findAllDoctor( new PageRequest(pageable.getPageNumber() - 1,pageable.getPageSize()));
+//=======
+//	public List<DoctorDto> getActiveDoctorsList() {
+//		return doctorMapper.doctorsToDto(doctorRepository.findAllByType(Doctor.class.getSimpleName()));
+//>>>>>>> dtos
 	}
 
 	/**
@@ -88,9 +104,9 @@ public class EmployeesService {
 	 * @param userName the user name
 	 * @return the doctor patient list
 	 */
-	public List<Patient> getDoctorPatientList(String userName) {
+	public List<PatientDto> getDoctorPatientList(String userName) {
 		Doctor doctor = (Doctor) employeesRepository.findByUserName(userName);
-		return doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList());
+		return patientMapper.patiensToDto(doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList()));
 	}
 
 	/**
@@ -169,12 +185,12 @@ public class EmployeesService {
 	 */
 	public void deactivateUser(String userName) {
 		Employee emp = employeesRepository.findByUserName(userName);
-		emp.setAcitve(false);
+		emp.setActive(false);
 		employeesRepository.save(emp);
 	}
 
 	public boolean isUserActive(String userNanme) {
 		Employee employee = employeesRepository.findByUserName(userNanme);
-		return employee != null ? employee.isAcitve() : false;
+		return employee != null ? employee.isActive() : false;
 	}
 }

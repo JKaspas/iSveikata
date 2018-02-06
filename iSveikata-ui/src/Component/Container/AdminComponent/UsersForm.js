@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { FormErrors } from './Form_errors';
-import '../../../Form.css'
+import '../../../Form.css';
 
 
 const UsersForm = (props) => {

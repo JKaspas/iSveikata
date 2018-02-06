@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router'
 
 
 
@@ -15,6 +14,7 @@ const PrescriptionListingItem = (props) =>{
             <td>{props.description}</td> */}
             <td>{props.useAmount} kartų</td>
             <td>{props.viewUsageLink}</td>
+            
     </tr>
     )
 }

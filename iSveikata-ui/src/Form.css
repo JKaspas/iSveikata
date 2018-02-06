@@ -5,19 +5,19 @@
 	height: 100px;
 }
 
-.form-control:focus, #is-valid:focus, #is-invalid:focus {
+.form-control:focus, #is-valid:focus, #is-invalid:focus, .is-valid:focus, .is-invalid:focus {
 	border-color: #6600cc;
 	box-shadow: none !important;
     outline: none !important;
 }
 
-#is-valid {
+#is-valid, .is-valid {
 	border-color: #00b300;
 	box-shadow: none !important;
     outline: none !important;
 }
 
-#is-invalid {
+#is-invalid, .is-invalid {
 	border-color: #cc0000;
 	box-shadow: none !important;
     outline: none !important;
