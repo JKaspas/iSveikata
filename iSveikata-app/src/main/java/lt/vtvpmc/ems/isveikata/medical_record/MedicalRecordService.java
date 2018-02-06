@@ -23,60 +23,42 @@ import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 @Transactional
 public class MedicalRecordService {
 
-    @Autowired
-    private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+	@Autowired
+	private JpaMedicalRecordRepository jpaMedicalRecordRepository;
 
-    @Autowired
-    private JpaAppointmentRepository jpaAppointmentRepository;
+	@Autowired
+	private JpaAppointmentRepository jpaAppointmentRepository;
 
-    @Autowired
-    private JpaEmployeesRepository<Doctor> jpaEmployeesRepository;
+	@Autowired
+	private JpaEmployeesRepository<Doctor> jpaEmployeesRepository;
 
-    @Autowired
-    private JpaPatientRepository jpaPatientRepository;
+	@Autowired
+	private JpaPatientRepository jpaPatientRepository;
 
-    @Autowired
-    private JpaIcdRepository jpaIcdRepository;
-    @Autowired
-    private MedicalRecordMapper mapper;
-    
-   
-
+	@Autowired
+	private JpaIcdRepository jpaIcdRepository;
+	@Autowired
+	private MedicalRecordMapper mapper;
 
 	public void createNewRecord(Map<String, Object> map) {
-        final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 
-        Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
-        MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
-        Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
+		Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
+		MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
+		Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
 
-        medicalRecord.setIcd(icd);
-        medicalRecord.setAppointment(appointment);
-        medicalRecord.setDoctor((Doctor)jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
-        medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), Long.class)));
-        jpaMedicalRecordRepository.save(medicalRecord);
-        jpaAppointmentRepository.save(appointment);
+		medicalRecord.setIcd(icd);
+		medicalRecord.setAppointment(appointment);
+		medicalRecord.setDoctor(
+				(Doctor) jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
+		medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), Long.class)));
+		jpaMedicalRecordRepository.save(medicalRecord);
+		jpaAppointmentRepository.save(appointment);
 
 	}
-
-
-	public List<MedicalRecordDto> getAllMedicalRecord() {
-		return mapper.fromMedicalRecords(jpaMedicalRecordRepository.findAll()); 
-	}
-
 
 	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
-		return mapper.fromMedicalRecord(jpaMedicalRecordRepository.findOne(medicalRecordId));
-		
+		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 	}
 
-
-	public List<MedicalRecordDto> getSortedMedicalRecords() {
-		return mapper.fromMedicalRecords(jpaMedicalRecordRepository.findAllByOrderByIdDesc());  
-		}
-	
-	
-	
-} 
-	
-
+}

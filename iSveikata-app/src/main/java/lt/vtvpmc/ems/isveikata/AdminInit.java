@@ -10,14 +10,17 @@ import lt.vtvpmc.ems.isveikata.employees.Admin;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 
 @Configuration
-public class AdminInit {
+public class AdminInit  {
 
 	@Bean
-	public CommandLineRunner createAdminOnCleanInstall(JpaEmployeesRepository<Admin> repo) throws NoSuchAlgorithmException {
+	public CommandLineRunner createAdminOnCleanInstall(JpaEmployeesRepository<Admin> repo)
+			throws NoSuchAlgorithmException {
 		if (repo.findByUserName("root") != null) {
 			return null;
 		} else {
-			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", Passwords.hashString("123") ));
+			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", Passwords.hashString("123")));
 		}
 	}
+
+
 }

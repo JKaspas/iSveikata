@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.patient.PatientDto;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
@@ -238,18 +239,17 @@ public class EmployeesController {
 		return employeesService.getType(userName);
 	}
 
+	// dubliuojasi su patient/notbind
 	/**
 	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
 	 *
 	 * @return all active and not bind with doctor patients
 	 */
 	@GetMapping("/doctor/notbind")
-	private Page<Patient> getPatientListWithoutDoctor(Pageable pageable) {
+	private Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
 		return patientService.getPatientListWithoutDoctor(pageable);
-//	private List<PatientDto> getPatientListWithoutDoctor() {
-//		return patientService.getPatientListWithoutDoctor();
 	}
-
+	
 	/**
 	 * Delete user.
 	 *

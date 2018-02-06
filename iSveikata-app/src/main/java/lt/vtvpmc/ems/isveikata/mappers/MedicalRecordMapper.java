@@ -26,9 +26,9 @@ public interface MedicalRecordMapper {
 	MedicalRecord toMedicalRecord(MedicalRecordDto medicalRecordDto);
 
 	@InheritInverseConfiguration
-	MedicalRecordDto fromMedicalRecord(MedicalRecord medicalRecord);
+	MedicalRecordDto medicalRecordToDto(MedicalRecord medicalRecord);
 
-	List<MedicalRecordDto> fromMedicalRecords(List<MedicalRecord> medicalRecords);
+	List<MedicalRecordDto> medicalRecordsToDto(List<MedicalRecord> medicalRecords);
 
 
 }

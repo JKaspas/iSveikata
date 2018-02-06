@@ -10,7 +10,7 @@ public class PrescriptionDto {
 
     private String doctorUserName;
     private Long patientId;
-    private ApiDto apiDto;
+//    private ApiDto apiDto;
     private Date expirationDate;
     private Date prescriptionDate;
     private Long ingredientAmount;

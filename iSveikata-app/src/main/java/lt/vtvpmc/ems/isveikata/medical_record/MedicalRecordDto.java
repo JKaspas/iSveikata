@@ -9,11 +9,11 @@ import lt.vtvpmc.ems.isveikata.patient.Patient;
 @Data
 public class MedicalRecordDto {
 	
-	private Long id;
-	private Doctor doctor;
-	private Long patientId;
-	private Appointment appointment;
-	private Icd icd;
+//	private Long id;
+//	private Doctor doctor;
+//	private Long patientId;
+//	private Appointment appointment;
+//	private Icd icd;
 	private boolean isCompensable;
 	private boolean isRepetitive;
 
