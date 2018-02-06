@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const PrescriptionListView = (props) =>{
 
 
@@ -12,14 +11,16 @@ const PrescriptionListView = (props) =>{
                     <th>Išrašymo data</th>
                     <th>Galiojimo data</th>
                     <th>Vaisto aktyvioji medžiaga</th>
-                    <th>Aktyvios medžiagos kiekis</th>
-                    <th>Aktyvios medžiagos matavimo vienetai</th>
-                    <th>Recepto aprašymas</th>
-                    <th>Recepto panaudojimo kartai</th>
+                    {/* <th>Aktyvios medžiagos kiekis</th>
+                    <th>Aktyvios medžiagos matavimo vienetai</th> */}
+                    {/* <th>Recepto aprašymas</th> */}
+                    <th>Panaudojimai</th>
                 </tr>
             </thead>
             <tbody>
+       
                 {props.prescription}
+                
             </tbody>
         </table>
         {props.notFound}

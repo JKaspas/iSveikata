@@ -170,3 +170,26 @@ const TrainForm = (props) => {
       </form>
     </div>)  
 }
+
+
+showDetails = (rowIndex) =>{
+  if(this.state.opendRecordRow !== rowIndex && this.state.opendRecordRow !== ''){
+      let rowBefore = document.getElementsByClassName("record")[this.state.opendRecordRow]
+      rowBefore.style.height = ''
+      this.setState({
+          opendRecordRow:rowIndex
+      })
+      let secondRow = document.getElementsByClassName("record")[rowIndex]
+      secondRow.style.height = '250px'
+  }else if(this.state.opendRecordRow === rowIndex){
+      let rowBefore = document.getElementsByClassName("record")[this.state.opendRecordRow]
+      rowBefore.style.height = ''
+  }else{
+      let row = document.getElementsByClassName("record")[rowIndex]
+      row.style.height = '250px'
+      this.setState({
+          opendRecordRow:rowIndex
+      })
+  }
+  console.log(rowIndex)
+}

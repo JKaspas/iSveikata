@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @RestController
 @RequestMapping(value = "/api/patient")
@@ -27,6 +30,9 @@ public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private MedicalRecordService medicalRecordService;
 
 	// PATIENT: /api/patient
 	//
@@ -83,7 +89,16 @@ public class PatientController {
 	private List<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId) {
 		return patientService.getPatientRecordList(patientId);
 	}
-
+	
+//	Sort veikia, bet tada negrąžina medical record detalių.
+//	@GetMapping("/{patientId}/record")
+//    @ResponseStatus(HttpStatus.OK)
+//    private List<MedicalRecordDto> getAllSortedMedicalRecords(){
+//        return medicalRecordService.getSortedMedicalRecords();
+//    }
+	
+	
+	
 	/**
 	 * Gets all records URL: api/{patientId}/prescription
 	 *
@@ -95,17 +110,17 @@ public class PatientController {
 		return patientService.getPatientPrescriptionList(patientId);
 	}
 
-	/**
-	 * Gets record with appointmet and with doctor by record id URL:
-	 * "/record/{record_id}"
-	 * 
-	 * @param id
-	 * @return record with appointmet and with doctor by record id
-	 */
-	@GetMapping("/record/{record_id}")
-	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
-		return patientService.getPatientRecordById(id);
-	}
+//	/**
+//	 * Gets record with appointmet and with doctor by record id URL:
+//	 * "/record/{record_id}"
+//	 * 
+//	 * @param id
+//	 * @return record with appointmet and with doctor by record id
+//	 */
+//	@GetMapping("/record/{record_id}")
+//	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
+//		return patientService.getPatientRecordById(id);
+//	}
 
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password

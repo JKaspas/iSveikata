@@ -1,6 +1,8 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
+
+
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
 
 /**
  * The Class PatientService.
@@ -27,6 +31,13 @@ public class PatientService {
 	/** The medical record repository. */
 	@Autowired
 	private JpaMedicalRecordRepository medicalRecordRepository;
+	
+    @Autowired
+    private MedicalRecordMapper mapper;
+    
+    @Autowired
+    private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+
 
 	/**
 	 * Gets the patient list.
@@ -55,9 +66,17 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public List<MedicalRecord> getPatientRecordList(Long patientId) {
-		Patient pat = patientRepository.findOne(patientId);
-		return pat.getMedicalRecords();
+		return patientRepository.findOne(patientId).getMedicalRecords();
 	}
+	
+	/**
+	 * Gets the sorted  patient record list.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 * @return the patient record list
+	 */
+	
 
 	/**
 	 * Gets the patient prescription list.
@@ -70,16 +89,16 @@ public class PatientService {
 		return patientRepository.findOne(patientId).getPrescriptions();
 	}
 
-	/**
-	 * Gets the patient record by id.
-	 *
-	 * @param id
-	 *            the id
-	 * @return the patient record by id
-	 */
-	public MedicalRecord getPatientRecordById(Long id) {
-		return medicalRecordRepository.findOne(id);
-	}
+//	/**
+//	 * Gets the patient record by id.
+//	 *
+//	 * @param id
+//	 *            the id
+//	 * @return the patient record by id
+//	 */
+//	public MedicalRecord getPatientRecordById(Long id) {
+//		return medicalRecordRepository.findOne(id);
+//	}
 
 	/**
 	 * Update patient password.

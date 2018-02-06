@@ -131,7 +131,8 @@ export default class AdminCreateUserContainer extends Component{
     submitHandler = (e) =>{
         
         e.preventDefault();
-
+        console.log(this.userObjectByType())
+        console.log(this.specializationObject())
         axios.post('http://localhost:8080/api/admin/new/user', {
             employee:this.userObjectByType(),
             specialization:this.specializationObject(),
@@ -160,7 +161,7 @@ export default class AdminCreateUserContainer extends Component{
         .catch((erorr) => {
             console.log(erorr)
             this.setState({
-                infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
+                //infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
             })
         })
         

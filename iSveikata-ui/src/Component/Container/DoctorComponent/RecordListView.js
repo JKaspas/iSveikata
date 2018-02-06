@@ -6,20 +6,21 @@ const RecordListView = (props) =>{
 
     return (
     <div> 
-        <table className="table table-hover">
+        <table  className="table table-hover">
             <thead>
                 <tr>
-                    <th>Įrašo data</th>
-                    <th>Daktaras</th>
+                    <th>Vizito data</th>
                     <th>Ligos kodas</th>
-                    <th>Vizito aprašymas</th>
+                    <th>Gydytojo vardas, pavardė</th>
+                    {/* <th>Vizito aprašymas</th>
                     <th>Vizito trukmė</th>
                     <th>Vizitas kompensuojamas</th>
-                    <th>Vizitas pakartotinas</th>
+                    <th>Vizitas pakartotinas</th> */}
                 </tr>
             </thead>
-            <tbody>
-                {props.records}
+            <tbody > 
+                {/* id="recorTableBody" */}
+                {props.record}
             </tbody>
         </table>
         {props.notFound}

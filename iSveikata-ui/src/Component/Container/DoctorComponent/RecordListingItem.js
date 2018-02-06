@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Link} from 'react-router'
 
 
 const RecordListingItem = (props) =>{
@@ -10,14 +10,14 @@ const RecordListingItem = (props) =>{
     var repetitive = props.repetitive === true? yesValue:noValue;
 
     return (
-    <tr  className="record" onClick={() => props.showDetails(props.index)} >
+    <tr  onClick={() => props.showDetails(props.id)}>
             <td>{props.appDate}</td>
-            <td>{props.doctorName}</td>
             <td>{props.icd}</td>
-            <td>{props.appDescription.substring(0, 30)}...</td>
+            <td>{props.doctorName}</td>
+            {/* <td>{props.appDescription.substring(0, 30)}...</td>
             <td>{props.appDuration} min</td>
             <td>{compensable}</td>
-            <td>{repetitive}</td>
+            <td>{repetitive}</td> */}
     </tr>)
 }
 

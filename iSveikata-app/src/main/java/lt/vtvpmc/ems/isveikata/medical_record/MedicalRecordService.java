@@ -1,20 +1,25 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
+
+import org.hibernate.annotations.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
 import lt.vtvpmc.ems.isveikata.appointment.JpaAppointmentRepository;
-import lt.vtvpmc.ems.isveikata.employees.DTO.RecordAppointment;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.icd.Icd;
 import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
+import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -34,6 +39,10 @@ public class MedicalRecordService {
 
     @Autowired
     private JpaIcdRepository jpaIcdRepository;
+    @Autowired
+    private MedicalRecordMapper mapper;
+    
+   
 
 
 	public void createNewRecord(Map<String, Object> map) {
@@ -51,4 +60,25 @@ public class MedicalRecordService {
         jpaAppointmentRepository.save(appointment);
 
 	}
-}
+
+
+	public List<MedicalRecordDto> getAllMedicalRecord() {
+		return mapper.fromMedicalRecords(jpaMedicalRecordRepository.findAll()); 
+	}
+
+
+	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
+		return mapper.fromMedicalRecord(jpaMedicalRecordRepository.findOne(medicalRecordId));
+		
+	}
+
+
+	public List<MedicalRecordDto> getSortedMedicalRecords() {
+		return mapper.fromMedicalRecords(jpaMedicalRecordRepository.findAllByOrderByIdDesc());  
+		}
+	
+	
+	
+} 
+	
+
