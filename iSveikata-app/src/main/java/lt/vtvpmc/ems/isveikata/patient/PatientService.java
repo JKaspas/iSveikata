@@ -117,8 +117,8 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public Page<MedicalRecord> getPatientRecordList(Long patientId, Pageable pageable) {
-		PageRequest request =  new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
-		return medicalRecordRepository.findAllByPatientPatientId(patientId,request);
+		PageRequest request =  new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		return medicalRecordRepository.findAllByPatientPatientId(patientId,request.previousOrFirst());
 //	public List<MedicalRecord> getPatientRecordList(Long patientId) {
 //		return patientRepository.findOne(patientId).getMedicalRecords();
 //>>>>>>> patient
@@ -141,8 +141,8 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<Prescription> getPatientPrescriptionList(Long patientId, Pageable pageable) {
-		PageRequest request =  new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
-		return prescriptionRepository.findAllByPatientPatientId(patientId,request);
+		PageRequest request =  new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		return prescriptionRepository.findAllByPatientPatientId(patientId,request.previousOrFirst());
 //	public List<PrescriptionDto> getPatientPrescriptionList(Long patientId) {
 //		return prescriptionMapper.prescriptionsToDto(patientRepository.findOne(patientId).getPrescriptions());
 //>>>>>>> dtos

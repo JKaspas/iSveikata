@@ -89,8 +89,7 @@ export default class AdminBindUserPartContainer extends Component{
                 key={index}
                 patientId={patient.patientId}
                 birthDate={patient.birthDate}
-                firstName={patient.firstName}
-                lastName={patient.lastName}
+                fullName={patient.fullName}
                 patientBindLink={<td><PatientBindLink bindClick={this.bindClick} patientId={patient.patientId}/></td>}
                 
             />

@@ -30,42 +30,42 @@ class DruggistViewContainer extends Component{
         
     }
 
+   
+    searchForPatientById = (patientId) =>{
+        axios.get(' http://localhost:8080/api/patient/'+patientId)
+        .then((response)=>{
+            
+            if(response.data.length === 0){
+                this.setState({
+                    info:(<h3>Pcientų su tokiu asmens kodu nėra</h3>)
+                })
+            }else{
+                this.setState({
+                    patient: <PatientListView  patients={this.composePatient(response.data)} />,
+                    
+                })
+            }
+                  
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            
+        })
+    }
+
     composePatient = (patient) =>{
         
         return (
             <PatientListingItem
-                patientId={patient.patientId}
+                patientId={patient.id}
                 birthDate={patient.birthDate}
-                firstName={patient.firstName}
-                lastName={patient.lastName}
-                druggistPrescriptionView={<td><DruggistPrescriptionLink patientId={patient.patientId}/></td>}
+                fullName={patient.fullName}
+                druggistPrescriptionView={<td><DruggistPrescriptionLink patientId={patient.id}/></td>}
                    
             />
         )
     }
    
-    searchForPatientById = (patientId) =>{
-        axios.get(' http://localhost:8080/api/patient/'+patientId)
-        .then((response)=>{
-            this.setState({
-                patient: <PatientListView  patients={this.composePatient(response.data)} />,
-                
-            })
-            // this.setPatientAmount(this.state.patients,0, 20)
-
-            if(response.data.length === 0){
-                this.setState({
-                    info:(<h3>Pcientų su tokiu asmens kodu nėra</h3>)
-                })
-            }
-                  
-            console.log(response.data)
-        })
-        .catch((erorr) => {
-            
-            //console.log(erorr)
-        })
-    }
     fielddHandler = (e) =>{
         this.setState({
             searchValue:e.target.value

@@ -36,13 +36,13 @@ export default class PatientPrescriptionContainer extends Component{
       
        axios.get('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/prescription')
         .then((response) => {
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
                     notFound:(<h3>Išrašytų receptų nėra</h3>)
                 })
             }else{
                 this.setState({
-                    prescriptions:response.data.map(this.composePrescription),
+                    prescriptions:response.data.content.map(this.composePrescription),
                     // viewContent:<PrescriptionListView prescription={this.state.composePrescription} notFound={this.state.notFoundPrescription}/>
                     })
             }
