@@ -106,7 +106,11 @@ class DoctorViewContainer extends Component{
     
                 recordLink={<td><NewRecordLink  patientId={patient.patientId}/></td>}
                 prescriptionLink={<td><NewPrescriptionLink  patientId={patient.patientId}/></td>}
+<<<<<<< HEAD
                 doctorViewPatient={patientViewLink}
+=======
+                doctorViewPatient={<td><DoctorViewPatientLink patientId={patient.patientId} /></td>}    
+>>>>>>> patient
                   
                     
             />

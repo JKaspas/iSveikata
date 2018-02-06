@@ -14,14 +14,13 @@ import org.springframework.stereotype.Service;
 import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
+import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
 import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
 import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.prescription.JpaPrescriptionRepository;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
-
-
 
 /**
  * The Class PatientService.
@@ -84,6 +83,12 @@ public class PatientService {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		return patientRepository.findAllByDoctorUserName(userName, request);
 	}
+    @Autowired
+    private MedicalRecordMapper mapper;
+    
+    @Autowired
+    private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+
 
 	/**
 	 * Gets the patient list.
@@ -114,7 +119,19 @@ public class PatientService {
 	public Page<MedicalRecord> getPatientRecordList(Long patientId, Pageable pageable) {
 		PageRequest request =  new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
 		return medicalRecordRepository.findAllByPatientPatientId(patientId,request);
+//	public List<MedicalRecord> getPatientRecordList(Long patientId) {
+//		return patientRepository.findOne(patientId).getMedicalRecords();
+//>>>>>>> patient
 	}
+	
+	/**
+	 * Gets the sorted  patient record list.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 * @return the patient record list
+	 */
+	
 
 	/**
 	 * Gets the patient prescription list.
@@ -131,16 +148,16 @@ public class PatientService {
 //>>>>>>> dtos
 	}
 
-	/**
-	 * Gets the patient record by id.
-	 *
-	 * @param id
-	 *            the id
-	 * @return the patient record by id
-	 */
-	public MedicalRecord getPatientRecordById(Long id) {
-		return medicalRecordRepository.findOne(id);
-	}
+//	/**
+//	 * Gets the patient record by id.
+//	 *
+//	 * @param id
+//	 *            the id
+//	 * @return the patient record by id
+//	 */
+//	public MedicalRecord getPatientRecordById(Long id) {
+//		return medicalRecordRepository.findOne(id);
+//	}
 
 	/**
 	 * Update patient password.

@@ -59,7 +59,8 @@ var PatientNavigation = (props) =>{
     <div className="container">
       <a className="navbar-brand" href="#patient">iSveikata</a>
       <ul className="nav navbar-nav navbar-left">
-            <li><a className="" href="#patient">Pagrindinis</a></li>
+            <li><a className="" href="#patient/record">Mano ligos istorijos įrašai</a></li>
+            <li><a className="" href="#patient/prescription">Mano receptai</a></li>
             <li><a className="" href="#patient/password">Keisti slaptažodį</a></li>
       </ul>
       <ul className="nav navbar-nav navbar-right">

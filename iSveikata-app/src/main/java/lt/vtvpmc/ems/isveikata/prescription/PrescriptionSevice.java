@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import lt.vtvpmc.ems.isveikata.employees.Druggist;
-import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.vtvpmc.ems.isveikata.api.Api;
 import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.employees.Druggist;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @Service
@@ -34,7 +34,7 @@ public class PrescriptionSevice {
     private JpaPatientRepository patientRepository;
 
     @Autowired
-    private JpaEmployeesRepository<Doctor> employeesRepository;
+    private JpaEmployeesRepository<?> employeesRepository;
 
     @Autowired
     private JpaApiRepository apiRepository;

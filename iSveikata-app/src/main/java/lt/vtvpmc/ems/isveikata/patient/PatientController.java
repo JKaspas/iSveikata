@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @RestController
@@ -27,6 +28,9 @@ public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private MedicalRecordService medicalRecordService;
 
 // TODO 	get /api/patient/record/{record_id} to DTO
 // TODO		get /api/patient/{patientId}/prescription to DTO
@@ -80,7 +84,16 @@ public class PatientController {
 	private Page<MedicalRecord> getRecordList(@PathVariable("patientId") Long patientId, Pageable pageable) {
 		return patientService.getPatientRecordList(patientId, pageable);
 	}
-
+	
+//	Sort veikia, bet tada negrąžina medical record detalių.
+//	@GetMapping("/{patientId}/record")
+//    @ResponseStatus(HttpStatus.OK)
+//    private List<MedicalRecordDto> getAllSortedMedicalRecords(){
+//        return medicalRecordService.getSortedMedicalRecords();
+//    }
+	
+	
+	
 	/**
 	 * Gets all records URL: api/{patientId}/prescription
 	 *
@@ -95,17 +108,17 @@ public class PatientController {
 //>>>>>>> dtos
 	}
 
-	/**
-	 * Gets record with appointmet and with doctor by record id URL:
-	 * "/record/{record_id}"
-	 * 
-	 * @param id
-	 * @return record with appointmet and with doctor by record id
-	 */
-	@GetMapping("/record/{record_id}")
-	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
-		return patientService.getPatientRecordById(id);
-	}
+//	/**
+//	 * Gets record with appointmet and with doctor by record id URL:
+//	 * "/record/{record_id}"
+//	 * 
+//	 * @param id
+//	 * @return record with appointmet and with doctor by record id
+//	 */
+//	@GetMapping("/record/{record_id}")
+//	private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long id) {
+//		return patientService.getPatientRecordById(id);
+//	}
 
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
