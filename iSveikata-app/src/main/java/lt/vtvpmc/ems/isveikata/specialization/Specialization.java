@@ -25,15 +25,4 @@ public class Specialization implements Serializable {
 	@JsonIgnore
 	private List<Doctor> doctor;
 
-	public List<Doctor> getDoctor() {
-		return doctor;
-	}
-
-	public void setDoctor(List<Doctor> doctor) {
-		this.doctor = doctor;
-	}
-
-	public String getTitle() {
-		return title;
-	}
 }

@@ -31,11 +31,4 @@ public class PrescriptionUsage implements Serializable {
     @Type(type = "date")
     private Date usageDate;
 
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
-
-    public void setDruggist(Druggist druggist) {
-        this.druggist = druggist;
-    }
 }

@@ -50,19 +50,4 @@ public class Prescription implements Serializable {
     private String description;
     private long useAmount;
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public void setApi(Api api) {
-        this.api = api;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public List<PrescriptionUsage> getPrescriptionUsage() {
-        return prescriptionUsage;
-    }
 }

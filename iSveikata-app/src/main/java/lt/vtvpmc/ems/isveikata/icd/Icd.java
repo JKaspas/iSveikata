@@ -28,22 +28,7 @@ public class Icd implements Serializable {
 
 //	@OneToMany(mappedBy = "icd")
 //	private List<MedicalRecord> medicalRecordList;
-
-
-	public String getTitle() {
-		return title;
-	}
-
-    public String getIcdCode() {
-        return icdCode;
-    }
-
-    public void setIcdCode(String icdCode) {
-        this.icdCode = icdCode;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	
+    
 }
 

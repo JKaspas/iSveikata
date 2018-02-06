@@ -101,7 +101,7 @@ public class PatientService {
      * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) throws NoSuchAlgorithmException {
+	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId)  {
 		Patient pat = patientRepository.findOne(patientId);
 		if(Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))){
 			pat.setPassword(newPassword);

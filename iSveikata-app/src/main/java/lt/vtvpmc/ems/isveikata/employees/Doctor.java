@@ -35,27 +35,4 @@ public class Doctor extends Employee {
 	@OneToMany(mappedBy = "doctor")
 	private List<Prescription> prescriptions;
 
-	public List<Patient> getPatient() {
-		return patient;
-	}
-
-	public void setPatient(List<Patient> patient) {
-		this.patient = patient;
-	}
-
-	public List<MedicalRecord> getMedicalRecords() {
-		return medicalRecords;
-	}
-
-	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-		this.medicalRecords = medicalRecords;
-	}
-
-	public Specialization getSpecialization() {
-		return specialization;
-	}
-
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
-	}
 }
