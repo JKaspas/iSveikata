@@ -11,8 +11,7 @@ const PatientListView = (props) =>{
                 <tr>
                     <th>Asmens kodas</th>
                     <th>Gimimo data</th>
-                    <th>Vardas</th>
-                    <th>Pavardė</th>
+                    <th>Pilnas vardas</th>
                 </tr>
             </thead>
             <tbody>

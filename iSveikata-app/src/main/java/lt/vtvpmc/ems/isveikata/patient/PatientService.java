@@ -5,13 +5,22 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
+import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
+import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
+import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
+import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.medical_record.JpaMedicalRecordRepository;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.prescription.JpaPrescriptionRepository;
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 /**
  * The Class PatientService.
@@ -24,17 +33,70 @@ public class PatientService {
 	@Autowired
 	private JpaPatientRepository patientRepository;
 
+	/** The patient repository. */
+	@Autowired
+	private JpaEmployeesRepository<Doctor> doctorRepository;
+
 	/** The medical record repository. */
 	@Autowired
 	private JpaMedicalRecordRepository medicalRecordRepository;
+	
+	@Autowired
+	private PatientMapper patientMapper;
+	
+	@Autowired
+	private PrescriptionMapper prescriptionMapper;
+
+	/** The medical record repository. */
+	@Autowired
+	private JpaPrescriptionRepository prescriptionRepository;
+
+
+	/**
+	 * Get all patient (paged list)
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Patient> getAllPagedActivePatient(Pageable pageable){
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findByIsActiveTrue(request);
+	}
+
+	/**
+	 * Get all patient (paged list)
+	 * @param pageable
+	 * @return
+	 */
+	public Page<Patient> getAllPatientByPatientId(Long patientId, Pageable pageable){
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllPatientByPatientId(patientId, request);
+	}
+
+	/**
+	 * Get all patient by doctor userName (paged list)
+	 *
+	 * @param pageable
+	 * @param userName
+	 * @return Page<List> of patient
+	 */
+	public Page<Patient> getAllPagedPatientByDoctor(Pageable pageable, String userName){
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllByDoctorUserName(userName, request);
+	}
+    @Autowired
+    private MedicalRecordMapper mapper;
+    
+    @Autowired
+    private JpaMedicalRecordRepository jpaMedicalRecordRepository;
+
 
 	/**
 	 * Gets the patient list.
 	 *
 	 * @return the patient list
 	 */
-	public List<Patient> getActivePatientList() {
-		return patientRepository.findByIsActiveTrue();
+	public List<PatientDto> getActivePatientList() {
+		return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
 	}
 	/**
 	 * Gets the patient.
@@ -43,8 +105,8 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient
 	 */
-	public Patient getPatient(Long patientId) {
-		return patientRepository.findOne(patientId);
+	public PatientDto getPatient(Long patientId) {
+		return patientMapper.patientToDto(patientRepository.findOne(patientId));
 	}
 
 	/**
@@ -54,10 +116,22 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient record list
 	 */
-	public List<MedicalRecord> getPatientRecordList(Long patientId) {
-		Patient pat = patientRepository.findOne(patientId);
-		return pat.getMedicalRecords();
+	public Page<MedicalRecord> getPatientRecordList(Long patientId, Pageable pageable) {
+		PageRequest request =  new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		return medicalRecordRepository.findAllByPatientPatientId(patientId,request.previousOrFirst());
+//	public List<MedicalRecord> getPatientRecordList(Long patientId) {
+//		return patientRepository.findOne(patientId).getMedicalRecords();
+//>>>>>>> patient
 	}
+	
+	/**
+	 * Gets the sorted  patient record list.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 * @return the patient record list
+	 */
+	
 
 	/**
 	 * Gets the patient prescription list.
@@ -66,20 +140,24 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
-	public List<Prescription> getPatientPrescriptionList(Long patientId) {
-		return patientRepository.findOne(patientId).getPrescriptions();
+	public Page<Prescription> getPatientPrescriptionList(Long patientId, Pageable pageable) {
+		PageRequest request =  new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		return prescriptionRepository.findAllByPatientPatientId(patientId,request.previousOrFirst());
+//	public List<PrescriptionDto> getPatientPrescriptionList(Long patientId) {
+//		return prescriptionMapper.prescriptionsToDto(patientRepository.findOne(patientId).getPrescriptions());
+//>>>>>>> dtos
 	}
 
-	/**
-	 * Gets the patient record by id.
-	 *
-	 * @param id
-	 *            the id
-	 * @return the patient record by id
-	 */
-	public MedicalRecord getPatientRecordById(Long id) {
-		return medicalRecordRepository.findOne(id);
-	}
+//	/**
+//	 * Gets the patient record by id.
+//	 *
+//	 * @param id
+//	 *            the id
+//	 * @return the patient record by id
+//	 */
+//	public MedicalRecord getPatientRecordById(Long id) {
+//		return medicalRecordRepository.findOne(id);
+//	}
 
 	/**
 	 * Update patient password.
@@ -93,7 +171,7 @@ public class PatientService {
      * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) throws NoSuchAlgorithmException {
+	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId)  {
 		Patient pat = patientRepository.findOne(patientId);
 		if(Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))){
 			pat.setPassword(newPassword);
@@ -111,7 +189,6 @@ public class PatientService {
 	 * @param patient
 	 *            the patient
 	 */
-	// 7
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
 	}
@@ -121,9 +198,12 @@ public class PatientService {
 	 *
 	 * @return the patient list without doctor
 	 */
-	// 8
-	public List<Patient> getPatientListWithoutDoctor() {
-		return patientRepository.findByIsActiveTrueAndDoctorIsNull();
+	public Page<Patient> getPatientListWithoutDoctor(Pageable pageable) {
+		return patientRepository.findByIsActiveTrueAndDoctorIsNull(new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize()));
+//=======
+//	public List<PatientDto> getPatientListWithoutDoctor() {
+//		return patientMapper.patiensToDto(patientRepository.findByIsActiveTrueAndDoctorIsNull());
+//>>>>>>> dtos
 	}
 	/**
 	 * Patient login.
@@ -134,7 +214,6 @@ public class PatientService {
 	 *            the password
 	 * @return true, if successful
 	 */
-	// 9
 	public boolean patientLogin(String patientId, String password) {
 		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
@@ -147,7 +226,6 @@ public class PatientService {
 	 *            the patient
 	 * @return true, if successful
 	 */
-	// 10 new
 	public boolean validateAddNewPatient(Patient patient) {
 		if (patientRepository.exists(patient.getPatientId())) {
 			return false;
@@ -182,5 +260,41 @@ public class PatientService {
 			return false;
 		}
 	}
+
+	/**
+	 * Return all active paged patient list by doctor userName and searchValue (firstName, lastName, patientId)
+	 *
+	 * @param pageable
+	 *
+	 * @param userName
+	 * 			  doctor userName
+	 * @param searchValue
+	 * 			  searchable value (firstName, lastName, patientId)
+	 *
+	 * @return paged list of patient
+	 */
+
+	public Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName, String searchValue) {
+		Doctor doctor = doctorRepository.findByUserName(userName);
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor, request );
+	}
+
+	/**
+	 * Return all active paged patient list by searchValue (firstName, lastName, patientId)
+	 *
+	 * @param pageable
+	 *
+	 * @param searchValue
+	 * 			  searchable value (firstName, lastName, patientId)
+	 *
+	 * @return paged list of patient
+	 */
+
+	public Page<Patient> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		return patientRepository.findAllActivePatientBySearchValue(searchValue, request );
+	}
+
 
 }

@@ -13,6 +13,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Data
 public class Appointment implements Serializable {
+	private static final long serialVersionUID = -5787787986684616099L;
 
 	@Id
 	@GeneratedValue
@@ -28,14 +29,6 @@ public class Appointment implements Serializable {
 	@JsonIgnore
 	@OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private MedicalRecord medicalRecord;
-
-	public MedicalRecord getMedicalRecord() {
-		return medicalRecord;
-	}
-
-	public void setMedicalRecord(MedicalRecord medicalRecord) {
-		this.medicalRecord = medicalRecord;
-	}
 
 	// @Transient
 	// private static final DateTimeFormatter DTF =

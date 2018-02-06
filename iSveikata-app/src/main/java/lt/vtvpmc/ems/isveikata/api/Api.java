@@ -12,6 +12,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Api implements Serializable {
+	private static final long serialVersionUID = -8855467732285820217L;
 
 	@Id
 	@GeneratedValue

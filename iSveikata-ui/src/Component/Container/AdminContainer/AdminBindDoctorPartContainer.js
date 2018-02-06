@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import Pagination from "react-js-pagination"
+
 
 import DoctorListView from '../AdminComponent/DoctorListView'
 import DoctorListingItem from '../AdminComponent/DoctorListingItem'
@@ -11,8 +13,14 @@ export default class AdminBindDoctorPartContainer extends Component{
         super(props);
         this.state = {
             search:'',
-            doctors:null,
-            notFound:''
+            doctorList:'',
+            listInfo:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:'',
+            listIsEmpty:false
+
         }
     }
 
@@ -26,16 +34,24 @@ export default class AdminBindDoctorPartContainer extends Component{
             return '';
         }
 
-        axios.get('http://localhost:8080/api/doctor')
+        this.getAllDoctor(this.state.activePage)
+       
+    }
+
+    getAllDoctor = (activeNumber) =>{
+        axios.get('http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
-                    notFound:(<h3>No doctor found</h3>),
-                    doctor:(<td><th><h3>No doctor found</h3></th></td>)
+                    doctorList:(<h3>Daktarų sistemoje nėra</h3>),
+                    listIsEmpty:true,
                 })
             }else{
                 this.setState({
-                    doctors:response.data.map(this.composeDoctor)
+                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
                 })
             }
             console.log(response.status)
@@ -64,6 +80,35 @@ export default class AdminBindDoctorPartContainer extends Component{
         this.setState({[e.target.name]: e.target.value})
     }
 
+     //handle paggination page changes 
+     handlePageChange = (activePage) => {
+        
+        //sen request for specific page
+        this.getAllDoctor(activePage);
+        
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })
+      }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
+            return ''
+        }
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+            <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemsPerPage}
+            totalItemsCount={this.state.listInfo.totalElements}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+            />
+        </div>
+        )
+    }
 
 
     
@@ -78,15 +123,13 @@ export default class AdminBindDoctorPartContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                                <div className="col-sm-4 col-sm-offset-4">
+                                {/* <div className="col-sm-4 col-sm-offset-4">
                                     <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
-                                </div>
+                                </div> */}
                             </div>
                             <div className="col-sm-12">
-                                <DoctorListView 
-                                    doctors={this.state.doctors}
-                                />
-                                {this.state.notFound}
+                                {this.state.doctorList}
+                                {this.showPagination()}
                             </div>
                         </div> 
                     </div> 

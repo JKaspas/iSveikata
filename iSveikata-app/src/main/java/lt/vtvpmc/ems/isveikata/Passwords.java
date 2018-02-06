@@ -1,7 +1,6 @@
 package lt.vtvpmc.ems.isveikata;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class Passwords {
 

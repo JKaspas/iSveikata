@@ -1,20 +1,32 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesController.
@@ -66,6 +78,7 @@ public class EmployeesController {
 					.body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
 		}
 	}
+
 
 	/**
 	 * Insert patient. Insert new patient into data base with unique patientId.
@@ -139,21 +152,43 @@ public class EmployeesController {
 	 * @return list of all doctors
 	 */
 	@GetMapping("/doctor")
-	private List<Doctor> getAllDoctors() {
-		return employeesService.getActiveDoctorsList();
+	private Page<Doctor> getAllDoctors(Pageable pageable) {
+		return employeesService.getActiveDoctorsList(pageable);
 	}
 
 	/**
-	 * Gets all active patient from given doctor URL: /api/doctor/{userName}.
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
 	 *
 	 * @param userName
 	 *            the user name
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
-	private List<Patient> getAllDoctorPatient(@PathVariable String userName) {
-		return employeesService.getDoctorPatientList(userName);
+
+	@ResponseStatus(HttpStatus.OK)
+	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
+		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
+
+	/**
+	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
+	 *
+	 * @param userName
+	 *            the user name
+	 * @return list of all patient of current doctor
+	 */
+	@GetMapping("/doctor/{userName}/patient/{searchValue}")
+	@ResponseStatus(HttpStatus.OK)
+	private Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(@PathVariable final String userName,
+															   @PathVariable final String searchValue,
+															   Pageable pageable){
+		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
+
+//	private List<PatientDto> getAllDoctorPatient(@PathVariable String userName) {
+//		return employeesService.getDoctorPatientList(userName);
+
+	}
+
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
@@ -209,8 +244,10 @@ public class EmployeesController {
 	 * @return all active and not bind with doctor patients
 	 */
 	@GetMapping("/doctor/notbind")
-	private List<Patient> getPatientListWithoutDoctor() {
-		return patientService.getPatientListWithoutDoctor();
+	private Page<Patient> getPatientListWithoutDoctor(Pageable pageable) {
+		return patientService.getPatientListWithoutDoctor(pageable);
+//	private List<PatientDto> getPatientListWithoutDoctor() {
+//		return patientService.getPatientListWithoutDoctor();
 	}
 
 	/**
