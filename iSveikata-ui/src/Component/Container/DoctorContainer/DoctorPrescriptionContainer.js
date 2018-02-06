@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
-import PatientInfoCard from '../DoctorComponent/PatientInfoCard'
-import PrescriptionForm from '../DoctorComponent/PrescriptionForm'
+import PatientInfoCard from '../DoctorComponent/PatientInfoCard';
+import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
 
 
 export default class DoctorPrescriptionContainer extends Component{
@@ -20,17 +20,14 @@ export default class DoctorPrescriptionContainer extends Component{
 
             infoState:'',
 
-            
-
-            daysToExpiration: '30 dienų',
-            expirationDate: '',
+            daysToExpiration: '10',
             substance: 'Lumefantrine',
             substanceAmount: '',
             substanceUnit: 'mg',
             description: '',
 
-        
             formErrors: {substanceAmount: '', description: ''},
+            fieldState: {substanceAmount: 'is-empty', description: 'is-empty'},
             substanceAmountValid: false,
             descriptionValid: false,    
 
@@ -93,23 +90,29 @@ export default class DoctorPrescriptionContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-
+    
         if(name === "substance"){
             this.setState({
                 substance:e.target.value,
                 substanceUnit:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units)
             })
         }else{
-            this.setState({[name]: value},
-            () => { this.validateField(name, value) });
+            this.setState({[name]: value});
         }
+    }
     
+    fieldValidationHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+        const value = e.target.value;
+      
+        this.validateField(name, value);
     }
 
     submitHandler = (e) =>{
         let date = new Date()
         let currentDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
-        let expDate = date.getFullYear() + '-'+ (date.getMonth()+3) + '-' + date.getDate();
+        let expDate = this.generateExpirationDate();
         e.preventDefault();
         axios.post('http://localhost:8080/api/doctor/new/prescription', {
            
@@ -149,21 +152,25 @@ export default class DoctorPrescriptionContainer extends Component{
             })
         })
     }
-    //neužbaigta funkcija
+
+    //Receptas galioja iki
     generateExpirationDate = () => {
         let generatedExpirationDate = ''; 
 
         if(this.state.daysToExpirationValid) {
+
             let currentDate = new Date();
-            currentDate.setDate(currentDate.getDate() + this.state.daysToExpiration);
+            currentDate.setDate(currentDate.getDate() + parseInt(this.state.daysToExpiration, 10));
             generatedExpirationDate = currentDate.toISOString().substr(0, 10);       
         }
+
         return generatedExpirationDate;
     }
 
      //Formos laukų validacija:
      validateField = (fieldName, value) => {
         let fieldValidationErrors = this.state.formErrors;
+        let fieldValidationState = this.state.fieldState;
         let descriptionValid = this.state.descriptionValid;
         let substanceAmountValid = this.state.substanceAmountValid;
       
@@ -171,17 +178,22 @@ export default class DoctorPrescriptionContainer extends Component{
             case 'description':
                 descriptionValid = value.length >= 3;
                 // ^ Tikrina ar įrašyta bent kažkas.
-                fieldValidationErrors.description = descriptionValid ? '' : 'Nurodyti kokią vaisto dozę, kiek kartų ir kaip vartoti..';
+                fieldValidationErrors.description = descriptionValid ? '' : 'Nurodykite kokią vaisto dozę, kiek kartų ir kaip vartoti.';
+                fieldValidationState.description = descriptionValid ? 'is-valid' : 'is-invalid';
+                //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
+                //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
             case 'substanceAmount':
-                substanceAmountValid = value.match(/^\d{1,10}$/g);
-                // ^ Tikrina ar įrašytas teigiamas skaičius.
-                fieldValidationErrors.duration = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį.';
+                substanceAmountValid = value.match(/^(([1-9]{1})([\d]{0,9})|([0]{1})([.]{1})([\d]{0,7})([1-9]{1}))$/g);
+                // ^ Tikrina ar įrašytas teigiamas skaičius. Jei pirmas skaičius nulis, po jo būtinai turi eiti "," ir bent vienas už nulį didesnis skaičius.
+                fieldValidationErrors.substanceAmount = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį (teigiamas skaičius).';
+                fieldValidationState.substanceAmount = substanceAmountValid ? 'is-valid' : 'is-invalid';
                 break;
             default:
                 break;
         }
         this.setState({formErrors: fieldValidationErrors,
+                    fieldState: fieldValidationState,
                     descriptionValid: descriptionValid,
                     substanceAmountValid: substanceAmountValid,
                     }, this.validateForm);
@@ -191,15 +203,6 @@ export default class DoctorPrescriptionContainer extends Component{
     validateForm = () => {
         this.setState({formValid: this.state.descriptionValid && this.state.substanceAmountValid});
     }
-
-    //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-    //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
-    errorClass = (error) => {
-        return(error.length === 0 ? 'is-valid' : 'is-invalid');
-    }
-
-   
-
 
 
     render() {
@@ -213,8 +216,8 @@ export default class DoctorPrescriptionContainer extends Component{
                 patientId={this.state.patient.patientId}
                 form={
                 <PrescriptionForm 
-                    errorClassDescription={this.errorClass(this.state.formErrors.description)}
-                    errorClassSubstanceAmount={this.errorClass(this.state.formErrors.substanceAmount)}
+                    errorClassDescription={this.state.fieldState.description}
+                    errorClassSubstanceAmount={this.state.fieldState.substanceAmount}
                     infoState={this.state.infoState}
                     substances={this.state.apis}
                     formErrors={this.state.formErrors}
@@ -229,6 +232,9 @@ export default class DoctorPrescriptionContainer extends Component{
 
                     submitHandler={this.submitHandler}
                     fieldHandler={this.fieldHandler}
+                    fieldValidationHandler={this.fieldValidationHandler}
+
+                    generateExpirationDate={this.generateExpirationDate()}
                 />}
                 />
                 {this.state.date}
@@ -237,5 +243,4 @@ export default class DoctorPrescriptionContainer extends Component{
         )
     }
 
-    
 }

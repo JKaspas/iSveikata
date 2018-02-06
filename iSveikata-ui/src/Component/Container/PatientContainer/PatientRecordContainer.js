@@ -36,13 +36,13 @@ export default class PatientRecordContainer extends Component{
      
         axios.get('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/record')
         .then((response) => {
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
                     notFound:(<h3>Ligos įrašų nėra</h3>)
                 })
             }else{
                 this.setState({
-                   records:response.data.map(this.composeRecord),
+                   records:response.data.content.map(this.composeRecord),
                 })
             }
             console.log(response.data)

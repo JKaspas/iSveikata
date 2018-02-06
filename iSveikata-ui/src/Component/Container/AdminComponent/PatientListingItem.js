@@ -5,8 +5,7 @@ const PatientListingItem = (props) =>{
     <tr >
             <td>{props.patientId}</td>
             <td>{props.birthDate}</td>
-            <td>{props.firstName}</td>
-            <td>{props.lastName}</td>
+            <td>{props.fullName}</td>
             {props.doctorViewPatient}
             {props.recordLink}
             {props.prescriptionLink}

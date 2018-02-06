@@ -106,8 +106,7 @@ class DoctorViewContainer extends Component{
                 key={index}
                 patientId={patient.patientId}
                 birthDate={patient.birthDate}
-                firstName={patient.firstName}
-                lastName={patient.lastName}
+                fullName={patient.fullName}
     
                 recordLink={<td><NewRecordLink  patientId={patient.patientId}/></td>}
                 prescriptionLink={<td><NewPrescriptionLink  patientId={patient.patientId}/></td>}

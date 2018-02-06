@@ -2,9 +2,10 @@
 	color: #cc0000;
 	font-weight: bold;
 	text-align: left;
+	height: 100px;
 }
 
-.form-control:focus {
+.form-control:focus, #is-valid:focus, #is-invalid:focus {
 	border-color: #6600cc;
 	box-shadow: none !important;
     outline: none !important;

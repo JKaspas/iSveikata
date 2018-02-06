@@ -120,11 +120,9 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public Page<MedicalRecordDto> getPatientRecordList(Long patientId, Pageable pageable) {
-		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId,
-				pageable.previousOrFirst());
+		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId, pageable.previousOrFirst());
 		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage.getContent());
 		return new PageImpl<>(dtos, pageable, dtos.size());
-
 	}
 
 	/**
