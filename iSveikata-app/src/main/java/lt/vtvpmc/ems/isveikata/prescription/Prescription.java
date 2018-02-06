@@ -11,8 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.api.Api;
@@ -23,8 +24,9 @@ import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 @Entity
 @Data
 public class Prescription implements Serializable {
+	private static final long serialVersionUID = -3936968052423037625L;
 
-    @Id
+	@Id
     @GeneratedValue
     private long id;
 
@@ -50,24 +52,9 @@ public class Prescription implements Serializable {
     private long ingredientAmount;
     private String description;
     private long useAmount;
+	public void addUsage() {
+		useAmount++;
+		
+	}
 
-    public void addUsage(){
-        useAmount++;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public void setApi(Api api) {
-        this.api = api;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public List<PrescriptionUsage> getPrescriptionUsage() {
-        return prescriptionUsage;
-    }
 }

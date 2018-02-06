@@ -16,8 +16,9 @@ import java.util.Date;
 @Entity
 @Data
 public class PrescriptionUsage implements Serializable {
+	private static final long serialVersionUID = -1356539984293281290L;
 
-    @Id
+	@Id
     @GeneratedValue
     private long id;
 
@@ -30,11 +31,4 @@ public class PrescriptionUsage implements Serializable {
     @Type(type = "date")
     private Date usageDate;
 
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
-
-    public void setDruggist(Druggist druggist) {
-        this.druggist = druggist;
-    }
 }

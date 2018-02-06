@@ -19,8 +19,8 @@ public class SpecializationController {
 	 * @param specialization
 	 */
 	@PostMapping("/specialization")
-	private void createIcd(@RequestBody Specialization specialization) {
-		specializationService.createSpecialization(specialization);
+	private void createIcd(@RequestBody SpecializationDto specializationDto) {
+		specializationService.createSpecialization(specializationDto);
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class SpecializationController {
 	 * @return all specialization
 	 */
 	@GetMapping("/specialization")
-	private List<Specialization> getAllSpecialization() {
+	private List<SpecializationDto> getAllSpecialization() {
 		return specializationService.getAllSpecialization();
 	}
 

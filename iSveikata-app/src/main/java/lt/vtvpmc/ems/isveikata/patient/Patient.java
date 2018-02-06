@@ -23,6 +23,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 @Entity
 @Data
 public class Patient implements Serializable {
+	private static final long serialVersionUID = 416974951348630192L;
 
 	@Id
 	@Min(10_001_010_000L)
@@ -56,71 +57,8 @@ public class Patient implements Serializable {
 	@OneToMany(mappedBy = "patient")
 	private List<Prescription> prescriptions;
 
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public Long getPatientId() {
-		return patientId;
-	}
-
-	public void setPatientId(Long patientId) {
-		this.patientId = patientId;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Doctor getDoctor() {
-		return doctor;
-	}
-
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
-
-	public List<MedicalRecord> getMedicalRecords() {
-		return this.medicalRecords;
-	}
-
-	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-		this.medicalRecords = medicalRecords;
-	}
-
-	public byte[] getPassword() {
-		return password;
-	}
-
 	public void setPassword(String password) {
 		this.password = Passwords.hashString(password);
 	}
 
-	public List<Prescription> getPrescriptions() {
-		return prescriptions;
-	}
 }

@@ -16,7 +16,8 @@ import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PrescriptionController {
 
-
+//TODO 	get /api/prescription/{prescriptionId}/usages to DTO
+	
     @Autowired
     private PrescriptionSevice prescriptionSevice;
 

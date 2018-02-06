@@ -1,22 +1,32 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
+import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
+import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesController.
@@ -154,6 +164,7 @@ public class EmployeesController {
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
+
 	@ResponseStatus(HttpStatus.OK)
 	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
@@ -172,6 +183,10 @@ public class EmployeesController {
 															   @PathVariable final String searchValue,
 															   Pageable pageable){
 		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
+
+//	private List<PatientDto> getAllDoctorPatient(@PathVariable String userName) {
+//		return employeesService.getDoctorPatientList(userName);
+
 	}
 
 
@@ -231,6 +246,8 @@ public class EmployeesController {
 	@GetMapping("/doctor/notbind")
 	private Page<Patient> getPatientListWithoutDoctor(Pageable pageable) {
 		return patientService.getPatientListWithoutDoctor(pageable);
+//	private List<PatientDto> getPatientListWithoutDoctor() {
+//		return patientService.getPatientListWithoutDoctor();
 	}
 
 	/**
