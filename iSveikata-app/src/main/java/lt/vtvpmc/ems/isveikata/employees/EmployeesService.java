@@ -185,12 +185,12 @@ public class EmployeesService {
 	 */
 	public void deactivateUser(String userName) {
 		Employee emp = employeesRepository.findByUserName(userName);
-		emp.setAcitve(false);
+		emp.setActive(false);
 		employeesRepository.save(emp);
 	}
 
 	public boolean isUserActive(String userNanme) {
 		Employee employee = employeesRepository.findByUserName(userNanme);
-		return employee != null ? employee.isAcitve() : false;
+		return employee != null ? employee.isActive() : false;
 	}
 }

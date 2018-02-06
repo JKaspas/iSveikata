@@ -23,7 +23,7 @@ import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @RestController
 @RequestMapping(value = "/api/patient")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PatientController {
 
 	@Autowired

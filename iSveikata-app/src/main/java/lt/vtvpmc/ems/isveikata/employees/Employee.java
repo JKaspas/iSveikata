@@ -41,7 +41,7 @@ public abstract class Employee {
 	@NotNull
 	private byte[] password;
 
-	private boolean isAcitve = true;
+	private boolean isActive = true;
 
 	public Employee() {
 	}
