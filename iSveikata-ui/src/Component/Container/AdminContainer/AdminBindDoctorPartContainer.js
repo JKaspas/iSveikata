@@ -13,13 +13,13 @@ export default class AdminBindDoctorPartContainer extends Component{
         super(props);
         this.state = {
             search:'',
-            doctors:null,
+            doctorList:'',
             listInfo:'',
-            notFound:'',
 
             activePage:1,
             itemsPerPage:8,
-            listLength:''
+            listLength:'',
+            listIsEmpty:false
 
         }
     }
@@ -43,13 +43,15 @@ export default class AdminBindDoctorPartContainer extends Component{
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
-                    notFound:(<h3>No doctor found</h3>),
+                    doctorList:(<h3>Daktarų sistemoje nėra</h3>),
+                    listIsEmpty:true,
                 })
             }else{
                 this.setState({
-                    doctors:response.data.content.map(this.composeDoctor),
+                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
                     listInfo:response.data,
-                    listLength:response.data.content.length
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
                 })
             }
             console.log(response.status)
@@ -92,7 +94,7 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength < this.state.itemsPerPage && !this.state.listInfo.last){
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
             return ''
         }
         return (
@@ -121,16 +123,13 @@ export default class AdminBindDoctorPartContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                                <div className="col-sm-4 col-sm-offset-4">
+                                {/* <div className="col-sm-4 col-sm-offset-4">
                                     <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
-                                </div>
+                                </div> */}
                             </div>
                             <div className="col-sm-12">
-                                <DoctorListView 
-                                    doctors={this.state.doctors}
-                                />
+                                {this.state.doctorList}
                                 {this.showPagination()}
-                                {this.state.notFound}
                             </div>
                         </div> 
                     </div> 

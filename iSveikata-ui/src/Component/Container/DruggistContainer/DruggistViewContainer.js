@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import Pagination from "react-js-pagination"
-
 
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
@@ -14,20 +12,11 @@ class DruggistViewContainer extends Component{
         super(props)
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
-            patients:null,
+            patient:'',
             searchValue:'',
             info:'',
-            patientTypeName:'Visi pacientai',
-            patientType:true,
-
-            listBegin:0,
-            listEnd:5,
             
-            listInfo:'',
-
-            activePage:1,
-            itemsPerPage:8,
-            listLength:'',
+          
         }
     }
 
@@ -38,22 +27,35 @@ class DruggistViewContainer extends Component{
             return '';
         }  
 
-        this.getAllPatient(this.state.activePage)
+        
     }
 
-    getAllPatient = (activePage) =>{
-        axios.get('http://localhost:8080/api/patient/?page='+activePage+'&size='+this.state.itemsPerPage)
+    composePatient = (patient) =>{
+        
+        return (
+            <PatientListingItem
+                patientId={patient.patientId}
+                birthDate={patient.birthDate}
+                firstName={patient.firstName}
+                lastName={patient.lastName}
+                druggistPrescriptionView={<td><DruggistPrescriptionLink patientId={patient.patientId}/></td>}
+                   
+            />
+        )
+    }
+   
+    searchForPatientById = (patientId) =>{
+        axios.get(' http://localhost:8080/api/patient/'+patientId)
         .then((response)=>{
             this.setState({
-                patients:response.data.content.map(this.composePatient),
-                listInfo:response.data,
-                listLength:response.data.content.length,
+                patient: <PatientListView  patients={this.composePatient(response.data)} />,
+                
             })
             // this.setPatientAmount(this.state.patients,0, 20)
 
             if(response.data.length === 0){
                 this.setState({
-                    info:(<h3>Priskirtų pacientų nerasta</h3>)
+                    info:(<h3>Pcientų su tokiu asmens kodu nėra</h3>)
                 })
             }
                   
@@ -64,60 +66,24 @@ class DruggistViewContainer extends Component{
             //console.log(erorr)
         })
     }
-
-
-    composePatient = (patient, index) =>{
-        
-
-        return (
-            <PatientListingItem
-                key={index}
-                patientId={patient.patientId}
-                birthDate={patient.birthDate}
-                firstName={patient.firstName}
-                lastName={patient.lastName}
-
-                druggistPrescriptionView={<td><DruggistPrescriptionLink patientId={patient.patientId}/></td>}
-                  
-                    
-            />
-        )
-    }
-
     fielddHandler = (e) =>{
         this.setState({
             searchValue:e.target.value
         })
+        console.log(e.target.value)
     }
     searchHandler = (e) =>{
         e.preventDefault()
-       console.log("Searcrh search..."+ this.state.searchValue)
+        if(this.state.searchValue.length === 11){
+            this.searchForPatientById(this.state.searchValue)
+        }else{
+            this.setState({
+                patient:(<h3>Iveskite tinkama/pilna asmens kodą</h3>)
+            })
+        }
     }
 
-    //handle paggination page changes 
-    handlePageChange = (activePage) => {
-        //on page number change send request for new page of patient
-        this.getAllPatient(activePage)
-        //change activePage state to new page number
-        this.setState({
-            activePage:activePage
-        })
-    }
-
-    //Show paggination div with props from state
-    showPagination = () =>{
-        return (
-            <div className="col-sm-5 col-sm-offset-4">
-            <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.listInfo.totalElements}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-            />
-        </div>
-        )
-    }
+ 
 
     
 
@@ -129,23 +95,22 @@ class DruggistViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                            <h4>Pacientų sarašas</h4>
+                            <h4>Klientų paieška pagal asmens kodą</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
+                            <h4 className="text-center">Iveskite kliento asmens kodą</h4>
                                 <SearchFieldForm 
+                                    searchType={"number"}
                                     searchHandler={this.searchHandler}
                                     fielddHandler={this.fielddHandler}
                                     searchValue={this.state.searchValue}
+                                    searchPlaceHolder={"Kliento asmens kodas"}
                                 />
                             </div>
                             
                             <div className="col-sm-12">
-                                <PatientListView 
-                                    patients={this.state.patients}
-                                />
-                                {this.showPagination()}                                
+                               {this.state.patient}                            
                                 {this.state.info}
                                 
 

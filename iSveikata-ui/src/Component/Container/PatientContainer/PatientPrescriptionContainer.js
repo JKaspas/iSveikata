@@ -54,7 +54,7 @@ export default class PatientPrescriptionContainer extends Component{
     }
 
     showPrescriptionDetails = (rowId) =>{
-        this. loadSpecificPrescription(rowId);
+        this.loadSpecificPrescription(rowId);
         this.closeOpenDetails();
         console.log(rowId)
     }
@@ -77,7 +77,7 @@ export default class PatientPrescriptionContainer extends Component{
                 // units={prescription.ingredientUnit}
                 // description={prescription.description}
                 useAmount={prescription.useAmount}
-                viewUsageLink={usageLink}
+                viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
             />
         )

@@ -13,15 +13,16 @@ export default class AdminBindUserPartContainer extends Component{
         super();
         this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
-            patients:null,
-            infoNoPatient:'',
+            patientList:'',
             infoState:'',
             
             listInfo:'',
 
             activePage:1,
             itemsPerPage:8,
-            listLength:''
+            listLength:'',
+
+            listIsEmpty:false
         }
     }
 
@@ -43,14 +44,18 @@ export default class AdminBindUserPartContainer extends Component{
     getPatientList = (activePage) =>{
         axios.get('http://localhost:8080/api/doctor/notbind?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
-            this.setState({
-                patients:response.data.content.map(this.composePatient),
-                listInfo:response.data,
-                listLength:response.data.content.length
-            })
+            
             if(response.data.length === 0){
                 this.setState({
-                    infoNoPatient:(<h3>No patient found</h3>)
+                    patientList:(<h3>Daktarams nepriskirtu pacientų daugiau nėra</h3>),
+                    listIsEmpty:true,
+                })
+            }else{
+                this.setState({
+                    patientList:<PatientListView patients={response.data.content.map(this.composePatient)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false
                 })
             }
             console.log(response.status)
@@ -106,7 +111,7 @@ export default class AdminBindUserPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength < this.state.itemsPerPage && !this.state.listInfo.last){
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
             return ''
         }
         return (
@@ -137,17 +142,14 @@ export default class AdminBindUserPartContainer extends Component{
                         <div className="panel-body">
                             {this.state.infoState}
                             <div className="col-sm-12">
-                                <div className="col-sm-4 col-sm-offset-4">
+                                {/* <div className="col-sm-4 col-sm-offset-4">
                                     <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
-                                </div>
+                                </div> */}
                             </div>
                             
                             <div className="col-sm-12">
-                                <PatientListView 
-                                    patients={this.state.patients}
-                                />
+                                {this.state.patientList}
                                  {this.showPagination()}
-                                {this.state.infoNoPatient}
                                 
                             </div>
                         </div> 

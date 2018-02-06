@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Link} from 'react-router'
 
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';

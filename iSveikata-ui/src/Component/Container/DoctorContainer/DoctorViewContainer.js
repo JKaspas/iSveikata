@@ -15,19 +15,19 @@ class DoctorViewContainer extends Component{
         super(props)
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
-            patients:null,
-            listInfo:'',
-            listLength:'',
+            patientListView:null,
+           
             searchValue:'',
-            info:'',
             patientTypeName:'Visi pacientai',
             patientType:true,
+            searchOn:false,
 
-            listBegin:0,
-            listEnd:5,
-
+            listInfo:'',
+            listLength:'',
             activePage:1,
-            itemsPerPage:8
+            itemsPerPage:8,
+
+            listIsEmpty:false
 
         }
     }
@@ -45,19 +45,21 @@ class DoctorViewContainer extends Component{
     getDoctorPatient = (userName, activePage) =>{
         axios.get('http://localhost:8080/api/doctor/'+userName+'/patient?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
-            this.setState({
-                patients:response.data.content.map(this.composePatient),
-                listInfo:response.data,
-                listLength:response.data.content.length,
-            })
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
-                    info:(<h3>No patient found</h3>)
+                    patientListView:(<h3>Jūs neturite priskirtų pacientų</h3>),
+                    listIsEmpty:true
                 })
-            }
-                  
+            }else{
+                this.setState({
+                    patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false
+
+                 })
+            } 
             console.log(response.status)
-            
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -69,18 +71,21 @@ class DoctorViewContainer extends Component{
     getAllPatient = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
-            this.setState({
-                patients:response.data.content.map(this.composePatient),
-                listInfo:response.data,
-                listLength:response.data.content.length,
-            })
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
-                    info:(<h3>Priskirtų pacientų nerasta</h3>)
+                    patientListView:(<h3>Systemos klaida, pacientų nėra</h3>),
+                    listIsEmpty:true
                 })
-            }            
+            }else{
+                this.setState({
+                    patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false
+
+                })  
+            }         
             console.log(response.status)
-            
         })
         .catch((erorr) => {
             //console.log(erorr)
@@ -89,12 +94,12 @@ class DoctorViewContainer extends Component{
 
     //compose patient list item (row) to show it in table
     composePatient = (patient, index) =>{
-        let patientViewLink = ''
+        let patientViewLink = null
 
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-        patientViewLink=(<td><DoctorViewPatientLink patientId={patient.patientId} /></td>)
+            patientViewLink=(<td><DoctorViewPatientLink patientId={patient.patientId} /></td>)
         }
         return (
             <PatientListingItem
@@ -106,16 +111,67 @@ class DoctorViewContainer extends Component{
     
                 recordLink={<td><NewRecordLink  patientId={patient.patientId}/></td>}
                 prescriptionLink={<td><NewPrescriptionLink  patientId={patient.patientId}/></td>}
-<<<<<<< HEAD
                 doctorViewPatient={patientViewLink}
-=======
-                doctorViewPatient={<td><DoctorViewPatientLink patientId={patient.patientId} /></td>}    
->>>>>>> patient
                   
                     
             />
         )
     }
+
+    getDoctorPatientBySearchValue = (activePage, searchValue) =>{
+        axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient/'
+        +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            if(response.data.content.length === 0){
+                this.setState({
+                    patientListView:(<h3>Tokių pacientų nerasta</h3>),
+                    listIsEmpty:true
+                })
+            }else{  
+                this.setState({
+                    patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
+                    searchOn:true
+
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            console.log(erorr)
+
+        })
+    }
+
+    getAllPatientBySearchValue = (activePage, searchValue) =>{
+        axios.get('http://localhost:8080/api/patient/search/'
+        +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            if(response.data.content.length === 0){
+                this.setState({
+                    patientListView:(<h3>Tokių pacientų nerasta</h3>),
+                    listIsEmpty:true
+                })
+            }else{  
+                this.setState({
+                    patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
+                    searchOn:true
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            console.log(erorr)
+
+        })
+    }
+
+
     //in seacrh field change state value ot new event (e) value
     fielddHandler = (e) =>{
         this.setState({
@@ -125,37 +181,65 @@ class DoctorViewContainer extends Component{
     //search button click handling 
     searchHandler = (e) =>{
         e.preventDefault()
-       console.log("Searcrh search..."+ this.state.searchValue)
+        if(this.state.searchValue.length > 2){
+            if(this.state.patientType){
+                this.getDoctorPatientBySearchValue(1, this.state.searchValue)   
+            }else{
+                this.getAllPatientBySearchValue(1, this.state.searchValue)            
+            }
+        }else{
+            this.setState({
+                patientListView:(<h3>Įveskite daugiau simbolių</h3>),
+                listIsEmpty:true
+            })
+        }
+        
+        this.setState({
+            activePage:1,
+        })
+       
+        console.log("Searcrh search..."+ this.state.searchValue)
     }
     //on button click chnage patient from doctor patient or all patient and vice versa
     changePatients = () =>{
         if(this.state.patientType){
             this.getAllPatient(1)
             this.setState({
-                patientType:!this.state.patientType,
                 patientTypeName:"Mano pacientai",
-                activePage:1,
+                searchOn:false
             })
         }else{
             this.getDoctorPatient(this.session.user.userName,1)
             this.setState({
-                patientType:!this.state.patientType,
                 patientTypeName:"Visi pacientai",
-                activePage:1,
+                searchOn:false
             })
         }
+        this.setState({
+            patientType:!this.state.patientType,
+            activePage:1
+        })
     }
 
     //handle paggination page changes 
     handlePageChange = (activePage) => {
+        
         //if patient type is true (means it's still doctor patient) 
         //request for new page with given active page number and doctro userName 
         if(this.state.patientType){
-            this.getDoctorPatient(this.session.user.userName, activePage);
+            if(this.state.searchOn){
+                this.getDoctorPatientBySearchValue(activePage, this.state.searchValue)
+            }else{
+                this.getDoctorPatient(this.session.user.userName, activePage);
+            }
+
             console.log(`active page is doctor patient ${activePage}`);
         }else{
-            this.getAllPatient(activePage)
-            console.log(`active page is all patient ${activePage}`);
+            if(this.state.searchOn){
+                this.getAllPatientBySearchValue(activePage, this.state.searchValue)
+            }else{
+                this.getAllPatient(activePage)
+            }
         }
         //change activePage state to new page number
         this.setState({
@@ -164,11 +248,11 @@ class DoctorViewContainer extends Component{
       }
       //Show paggination div with props from state
       showPagination = () =>{
-          if(this.state.listLength < this.state.itemsPerPage && !this.state.listInfo.last){
+          if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
             return ''
           }
           return (
-              <div className="col-sm-5 col-sm-offset-4">
+              <div className="text-center">
                 <Pagination
                 activePage={this.state.activePage}
                 itemsCountPerPage={this.state.itemsPerPage}
@@ -192,23 +276,21 @@ class DoctorViewContainer extends Component{
                             <h4>Priskirtų pacientų sąrašas</h4>
                         </div>
                         <div className="panel-body">
-                            <div className="col-sm-12">
+                            <div className="text-center">
+                                <h4>Prašau įveskite bent 3 simbolius</h4>
                                 <SearchFieldForm 
                                     searchHandler={this.searchHandler}
                                     fielddHandler={this.fielddHandler}
                                     searchValue={this.state.searchValue}
+                                    searchPlaceHolder={"Pacientų paieška"}
+                                    searchType={"text"}
                                 />
                                 <button className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                             </div>
-                            
                             <div className="col-sm-12">
-                                <PatientListView 
-                                    patients={this.state.patients}
-                                />
+                                {this.state.patientListView}
                                 {this.showPagination()}
                                 {this.state.info}
-                              
-
                             </div>
                         </div> 
                     </div> 

@@ -18,14 +18,9 @@ const RecordListView = (props) =>{
                     <th>Vizitas pakartotinas</th> */}
                 </tr>
             </thead>
-<<<<<<< HEAD
-            <tbody id="recorTableBody">
-                {props.records}
-=======
             <tbody > 
                 {/* id="recorTableBody" */}
                 {props.record}
->>>>>>> patient
             </tbody>
         </table>
         {props.notFound}

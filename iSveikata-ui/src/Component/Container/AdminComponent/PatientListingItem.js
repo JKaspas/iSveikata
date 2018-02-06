@@ -11,10 +11,7 @@ const PatientListingItem = (props) =>{
             {props.recordLink}
             {props.prescriptionLink}
             {props.patientBindLink}
-<<<<<<< HEAD
             {props.druggistPrescriptionView}
-=======
->>>>>>> patient
 
     </tr>)
 }

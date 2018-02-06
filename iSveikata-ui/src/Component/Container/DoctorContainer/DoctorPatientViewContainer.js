@@ -1,41 +1,27 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router'
-<<<<<<< HEAD
 import Pagination from "react-js-pagination"
 
-=======
->>>>>>> patient
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import RecordListingItemDemo from '../DoctorComponent/RecordListingItemDemo';
 import RecordListViewDemo from '../DoctorComponent/RecordListViewDemo';
-<<<<<<< HEAD
 
 var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
 var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
-=======
->>>>>>> patient
 
 export default class DoctorPatientViewContainer extends Component{
     constructor(props){
         super(props)
         this.state = {
             patient:'',
-<<<<<<< HEAD
             recordDetails:'',
             notFoundRecord:(<h3>Ligos istorija tuščia</h3>),
             notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi</h3>),
-=======
-            records:null,
-            recordDetails:'',
-            prescriptions:null,
-            notFoundRecord:'',
-            notFoundPrescription:'',
->>>>>>> patient
             viewContent:'',
             contentType:'record',
 
@@ -45,11 +31,6 @@ export default class DoctorPatientViewContainer extends Component{
             itemsPerPage:8,
             listLength:'',
 
-<<<<<<< HEAD
-=======
-            opendRecordRow:'',
-            medicalcordDetail:''
->>>>>>> patient
         }
     }
 
@@ -108,36 +89,13 @@ export default class DoctorPatientViewContainer extends Component{
                 this.setState({
                 })
             }
-<<<<<<< HEAD
             console.log(response.status)
-=======
-            this.setState({
-                records:response.data.map(this.composeRecord),
-                viewContent:<RecordListViewDemo records={response.data.map(this.composeRecord)} notFound={this.state.notFoundRecord}/>
-            })
-            console.log(response.data)
->>>>>>> patient
         })
         .catch((erorr) =>{
             console.log(erorr)
         })
     }
-<<<<<<< HEAD
     composeRecords = (record,index) =>{
-=======
-    showRecordDetails = (rowId) =>{
-        this.loadSpecificRecord(rowId);
-        this.closeOpenDetails();
-        console.log(rowId)
-    }
-    showPrescriptionDetails = (rowId) =>{
-        this. loadSpecificPrescription(rowId);
-        this.closeOpenDetails();
-        console.log(rowId)
-    }
-
-    composeRecord = (record,index) =>{
->>>>>>> patient
         var date = new Date(record.appointment.date)
         var newDate = 
         date.getFullYear() 
@@ -150,18 +108,10 @@ export default class DoctorPatientViewContainer extends Component{
                 appDate={newDate}
                 icd={record.icd.icdCode}
                 doctorName={record.doctor.firstName + ' ' +record.doctor.lastName }
-<<<<<<< HEAD
-=======
-                // appDescription={record.appointment.description}
-                // appDuration={record.appointment.duration}
-                // compensable={record.compensable}
-                // repetitive={record.repetitive}
->>>>>>> patient
                 showDetails={this.showRecordDetails}
             />
         )
     }
-<<<<<<< HEAD
      //compose prescription list to specific listing item (view component)
      composePrescription = (prescription, index) =>{
         var usageLink = '';
@@ -169,64 +119,6 @@ export default class DoctorPatientViewContainer extends Component{
         if(prescription.useAmount > 0){
             usageLink=<Link to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
         }
-=======
-
-    loadSpecificRecord = (recordId) =>{
-        axios.get('http://localhost:8080/api/record/'+recordId)
-        .then((response) => {
-            this.setState({
-                infoDetails:this.composeSpecificRecord(response.data)
-                })
-            console.log(response.status)
-        })
-        .catch((erorr) =>{
-            console.log(erorr)
-        })
-    }
-    composeSpecificRecord = (record) => {
-        var yesValue = 'Taip';
-        var noValue = 'Ne';
-
-        var compensable = record.compensable === true? yesValue:noValue;
-        var repetitive = record.repetitive === true? yesValue:noValue;
-
-        return (<div style={{padding:'30px' }}>
-                <p> Ligos įrašo data: {record.appointment.data}</p>
-                <p>Ligos kodas: {record.icd.icdCode}</p>
-                <p>Ligos įraša padares gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
-                <p>Vizito trukme: {record.appointment.duration}</p>
-                <p>Vizitas komensuojamas? {compensable}</p>
-                <p>Vizitas pakartotinas? {repetitive}</p>
-                <p>Aprasymas: {record.appointment.description}</p>
-        </div>)
-    }
-
-    loadPrescriptions = () =>{
-        axios.get('http://localhost:8080/api/patient/'+this.props.params.patientId+'/prescription')
-        .then((response) => {
-            if(response.data.length === 0){
-                this.setState({
-                    notFoundPrescription:(<h3>Išrašytų receptų nėra</h3>)
-                })
-            }
-            this.setState({
-                prescriptions:response.data.map(this.composePrescription)
-            })
-            console.log(response.status)
-        })
-        .catch((erorr) =>{
-            console.log(erorr)
-        })
-    }
-    
-
-    composePrescription = (prescription, index) =>{
-        var usageLink = '';
-        if(prescription.useAmount > 0){
-            usageLink=<Link to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
-        }
-
->>>>>>> patient
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -235,24 +127,15 @@ export default class DoctorPatientViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.api.title}
-<<<<<<< HEAD
                 useAmount={prescription.useAmount}
                 viewUsageLink={<td>{usageLink}</td>}
-=======
-                // ingredientAmount={prescription.ingredientAmount}
-                // units={prescription.ingredientUnit}
-                // description={prescription.description}
-                useAmount={prescription.useAmount}
-                viewUsageLink={usageLink}
->>>>>>> patient
                 showDetails={this.showPrescriptionDetails}
             />
         )
     }
-<<<<<<< HEAD
 
     loadSpecificRecord = (recordId) =>{
-        axios.get('http://localhost:8080/api/patient/record/'+recordId)
+        axios.get('http://localhost:8080/api/record/'+recordId)
         .then((response) => {
             this.setState({
                 infoDetails:this.composeSpecificRecord(response.data)
@@ -284,9 +167,6 @@ export default class DoctorPatientViewContainer extends Component{
     
    //request for single prescription and compose it to view object
    loadSpecificPrescription = (prescriptionId) =>{
-=======
-    loadSpecificPrescription = (prescriptionId) =>{
->>>>>>> patient
         axios.get('http://localhost:8080//api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
@@ -298,10 +178,7 @@ export default class DoctorPatientViewContainer extends Component{
             console.log(erorr)
         })
     }
-<<<<<<< HEAD
     //compose single object to spcific view object
-=======
->>>>>>> patient
     composeSpecificPrescription = (prescription) => {
        
         return (<div style={{padding:'30px' }}>
@@ -310,37 +187,23 @@ export default class DoctorPatientViewContainer extends Component{
                 <p>Recepto panaudojmų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
                 <p>Aktyviosios medžiagos kiekis dozeje: {prescription.ingredientAmount}</p>
-<<<<<<< HEAD
                 <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
                 <p>Aprašymas: {prescription.description}</p>
         </div>)
     }
 
     //on medical record tab click show list of medical record
-=======
-                <p>Matavimo vienetai: {prescription.unit}</p>
-                <p>Aprašymas: {prescription.description}</p>
-        </div>)
-    }
->>>>>>> patient
     showMedicalRecord = () =>{
         document.getElementById("record-tab").style.background = "lightGrey"
         document.getElementById("prescription-tab").style.background = "none"
         
         this.setState({
-<<<<<<< HEAD
             activePage:1,
             contentType:'record'
-=======
-            viewContent:<RecordListViewDemo records={this.state.records} notFound={this.state.notFoundRecord}/>
->>>>>>> patient
         })
         this.loadRecords(1)
     }
-<<<<<<< HEAD
     //on prescription tab click show list of prescription
-=======
->>>>>>> patient
     showPrescription = () =>{
         document.getElementById("record-tab").style.background = "none"
         document.getElementById("prescription-tab").style.background = "lightGrey"
@@ -363,10 +226,7 @@ export default class DoctorPatientViewContainer extends Component{
         this.closeOpenDetails();
     }
 
-<<<<<<< HEAD
     //onClick on (medicalRecord or pracription) show or hide div with details
-=======
->>>>>>> patient
     closeOpenDetails = () =>{
         let el = document.getElementById("recordDetails")
         if(el.style.display === 'block'){
@@ -375,7 +235,6 @@ export default class DoctorPatientViewContainer extends Component{
             el.style.display = 'block'
         }
     }
-<<<<<<< HEAD
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
@@ -405,8 +264,6 @@ export default class DoctorPatientViewContainer extends Component{
         </div>
         )
     }
-=======
->>>>>>> patient
 
     render() {
         return (
@@ -418,12 +275,6 @@ export default class DoctorPatientViewContainer extends Component{
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h4>Pacientas</h4>
-<<<<<<< HEAD
-=======
-                            {/* <p>{this.state.patient.firstName + ' ' + this.state.patient.lastName}</p>
-                            <p>{this.state.patient.patientId}</p>
-                            <p>{this.state.patient.birthDate}</p> */}
->>>>>>> patient
                             <p>{this.props.params.patientId}</p>
                         </div>
                         <div className="panel-body">
@@ -442,7 +293,6 @@ export default class DoctorPatientViewContainer extends Component{
                                 </ul>
                                 <br/>
                                 {this.state.viewContent}
-<<<<<<< HEAD
                                 {this.showPagination()}
 
                                 <div id="recordDetails" style={backgroundStyle}>
@@ -450,19 +300,6 @@ export default class DoctorPatientViewContainer extends Component{
                                         <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
                                         {this.state.infoDetails}
                                     </div>
-=======
-                                <div id="recordDetails" style={{  height: '60%',
-                                                width: '60%',
-                                                border: '2px solid black',
-                                                zIndex: '2',
-                                                position: 'fixed',
-                                                top: '20%',
-                                                left: '20%',
-                                                background: 'white',
-                                                display:'none'}}>
-                                <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >Uždaryti</button> 
-                                {this.state.infoDetails}
->>>>>>> patient
                                 </div>
                             </div>
                         </div> 
@@ -473,4 +310,3 @@ export default class DoctorPatientViewContainer extends Component{
     }
 }
 
-  
