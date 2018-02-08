@@ -43,7 +43,7 @@ export default class AdminBindDoctorPartContainer extends Component{
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
-                    doctorList:(<h3>Daktarų sistemoje nėra</h3>),
+                    doctorList:(<h3>Sistemoje nesukurta nė viena gydytojo paskyra.</h3>),
                     listIsEmpty:true,
                 })
             }else{
@@ -119,7 +119,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Priskirkyte gydytojui pacientą</h4>
+                            <h4>Priskirkite gydytojui pacientą</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

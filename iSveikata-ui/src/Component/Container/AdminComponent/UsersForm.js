@@ -40,10 +40,10 @@ const UsersForm = (props) => {
                 </div>
             </div>
             <div className="form-group">
-                <label className="control-label col-sm-3">Slapyvardis:</label>
+                <label className="control-label col-sm-3">Vartotojo vardas:</label>
                 <div className="col-sm-9">          
                     <input type="text" readOnly className="form-control" name="userName"
-                    placeholder="Slapyvardis" value={props.userName} required
+                    placeholder="Vartotojo vardas" value={props.userName} required
                     onChange={props.fieldHandler} maxLength="225"/>
                 </div>
             </div>

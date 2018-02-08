@@ -47,7 +47,7 @@ export default class AdminBindUserPartContainer extends Component{
             
             if(response.data.length === 0){
                 this.setState({
-                    patientList:(<h3>Daktarams nepriskirtu pacientų daugiau nėra</h3>),
+                    patientList:(<h3>Gydytojams nepriskirtų pacientų daugiau nėra.</h3>),
                     listIsEmpty:true,
                 })
             }else{

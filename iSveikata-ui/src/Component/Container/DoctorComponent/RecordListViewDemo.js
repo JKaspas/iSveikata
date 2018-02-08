@@ -10,7 +10,7 @@ const RecordListViewDemo = (props) =>{
             <thead>
                 <tr>
                     <th>Įrašo data</th>
-                    <th>Daktaras</th>
+                    <th>Gydytojas</th>
                     <th>Ligos kodas</th>
                 </tr>
             </thead>

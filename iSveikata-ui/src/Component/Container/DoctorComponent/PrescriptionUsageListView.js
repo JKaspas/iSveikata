@@ -10,7 +10,7 @@ const PrescriptionUsageListView = (props) =>{
             <thead>
                 <tr>
                     <th>Recepto panaudojimo data</th>
-                    <th>Daktaras</th>
+                    <th>Gydytojas</th>
                 </tr>
             </thead>
             <tbody id="recorTableBody">

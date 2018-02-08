@@ -10,7 +10,7 @@ var PublicViewComponent = () =>{
             <header className="bg-primary text-white">
                 <div className="container text-center">
                     <h1>iSveikata</h1>
-                    <p className="lead">Sveikatos prižiūros sistema</p>
+                    <p className="lead">Sveikatos priežiūros sistema</p>
                 </div>
             </header>
 
@@ -18,7 +18,7 @@ var PublicViewComponent = () =>{
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-12 mx-auto">
-                        <h2>Statistic chart</h2>
+                        <h2>Susirgimų statistika</h2>
                         <img className="col-lg-12" src={first} alt="Mountain View"/>
                     </div>
                     </div>
@@ -29,7 +29,7 @@ var PublicViewComponent = () =>{
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-12 mx-auto">
-                        <h2>Statistic chart</h2>
+                        <h2>Vaistų vartojimo statistika</h2>
                         <img className="col-lg-12" src={second} alt="Mountain View"/>
                     </div>
                     </div>
@@ -40,7 +40,7 @@ var PublicViewComponent = () =>{
                 <div className="container">
                     <div className="row">
                     <div className="col-lg-12 mx-auto">
-                        <h2>Statistic chart</h2>
+                        <h2>Papildoma statistika</h2>
                         <img className="col-lg-12" src={third} alt="Mountain View"/>
                     </div>
                     </div>

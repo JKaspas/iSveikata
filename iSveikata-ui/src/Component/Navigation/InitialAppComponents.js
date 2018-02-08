@@ -40,7 +40,7 @@ var InitialPublicApp = (props) =>{
     </div>)
   }
   var NoMatch = () =>{
-    return (<div className='container'><section>URL no match</section></div>)
+    return (<div className='container'><section>Puslapis nerastas</section></div>)
   }
 
 export {InitialAdminApp}
