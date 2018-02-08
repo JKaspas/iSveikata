@@ -124,9 +124,9 @@ class DruggistViewContainer extends Component{
         return (<div style={{padding:'30px' }}>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
-                <p>Recepto panaudojmų skaičius: {prescription.useAmount}</p>
+                <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozeje: {prescription.ingredientAmount}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
                 <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
                 <p>Aprašymas: {prescription.description}</p>
                 <button onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>

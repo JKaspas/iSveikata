@@ -104,13 +104,13 @@ export default class PatientRecordContainer extends Component{
         var repetitive = record.repetitive === true? yesValue:noValue;
 
         return (<div style={{padding:'30px' }}>
-                <p> Ligos įrašo data: {record.appointment.data}</p>
+                <p>Ligos įrašo data: {record.appointment.data}</p>
                 <p>Ligos kodas: {record.icd.icdCode}</p>
-                <p>Ligos įraša padares gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
-                <p>Vizito trukme: {record.appointment.duration}</p>
-                <p>Vizitas komensuojamas? {compensable}</p>
-                <p>Vizitas pakartotinas? {repetitive}</p>
-                <p>Aprasymas: {record.appointment.description}</p>
+                <p>Ligos įrašą padaręs gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
+                <p>Vizito trukmė: {record.appointment.duration}</p>
+                <p>Vizitas kompensuojamas? {compensable}</p>
+                <p>Vizitas pakartotinis? {repetitive}</p>
+                <p>Aprašymas: {record.appointment.description}</p>
         </div>)
     }
 
@@ -130,7 +130,7 @@ export default class PatientRecordContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4> Ligos istorijos irasai</h4>
+                            <h4>Ligos istorijos įrašai</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

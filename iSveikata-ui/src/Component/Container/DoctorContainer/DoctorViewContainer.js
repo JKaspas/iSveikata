@@ -73,7 +73,7 @@ class DoctorViewContainer extends Component{
         .then((response)=>{
             if(response.data.content.length === 0){
                 this.setState({
-                    patientListView:(<h3>Systemos klaida, pacientų nėra</h3>),
+                    patientListView:(<h3>Sistemos klaida, pacientų nėra</h3>),
                     listIsEmpty:true
                 })
             }else{
@@ -276,7 +276,7 @@ class DoctorViewContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="text-center">
-                                <h4>Prašau įveskite bent 3 simbolius</h4>
+                                <h4>Prašome įvesti bent 3 simbolius</h4>
                                 <SearchFieldForm 
                                     searchHandler={this.searchHandler}
                                     fielddHandler={this.fielddHandler}

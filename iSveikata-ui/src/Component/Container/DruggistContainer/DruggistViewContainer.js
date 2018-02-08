@@ -37,7 +37,7 @@ class DruggistViewContainer extends Component{
             
             if(response.data.length === 0){
                 this.setState({
-                    info:(<h3>Pcientų su tokiu asmens kodu nėra</h3>)
+                    info:(<h3>Klientų su tokiu asmens kodu nėra</h3>)
                 })
             }else{
                 this.setState({
@@ -78,7 +78,7 @@ class DruggistViewContainer extends Component{
             this.searchForPatientById(this.state.searchValue)
         }else{
             this.setState({
-                patient:(<h3>Iveskite tinkama/pilna asmens kodą</h3>)
+                patient:(<h3>Įveskite taisyklingą asmens kodą</h3>)
             })
         }
     }
@@ -99,7 +99,7 @@ class DruggistViewContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                            <h4 className="text-center">Iveskite kliento asmens kodą</h4>
+                            <h4 className="text-center">Įveskite kliento asmens kodą</h4>
                                 <SearchFieldForm 
                                     searchType={"number"}
                                     searchHandler={this.searchHandler}

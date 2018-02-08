@@ -100,9 +100,9 @@ export default class PatientPrescriptionContainer extends Component{
         return (<div style={{padding:'30px' }}>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Recepto galiojimo data: {prescription.expirationDate}</p>
-                <p>Recepto panaudojmų skaičius: {prescription.useAmount}</p>
+                <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozeje: {prescription.ingredientAmount}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
                 <p>Matavimo vienetai: {prescription.unit}</p>
                 <p>Aprašymas: {prescription.description}</p>
         </div>)

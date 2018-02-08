@@ -154,13 +154,13 @@ export default class DoctorPatientViewContainer extends Component{
         var repetitive = record.repetitive === true? yesValue:noValue;
 
         return (<div style={{padding:'30px' }}>
-                <p> Ligos įrašo data: {record.appointment.date}</p>
+                <p>Ligos įrašo data: {record.appointment.date}</p>
                 <p>Ligos kodas: {record.icd.icdCode}</p>
-                <p>Ligos įraša padares gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
-                <p>Vizito trukme: {record.appointment.duration}</p>
-                <p>Vizitas komensuojamas? {compensable}</p>
-                <p>Vizitas pakartotinas? {repetitive}</p>
-                <p>Aprasymas: {record.appointment.description}</p>
+                <p>Ligos įrašą padaręs gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
+                <p>Vizito trukmė: {record.appointment.duration}</p>
+                <p>Vizitas kompensuojamas? {compensable}</p>
+                <p>Vizitas pakartotinis? {repetitive}</p>
+                <p>Aprašymas: {record.appointment.description}</p>
         </div>)
     }
 
@@ -184,9 +184,9 @@ export default class DoctorPatientViewContainer extends Component{
         return (<div style={{padding:'30px' }}>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
-                <p>Recepto panaudojmų skaičius: {prescription.useAmount}</p>
+                <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozeje: {prescription.ingredientAmount}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
                 <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
                 <p>Aprašymas: {prescription.description}</p>
         </div>)
