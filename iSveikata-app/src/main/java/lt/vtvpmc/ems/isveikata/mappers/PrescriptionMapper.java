@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 
-@Mapper(componentModel = "spring", uses = { ApiMapper.class })
+@Mapper(componentModel = "spring")
 public interface PrescriptionMapper {
 
 	@Mappings({
 			// @Mapping(source = "doctorUserName", target = "doctor"),
 			// @Mapping(source = "patientId", target = "patient"),
-			@Mapping(source = "apiDto", target = "api") })
+			//@Mapping(source = "apiDto", target = "api") 
+		})
 	Prescription dtoToPrescription(PrescriptionDto prescriptionDto);
 
 	@InheritInverseConfiguration
