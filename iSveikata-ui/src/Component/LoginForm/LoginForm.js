@@ -13,12 +13,12 @@ var LoginForm = (props) =>{
                 <div> 
                     <FormErrors formErrors={props.formErrors}/>
                 </div>
-                <input className={props.errorClassLoginValue} type="text" name={props.loginValueName} 
+                <input className={'form-control ' + (props.loginValue.length === 0 ? 'is-empty' : props.errorClassLoginValue)} type="text" name={props.loginValueName} 
                 placeholder={props.loginPlaceholder} value={props.loginValue} required
                 onChange={props.fieldHandler}
                 onBlur={props.fieldValidationHandler} />
                 <br />
-                <input className={props.errorClassPassword} type="password" name="password" 
+                <input className={'form-control ' + (props.password.length === 0 ? 'is-empty' : props.errorClassPassword)} type="password" name="password" 
                 placeholder="Slaptažodis" value={props.password} required autoComplete="off"
                 onChange={props.fieldHandler}
                 onBlur={props.fieldValidationHandler} />

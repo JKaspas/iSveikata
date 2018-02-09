@@ -1,31 +1,58 @@
-import React from 'react'
+import React from 'react';
+import { FormErrors } from '../AdminComponent/Form_errors';
+import '../../../Form.css';
 
 
 export const ChangePasswordForm = (props) =>{
     return(
-    <div className="container">
-        <section>
-            {props.infoState}
-            <form onSubmit={props.submitHandler} className="form-signin">
-                <h2 className="form-signin-heading">Slaptažodžio keitimas</h2>
-                <input className="form-control" type="password" 
-                name="oldPassword" onChange={props.fieldHandler} 
-                placeholder="Senas slaptažodis" required 
-                autoComplete="off"/>
-                <input className="form-control" type="password" 
-                name="newPassword" onChange={props.fieldHandler} 
-                placeholder="Naujas slaptažodis" required
-                autoComplete="off"/>
-                <input className="form-control" type="password" 
-                name="newPasswordRepeat" onChange={props.fieldHandler} 
-                placeholder="Pakartoti naują slaptažodį" required
-                autoComplete="off" />
-                <div className="checkbox">
+    <div className="col-sm-12">
+        {props.infoState}
+        <div className="col-sm-9 col-sm-offset-3">   
+            <FormErrors formErrors={props.formErrors} />
+        </div>
+        <form className="form-horizontal" onSubmit={props.submitHandler}>
+            <div className="form-group">
+                <label className="control-label col-sm-3">Dabartinis slaptažodis:</label>
+                <div className="col-sm-9">
+                    <input type="password" className={'form-control ' + (props.oldPassword.length === 0 ? 'is-empty' : props.errorClassOldPassword)} name="oldPassword" 
+                    value={props.oldPassword} required maxLength="15" autoComplete="off"
+                    onChange={props.fieldHandler}
+                    onBlur={props.fieldValidationHandler} />
                 </div>
-                <button className="btn btn-lg btn-primary btn-block" type="submit">Pakeisti</button>
-            </form>
-        </section>
+            </div>
+            <div className="form-group">
+                <label className="control-label col-sm-3">Naujas slaptažodis:</label>
+                <div className="col-sm-9">
+                    <input type="password" className={'form-control ' + (props.newPassword.length === 0 ? 'is-empty' : props.errorClassNewPassword)} name="newPassword" 
+                    value={props.newPassword} required maxLength="15" autoComplete="off"
+                    onChange={props.fieldHandler}
+                    onBlur={props.fieldValidationHandler} />
+                </div>
+            </div>
+            <div className="form-group">
+                <label className="control-label col-sm-3">Pakartokite naują slaptažodį:</label>
+                <div className="col-sm-9">
+                    <input type="password" className={'form-control ' + (props.newPasswordRepeat.length === 0 ? 'is-empty' : props.errorClassNewPasswordRepeat)} name="newPasswordRepeat" 
+                    value={props.newPasswordRepeat} required maxLength="15" autoComplete="off"
+                    onChange={props.fieldHandler}
+                    onBlur={props.fieldValidationHandler} />
+                </div>
+            </div>
+            <div className="form-group">        
+                <div className="col-sm-offset-3 col-sm-9">
+                    <button className="btn btn-primary" type="submit" disabled={!props.formValid}>Pakeisti</button>
+                </div>
+            </div>
+        </form>
     </div> 
     )
 }
 
+
+
+              
+                   
+                      
+                                
+                          
+                       

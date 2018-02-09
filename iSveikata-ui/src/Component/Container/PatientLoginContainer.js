@@ -15,7 +15,7 @@ class PatientLoginContainer extends Component{
             infoState:'',
 
             formErrors: {patientId: '', password: ''},
-            fieldState: {patientId: 'form-control is-empty', password: 'form-control is-empty'},
+            fieldState: {patientId: 'is-empty', password: 'is-empty'},
             patientIdValid: false,
             passwordValid: false,    
             formValid: false,
@@ -44,7 +44,6 @@ class PatientLoginContainer extends Component{
         
     }
     
-
     fieldHandler = (e) => {
         // e === event
         const name = e.target.name;
@@ -57,8 +56,14 @@ class PatientLoginContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.value;
-      
-        this.validateField(name, value);
+
+        if(value.length !== 0) {
+         
+            this.validateField(name, value);
+        } else {
+            let nameValid = name + 'Valid';
+            this.setState({[nameValid]: false}, this.validateForm);      
+        }    
     }
 
     validateField = (fieldName, value) => {
@@ -125,7 +130,7 @@ class PatientLoginContainer extends Component{
                     fieldValidationErrors.patientId = 'Įveskite 11 skaitmenų asmens kodą.';
                 }
 
-                fieldValidationState.patientId = patientIdValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.patientId = patientIdValid ? 'is-valid' : 'is-invalid';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
@@ -134,7 +139,7 @@ class PatientLoginContainer extends Component{
                 passwordValid = value.length >= 8 && value.length <= 15;
                 // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių.
                 fieldValidationErrors.password = passwordValid ? '' : (value.length < 8 ? 'Slaptažodis per trumpas.' : 'Slaptažodis per ilgas.');
-                fieldValidationState.password = passwordValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.password = passwordValid ? 'is-valid' : 'is-invalid';
                 break;
             default:
                 break;

@@ -22,7 +22,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Asmens kodas:</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className={props.erorrClassPatientId} name="patientId" 
+                                            <input type="text" className={'form-control ' + props.errorClassPatientId} name="patientId" 
                                             value={props.patientId} required maxLength="11" placeholder="Asmens kodas"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />
@@ -42,7 +42,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Vardas:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className={props.erorrClassFirstName} name="firstName"
+                                            <input type="text" className={'form-control ' + props.errorClassFirstName} name="firstName"
                                             value={props.firstName} required maxLength="225" placeholder="Paciento vardas"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />
@@ -51,7 +51,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3" >Pavardė:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className={props.erorrClassLastName} name="lastName"
+                                            <input type="text" className={'form-control ' + props.errorClassLastName} name="lastName"
                                             value={props.lastName} required maxLength="225" placeholder="Paciento pavardė"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />

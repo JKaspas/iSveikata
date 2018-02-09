@@ -16,7 +16,7 @@ class UserLoginContainer extends Component{
             infoState:'',
 
             formErrors: {userName: '', password: ''},
-            fieldState: {userName: 'form-control is-empty', password: 'form-control is-empty'},
+            fieldState: {userName: 'is-empty', password: 'is-empty'},
             userNameValid: false,
             passwordValid: false,    
             formValid: false,
@@ -57,8 +57,14 @@ class UserLoginContainer extends Component{
         // e === event
         const name = e.target.name;
         const value = e.target.value;
-      
-        this.validateField(name, value);
+
+        if(value.length !== 0) {
+         
+            this.validateField(name, value);
+        } else {
+            let nameValid = name + 'Valid';
+            this.setState({[nameValid]: false}, this.validateForm);      
+        }    
     }
 
     validateField = (fieldName, value) => {
@@ -73,7 +79,7 @@ class UserLoginContainer extends Component{
                 // ^ Tikrina ar įrašytas teisingo formato vartotojo vardas. Sistemoje jis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus.
                 //Išimtis: administratoriaus vartotojo vardas.
                 fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą. Atkreipkite dėmesį į didžiąsias raides.';
-                fieldValidationState.userName = userNameValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.userName = userNameValid ? 'is-valid' : 'is-invalid';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
@@ -81,7 +87,7 @@ class UserLoginContainer extends Component{
                 passwordValid = ((value.length >= 8) && (value.length <= 15)) || (value === "123");
                 // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. Išimtis: administratoriaus slaptažodis.
                 fieldValidationErrors.password = passwordValid ? '' : (value.length < 8 ? 'Slaptažodis per trumpas.' : 'Slaptažodis per ilgas.');
-                fieldValidationState.password = passwordValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.password = passwordValid ? 'is-valid' : 'is-invalid';
                 break;
             default:
                 break;

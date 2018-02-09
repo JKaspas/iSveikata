@@ -13,7 +13,7 @@ export default class AdminCreatePatientContainer extends Component{
             lastName:'',
 
             formErrors: {firstName: '', lastName: '', patientId: ''},
-            fieldState: {firstName: 'form-control is-empty', lastName: 'form-control is-empty', patientId: 'form-control is-empty'},
+            fieldState: {firstName: 'is-empty', lastName: 'is-empty', patientId: 'is-empty'},
             firstNameValid: false,
             lastNameValid: false,
             patientIdValid: false,                  
@@ -132,7 +132,7 @@ export default class AdminCreatePatientContainer extends Component{
                 // ^ Tikrina ar įrašytos tik raidės. Tarp žodžių leidžiamas vienas tarpas.
                 //Vėliau su XRegExp galima būtų padaryti kad atpažintų ir kitų kalbų raides;
                 fieldValidationErrors.firstName = firstNameValid ? '' : 'Įveskite vardą.';
-                fieldValidationState.firstName = firstNameValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.firstName = firstNameValid ? 'is-valid' : 'is-invalid';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
@@ -140,7 +140,7 @@ export default class AdminCreatePatientContainer extends Component{
                 lastNameValid = value.match(/^[a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+( [a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+)*$/g);
                 // ^ Tikrina ar įrašytos tik raidės. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
-                fieldValidationState.lastName = lastNameValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.lastName = lastNameValid ? 'is-valid' : 'is-invalid';
                 break;
             case 'patientId':
             //Patikrinama ar įrašyta 11 skaitmenų.
@@ -199,7 +199,7 @@ export default class AdminCreatePatientContainer extends Component{
                     fieldValidationErrors.patientId = 'Įveskite 11 skaitmenų asmens kodą.';
                 }
 
-                fieldValidationState.patientId = patientIdValid ? 'form-control is-valid' : 'form-control is-invalid';
+                fieldValidationState.patientId = patientIdValid ? 'is-valid' : 'is-invalid';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
@@ -223,9 +223,9 @@ export default class AdminCreatePatientContainer extends Component{
     render(){
         return(
             <PatientForm 
-            erorrClassPatientId={this.state.fieldState.patientId}
-            erorrClassFirstName={this.state.fieldState.firstName}
-            erorrClassLastName={this.state.fieldState.lastName}
+            errorClassPatientId={this.state.fieldState.patientId}
+            errorClassFirstName={this.state.fieldState.firstName}
+            errorClassLastName={this.state.fieldState.lastName}
             infoState={this.state.infoState}
             formErrors={this.state.formErrors}
             formValid={this.state.formValid}
