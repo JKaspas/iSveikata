@@ -51,9 +51,8 @@ public class EmployeesService {
 	 * Adds new user.
 	 *  @param employee the employee
 	 * @param specialization
-	 * @param drugStore
 	 */
-	public void addEmployee(Employee employee, Specialization specialization, String drugStore) {
+	public void addEmployee(Employee employee, Specialization specialization) {
 		if (employee instanceof Doctor) {
 			Specialization spec = null;
 			if (specializationRepository.findByTitle(specialization.getTitle()) == null) {
