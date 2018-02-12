@@ -56,10 +56,9 @@ class DoctorViewContainer extends Component{
                     listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false
-
                  })
             } 
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -99,17 +98,17 @@ class DoctorViewContainer extends Component{
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-            patientViewLink=(<td><DoctorViewPatientLink patientId={patient.patientId} /></td>)
+            patientViewLink=(<td><DoctorViewPatientLink patientId={patient.id} /></td>)
         }
         return (
             <PatientListingItem
-                key={index}
-                patientId={patient.patientId}
+                key={patient.id}
+                patientId={patient.id}
                 birthDate={patient.birthDate}
                 fullName={patient.fullName}
     
-                recordLink={<td><NewRecordLink  patientId={patient.patientId}/></td>}
-                prescriptionLink={<td><NewPrescriptionLink  patientId={patient.patientId}/></td>}
+                recordLink={<td><NewRecordLink  patientId={patient.id}/></td>}
+                prescriptionLink={<td><NewPrescriptionLink  patientId={patient.id}/></td>}
                 doctorViewPatient={patientViewLink}
                   
                     

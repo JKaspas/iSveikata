@@ -86,12 +86,11 @@ export default class AdminBindUserPartContainer extends Component{
     composePatient = (patient, index) =>{
         return (
             <PatientListingItem 
-                key={index}
-                patientId={patient.patientId}
+                key={patient.id}
+                patientId={patient.id}
                 birthDate={patient.birthDate}
                 fullName={patient.fullName}
-                patientBindLink={<td><PatientBindLink bindClick={this.bindClick} patientId={patient.patientId}/></td>}
-                
+                patientBindLink={<td><PatientBindLink bindClick={this.bindClick} patientId={patient.id}/></td>}
             />
         )
     }
@@ -134,6 +133,8 @@ export default class AdminBindUserPartContainer extends Component{
         <div className="container">
             <section>
                 <div className="panel-group">
+                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+                <p/>
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h4>Priskirkite pacientą gydytojui</h4>

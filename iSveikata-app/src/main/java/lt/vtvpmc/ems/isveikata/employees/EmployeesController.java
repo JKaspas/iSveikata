@@ -69,15 +69,16 @@ public class EmployeesController {
 		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
 		final Specialization specialization =  mapper.convertValue(map.get("specialization"), Specialization.class);
-		final String drugStore = mapper.convertValue(map.get("drugStore"), String.class);
+//		final String drugStore = mapper.convertValue(map.get("drugStore"), String.class);
 
 		if (employeesService.validateAddNewUser(employee)) {
-			employeesService.addEmployee(employee, specialization, drugStore);
+			employeesService.addEmployee(employee, specialization);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
 					.body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
 		}
+
 	}
 
 
@@ -167,7 +168,7 @@ public class EmployeesController {
 	@GetMapping("/doctor/{userName}/patient")
 
 	@ResponseStatus(HttpStatus.OK)
-	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
+	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
 

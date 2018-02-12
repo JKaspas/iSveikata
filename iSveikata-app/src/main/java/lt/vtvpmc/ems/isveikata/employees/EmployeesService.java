@@ -51,9 +51,8 @@ public class EmployeesService {
 	 * Adds new user.
 	 *  @param employee the employee
 	 * @param specialization
-	 * @param drugStore
 	 */
-	public void addEmployee(Employee employee, Specialization specialization, String drugStore) {
+	public void addEmployee(Employee employee, Specialization specialization) {
 		if (employee instanceof Doctor) {
 			Specialization spec = null;
 			if (specializationRepository.findByTitle(specialization.getTitle()) == null) {
@@ -91,22 +90,12 @@ public class EmployeesService {
 	 */
 	public Page<Doctor> getActiveDoctorsList(Pageable pageable) {
 		//return doctorRepository.findAllByType(Doctor.class.getSimpleName());
-		return employeesRepository.findAllDoctor( new PageRequest(pageable.getPageNumber() - 1,pageable.getPageSize()));
+		PageRequest request = new PageRequest(pageable.getPageNumber(),pageable.getPageSize());
+		return employeesRepository.findAllDoctor(request.previousOrFirst());
 //=======
 //	public List<DoctorDto> getActiveDoctorsList() {
 //		return doctorMapper.doctorsToDto(doctorRepository.findAllByType(Doctor.class.getSimpleName()));
 //>>>>>>> dtos
-	}
-
-	/**
-	 * Gets the doctor patient list.
-	 *
-	 * @param userName the user name
-	 * @return the doctor patient list
-	 */
-	public List<PatientDto> getDoctorPatientList(String userName) {
-		Doctor doctor = (Doctor) employeesRepository.findByUserName(userName);
-		return patientMapper.patiensToDto(doctor.getPatient().stream().filter(patient -> patient.isActive()).collect(Collectors.toList()));
 	}
 
 	/**

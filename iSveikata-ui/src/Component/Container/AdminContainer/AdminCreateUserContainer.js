@@ -131,7 +131,8 @@ export default class AdminCreateUserContainer extends Component{
     submitHandler = (e) =>{
         
         e.preventDefault();
-
+        console.log(this.userObjectByType())
+        console.log(this.fullCompanyName())
         axios.post('http://localhost:8080/api/admin/new/user', {
             employee:this.userObjectByType(),
             specialization:this.specializationObject(),
