@@ -168,7 +168,7 @@ public class EmployeesController {
 	@GetMapping("/doctor/{userName}/patient")
 
 	@ResponseStatus(HttpStatus.OK)
-	private Page<Patient> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
+	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable){
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
 	}
 
