@@ -20,7 +20,7 @@ const RecordListView = (props) =>{
             </thead>
             <tbody > 
                 {/* id="recorTableBody" */}
-                {props.record}
+                {props.records}
             </tbody>
         </table>
         {props.notFound}
