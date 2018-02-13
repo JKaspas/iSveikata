@@ -27,3 +27,11 @@ textarea {
 	resize: vertical;
 	overflow: auto;
 }
+
+label {
+	color: #000000 !important;
+}
+
+h2 {
+	padding-bottom: 30px;
+}

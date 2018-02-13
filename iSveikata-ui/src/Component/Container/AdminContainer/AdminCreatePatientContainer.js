@@ -86,13 +86,13 @@ export default class AdminCreatePatientContainer extends Component{
     generateBirthDate = () => {
         let birthDateAutoInput = '';
           
-        let patientIdAsString = this.state.patientId.toString();
-    
-        let birthYearLastdigitsAsString = patientIdAsString.substring(1, 3);
-        let birthMonthAsString = patientIdAsString.substring(3, 5); 
-        let birthDayAsString = patientIdAsString.substring(5, 7);
-    
         if(this.state.patientIdValid) {
+            let patientIdAsString = this.state.patientId.toString();
+    
+            let birthYearLastdigitsAsString = patientIdAsString.substring(1, 3);
+            let birthMonthAsString = patientIdAsString.substring(3, 5); 
+            let birthDayAsString = patientIdAsString.substring(5, 7);
+            
             if(patientIdAsString.charAt(0) === "3" || patientIdAsString.charAt(0) === "4") {
                 birthDateAutoInput = "19" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
             } else if(patientIdAsString.charAt(0) === "5" || patientIdAsString.charAt(0) === "6") {
