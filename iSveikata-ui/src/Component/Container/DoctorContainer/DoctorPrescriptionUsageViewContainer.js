@@ -20,7 +20,9 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-
+        
+        
+        
        this.getPrescriptionUsage();
     }
 

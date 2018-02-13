@@ -228,6 +228,8 @@ export default class DoctorPatientViewContainer extends Component{
         this.loadSpecificPrescription(rowId);
     }
 
+
+
      //handle paggination page changes 
      handlePageChange = (activePage) => {
         //by content type (record/prescription) send request for specific page
