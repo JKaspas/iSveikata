@@ -45,5 +45,11 @@ public interface JpaPatientRepository extends JpaRepository<Patient, Long> {
 	Page<Patient> findAllActivePatientBySearchValue(@Param("searchValue") String searchValue,
 														 Pageable pageRequest);
 
-
+	@Query("SELECT t FROM Patient t WHERE " +
+			"(t.isActive = true AND  " +
+			"t.doctor IS NULL) AND" +
+			"(LOWER(t.firstName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
+			"LOWER(t.lastName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
+			"LOWER(t.patientId) LIKE LOWER(CONCAT('%',:searchValue, '%')))")
+	Page<Patient> findAllActiveNotBindPatientBySearchValue(@Param("searchValue") String searchValue, Pageable pageable);
 }

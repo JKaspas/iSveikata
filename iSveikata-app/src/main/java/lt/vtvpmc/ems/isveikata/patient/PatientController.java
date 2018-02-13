@@ -57,10 +57,23 @@ public class PatientController {
 
 	}
 
-	// dubliuojasi su doctor/notbind
-	@GetMapping("/notBind")
+	/**
+	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/notbind")
 	private Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
 		return patientService.getPatientListWithoutDoctor(pageable);
+	}
+	/**
+	 * Gets all active and not bind with doctor patients by searchValue (firstName, lastName, patientId)
+	 *
+	 * @return all active and not bind with doctor patients
+	 */
+	@GetMapping("/notbind/{searchValue}/search")
+	private Page<PatientDto> getPatientListWithoutDoctor(@PathVariable String searchValue, Pageable pageable) {
+		return patientService.getPatientListWithoutDoctorBySearchValue(searchValue, pageable);
 	}
 
 	/**

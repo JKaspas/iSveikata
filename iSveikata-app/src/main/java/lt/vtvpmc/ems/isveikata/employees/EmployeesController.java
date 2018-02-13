@@ -251,16 +251,6 @@ public class EmployeesController {
 		return employeesService.getType(userName);
 	}
 
-	// dubliuojasi su patient/notbind
-	/**
-	 * Gets all active and not bind with doctor patients URL: /api/doctor/notbind.
-	 *
-	 * @return all active and not bind with doctor patients
-	 */
-	@GetMapping("/doctor/notbind")
-	private Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
-		return patientService.getPatientListWithoutDoctor(pageable);
-	}
 	
 	/**
 	 * Delete user.

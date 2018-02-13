@@ -289,7 +289,7 @@ public class PatientService {
 	}
 
 	/**
-	 * Return all active paged patient list by searchValue (firstName, lastName,
+	 * Return all active paged patient list by searchValue (firstName, lastName)
 	 * patientId)
 	 *
 	 * @param pageable
@@ -302,10 +302,27 @@ public class PatientService {
 
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllActivePatientBySearchValue(searchValue,
-				pageable.previousOrFirst());
+		Page<Patient> patientPage = patientRepository.findAllActivePatientBySearchValue(searchValue,request);
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
 
+	/**
+	 * Return all active not bind patient by searchValue (firstName, lastName, patientId)
+	 * patientId)
+	 *
+	 * @param pageable
+	 *
+	 * @param searchValue
+	 *            searchable value (firstName, lastName, patientId)
+	 *
+	 * @return paged list of patient
+	 */
+
+	public Page<PatientDto> getPatientListWithoutDoctorBySearchValue(String searchValue, Pageable pageable) {
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		Page<Patient> patientPage = patientRepository.findAllActiveNotBindPatientBySearchValue(searchValue, request);
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
+		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+	}
 }

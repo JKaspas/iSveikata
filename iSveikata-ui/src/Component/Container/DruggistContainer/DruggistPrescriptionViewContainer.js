@@ -66,11 +66,13 @@ class DruggistViewContainer extends Component{
     showDetails = (prescriptionId) =>{    
         this.loadSpecificPrescription(prescriptionId)
         this.closeOpenDetails()
-        console.log(prescriptionId)
     }
 
     composePrescription = (prescription, index) =>{
- 
+        if(new Date(prescription.expirationDate) < new Date()){
+            return null
+        }
+
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -86,7 +88,7 @@ class DruggistViewContainer extends Component{
     }
     prescriptionUsageSubmit = (prescriptionId) =>{
         let currentDate = new Date();
-        axios.post('http://localhost:8080//api/prescription/'+prescriptionId+'/new/usage',{
+        axios.post('http://localhost:8080/api/prescription/'+prescriptionId+'/new/usage',{
             usage:{
                 usageDate:currentDate
             },
@@ -108,7 +110,7 @@ class DruggistViewContainer extends Component{
     }
 
     loadSpecificPrescription = (prescriptionId) =>{
-        axios.get('http://localhost:8080//api/prescription/'+prescriptionId)
+        axios.get('http://localhost:8080/api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId)

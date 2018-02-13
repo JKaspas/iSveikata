@@ -7,6 +7,7 @@ import Pagination from "react-js-pagination"
 import PatientListView from '../AdminComponent/PatientListView'
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';
+import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 
 export default class AdminBindUserPartContainer extends Component{
     constructor(){
@@ -22,15 +23,11 @@ export default class AdminBindUserPartContainer extends Component{
             itemsPerPage:8,
             listLength:'',
 
-            listIsEmpty:false
+            listIsEmpty:false,
+
+            searchValue:''
         }
     }
-
-    fieldHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
-    
-    }
-  
   
     componentWillMount = () =>{
         
@@ -42,12 +39,35 @@ export default class AdminBindUserPartContainer extends Component{
     }
 
     getPatientList = (activePage) =>{
-        axios.get('http://localhost:8080/api/doctor/notbind?page='+activePage+'&size='+this.state.itemsPerPage)
+        axios.get('http://localhost:8080/api/patient/notbind?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             
             if(response.data.length === 0){
                 this.setState({
-                    patientList:(<h3>Gydytojams nepriskirtų pacientų daugiau nėra.</h3>),
+                    patientList:(<h3>Gydytojams nepriskirtų pacientų nėra.</h3>),
+                    listIsEmpty:true,
+                })
+            }else{
+                this.setState({
+                    patientList:<PatientListView patients={response.data.content.map(this.composePatient)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            console.log(erorr)
+        })
+    }
+    getPatientListBySearchValue = (searchValue, activePage) =>{
+        axios.get('http://localhost:8080/api/patient/notbind/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            
+            if(response.data.length === 0){
+                this.setState({
+                    patientList:(<h3>Gydytojams nepriskirtų pacientų nėra.</h3>),
                     listIsEmpty:true,
                 })
             }else{
@@ -95,11 +115,38 @@ export default class AdminBindUserPartContainer extends Component{
         )
     }
 
+    fielddHandler = (e) =>{
+        this.setState({
+            searchValue:e.target.value
+        })
+    }
+    
+    searchdHandler = (e) =>{
+        e.preventDefault();
+        if(this.state.searchValue.length > 2){
+            this.getPatientListBySearchValue(this.state.searchValue, 1)
+        }else if(this.state.searchValue.length === 0){
+           this.getPatientList(1)
+        }else{
+            this.setState({
+                patientList:(<h3>Įveskit bent 3 simbolius</h3>),
+                listIsEmpty:true,
+            })
+        }
+        this.setState({
+            activePage:1
+        })
+    }
+
      //handle paggination page changes 
     handlePageChange = (activePage) => {
-        
-        //sen request for specific page
-        this.getPatientList(activePage);
+        if(this.state.searchValue.length > 2){
+            //send request for specific page when searchValue longer than 2 
+            this.getPatientListBySearchValue(this.state.searchValue, activePage)
+        }else{
+            //sen request for specific page
+            this.getPatientList(activePage);
+        }
         
         //change activePage state to new page number
         this.setState({
@@ -142,15 +189,18 @@ export default class AdminBindUserPartContainer extends Component{
                         <div className="panel-body">
                             {this.state.infoState}
                             <div className="col-sm-12">
-                                {/* <div className="col-sm-4 col-sm-offset-4">
-                                    <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
-                                </div> */}
+                                <h4 className="text-center" >Prašome įvesti bent 3 simbolius</h4>
+                                <SearchFieldForm
+                                        searchHandler={this.searchdHandler}
+                                        fielddHandler={this.fielddHandler}
+                                        searchValue={this.state.searchValue}
+                                        searchPlaceHolder={"Pacientų paieška"}
+                                        searchType={"text"}
+                                    />
                             </div>
-                            
                             <div className="col-sm-12">
                                 {this.state.patientList}
                                  {this.showPagination()}
-                                
                             </div>
                         </div> 
                     </div> 
