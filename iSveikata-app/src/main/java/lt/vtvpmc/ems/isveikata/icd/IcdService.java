@@ -1,10 +1,12 @@
 package lt.vtvpmc.ems.isveikata.icd;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import javax.transaction.Transactional;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -18,7 +20,7 @@ public class IcdService {
     }
 
     public List<Icd> getAllIcd() {
-        return jpaIcdRepository.findAll();
+    	return jpaIcdRepository.findAll(new Sort(Sort.Direction.ASC, "icdCode"));
     }
 
     public String getIcdTitle(String icdCode) {
