@@ -10,21 +10,19 @@ import org.mapstruct.Mappings;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
 
-@Mapper(componentModel = "spring")
+@Mapper(uses = { DoctorMapper.class }, componentModel = "spring")
 public interface MedicalRecordMapper {
-	String delimiter = " ";
 
-	@Mappings({ 
-		@Mapping(source = "appointment.date", target = "appointmentDate"),
-		@Mapping(source = "appointment.duration", target = "appoitmentDuration"),
-		@Mapping(source = "appointment.description", target = "appointmentDescription"),
-		@Mapping(source = "icd.icdCode", target = "icdCode"),
-		@Mapping(source = "icd.title", target = "icdDescription"),
-		@Mapping(target = "doctorFullName", source="doctor.lastName")
-		})
+	@Mappings({ @Mapping(source = "appointment.date", target = "appointmentDate"),
+			@Mapping(source = "appointment.duration", target = "appoitmentDuration"),
+			@Mapping(source = "appointment.description", target = "appointmentDescription"),
+			@Mapping(source = "icd.icdCode", target = "icdCode"),
+			@Mapping(source = "icd.title", target = "icdDescription"),
+			@Mapping(target = "doctorFullName", expression="java(medicalRecord.getDoctor().getFirstName() + \" \" + medicalRecord.getDoctor().getLastName())")
+	})
 	MedicalRecordDto medicalRecordToDto(MedicalRecord medicalRecord);
 
 	@InheritConfiguration
-	List<MedicalRecordDto> medicalRecordsToDto(List<MedicalRecord> medicalRecords);
+	List<MedicalRecordDto> medicalRecordsToDto(List<MedicalRecord> medicalRecords);	
 
 }

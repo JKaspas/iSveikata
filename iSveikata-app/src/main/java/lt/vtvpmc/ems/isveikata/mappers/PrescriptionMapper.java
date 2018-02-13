@@ -17,7 +17,7 @@ public interface PrescriptionMapper {
 			@Mapping(source = "ingredientAmount", target = "amount"),
 			@Mapping(source = "api.title", target = "apiTitle"),
 			@Mapping(source = "api.measurements", target ="apiUnits"),
-			@Mapping(source = "doctor.lastName", target = "doctorFullName"),
+			@Mapping(target = "doctorFullName", expression = "java(prescription.getDoctor().getFirstName() + \" \" + prescription.getDoctor().getLastName())"),
 		})
 	PrescriptionDto prescriptionToDto(Prescription prescription);
 

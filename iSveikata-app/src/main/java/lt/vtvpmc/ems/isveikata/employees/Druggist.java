@@ -16,6 +16,4 @@ public class Druggist extends Employee {
 	@NotNull
 	private String drugStore;
 
-
-
 }

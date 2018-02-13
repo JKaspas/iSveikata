@@ -12,10 +12,9 @@ import lt.vtvpmc.ems.isveikata.employees.DoctorDto;
 
 @Mapper(componentModel = "spring", uses = SpecializationMapper.class)
 public interface DoctorMapper {
-	String delimiter = " ";
 	
 	@Mappings({ 
-		@Mapping(target = "fullName", expression = "java(doctor.getFirstName() + delimiter + doctor.getLastName())"),
+		@Mapping(target = "fullName", expression = "java(doctor.getFirstName() + \" \" + doctor.getLastName())"),
 		@Mapping(target = "specialization", source="specialization.title")})
 	DoctorDto doctorToDto(Doctor doctor);
 	

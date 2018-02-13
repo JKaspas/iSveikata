@@ -54,7 +54,6 @@ public class Prescription implements Serializable {
     private long useAmount;
 	public void addUsage() {
 		useAmount++;
-		
 	}
 
 }
