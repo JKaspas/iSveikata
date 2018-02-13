@@ -14,6 +14,7 @@ import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordCont
 import DoctorPrescriptionContainer from '../Container/DoctorContainer/DoctorPrescriptionContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
 import DoctorPrescriptionUsageViewContainer from '../Container/DoctorContainer/DoctorPrescriptionUsageViewContainer'
+import PatientPrescriptionUsageViewContainer from '../Container/PatientContainer/PatientPrescriptionUsageViewContainer'
 
 import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
 import DruggistPrescriptionViewContainer from '../Container/DruggistContainer/DruggistPrescriptionViewContainer'
@@ -75,6 +76,7 @@ var RouteComponent = () =>{
             <Route path="/patient/record" component={PatientRecordContainer} />
             <Route path="/patient/prescription" component={PatientPrescriptionContainer} />
             <Route path="/patient/password" component={PatientPasswordContainer} />
+            <Route path="/pacientas/receptas/:prescriptionId/panaudojimai" component={PatientPrescriptionUsageViewContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
       </Router>)

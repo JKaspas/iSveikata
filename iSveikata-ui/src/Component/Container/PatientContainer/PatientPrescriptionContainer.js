@@ -73,7 +73,7 @@ export default class PatientPrescriptionContainer extends Component{
     composePrescription = (prescription, index) =>{
         var usageLink = '';
         if(prescription.useAmount > 0){
-            usageLink=<Link to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
+            usageLink=<Link to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
         }
 
         return(
@@ -195,4 +195,3 @@ export default class PatientPrescriptionContainer extends Component{
         </div>)
     }
 }
-
