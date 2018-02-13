@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Link} from 'react-router'
 import Pagination from "react-js-pagination"
 
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
@@ -40,8 +39,7 @@ export default class PatientRecordContainer extends Component{
     }
    
     componentWillMount = () =>{
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(this.session === null || this.session.patient.loggedIn !== true){
+            if(this.session === null || this.session.patient.loggedIn !== true){
             this.props.router.push('/pacientams');
             return '';
         }
@@ -53,9 +51,7 @@ export default class PatientRecordContainer extends Component{
         +this.session.patient.patientId+'/record?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
-            document.getElementById("record-tab").style.background = "lightGrey"
-
-            if(response.data.content.length === 0){
+                if(response.data.content.length === 0){
                 this.setState({
                     viewContent:this.state.notFoundRecord
                 })
@@ -89,8 +85,8 @@ export default class PatientRecordContainer extends Component{
                 key={index}
                 id={record.id}
                 appDate={record.appointmentDate}
-                icd={record.icd.icdCode}
-                doctorName={record.doctor.doctorFullName }
+                icd={record.icdCode}
+                doctorName={record.doctorFullName }
                 // appDescription={record.appointment.description}
                 // appDuration={record.appointment.duration}
                 // compensable={record.compensable}
@@ -122,13 +118,13 @@ export default class PatientRecordContainer extends Component{
         var repetitive = record.repetitive === true? yesValue:noValue;
 
         return (<div style={{padding:'30px' }}>
-                <p>Ligos įrašo data: {record.appointment.date}</p>
-                <p>Ligos kodas: {record.icd.icdCode}</p>
-                <p>Ligos įrašą padaręs gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
-                <p>Vizito trukmė: {record.appointment.duration}</p>
+                <p>Ligos įrašo data: {record.appointmentDate}</p>
+                <p>Ligos kodas: {record.icdCode}</p>
+                <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
+                <p>Vizito trukmė: {record.appoitmentDuration}</p>
                 <p>Vizitas kompensuojamas? {compensable}</p>
                 <p>Vizitas pakartotinis? {repetitive}</p>
-                <p>Aprašymas: {record.appointment.description}</p>
+                <p>Aprašymas: {record.appointmentDescription}</p>
         </div>)
     }
 
@@ -136,7 +132,7 @@ export default class PatientRecordContainer extends Component{
     showRecordDetails = (rowId) =>{
         this.loadSpecificRecord(rowId);
         this.closeOpenDetails();
-        // console.log(rowId)
+       // console.log(rowId)
     }
 
   //onClick on (medicalRecord or pracription) show or hide div with details
@@ -218,4 +214,3 @@ export default class PatientRecordContainer extends Component{
         </div>)
     }
 }
-
