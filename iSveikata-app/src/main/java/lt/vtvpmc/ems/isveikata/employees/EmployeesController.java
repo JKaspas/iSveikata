@@ -159,6 +159,17 @@ public class EmployeesController {
 	}
 
 	/**
+	 * Get active doctor list (paged) by searchValue (firstName or lastName)
+	 *
+	 * @param searchValue
+	 * @return list of active doctor by searchValue
+	 */
+	@GetMapping("/doctor/{searchValue}/search")
+	private Page<DoctorDto> getAllDoctorBySearchValue(@PathVariable String searchValue, Pageable pageable){
+		return employeesService.getActiveDoctorBySearchValue(searchValue, pageable);
+	}
+
+	/**
 	 * Gets all active patient from given doctor URL: /api/doctor/{userName}/patient.
 	 *
 	 * @param userName
