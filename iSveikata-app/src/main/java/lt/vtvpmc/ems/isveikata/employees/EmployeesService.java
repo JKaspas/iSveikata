@@ -1,10 +1,10 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,6 @@ import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
 import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
-import lt.vtvpmc.ems.isveikata.patient.PatientDto;
 import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
@@ -88,14 +87,12 @@ public class EmployeesService {
 	 *
 	 * @return the active doctors list
 	 */
-	public Page<Doctor> getActiveDoctorsList(Pageable pageable) {
-		//return doctorRepository.findAllByType(Doctor.class.getSimpleName());
-		PageRequest request = new PageRequest(pageable.getPageNumber(),pageable.getPageSize());
-		return employeesRepository.findAllDoctor(request.previousOrFirst());
-//=======
-//	public List<DoctorDto> getActiveDoctorsList() {
-//		return doctorMapper.doctorsToDto(doctorRepository.findAllByType(Doctor.class.getSimpleName()));
-//>>>>>>> dtos
+	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
+		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		Page<Doctor> doctorPage = doctorRepository.findAllDoctor(request);
+		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
+		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
+
 	}
 
 	/**

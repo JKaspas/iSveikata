@@ -41,7 +41,7 @@ export default class AdminBindDoctorPartContainer extends Component{
     getAllDoctor = (activeNumber) =>{
         axios.get('http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage)
         .then((response)=>{
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
                 this.setState({
                     doctorList:(<h3>Sistemoje nesukurta nė viena gydytojo paskyra.</h3>),
                     listIsEmpty:true,
@@ -65,10 +65,9 @@ export default class AdminBindDoctorPartContainer extends Component{
         return(
             <DoctorListingItem
                 key={index}
-                firstName={doctor.firstName}
-                lastName={doctor.lastName}
+                fullName={doctor.fullName}
                 userName={doctor.userName}
-                specialization={doctor.specialization.title}
+                specialization={doctor.specialization}
                 doctorBindLink={<DoctorBindLink userName={doctor.userName}/>}
             />)
     }

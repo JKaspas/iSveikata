@@ -154,7 +154,7 @@ public class EmployeesController {
 	 * @return list of all doctors
 	 */
 	@GetMapping("/doctor")
-	private Page<Doctor> getAllDoctors(Pageable pageable) {
+	private Page<DoctorDto> getAllDoctors(Pageable pageable) {
 		return employeesService.getActiveDoctorsList(pageable);
 	}
 
