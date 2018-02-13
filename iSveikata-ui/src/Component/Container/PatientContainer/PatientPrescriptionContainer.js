@@ -1,11 +1,16 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router'
+import Pagination from "react-js-pagination"
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'; 
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 
 
+var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 export default class PatientPrescriptionContainer extends Component{
     constructor(props){
@@ -13,13 +18,18 @@ export default class PatientPrescriptionContainer extends Component{
         this.session =  JSON.parse(sessionStorage.getItem('session'));
         this.state = {
             prescriptions:null,
-            notFound:'',
             recordDetails:'',
             patient:'',
-            notFoundPrescription:'',
+            notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi</h3>),
             opendRecordRow:'',
-            viewContent:''
-            
+            viewContent:'',
+            contentType:'record',
+
+            listInfo:'',
+
+            activePage:1,
+            itemsPerPage:8,
+            listLength:'',
         }
     }
     componentDidCatch = (erorr, info) =>{
@@ -33,17 +43,23 @@ export default class PatientPrescriptionContainer extends Component{
             this.props.router.push('/pacientams');
             return '';
         }
-      
-       axios.get('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/prescription')
+        this.loadRecords(this.state.activePage);
+    }
+    //load all patient prescriptions and compose to view component
+    loadRecords = (activePage) =>{
+       axios.get('http://localhost:8080/api/patient/'
+       +this.session.patient.patientId+'/prescription?page='
+       +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             if(response.data.content.length === 0){
                 this.setState({
-                    notFound:(<h3>Išrašytų receptų nėra</h3>)
+                    viewContent:this.state.notFoundPrescription
                 })
             }else{
                 this.setState({
-                    prescriptions:response.data.content.map(this.composePrescription),
-                    // viewContent:<PrescriptionListView prescription={this.state.composePrescription} notFound={this.state.notFoundPrescription}/>
+                    viewContent:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)} />,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
                     })
             }
             console.log(response.data)
@@ -53,11 +69,6 @@ export default class PatientPrescriptionContainer extends Component{
         })
     }
 
-    showPrescriptionDetails = (rowId) =>{
-        this.loadSpecificPrescription(rowId);
-        this.closeOpenDetails();
-        console.log(rowId)
-    }
 
     composePrescription = (prescription, index) =>{
         var usageLink = '';
@@ -72,7 +83,7 @@ export default class PatientPrescriptionContainer extends Component{
                 id={prescription.id}
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
-                ingredientName={prescription.api.title}
+                ingredientName={prescription.apiTitle}
                 // ingredientAmount={prescription.ingredientAmount}
                 // units={prescription.ingredientUnit}
                 // description={prescription.description}
@@ -98,22 +109,27 @@ export default class PatientPrescriptionContainer extends Component{
     composeSpecificPrescription = (prescription) => {
        
         return (<div style={{padding:'30px' }}>
-                <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
+                <p>Išrašymo data: {prescription.prescriptionDate}</p>
+                <p>Galiojimo data: {prescription.expirationDate}</p>
+                <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-                <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
-                <p>Matavimo vienetai: {prescription.unit}</p>
+                <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Aprašymas: {prescription.description}</p>
         </div>)
     }
 
-    // showPrescription = () =>{
-    //     this.setState({
-    //         viewContent:<PrescriptionListView prescription={this.state.prescriptions} notFound={this.state.notFoundPrescription}/>
-    //     })
-    // }
+ //on medical record row click show prescription record details
+    showPrescriptionDetails = (rowId) =>{
+        this.loadSpecificPrescription(rowId);
+        this.closeOpenDetails();
+        console.log(rowId)
+    }
 
+
+
+//onClick on (medicalRecord or prescription) show or hide div with details
     closeOpenDetails = () =>{
         let el = document.getElementById("recordDetails")
         if(el.style.display === 'block'){
@@ -122,6 +138,32 @@ export default class PatientPrescriptionContainer extends Component{
             el.style.display = 'block'
         }
     }
+
+     //handle paggination page changes 
+ handlePageChange = (activePage) => {
+    //by content type (record/prescription) send request for specific page
+   
+        this.loadRecords(activePage);
+    
+    //change activePage state to new page number
+    this.setState({
+        activePage:activePage
+    })
+}
+ //Show paggination div with props from state
+ showPagination = () =>{
+    return (
+        <div className="col-sm-5 col-sm-offset-4">
+        <Pagination
+        activePage={this.state.activePage}
+        itemsCountPerPage={this.state.itemsPerPage}
+        totalItemsCount={this.state.listInfo.totalElements}
+        pageRangeDisplayed={5}
+        onChange={this.handlePageChange}
+        />
+    </div>
+    )
+}
 
     render() {
         return (
@@ -134,22 +176,16 @@ export default class PatientPrescriptionContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                            {/* {this.state.viewContent} */}
-                            <PrescriptionListView
-                                    prescription={this.state.prescriptions}
-                                />
-                                {this.state.notFound}
-                                <div id="recordDetails" style={{  height: '60%',
-                                                width: '60%',
-                                                border: '2px solid black',
-                                                zIndex: '2',
-                                                position: 'fixed',
-                                                top: '20%',
-                                                left: '20%',
-                                                background: 'white',
-                                                display:'none'}}>
-                                <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >Uždaryti</button> 
-                                {this.state.infoDetails}
+
+                            {this.state.viewContent}
+                                {this.showPagination()}
+
+                                <div id="recordDetails" style={backgroundStyle}>
+                                    <div  style={recordDetailWindowStyle}>
+                                        <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
+                                        {this.state.infoDetails}
+
+                                     </div>
                                 </div>
                             </div>
                         </div> 
