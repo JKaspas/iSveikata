@@ -76,8 +76,7 @@ export default class DoctorPrescriptionContainer extends Component{
         axios.get('http://localhost:8080/api/patient/'+ this.props.params.patientId)
         .then((response)=>{
             this.setState({
-                patient:response.data,
-                patientFullName:response.data.firstName + ' ' + response.data.lastName
+                patient:response.data
             })
             console.log(response.status)
         })
@@ -212,8 +211,9 @@ export default class DoctorPrescriptionContainer extends Component{
                 <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
                 <h2>Naujas receptas</h2>
                 <PatientInfoCard 
-                patientFullName={this.state.patientFullName}
-                patientId={this.state.patient.patientId}
+                patientFullName={this.state.patient.fullName}
+                date={this.state.patient.birthDate}
+                patientId={this.state.patient.id}
                 form={
                 <PrescriptionForm 
                     errorClassDescription={this.state.fieldState.description}

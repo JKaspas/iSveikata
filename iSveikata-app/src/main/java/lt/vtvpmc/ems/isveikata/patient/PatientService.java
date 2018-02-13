@@ -281,13 +281,13 @@ public class PatientService {
 	 * @return paged list of patient
 	 */
 
-	public Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
+	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
 			String searchValue) {
 		Doctor doctor = doctorRepository.findByUserName(userName);
-		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
-		return patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor, request.previousOrFirst());
-
-	//TODO    REIKIA DTO LISTUI
+		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
+		Page<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor, request);
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
+		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
 
 	/**

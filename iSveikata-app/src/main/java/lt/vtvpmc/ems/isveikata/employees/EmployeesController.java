@@ -181,7 +181,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor/{userName}/patient/{searchValue}")
 	@ResponseStatus(HttpStatus.OK)
-	private Page<Patient> getAllPagedPatientByDoctorAndBySearchValue(@PathVariable final String userName,
+	private Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(@PathVariable final String userName,
 															   @PathVariable final String searchValue,
 															   Pageable pageable){
 		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);

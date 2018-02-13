@@ -11,7 +11,6 @@ export default class DoctorRecordContainer extends Component{
         this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patient:'',
-            patientFullName:'',
             icds:'',
 
             icdCode:'A01',
@@ -60,9 +59,8 @@ export default class DoctorRecordContainer extends Component{
         .then((response)=>{
             this.setState({
                 patient:response.data,
-                patientFullName:response.data.firstName + ' ' + response.data.lastName
             })
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -188,8 +186,9 @@ export default class DoctorRecordContainer extends Component{
                 <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
                 <h2>Naujas ligos įrašas</h2>
                 <PatientInfoCard 
-                patientFullName={this.state.patientFullName}
-                patientId={this.state.patient.patientId}
+                patientFullName={this.state.patient.fullName}
+                date={this.state.patient.birthDate}
+                patientId={this.state.patient.id}
                 form={
                 <RecordForm 
                     erorrClassIcd={this.errorClass(this.state.formErrors.icd)}

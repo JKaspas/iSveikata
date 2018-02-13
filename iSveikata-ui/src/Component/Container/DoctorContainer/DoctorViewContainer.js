@@ -185,6 +185,12 @@ class DoctorViewContainer extends Component{
             }else{
                 this.getAllPatientBySearchValue(1, this.state.searchValue)            
             }
+        }else if(this.state.searchValue.length === 0){
+            if(this.state.patientType){
+                this.getDoctorPatient(this.session.user.userName, 1)  
+            }else{
+                this.getAllPatient(1)  
+            }
         }else{
             this.setState({
                 patientListView:(<h3>Įveskite daugiau simbolių</h3>),
@@ -195,8 +201,6 @@ class DoctorViewContainer extends Component{
         this.setState({
             activePage:1,
         })
-       
-        console.log("Searcrh search..."+ this.state.searchValue)
     }
     //on button click chnage patient from doctor patient or all patient and vice versa
     changePatients = () =>{

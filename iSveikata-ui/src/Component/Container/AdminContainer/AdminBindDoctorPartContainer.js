@@ -6,6 +6,7 @@ import Pagination from "react-js-pagination"
 import DoctorListView from '../AdminComponent/DoctorListView'
 import DoctorListingItem from '../AdminComponent/DoctorListingItem'
 import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
+import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 
 
 export default class AdminBindDoctorPartContainer extends Component{
@@ -19,7 +20,9 @@ export default class AdminBindDoctorPartContainer extends Component{
             activePage:1,
             itemsPerPage:8,
             listLength:'',
-            listIsEmpty:false
+            listIsEmpty:false,
+
+            searchValue:''
 
         }
     }
@@ -74,10 +77,19 @@ export default class AdminBindDoctorPartContainer extends Component{
     }
     
     
-
+    fielddHandler = (e) =>{
+        this.setState({
+            searchValue:e.target.value
+        })
+    }
     
     searchdHandler = (e) =>{
-        this.setState({[e.target.name]: e.target.value})
+        e.preventDefault();
+        
+
+
+        console.log("Looking form:...")
+        console.log(this.state.searchValue)
     }
 
      //handle paggination page changes 
@@ -123,9 +135,13 @@ export default class AdminBindDoctorPartContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                                {/* <div className="col-sm-4 col-sm-offset-4">
-                                    <input type="text" className="form-control" value={this.state.search} onChange={this.searchdHandler} placeholder="Paieška" name="search" />
-                                </div> */}
+                            <SearchFieldForm
+                                    searchHandler={this.searchdHandler}
+                                    fielddHandler={this.fielddHandler}
+                                    searchValue={this.state.searchValue}
+                                    searchPlaceHolder={"Gydytojų paieška"}
+                                    searchType={"text"}
+                                />
                             </div>
                             <div className="col-sm-12">
                                 {this.state.doctorList}
