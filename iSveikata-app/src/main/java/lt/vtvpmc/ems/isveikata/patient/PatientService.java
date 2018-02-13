@@ -138,7 +138,6 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<PrescriptionDto> getPatientPrescriptionList(Long patientId, Pageable pageable) {
-
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "id");
 		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, request);
 		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
@@ -199,14 +198,7 @@ public class PatientService {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		Page<Patient> patientPage = patientRepository.findByIsActiveTrueAndDoctorIsNull(pageable.previousOrFirst());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
-
-		// =======
-		// public List<PatientDto> getPatientListWithoutDoctor() {
-		// return
-		// patientMapper.patiensToDto(patientRepository.findByIsActiveTrueAndDoctorIsNull());
-		// >>>>>>> dtos
 	}
 
 	/**

@@ -2,14 +2,13 @@ package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.List;
 
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
-import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import org.springframework.data.domain.Page;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import lt.vtvpmc.ems.isveikata.employees.Doctor;
 
 public interface JpaPatientRepository extends JpaRepository<Patient, Long> {
 

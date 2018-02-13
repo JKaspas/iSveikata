@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @DiscriminatorValue(value = "druggist")
 public class Druggist extends Employee {
 

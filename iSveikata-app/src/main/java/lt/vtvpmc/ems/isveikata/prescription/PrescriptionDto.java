@@ -3,7 +3,6 @@ package lt.vtvpmc.ems.isveikata.prescription;
 import java.util.Date;
 
 import lombok.Data;
-import lt.vtvpmc.ems.isveikata.api.ApiDto;
 
 @Data
 public class PrescriptionDto {

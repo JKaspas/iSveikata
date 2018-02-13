@@ -17,14 +17,14 @@ import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 @Entity
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @Data
 @DiscriminatorValue(value = "doctor")
 public class Doctor extends Employee {
 
 	@ManyToOne
 	private Specialization specialization;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "doctor")
 	private List<Patient> patient;
