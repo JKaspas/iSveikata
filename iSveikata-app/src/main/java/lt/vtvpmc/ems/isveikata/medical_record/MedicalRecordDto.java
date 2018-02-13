@@ -12,7 +12,7 @@ public class MedicalRecordDto {
 	// private Long patientId;
 	// private Appointment appointment;
 	// private Icd icd;
-
+	private Long id;
 	private String doctorFullName;
 	private String icdCode;
 	private String icdDescription;

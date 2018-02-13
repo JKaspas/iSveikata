@@ -8,6 +8,7 @@ import org.mapstruct.Mappings;
 
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.patient.PatientDto;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface PatientMapper {
@@ -21,5 +22,7 @@ public interface PatientMapper {
 	PatientDto patientToDto(Patient patient);
 	
 	List<PatientDto> patiensToDto(List<Patient> patients);
+
+	//Page<PatientDto> patientsToPagedDto(Page<Patient> patients);
 	
 }

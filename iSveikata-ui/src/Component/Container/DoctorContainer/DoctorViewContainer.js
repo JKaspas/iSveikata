@@ -58,7 +58,7 @@ class DoctorViewContainer extends Component{
                     listIsEmpty:false
                  })
             } 
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -84,7 +84,7 @@ class DoctorViewContainer extends Component{
 
                 })  
             }         
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             //console.log(erorr)

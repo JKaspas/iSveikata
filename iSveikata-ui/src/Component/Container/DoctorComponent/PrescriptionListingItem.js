@@ -13,7 +13,7 @@ const PrescriptionListingItem = (props) =>{
             <td>{props.units}</td>
             <td>{props.description}</td> */}
             <td>{props.useAmount} kartų</td>
-            <td>{props.viewUsageLink}</td>
+            {props.viewUsageLink}
             
     </tr>
     )

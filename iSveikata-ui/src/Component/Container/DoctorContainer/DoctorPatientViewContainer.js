@@ -88,7 +88,7 @@ export default class DoctorPatientViewContainer extends Component{
                 })
                 
             }
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -125,8 +125,8 @@ export default class DoctorPatientViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
-                useAmount={prescription.amount}
-                viewUsageLink={usageLink}
+                useAmount={prescription.useAmount}
+                viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
             />
         )
@@ -138,7 +138,7 @@ export default class DoctorPatientViewContainer extends Component{
             this.setState({
                 infoDetails:this.composeSpecificRecord(response.data)
                 })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -152,13 +152,14 @@ export default class DoctorPatientViewContainer extends Component{
         var repetitive = record.repetitive === true? yesValue:noValue;
 
         return (<div style={{padding:'30px' }}>
-                <p>Ligos įrašo data: {record.appointment.date}</p>
-                <p>Ligos kodas: {record.icd.icdCode}</p>
-                <p>Ligos įrašą padaręs gydytojas: {record.doctor.firstName + ' ' +record.doctor.lastName} </p>
-                <p>Vizito trukmė: {record.appointment.duration}</p>
+                <p>Ligos įrašo data: {record.appointmentDate}</p>
+                <p>Ligos kodas: {record.icdCode}</p>
+                <p>Ligos aprasymas: {record.icdDescription}</p>
+                <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
+                <p>Vizito trukmė: {record.appoitmentDuration}</p>
                 <p>Vizitas kompensuojamas? {compensable}</p>
                 <p>Vizitas pakartotinis? {repetitive}</p>
-                <p>Aprašymas: {record.appointment.description}</p>
+                <p>Vizito aprašymas: {record.appointmentDescription}</p>
         </div>)
     }
 
@@ -182,10 +183,11 @@ export default class DoctorPatientViewContainer extends Component{
         return (<div style={{padding:'30px' }}>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
+                <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-                <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
-                <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
+                <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Aprašymas: {prescription.description}</p>
         </div>)
     }

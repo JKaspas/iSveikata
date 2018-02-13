@@ -56,7 +56,7 @@ class DruggistViewContainer extends Component{
                 })
             }
            
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -78,7 +78,7 @@ class DruggistViewContainer extends Component{
                 id={prescription.id}
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
-                ingredientName={prescription.api.title}
+                ingredientName={prescription.apiTitle}
                 useAmount={prescription.useAmount}
                 showDetails={this.showDetails}
             />
@@ -113,7 +113,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId)
                 })
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -125,9 +125,9 @@ class DruggistViewContainer extends Component{
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-                <p>Vaisto aktyvioji medžiaga: {prescription.apiDto.ingredientName}</p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.ingredientAmount}</p>
-                <p>Matavimo vienetai: {prescription.apiDto.unit}</p>
+                <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
+                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Aprašymas: {prescription.description}</p>
                 <button onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
                 
