@@ -63,6 +63,28 @@ export default class AdminBindDoctorPartContainer extends Component{
             console.log(erorr.response.data)
         })
     }
+    getAllDoctorBySearchValue = (searchValue, activeNumber) =>{
+        axios.get('http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activeNumber+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            if(response.data.content.length === 0){
+                this.setState({
+                    doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                    listIsEmpty:true,
+                })
+            }else{
+                this.setState({
+                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            console.log(erorr.response.data)
+        })
+    }
 
     composeDoctor = (doctor, index) =>{
         return(
@@ -84,11 +106,19 @@ export default class AdminBindDoctorPartContainer extends Component{
     
     searchdHandler = (e) =>{
         e.preventDefault();
-        
-
-
-        console.log("Looking form:...")
-        console.log(this.state.searchValue)
+        if(this.state.searchValue.length > 2){
+            this.getAllDoctorBySearchValue(this.state.searchValue, 1)
+        }else if(this.state.searchValue.length === 0){
+            this.getAllDoctor(1)
+        }else{
+            this.setState({
+                doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                listIsEmpty:true,
+            })
+        }
+        this.setState({
+            activePage:1
+        })
     }
 
      //handle paggination page changes 

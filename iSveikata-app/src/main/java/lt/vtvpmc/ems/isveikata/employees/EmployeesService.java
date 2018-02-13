@@ -88,11 +88,23 @@ public class EmployeesService {
 	 * @return the active doctors list
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
 		Page<Doctor> doctorPage = doctorRepository.findAllDoctor(request);
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
 		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
+	}
 
+	/**
+	 * Get active Doctor list (paged) by searchValue (firstName, lastName)
+	 * @param searchValue (firstName or lastName)
+	 *
+	 * @return the active doctor list by searchValue
+	 */
+	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable){
+		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
+		Page<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(searchValue, request);
+		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
+		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
 	}
 
 	/**
