@@ -1,6 +1,6 @@
 target/
 application.log
-application.log.*
+*.log.*
 
 !.mvn/wrapper/maven-wrapper.jar
 
