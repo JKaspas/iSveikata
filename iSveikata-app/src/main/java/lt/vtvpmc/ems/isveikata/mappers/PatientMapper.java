@@ -19,7 +19,5 @@ public interface PatientMapper {
 	PatientDto patientToDto(Patient patient);
 	
 	List<PatientDto> patiensToDto(List<Patient> patients);
-
-	//Page<PatientDto> patientsToPagedDto(Page<Patient> patients);
 	
 }

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 import lt.vtvpmc.ems.isveikata.specialization.SpecializationDto;
 
-@Mapper(componentModel = "spring") // , uses = { ApiMapper.class })
+@Mapper(componentModel = "spring") 
 public interface SpecializationMapper {
 
 	/**

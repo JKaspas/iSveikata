@@ -1,6 +1,5 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -41,7 +40,7 @@ public class MedicalRecordService {
 	private MedicalRecordMapper mapper;
 
 	public void createNewRecord(Map<String, Object> map) {
-		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+		final ObjectMapper mapper = new ObjectMapper(); 
 
 		Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
 		MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);

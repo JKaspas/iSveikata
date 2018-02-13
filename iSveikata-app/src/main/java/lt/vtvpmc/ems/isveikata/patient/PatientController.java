@@ -31,10 +31,7 @@ public class PatientController {
 
 	@Autowired
 	private MedicalRecordService medicalRecordService;
-
-	// TODO get /api/patient/record/{record_id} to DTO
-	// TODO get /api/patient/{patientId}/prescription to DTO
-	// TODO get /api/patient/{patientId}/record to DTO
+	
 	/**
 	 * Gets all active patients URL: /api/patient
 	 *
@@ -54,7 +51,6 @@ public class PatientController {
 	@GetMapping("/search/{searchValue}")
 	private Page<PatientDto> getPagedPatientBySearchValue(@PathVariable String searchValue, Pageable pageable) {
 		return patientService.getAllPagedPatientBySearchValue(pageable, searchValue);
-
 	}
 
 	/**
@@ -98,13 +94,6 @@ public class PatientController {
 		return patientService.getPatientRecordList(patientId, pageable);
 	}
 
-	// Sort veikia, bet tada negrąžina medical record detalių.
-	// @GetMapping("/{patientId}/record")
-	// @ResponseStatus(HttpStatus.OK)
-	// private List<MedicalRecordDto> getAllSortedMedicalRecords(){
-	// return medicalRecordService.getSortedMedicalRecords();
-	// }
-
 	/**
 	 * Gets all records URL: api/{patientId}/prescription
 	 *
@@ -114,10 +103,6 @@ public class PatientController {
 	@GetMapping("/{patientId}/prescription")
 	private Page<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") Long patientId, Pageable pageable) {
 		return patientService.getPatientPrescriptionList(patientId, pageable);
-		// private List<PrescriptionDto> getPrescriptionList(@PathVariable("patientId")
-		// Long patientId) {
-		// return patientService.getPatientPrescriptionList(patientId);
-		// >>>>>>> dtos
 	}
 
 	// /**
