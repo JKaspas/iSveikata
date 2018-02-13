@@ -137,9 +137,12 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<PrescriptionDto> getPatientPrescriptionList(Long patientId, Pageable pageable) {
+
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId,
 				pageable.previousOrFirst());
+//		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, pageable.previousOrFirst());
+//>>>>>>> 3d96c86809ccfddc59b5bbe7807e01fb1f892932
 		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
 		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
 	}

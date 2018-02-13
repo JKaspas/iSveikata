@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
@@ -11,5 +12,6 @@ public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord,
 	List<MedicalRecord> findAllByOrderByIdDesc();
 
 	Page<MedicalRecord> findAllByPatientPatientId(Long patientId, Pageable request);
+//	Page<MedicalRecord>  findByAndSort(Long patientId, Pageable request, Sort sort);
 
 }

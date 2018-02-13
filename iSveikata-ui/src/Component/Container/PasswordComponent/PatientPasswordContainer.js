@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
 import { ChangePasswordForm } from './ChangePasswordForm';
 
@@ -35,7 +35,7 @@ export default class PatientPasswordContainer extends Component{
     submitHandler = (e) =>{
 
         e.preventDefault();
-        if(this.state.newPassword === this.state.newPasswordRepeat){
+        if(this.state.formValid){
             axios.put('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/password', {
                 oldPassword:this.state.oldPassword,
                 newPassword:this.state.newPassword
@@ -54,9 +54,14 @@ export default class PatientPasswordContainer extends Component{
             })
         }else{
             this.setState({
-                infoState:<div className="alert alert-danger"><strong>Naujai pateikti slaptažodžiai nesutampa</strong></div>
+                infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
             })
         }
+    }
+
+    disableActions = (e) => {
+        // e === event
+        e.preventDefault();
     }
 
     fieldHandler = (e) => {
@@ -71,6 +76,28 @@ export default class PatientPasswordContainer extends Component{
        // }
     }
 
+    fieldOnFocusHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+ 
+        let fieldValidationState = this.state.fieldState;
+      
+        switch (name) {
+            case 'oldPassword':
+                fieldValidationState.oldPassword = 'is-empty';
+                break;
+            case 'newPassword':
+                fieldValidationState.newPassword = 'is-empty';
+                break;
+            case 'newPasswordRepeat':
+                fieldValidationState.newPasswordRepeat = 'is-empty';
+                break;
+            default:
+                break;
+        }
+        this.setState({fieldState: fieldValidationState, infoState: ''});
+    }
+
     fieldValidationHandler = (e) => {
         // e === event
         const name = e.target.name;
@@ -81,7 +108,27 @@ export default class PatientPasswordContainer extends Component{
             this.validateField(name, value);
         } else {
             let nameValid = name + 'Valid';
-            this.setState({[nameValid]: false}, this.validateForm);      
+         
+            let fieldValidationErrors = this.state.formErrors;
+            let fieldValidationState = this.state.fieldState;
+            let newPasswordRepeat = this.state.newPasswordRepeat;
+            switch (name) {
+                case 'oldPassword':
+                    fieldValidationErrors.oldPassword = '';
+                    break;
+                case 'newPassword':
+                    fieldValidationErrors.newPassword = '';
+                    fieldValidationErrors.newPasswordRepeat = '';
+                    fieldValidationState.newPasswordRepeat = 'is-empty';
+                    newPasswordRepeat = '';
+                    break;
+                case 'newPasswordRepeat':
+                    fieldValidationErrors.newPasswordRepeat = '';
+                    break;
+                default:
+                    break;
+            }
+            this.setState({[nameValid]: false, formErrors: fieldValidationErrors, fieldState: fieldValidationState, newPasswordRepeat:newPasswordRepeat}, this.validateForm);
         }    
     }
 
@@ -94,40 +141,38 @@ export default class PatientPasswordContainer extends Component{
       
         switch (fieldName) {
             case 'oldPassword':
-                oldPasswordValid = value.length >= 8;
-                // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. 
+                oldPasswordValid = (value.length >= 8) || (value === "123");
+                // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. Išimtis: administratoriaus slaptažodis.
                 fieldValidationErrors.oldPassword = oldPasswordValid ? '' : 'Įvestas slaptažodis per trumpas.';
-                fieldValidationState.oldPassword = oldPasswordValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.oldPassword = oldPasswordValid ? 'has-success' : 'has-error';
                 break;
             case 'newPassword':
                 if(value.length >= 8) { 
-
                     if(value !== this.state.oldPassword) {
                         newPasswordValid = true;
                         fieldValidationErrors.newPassword = '';
-
-                        newPasswordRepeatValid = value === this.state.newPasswordRepeat ? true : false; 
-                        fieldValidationErrors.newPasswordRepeat = newPasswordRepeatValid ? '' : (this.state.newPasswordRepeat.length === 0 ? '' : 'Slaptažodžiai nesutampa!');
-                        fieldValidationState.newPasswordRepeat = newPasswordRepeatValid ? 'is-valid' : (this.state.newPasswordRepeat.length === 0 ? '' : 'is-invalid');   
                     } else {
                         newPasswordValid = false;
                         fieldValidationErrors.newPassword = 'Naujas slaptažodis sutampa su senuoju.'; 
                     }
-
                 } else {
                     newPasswordValid = false;
                     fieldValidationErrors.newPassword = 'Naujas slaptažodis per trumpas.';
                 }
 
-                fieldValidationState.newPassword = newPasswordValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.newPassword = newPasswordValid ? 'has-success' : 'has-error';
+
+                newPasswordRepeatValid = value === this.state.newPasswordRepeat ? true : false; 
+                fieldValidationErrors.newPasswordRepeat = newPasswordRepeatValid ? '' : (this.state.newPasswordRepeat.length === 0 ? '' : 'Slaptažodžiai nesutampa!');
+                fieldValidationState.newPasswordRepeat = newPasswordRepeatValid ? 'has-success' : (this.state.newPasswordRepeat.length === 0 ? 'is-empty' : 'has-error');   
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-                //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
+                //Čia "has-success" / "has-error" yra viena iš formos elemento klasių. 
                 break;
             case 'newPasswordRepeat':
                 newPasswordRepeatValid = value === this.state.newPassword;
                 // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. Išimtis: administratoriaus slaptažodis.
-                fieldValidationErrors.newPasswordRepeat = newPasswordRepeatValid ? '' : 'Slaptažodžiai nesutampa!';
-                fieldValidationState.newPasswordRepeat = newPasswordRepeatValid ? 'is-valid' : 'is-invalid';
+                fieldValidationErrors.newPasswordRepeat = newPasswordRepeatValid ? '' : 'Naujasis slaptažodis pakartotas neteisingai!';
+                fieldValidationState.newPasswordRepeat = newPasswordRepeatValid ? 'has-success' : 'has-error';
                 break;
             default:
                 break;
@@ -140,7 +185,7 @@ export default class PatientPasswordContainer extends Component{
                     }, this.validateForm);
     }
 
-    //Paspausti "submit" leidžiama tik jei visi laukai įvesti teisingai.
+    //Jei bent vienas laukas neįvestas teisingai, paspaudus "submit" pasirodo perspėjimas.
     validateForm = () => {
         this.setState({formValid: this.state.oldPasswordValid && this.state.newPasswordValid && this.state.newPasswordRepeatValid});
     }
@@ -148,14 +193,15 @@ export default class PatientPasswordContainer extends Component{
     render(){
         return( 
             <div className='container'>
-                <section>
-                    <h2>Slaptažodžio keitimas</h2>      
+                <section>     
                     <ChangePasswordForm
-                    errorClassOldPassword={this.state.fieldState.oldPassword}
-                    errorClassNewPassword={this.state.fieldState.newPassword}
-                    errorClassNewPasswordRepeat={this.state.fieldState.newPasswordRepeat}
+                    classNameOldPassword={this.state.fieldState.oldPassword}
+                    classNameNewPassword={this.state.fieldState.newPassword}
+                    classNameNewPasswordRepeat={this.state.fieldState.newPasswordRepeat}
+                    errorMessageOldPassword={this.state.formErrors.oldPassword}
+                    errorMessageNewPassword={this.state.formErrors.newPassword}
+                    errorMessageNewPasswordRepeat={this.state.formErrors.newPasswordRepeat}
                     infoState={this.state.infoState}
-                    formErrors={this.state.formErrors}
                     formValid={this.state.formValid}
 
                     oldPassword={this.state.oldPassword}
@@ -164,8 +210,10 @@ export default class PatientPasswordContainer extends Component{
 
                     fieldValidationHandler={this.fieldValidationHandler}
                     fieldHandler={this.fieldHandler}
+                    fieldOnFocusHandler={this.fieldOnFocusHandler}
+                    disableActions={this.disableActions}
                     submitHandler={this.submitHandler} />
-                 </section>
+                </section>
             </div>
         )
     }
