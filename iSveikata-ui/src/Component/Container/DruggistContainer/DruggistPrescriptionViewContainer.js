@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 //import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
+import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
 var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
@@ -65,7 +66,6 @@ class DruggistViewContainer extends Component{
     }
     showDetails = (prescriptionId) =>{    
         this.loadSpecificPrescription(prescriptionId)
-        this.closeOpenDetails()
     }
 
     composePrescription = (prescription, index) =>{
@@ -123,7 +123,7 @@ class DruggistViewContainer extends Component{
     }
     composeSpecificPrescription = (prescription, prescriptionId) => {
        
-        return (<div style={{padding:'30px' }}>
+        return (<div>
                 <p>Išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Galiojimo data: {prescription.expirationDate}</p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
@@ -146,14 +146,6 @@ class DruggistViewContainer extends Component{
        console.log("Searcrh search..."+ this.state.searchValue)
     }
 
-    closeOpenDetails = () =>{
-        let el = document.getElementById("recordDetails")
-        if(el.style.display === 'block'){
-            el.style.display = 'none'
-        }else{
-            el.style.display = 'block'
-        }
-    }
 
 
     
@@ -174,13 +166,12 @@ class DruggistViewContainer extends Component{
                                 {this.state.infoState}
 
                                 {this.state.prescriptionList}
-                                
-                                <div id="recordDetails" style={backgroundStyle}>
-                                <div  style={recordDetailWindowStyle}>
-                                <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
-                                {this.state.infoDetails}
-                                </div>
-                                </div>
+    
+                                <DetailsModalView
+                                    infoHeader={"Recepto informacija"}
+                                    infoDetails={this.state.infoDetails}
+                                />
+
                             </div>
                         </div> 
                     </div> 
