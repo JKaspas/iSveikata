@@ -30,7 +30,7 @@ export default class PatientPrescriptionUsageViewContainer extends Component {
                     })
                     if (response.data.length === 0){
                         this.setState({
-                            info:(<h3>Priskirtų pacientų nerasta</h3>)
+                            info:(<h3>Panaudojimų nerasta</h3>)
                         })
                     }
                     console.log(response.data)
@@ -58,7 +58,7 @@ export default class PatientPrescriptionUsageViewContainer extends Component {
                 <div className="container">
                 <section>
                 <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                <p/>
+                   <p/>
                     <div className="panel-group">
                         <div className="panel panel-default">
                             <div className="panel-heading">
