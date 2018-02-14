@@ -40,7 +40,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
                 })
             }
                   
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             

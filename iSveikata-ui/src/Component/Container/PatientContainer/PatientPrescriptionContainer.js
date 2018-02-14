@@ -73,9 +73,9 @@ export default class PatientPrescriptionContainer extends Component{
     composePrescription = (prescription, index) =>{
         var usageLink = '';
         if(prescription.useAmount > 0){
-            usageLink=<Link to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
+            usageLink=<Link to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
         }
-
+       
         return(
             <PrescriptionListingItem  
                 key={index}
@@ -84,9 +84,6 @@ export default class PatientPrescriptionContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
-                // ingredientAmount={prescription.ingredientAmount}
-                // units={prescription.ingredientUnit}
-                // description={prescription.description}
                 useAmount={prescription.useAmount}
                 viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
@@ -195,4 +192,3 @@ export default class PatientPrescriptionContainer extends Component{
         </div>)
     }
 }
-
