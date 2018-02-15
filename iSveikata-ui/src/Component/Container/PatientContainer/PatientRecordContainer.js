@@ -17,7 +17,6 @@ export default class PatientRecordContainer extends Component{
         this.session =  JSON.parse(sessionStorage.getItem('session'));
         this.state = {
             records:null,
-            // notFound:'',
             notFoundRecord:(<h3>Ligos istorija tuščia</h3>),
             recordDetails:'',
             patient:'',
@@ -87,10 +86,6 @@ export default class PatientRecordContainer extends Component{
                 appDate={record.appointmentDate}
                 icd={record.icdCode}
                 doctorName={record.doctorFullName }
-                // appDescription={record.appointment.description}
-                // appDuration={record.appointment.duration}
-                // compensable={record.compensable}
-                // repetitive={record.repetitive}
                 showDetails={this.showRecordDetails}
             />
         )
@@ -181,24 +176,8 @@ export default class PatientRecordContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                                {/* <RecordListView
-                                    record={this.state.records}
-                                /> */}
                                 {this.state.viewContent}
                                 {this.showPagination()}
-                           
-                           {/* <div id="recordDetails" style={{  height: '60%',
-                                                width: '60%',
-                                                border: '2px solid black',
-                                                zIndex: '2',
-                                                position: 'fixed',
-                                                top: '20%',
-                                                left: '20%',
-                                                background: 'white',
-                                                display:'none'}}>
-                                <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >Uždaryti</button> 
-                                {this.state.infoDetails}
-                                </div> */}
                                 <div id="recordDetails" style={backgroundStyle}>
                                     <div  style={recordDetailWindowStyle}>
                                         <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 

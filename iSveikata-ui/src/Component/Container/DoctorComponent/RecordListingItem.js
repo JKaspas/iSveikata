@@ -7,10 +7,7 @@ const RecordListingItem = (props) =>{
             <td>{props.appDate}</td>
             <td>{props.icd}</td>
             <td>{props.doctorName}</td>
-            {/* <td>{props.appDescription.substring(0, 30)}...</td>
-            <td>{props.appDuration} min</td>
-            <td>{compensable}</td>
-            <td>{repetitive}</td> */}
+            
     </tr>)
 }
 
