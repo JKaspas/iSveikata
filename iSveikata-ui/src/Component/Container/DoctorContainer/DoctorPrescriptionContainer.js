@@ -4,26 +4,25 @@ import axios from 'axios';
 import PatientInfoCard from '../DoctorComponent/PatientInfoCard';
 import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
 
-
 export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
         super(props);
         this.session =  JSON.parse(sessionStorage.getItem('session'));
         this.state = {
-            patient:'',
-            patientFullName:'',
-            apis:'',
-            apiUnits:'',
+            patient: '',
+            patientFullName: '',
+            apis: '',
+            apiUnits: '',
 
-            patientId:props.params.patientId,
-            userName:this.session.user.userName,
+            patientId: props.params.patientId,
+            userName: this.session.user.userName,
 
-            infoState:'',
+            infoState: '',
 
-            daysToExpiration: '10',
-            substance: 'Lumefantrine',
+            daysToExpiration: 'select',
+            substance: 'select',
             substanceAmount: '',
-            substanceUnit: 'mg',
+            substanceUnit: '',
             description: '',
 
             formErrors: {substanceAmount: '', description: ''},
@@ -31,12 +30,10 @@ export default class DoctorPrescriptionContainer extends Component{
             substanceAmountValid: false,
             descriptionValid: false,    
 
-            daysToExpirationValid: true,  
-            substanceValid: true,
-            substanceUnitValid: true,
+            daysToExpirationValid: false,  
+            substanceValid: false,
       
             formValid: false,
-
         };
     }
 
@@ -47,8 +44,7 @@ export default class DoctorPrescriptionContainer extends Component{
         }  
         this.loadPatient();
         this.loadApi();
-    }
-
+    } 
 
     loadApi = () =>{
         axios.get('http://localhost:8080/api/api')
@@ -59,19 +55,18 @@ export default class DoctorPrescriptionContainer extends Component{
             })
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            console.log(error)
         })
-    }
+    } 
 
     mapApiUnitsWithTitle = (api, index) =>{
         return {
-            "title":api.ingredientName,
-            "units":api.unit
+            "title": api.ingredientName,
+            "units": api.unit
         }
-    }
+    } 
     
-
     loadPatient = () =>{
         axios.get('http://localhost:8080/api/patient/'+ this.props.params.patientId)
         .then((response)=>{
@@ -80,76 +75,134 @@ export default class DoctorPrescriptionContainer extends Component{
             })
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            console.log(error)
         })
+    }
+ 
+    submitHandler = (e) => {
+        let date = new Date()
+        let currentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        let expDate = this.generateExpirationDate();
+
+        e.preventDefault();
+
+        if(this.state.formValid){
+            axios.post('http://localhost:8080/api/doctor/new/prescription', {
+                prescription:{
+                    expirationDate:expDate,
+                    prescriptionDate:currentDate,
+                    description:this.state.description,
+                    ingredientAmount:this.state.substanceAmount,
+                    // ingredientUnit:this.state.substanceUnit,
+                },
+                patientId: this.state.patientId,
+                userName: this.state.userName,
+                apiTitle:this.state.substance
+            })
+            .then((response)=>{
+                console.log(response.status)
+                this.setState({
+                    infoState:<div className="alert alert-success"><strong>Naujas receptas sėkmingai sukurtas.</strong></div>,
+                    
+                    substanceAmount: '',
+                    description: '',
+        
+                    formErrors: {substanceAmount: '', description: ''},
+                    substanceAmountValid: false,
+                    descriptionValid: false,    
+                    daysToExpirationValid: false,  
+                    substanceValid: false,
+                    formValid: false,
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                this.setState({
+                    infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas.</strong></div>
+                })
+            })
+        }else{
+            this.setState({
+                infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus ir pasirinkti reikiamas reikšmes iš sąrašų.</strong></div>
+            })
+        }
     }
     
     fieldHandler = (e) => {
         // e === event
         const name = e.target.name;
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    
-        if(name === "substance"){
-            this.setState({
-                substance:e.target.value,
-                substanceUnit:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units)
-            })
-        }else{
-            this.setState({[name]: value});
+        const value = e.target.value;
+
+        let daysToExpirationValid = this.state.daysToExpirationValid;
+        let substanceValid = this.state.substanceValid;
+       
+        let substanceUnit = this.state.substanceUnit;
+
+        switch (name) {
+            case 'daysToExpiration':
+                daysToExpirationValid = value === "select" ? false : true;
+                break;
+            case 'substance':
+                substanceValid = value === "select" ? false : true;
+                substanceUnit = substanceValid ? this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units) : "";
+                break;
+            default:
+                break;
         }
+
+        this.setState({[name]: value,
+                    substanceUnit: substanceUnit,
+                    daysToExpirationValid: daysToExpirationValid,
+                    substanceValid: substanceValid,
+        });   
+    }
+
+    fieldOnFocusHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+ 
+        let fieldValidationState = this.state.fieldState;
+      
+        switch (name) {
+            case 'substanceAmount':
+                fieldValidationState.substanceAmount = 'is-empty';
+                break;
+            case 'description':
+                fieldValidationState.description = 'is-empty';
+                break;
+            default:
+                break;
+        }
+        this.setState({fieldState: fieldValidationState, infoState: ''});
     }
     
     fieldValidationHandler = (e) => {
         // e === event
         const name = e.target.name;
         const value = e.target.value;
-      
-        this.validateField(name, value);
-    }
 
-    submitHandler = (e) =>{
-        let date = new Date()
-        let currentDate = date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
-        let expDate = this.generateExpirationDate();
-        e.preventDefault();
-        axios.post('http://localhost:8080/api/doctor/new/prescription', {
-           
-    
-            prescription:{
-                expirationDate:expDate,
-                prescriptionDate:currentDate,
-                description:this.state.description,
-                ingredientAmount:this.state.substanceAmount,
-                // ingredientUnit:this.state.substanceUnit,
-            },
-            patientId: this.state.patientId,
-            userName: this.state.userName,
-            apiTitle:this.state.substance
-        })
-        .then((response)=>{
-            console.log(response.status)
-            this.setState({
-                infoState:<div className="alert alert-success"><strong>Naujas receptas sėkmingai sukurtas. </strong></div>,
-                 
-                substanceAmount: '',
-                description: '',
-    
-                formErrors: {substanceAmount: '', description: ''},
-                substanceAmountValid: false,
-                descriptionValid: false,    
-                daysToExpirationValid: true,  
-                substanceValid: true,
-                substanceUnitValid: true,
-                formValid: false,
-            })
-        })
-        .catch((erorr) => {
-            console.log(erorr)
-            this.setState({
-                infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas </strong></div>
-            })
-        })
+        if(value.length !== 0) {
+         
+            this.validateField(name, value);
+        } else {
+            let nameValid = name + 'Valid';
+         
+            let fieldValidationErrors = this.state.formErrors;
+            switch (name) {
+                case 'substanceAmount':
+                    fieldValidationErrors.substanceAmount = '';
+                    break;
+                case 'description':
+                    fieldValidationErrors.description = '';
+                    break;
+                default:
+                    break;
+            }
+            this.setState({[nameValid]: false,
+                formErrors: fieldValidationErrors
+                }, this.validateForm);
+        }    
     }
 
     //Receptas galioja iki
@@ -178,15 +231,15 @@ export default class DoctorPrescriptionContainer extends Component{
                 descriptionValid = value.length >= 3;
                 // ^ Tikrina ar įrašyta bent kažkas.
                 fieldValidationErrors.description = descriptionValid ? '' : 'Nurodykite kokią vaisto dozę, kiek kartų ir kaip vartoti.';
-                fieldValidationState.description = descriptionValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.description = descriptionValid ? 'has-success' : 'has-error';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
             case 'substanceAmount':
-                substanceAmountValid = value.match(/^(([1-9]{1})([\d]{0,9})|([0]{1})([.]{1})([\d]{0,7})([1-9]{1}))$/g);
+                substanceAmountValid = value.match(/^(([1-9]{1})([\d]{0,})|([0-9]{1})([.]{1})([\d]{0,})([1-9]{1}))$/g);
                 // ^ Tikrina ar įrašytas teigiamas skaičius. Jei pirmas skaičius nulis, po jo būtinai turi eiti "," ir bent vienas už nulį didesnis skaičius.
                 fieldValidationErrors.substanceAmount = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį (teigiamas skaičius).';
-                fieldValidationState.substanceAmount = substanceAmountValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.substanceAmount = substanceAmountValid ? 'has-success' : 'has-error';
                 break;
             default:
                 break;
@@ -198,49 +251,54 @@ export default class DoctorPrescriptionContainer extends Component{
                     }, this.validateForm);
     }
     
-    //Paspausti "submit" leidžiama tik jei visi laukai įvesti teisingai.
+    //Jei bent vienas laukas neįvestas teisingai, paspaudus "submit" pasirodo perspėjimas.
     validateForm = () => {
-        this.setState({formValid: this.state.descriptionValid && this.state.substanceAmountValid});
+        this.setState({formValid: this.state.descriptionValid && 
+                                this.state.substanceAmountValid && 
+                                this.state.daysToExpirationValid &&  
+                                this.state.substanceValid &&
+                                this.state.substanceUnit !== ""});
     }
-
 
     render() {
         return (
             <div className='container'>
                 <section>
-                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                <h2>Naujas receptas</h2>
-                <PatientInfoCard 
-                patientFullName={this.state.patient.fullName}
-                date={this.state.patient.birthDate}
-                patientId={this.state.patient.id}
-                form={
-                <PrescriptionForm 
-                    errorClassDescription={this.state.fieldState.description}
-                    errorClassSubstanceAmount={this.state.fieldState.substanceAmount}
-                    infoState={this.state.infoState}
-                    substances={this.state.apis}
-                    formErrors={this.state.formErrors}
+                    <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+                    <h2>Naujas receptas</h2>
+                    <PatientInfoCard 
+                    patientFullName={this.state.patient.fullName}
+                    date={this.state.patient.birthDate}
+                    patientId={this.state.patient.id}
+                    form={
+                        <PrescriptionForm 
+                        classNameDescription={this.state.fieldState.description}
+                        classNameSubstanceAmount={this.state.fieldState.substanceAmount}
+                        errorMessageDescriptione={this.state.formErrors.description}
+                        errorMessageSubstanceAmount={this.state.formErrors.substanceAmount}
+                        infoState={this.state.infoState}
 
-                    daysToExpiration={this.state.daysToExpiration}
-                    description={this.state.description}
-                    substance={this.state.substance}
-                    substanceAmount={this.state.substanceAmount}
-                    substanceUnit={this.state.substanceUnit}
-                    formValid={this.state.formValid}
-                    icd={this.state.icd}
+                        substances={this.state.apis}
 
-                    submitHandler={this.submitHandler}
-                    fieldHandler={this.fieldHandler}
-                    fieldValidationHandler={this.fieldValidationHandler}
+                        daysToExpiration={this.state.daysToExpiration}
+                        description={this.state.description}
+                        substance={this.state.substance}
+                        substanceAmount={this.state.substanceAmount}
+                        substanceUnit={this.state.substanceUnit}
 
-                    generateExpirationDate={this.generateExpirationDate()}
-                />}
-                />
-                {this.state.date}
+                        icd={this.state.icd}
+
+                        fieldValidationHandler={this.fieldValidationHandler}
+                        fieldHandler={this.fieldHandler}
+                        fieldOnFocusHandler={this.fieldOnFocusHandler}
+                        submitHandler={this.submitHandler}
+                        
+                        generateExpirationDate={this.generateExpirationDate()} />
+                    } />
+                    {this.state.date}
                 </section>
             </div>
         )
-    }
+    } 
 
 }

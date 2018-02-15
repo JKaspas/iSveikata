@@ -97,7 +97,7 @@ export default class DoctorPatientViewContainer extends Component{
     composeRecords = (record,index) =>{
         // var date = new Date(record.appointment.date)
         // var newDate =  date.getFullYear() 
-        // + '-'+ (date.getMonth()<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1)) 
+        // + '-'+ ((date.getMonth()+1)<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1)) 
         // + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate());
         return(
             <RecordListingItemDemo

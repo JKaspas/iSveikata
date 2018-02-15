@@ -35,6 +35,7 @@ export default class PatientPasswordContainer extends Component{
     submitHandler = (e) =>{
 
         e.preventDefault();
+
         if(this.state.formValid){
             axios.put('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/password', {
                 oldPassword:this.state.oldPassword,
@@ -128,7 +129,11 @@ export default class PatientPasswordContainer extends Component{
                 default:
                     break;
             }
-            this.setState({[nameValid]: false, formErrors: fieldValidationErrors, fieldState: fieldValidationState, newPasswordRepeat:newPasswordRepeat}, this.validateForm);
+            this.setState({[nameValid]: false,
+                formErrors: fieldValidationErrors,
+                fieldState: fieldValidationState,
+                newPasswordRepeat:newPasswordRepeat
+                }, this.validateForm);
         }    
     }
 
@@ -141,10 +146,12 @@ export default class PatientPasswordContainer extends Component{
       
         switch (fieldName) {
             case 'oldPassword':
-                oldPasswordValid = (value.length >= 8) || (value === "123");
-                // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių. Išimtis: administratoriaus slaptažodis.
+                oldPasswordValid = value.length >= 8;
+                // ^ Tikrina ar įrašyta ne mažiau kaip 8 (ir formoje leidžiama įvesti ne daugiau kaip 15 simbolių).
                 fieldValidationErrors.oldPassword = oldPasswordValid ? '' : 'Įvestas slaptažodis per trumpas.';
                 fieldValidationState.oldPassword = oldPasswordValid ? 'has-success' : 'has-error';
+                //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
+                //Čia "has-success" / "has-error" yra viena iš formos elemento klasių. 
                 break;
             case 'newPassword':
                 if(value.length >= 8) { 
@@ -163,10 +170,9 @@ export default class PatientPasswordContainer extends Component{
                 fieldValidationState.newPassword = newPasswordValid ? 'has-success' : 'has-error';
 
                 newPasswordRepeatValid = value === this.state.newPasswordRepeat ? true : false; 
+                // ^ Tikrina ar naujas slaptažodis sutampa su žemiau įvestu pakartotu slaptažodžiu (jeigu naujas slaptažodis redaguojamas, kai žemiau jau įvestas pakartojimas).
                 fieldValidationErrors.newPasswordRepeat = newPasswordRepeatValid ? '' : (this.state.newPasswordRepeat.length === 0 ? '' : 'Slaptažodžiai nesutampa!');
                 fieldValidationState.newPasswordRepeat = newPasswordRepeatValid ? 'has-success' : (this.state.newPasswordRepeat.length === 0 ? 'is-empty' : 'has-error');   
-                //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-                //Čia "has-success" / "has-error" yra viena iš formos elemento klasių. 
                 break;
             case 'newPasswordRepeat':
                 newPasswordRepeatValid = value === this.state.newPassword;
@@ -202,7 +208,6 @@ export default class PatientPasswordContainer extends Component{
                     errorMessageNewPassword={this.state.formErrors.newPassword}
                     errorMessageNewPasswordRepeat={this.state.formErrors.newPasswordRepeat}
                     infoState={this.state.infoState}
-                    formValid={this.state.formValid}
 
                     oldPassword={this.state.oldPassword}
                     newPassword={this.state.newPassword}
