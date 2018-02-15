@@ -22,7 +22,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
         }  
         
         
-        
+        document.getElementsByClassName("modal-backdrop")[0].style.position = "static"
        this.getPrescriptionUsage();
     }
 
