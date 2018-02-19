@@ -33,7 +33,9 @@ export default class DoctorPatientViewContainer extends Component{
             listLength:'',
 
             infoHeader:'',
-            infoDetails:''
+            infoDetails:'',
+
+            prescriptionUsage:''
 
         }
     }
@@ -101,7 +103,7 @@ export default class DoctorPatientViewContainer extends Component{
     composeRecords = (record,index) =>{
         // var date = new Date(record.appointment.date)
         // var newDate =  date.getFullYear() 
-        // + '-'+ (date.getMonth()<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1)) 
+        // + '-'+ ((date.getMonth()+1)<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1)) 
         // + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate());
         return(
             <RecordListingItemDemo
@@ -119,7 +121,7 @@ export default class DoctorPatientViewContainer extends Component{
         var usageLink = '';
         //if prescription have any prescriptionUsage then show button to view usages
         if(prescription.useAmount > 0){
-            usageLink=<Link to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
+            usageLink=<Link onClick={this.hideModal} to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
         }
         return(
             <PrescriptionListingItem 
@@ -134,6 +136,10 @@ export default class DoctorPatientViewContainer extends Component{
                 showDetails={this.showPrescriptionDetails}
             />
         )
+    }
+
+    hideModal = () =>{
+        // document.getElementById(".modal-backdrop").style.position = ""
     }
 
     loadSpecificRecord = (recordId) =>{
@@ -292,6 +298,7 @@ export default class DoctorPatientViewContainer extends Component{
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}
+                                    prescriptionUsage={this.state.prescriptionUsage}
                                 />
                             </div>
                         </div> 

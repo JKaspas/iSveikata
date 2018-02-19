@@ -23,7 +23,7 @@ class Timer extends React.Component {
     render() {
       return (
         <div>
-          Forma atverta {this.state.minutes} min.
+          Forma atverta {this.state.minutes === 0 ? " mažiau nei minutę." : this.state.minutes + " min."} 
         </div>
       );
     }

@@ -109,7 +109,7 @@ export default class DoctorRecordContainer extends Component {
           description: "",
           formErrors: { icd: "", description: "", duration: "" },
           icdValid: true,
-          descriptionValid: false,
+          descriptionValid: false, //turejo buti false
           durationValid: false,
           formValid: false
         });

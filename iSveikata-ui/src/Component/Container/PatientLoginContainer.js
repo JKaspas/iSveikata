@@ -22,9 +22,11 @@ class PatientLoginContainer extends Component{
         };
     }
     
-    
-    submitHandler = (e) =>{
+    submitHandler = (e) => {
+
         e.preventDefault();
+
+        if(this.state.formValid){
             axios.post('http://localhost:8080/api/patient/login', {
                 patientId:this.state.patientId,
                 password:this.state.password
@@ -41,7 +43,11 @@ class PatientLoginContainer extends Component{
                     infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
                 })
             })
-        
+        }else{
+            this.setState({
+                infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
+            })
+        }   
     }
     
     fieldHandler = (e) => {
@@ -49,7 +55,26 @@ class PatientLoginContainer extends Component{
         const name = e.target.name;
         const value = e.target.value;
     
-            this.setState({[name]: value});
+        this.setState({[name]: value});
+    }
+
+    fieldOnFocusHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+ 
+        let fieldValidationState = this.state.fieldState;
+      
+        switch (name) {
+            case 'patientId':
+                fieldValidationState.patientId = 'is-empty';
+                break;
+            case 'password':
+                fieldValidationState.password = 'is-empty';
+                break;
+            default:
+                break;
+        }
+        this.setState({fieldState: fieldValidationState, infoState: ''});
     }
 
     fieldValidationHandler = (e) => {
@@ -62,7 +87,21 @@ class PatientLoginContainer extends Component{
             this.validateField(name, value);
         } else {
             let nameValid = name + 'Valid';
-            this.setState({[nameValid]: false}, this.validateForm);      
+         
+            let fieldValidationErrors = this.state.formErrors;
+            switch (name) {
+                case 'patientId':
+                    fieldValidationErrors.patientId = '';
+                    break;
+                case 'password':
+                    fieldValidationErrors.password = '';
+                    break;
+                default:
+                    break;
+            }
+            this.setState({[nameValid]: false,
+                formErrors: fieldValidationErrors
+                }, this.validateForm);
         }    
     }
 
@@ -130,16 +169,16 @@ class PatientLoginContainer extends Component{
                     fieldValidationErrors.patientId = 'Įveskite 11 skaitmenų asmens kodą.';
                 }
 
-                fieldValidationState.patientId = patientIdValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.patientId = patientIdValid ? 'has-success' : 'has-error';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
 
             case 'password':
-                passwordValid = value.length >= 8 && value.length <= 15;
-                // ^ Tikrina ar įrašyta ne mažiau kaip 8 ir ne daugiau kaip 15 simbolių.
-                fieldValidationErrors.password = passwordValid ? '' : (value.length < 8 ? 'Slaptažodis per trumpas.' : 'Slaptažodis per ilgas.');
-                fieldValidationState.password = passwordValid ? 'is-valid' : 'is-invalid';
+                passwordValid = value.length >= 8;
+                // ^ Tikrina ar įrašyta ne mažiau kaip 8 (ir formoje leidžiama įvesti ne daugiau kaip 15 simbolių).
+                fieldValidationErrors.password = passwordValid ? '' : 'Slaptažodis per trumpas.';
+                fieldValidationState.password = passwordValid ? 'has-success' : 'has-error';
                 break;
             default:
                 break;
@@ -159,17 +198,18 @@ class PatientLoginContainer extends Component{
     render() {
         return (
             <LoginForm
-            errorClassLoginValue={this.state.fieldState.patientId}
-            errorClassPassword={this.state.fieldState.password} 
+            classNameLoginValue={this.state.fieldState.patientId}
+            classNamePassword={this.state.fieldState.password} 
+            errorMessageLoginValue={this.state.formErrors.patientId}
+            errorMessagePassword={this.state.formErrors.password}
             infoState={this.state.infoState}
-            formErrors={this.state.formErrors}
-            formValid={this.state.formValid}
 
             loginValue={this.state.patientId}
             password={this.state.password}
 
             fieldValidationHandler={this.fieldValidationHandler}
             fieldHandler={this.fieldHandler}
+            fieldOnFocusHandler={this.fieldOnFocusHandler}
             submitHandler={this.submitHandler}
 
             loginPlaceholder={"Asmens kodas"}
