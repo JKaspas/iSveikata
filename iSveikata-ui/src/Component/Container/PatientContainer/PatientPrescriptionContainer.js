@@ -5,12 +5,13 @@ import Pagination from "react-js-pagination"
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'; 
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
+import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
 
-var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 export default class PatientPrescriptionContainer extends Component{
     constructor(props){
@@ -30,6 +31,11 @@ export default class PatientPrescriptionContainer extends Component{
             activePage:1,
             itemsPerPage:8,
             listLength:'',
+
+            infoDetails:'',
+            infoHeader:'',
+
+            prescriptionUsage:''
         }
     }
     componentDidCatch = (erorr, info) =>{
@@ -73,7 +79,7 @@ export default class PatientPrescriptionContainer extends Component{
     composePrescription = (prescription, index) =>{
         var usageLink = '';
         if(prescription.useAmount > 0){
-            usageLink=<Link to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
+            usageLink=<Link onClick={this.hideModal} to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
         }
        
         return(
@@ -91,6 +97,10 @@ export default class PatientPrescriptionContainer extends Component{
         )
     }
 
+    hideModal = () =>{
+        // document.getElementById(".modal-backdrop").style.position = ""
+    }
+
     loadSpecificPrescription = (prescriptionId) =>{
         axios.get('http://localhost:8080/api/prescription/'+prescriptionId)
         .then((response) => {
@@ -105,7 +115,7 @@ export default class PatientPrescriptionContainer extends Component{
     }
     composeSpecificPrescription = (prescription) => {
        
-        return (<div style={{padding:'30px' }}>
+        return (<div>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Recepto galiojimo data: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
@@ -117,50 +127,37 @@ export default class PatientPrescriptionContainer extends Component{
         </div>)
     }
 
- //on medical record row click show prescription record details
+    //on  record row click show prescription record details
     showPrescriptionDetails = (rowId) =>{
         this.loadSpecificPrescription(rowId);
-        this.closeOpenDetails();
         console.log(rowId)
     }
 
-
-
-//onClick on (medicalRecord or prescription) show or hide div with details
-    closeOpenDetails = () =>{
-        let el = document.getElementById("recordDetails")
-        if(el.style.display === 'block'){
-            el.style.display = 'none'
-        }else{
-            el.style.display = 'block'
-        }
-    }
-
      //handle paggination page changes 
- handlePageChange = (activePage) => {
-    //by content type (record/prescription) send request for specific page
-   
+    handlePageChange = (activePage) => {
+        //by content type (record/prescription) send request for specific page
         this.loadRecords(activePage);
     
-    //change activePage state to new page number
-    this.setState({
-        activePage:activePage
-    })
-}
- //Show paggination div with props from state
- showPagination = () =>{
-    return (
-        <div className="col-sm-5 col-sm-offset-4">
-        <Pagination
-        activePage={this.state.activePage}
-        itemsCountPerPage={this.state.itemsPerPage}
-        totalItemsCount={this.state.listInfo.totalElements}
-        pageRangeDisplayed={5}
-        onChange={this.handlePageChange}
-        />
-    </div>
-    )
-}
+        //change activePage state to new page number
+        this.setState({
+             activePage:activePage
+        })  
+    }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+                <Pagination
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.state.listInfo.totalElements}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                />
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -169,7 +166,7 @@ export default class PatientPrescriptionContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Man išrašyti receptai</h4>
+                            <h4><strong>Man išrašyti receptai </strong> (asmens kodas: {this.session.patient.patientId})</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
@@ -177,13 +174,19 @@ export default class PatientPrescriptionContainer extends Component{
                             {this.state.viewContent}
                                 {this.showPagination()}
 
-                                <div id="recordDetails" style={backgroundStyle}>
+                                <DetailsModalView
+                                    infoHeader={this.state.infoHeader}
+                                    infoDetails={this.state.infoDetails}
+                                    prescriptionUsage={this.state.prescriptionUsage}
+                                />
+
+                                {/* <div id="recordDetails" style={backgroundStyle}>
                                     <div  style={recordDetailWindowStyle}>
                                         <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
                                         {this.state.infoDetails}
 
                                      </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div> 
                     </div> 

@@ -25,4 +25,3 @@ const PrescriptionListingItem = (props) =>{
 
 export default PrescriptionListingItem;
 
-333

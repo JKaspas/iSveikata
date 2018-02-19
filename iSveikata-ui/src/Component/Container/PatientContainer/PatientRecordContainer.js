@@ -4,11 +4,12 @@ import Pagination from "react-js-pagination"
 
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';
+import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
-var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-                            position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-                                position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
+//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
+// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
+//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 
 export default class PatientRecordContainer extends Component{
@@ -30,6 +31,9 @@ export default class PatientRecordContainer extends Component{
             itemsPerPage:8,
             listLength:'',
             
+            infoDetails:'',
+            infoHeader:'',
+            
         }
     }
     componentDidCatch = (erorr, info) =>{
@@ -41,9 +45,10 @@ export default class PatientRecordContainer extends Component{
             if(this.session === null || this.session.patient.loggedIn !== true){
             this.props.router.push('/pacientams');
             return '';
-        }
-        this.loadRecords(this.state.activePage);
+            }
+            this.loadRecords(this.state.activePage);
     }
+
     //load all patient medical record and compose to view component
     loadRecords = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
@@ -77,8 +82,7 @@ export default class PatientRecordContainer extends Component{
     //    var newDate =
     //    date.getFullYear()
     //    + '-'+ (date.getMonth()<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1))
-    //    + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate());
-        
+    //    + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate()); 
         return(
             <RecordListingItem
                 key={index}
@@ -90,6 +94,7 @@ export default class PatientRecordContainer extends Component{
             />
         )
     }
+
 
     loadSpecificRecord = (recordId) =>{
         axios.get('http://localhost:8080/api/record/'+recordId)
@@ -112,7 +117,7 @@ export default class PatientRecordContainer extends Component{
         var compensable = record.compensable === true? yesValue:noValue;
         var repetitive = record.repetitive === true? yesValue:noValue;
 
-        return (<div style={{padding:'30px' }}>
+        return (<div >
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
                 <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
@@ -126,44 +131,37 @@ export default class PatientRecordContainer extends Component{
     //on medical record row click show record details
     showRecordDetails = (rowId) =>{
         this.loadSpecificRecord(rowId);
-        this.closeOpenDetails();
        // console.log(rowId)
     }
 
-  //onClick on (medicalRecord or pracription) show or hide div with details
-  closeOpenDetails = () =>{
-    let el = document.getElementById("recordDetails")
-    if(el.style.display === 'block'){
-        el.style.display = 'none'
-    }else{
-        el.style.display = 'block'
-    }
-}
- //handle paggination page changes 
- handlePageChange = (activePage) => {
-    //by content type (record/prescription) send request for specific page
-   
-        this.loadRecords(activePage);
+
+    //handle paggination page changes 
+    handlePageChange = (activePage) => {
     
-    //change activePage state to new page number
-    this.setState({
-        activePage:activePage
-    })
-}
- //Show paggination div with props from state
- showPagination = () =>{
-    return (
-        <div className="col-sm-5 col-sm-offset-4">
-        <Pagination
-        activePage={this.state.activePage}
-        itemsCountPerPage={this.state.itemsPerPage}
-        totalItemsCount={this.state.listInfo.totalElements}
-        pageRangeDisplayed={5}
-        onChange={this.handlePageChange}
-        />
-    </div>
-    )
-}
+        //by content type (record/prescription) send request for specific page
+        this.loadRecords(activePage);
+        
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })
+    }
+
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+                <Pagination
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.state.listInfo.totalElements}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                />
+            </div>
+        )
+    }
 
     render() {
         return (
@@ -172,20 +170,18 @@ export default class PatientRecordContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Mano ligos istorijos įrašai</h4>
+                            <h4><strong>Mano ligos istorijos įrašai</strong> (asmens kodas {this.session.patient.patientId})</h4>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
                                 {this.state.viewContent}
                                 {this.showPagination()}
-                                <div id="recordDetails" style={backgroundStyle}>
-                                    <div  style={recordDetailWindowStyle}>
-                                        <button onClick={this.closeOpenDetails} className="btn btn-success pull-right" >X</button> 
-                                        {this.state.infoDetails}
-                                    </div>
-                                </div>
 
-                            </div>
+                                <DetailsModalView
+                                    infoHeader={this.state.infoHeader}
+                                    infoDetails={this.state.infoDetails}
+                                />
+                           </div>
                         </div> 
                     </div> 
                 </div>           

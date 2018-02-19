@@ -19,8 +19,10 @@ export default class PatientPrescriptionUsageViewContainer extends Component {
                 this.props.router.push('/pacientams');
                 return '';
             }
+            // document.getElementsByClassName("modal-backdrop")[0].style.position = "static"
             this.getPrescriptionUsage();
-            }
+        }
+            
 
             getPrescriptionUsage = () =>{
                 axios.get('http://localhost:8080/api/prescription/'+this.props.params.prescriptionId+'/usages')
@@ -30,7 +32,7 @@ export default class PatientPrescriptionUsageViewContainer extends Component {
                     })
                     if (response.data.length === 0){
                         this.setState({
-                            info:(<h3>Panaudojimų nerasta</h3>)
+                            info:(<h3>Recepto panaudojimų nerasta</h3>)
                         })
                     }
                     console.log(response.data)

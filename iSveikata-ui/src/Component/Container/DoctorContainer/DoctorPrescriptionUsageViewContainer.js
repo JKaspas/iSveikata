@@ -36,7 +36,7 @@ export default class DoctorPrescriptionUsageViewContainer extends Component{
 
             if(response.data.length === 0){
                 this.setState({
-                    info:(<h3>Priskirtų pacientų nerasta</h3>)
+                    info:(<h3>Recepto panaudojimų nerasta</h3>)
                 })
             }
                   
