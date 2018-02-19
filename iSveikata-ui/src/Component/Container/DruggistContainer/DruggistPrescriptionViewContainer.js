@@ -124,8 +124,8 @@ class DruggistViewContainer extends Component{
     composeSpecificPrescription = (prescription, prescriptionId) => {
        
         return (<div>
-                <p>Išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Galiojimo data: {prescription.expirationDate}</p>
+                <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
+                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>

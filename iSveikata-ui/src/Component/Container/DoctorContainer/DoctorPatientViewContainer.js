@@ -185,8 +185,8 @@ export default class DoctorPatientViewContainer extends Component{
     composeSpecificPrescription = (prescription) => {
        
         return (<div>
-                <p>Išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Galiojimo data: {prescription.expirationDate}</p>
+                <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
+                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
