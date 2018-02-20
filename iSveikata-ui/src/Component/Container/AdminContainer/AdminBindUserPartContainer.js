@@ -30,44 +30,36 @@ export default class AdminBindUserPartContainer extends Component{
     }
   
     componentWillMount = () =>{
-        
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }
-        this.getPatientList(this.state.activePage);  
+        this.getPatientList(this.state.searchValue, this.state.activePage);  
     }
 
-    getPatientList = (activePage) =>{
-        axios.get('http://localhost:8080/api/patient/notbind?page='+activePage+'&size='+this.state.itemsPerPage)
+    getPatientList = (searchValue, activePage) =>{
+        let allPatientRequestLink = 'http://localhost:8080/api/patient/notbind?page='+activePage+'&size='+this.state.itemsPerPage
+        let searchPatientrequestLink = 'http://localhost:8080/api/patient/notbind/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage
+        let finalRequestLink = allPatientRequestLink;
+
+        if(searchValue.length > 2){
+           finalRequestLink = searchPatientrequestLink
+        }else if(searchValue.length === 0){
+           finalRequestLink = allPatientRequestLink
+        }else{
+            this.setState({
+                patientList:(<h3>Įveskit bent 3 simbolius</h3>),
+                listIsEmpty:true,
+            })
+            return ''
+        }
+
+        axios.get(finalRequestLink)
         .then((response)=>{
-            
-            if(response.data.length === 0){
+            if(response.data.content.length === 0){
+                console.log("nieko nerasta ?")
                 this.setState({
-                    patientList:(<h3>Gydytojams nepriskirtų pacientų nėra.</h3>),
-                    listIsEmpty:true,
-                })
-            }else{
-                this.setState({
-                    patientList:<PatientListView patients={response.data.content.map(this.composePatient)}/>,
-                    listInfo:response.data,
-                    listLength:response.data.content.length,
-                    listIsEmpty:false
-                })
-            }
-            console.log(response.status)
-        })
-        .catch((erorr) => {
-            console.log(erorr)
-        })
-    }
-    getPatientListBySearchValue = (searchValue, activePage) =>{
-        axios.get('http://localhost:8080/api/patient/notbind/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage)
-        .then((response)=>{
-            
-            if(response.data.length === 0){
-                this.setState({
-                    patientList:(<h3>Gydytojams nepriskirtų pacientų nėra.</h3>),
+                    patientList:(<h3>Pacientų nėrasta</h3>),
                     listIsEmpty:true,
                 })
             }else{
@@ -89,10 +81,7 @@ export default class AdminBindUserPartContainer extends Component{
         axios.post("http://localhost:8080/api/admin/new/bind/"+this.props.params.userName+"/to/"+patient_id)
         .then((response)=>{
             console.log(response.status)
-            this.getPatientList(this.state.activePage);  
-            this.setState({
-                infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
-            })
+            this.getPatientList(this.state.searchValue, this.state.activePage);  
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -123,16 +112,10 @@ export default class AdminBindUserPartContainer extends Component{
     
     searchdHandler = (e) =>{
         e.preventDefault();
-        if(this.state.searchValue.length > 2){
-            this.getPatientListBySearchValue(this.state.searchValue, 1)
-        }else if(this.state.searchValue.length === 0){
-           this.getPatientList(1)
-        }else{
-            this.setState({
-                patientList:(<h3>Įveskit bent 3 simbolius</h3>),
-                listIsEmpty:true,
-            })
-        }
+        setTimeout(() =>{
+            this.getPatientList(this.state.searchValue, 1)
+        } , 1000 )
+        
         this.setState({
             activePage:1
         })
@@ -140,14 +123,8 @@ export default class AdminBindUserPartContainer extends Component{
 
      //handle paggination page changes 
     handlePageChange = (activePage) => {
-        if(this.state.searchValue.length > 2){
-            //send request for specific page when searchValue longer than 2 
-            this.getPatientListBySearchValue(this.state.searchValue, activePage)
-        }else{
-            //sen request for specific page
-            this.getPatientList(activePage);
-        }
-        
+        this.getPatientList(this.state.searchValue, activePage);  
+
         //change activePage state to new page number
         this.setState({
             activePage:activePage
@@ -172,9 +149,7 @@ export default class AdminBindUserPartContainer extends Component{
         )
     }
 
-    
 
-    
     render(){
         return(
         <div className="container">

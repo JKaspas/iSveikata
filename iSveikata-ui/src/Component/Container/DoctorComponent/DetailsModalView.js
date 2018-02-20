@@ -11,6 +11,7 @@ export const DetailsModalView = (props) =>{
                 </div>
                 <div className="modal-body">
                     {props.infoDetails}
+                    {props.prescriptionUsage}
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-default" data-dismiss="modal">Uždaryti</button>
