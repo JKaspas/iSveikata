@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-
+import Pagination from "react-js-pagination"
 
 //import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -23,6 +23,9 @@ class DruggistViewContainer extends Component{
             prescriptions:null,
             infoState:'',
             info:(<h3>Pacientui išrašytų receptų nerasta</h3>),
+
+            viewContent:'',
+            contentType:'record',
 
             listInfo:'',
 
@@ -49,12 +52,14 @@ class DruggistViewContainer extends Component{
         .then((response)=>{
             if(response.data.content.length === 0){
                 this.setState({
-                    prescriptionList:this.state.info
+                    viewContent:this.state.info
                 })
             }else{
                 this.setState({
-                    prescriptionList:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>
-                })
+                    viewContent:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    })
             }
            
             console.log(response.data)
@@ -147,6 +152,31 @@ class DruggistViewContainer extends Component{
     }
 
 
+    //handle paggination page changes 
+    handlePageChange = (activePage) => {
+    //by content type (record/prescription) send request for specific page
+        this.getPatientPrescriptions(activePage);
+
+        //change activePage state to new page number
+        this.setState({
+            activePage:activePage
+        })  
+    }
+
+    //Show paggination div with props from state
+    showPagination = () =>{
+        return (
+            <div className="col-sm-5 col-sm-offset-4">
+                <Pagination
+                activePage={this.state.activePage}
+                itemsCountPerPage={this.state.itemsPerPage}
+                totalItemsCount={this.state.listInfo.totalElements}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+                />
+            </div>
+        )
+    }
 
     
 
@@ -165,8 +195,8 @@ class DruggistViewContainer extends Component{
                             <div className="col-sm-12">
                                 {this.state.infoState}
 
-                                {this.state.prescriptionList}
-    
+                                {this.state.viewContent}
+                                {this.showPagination()}
                                 <DetailsModalView
                                     infoHeader={"Recepto informacija"}
                                     infoDetails={this.state.infoDetails}
