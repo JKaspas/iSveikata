@@ -4,10 +4,12 @@ var SearchFieldForm = (props) =>{
     return(
     <form onSubmit={props.searchHandler} className="form-inline text-center">
         <div className="form-group ">     
-            <input type={props.searchType} className="form-control" value={props.searchValue} onChange={props.fielddHandler} placeholder={props.searchPlaceHolder} name="userName" />
+            <input onKeyUp={props.searchHandler} type={props.searchType} className="form-control" value={props.searchValue} onChange={props.fielddHandler} placeholder={props.searchPlaceHolder} name="userName" />
         </div>
         <div className="form-group">     
-            <input type="submit" className="btn btn-primary" value="Ieškoti" />
+            <button type="submit" className="btn btn-primary" >
+            <i className="glyphicon glyphicon-search"></i>
+            </button>
         </div>
     </form>)
 }

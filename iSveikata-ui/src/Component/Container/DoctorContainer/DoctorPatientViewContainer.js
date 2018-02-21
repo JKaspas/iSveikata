@@ -9,6 +9,8 @@ import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import RecordListingItemDemo from '../DoctorComponent/RecordListingItemDemo';
 import RecordListViewDemo from '../DoctorComponent/RecordListViewDemo';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
+import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListView';
+import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
 
 // var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
 //                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
@@ -35,7 +37,7 @@ export default class DoctorPatientViewContainer extends Component{
             infoHeader:'',
             infoDetails:'',
 
-            prescriptionUsage:''
+            prescriptionUsage:null
 
         }
     }
@@ -118,11 +120,6 @@ export default class DoctorPatientViewContainer extends Component{
     }
      //compose prescription list to specific listing item (view component)
      composePrescription = (prescription, index) =>{
-        var usageLink = '';
-        //if prescription have any prescriptionUsage then show button to view usages
-        if(prescription.useAmount > 0){
-            usageLink=<Link onClick={this.hideModal} to={'/gydytojas/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
-        }
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -132,21 +129,19 @@ export default class DoctorPatientViewContainer extends Component{
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
                 useAmount={prescription.useAmount}
-                viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
             />
         )
     }
 
-    hideModal = () =>{
-        // document.getElementById(".modal-backdrop").style.position = ""
-    }
+    
 
     loadSpecificRecord = (recordId) =>{
         axios.get('http://localhost:8080/api/record/'+recordId)
         .then((response) => {
             this.setState({
-                infoDetails:this.composeSpecificRecord(response.data)
+                infoDetails:this.composeSpecificRecord(response.data),
+                infoHeader:"Ligos įrašo detali informacija"
                 })
             console.log(response.status)
         })
@@ -179,7 +174,8 @@ export default class DoctorPatientViewContainer extends Component{
         axios.get('http://localhost:8080//api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
-                    infoDetails:this.composeSpecificPrescription(response.data)
+                    infoDetails:this.composeSpecificPrescription(response.data),
+                    infoHeader:"Recepto detali informacija"
                 })
             console.log(response.status)
         })
@@ -202,6 +198,38 @@ export default class DoctorPatientViewContainer extends Component{
         </div>)
     }
 
+    getPrescriptionUsage = (id) =>{
+        axios.get('http://localhost:8080/api/prescription/'+id+'/usages')
+        .then((response)=>{
+            if(response.data.length === 0){
+                this.setState({
+                    prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
+                })
+                
+            }
+            else{
+                this.setState({
+                    prescriptionUsage:<PrescriptionUsageListView 
+                                        usage={response.data.map(this.composeUsage)}/>
+                })
+            }     
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            
+            //console.log(erorr)
+        })
+    }
+    composeUsage= (usage, index) =>{
+        return (
+            <PrescriptionUsageListingItem
+                key={index}
+                date={usage.usageDate}
+                druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
+               
+            />
+        )
+    }
     //on medical record tab click show list of medical record
     showMedicalRecord = () =>{
         document.getElementById("record-tab").style.background = "lightGrey"
@@ -231,6 +259,7 @@ export default class DoctorPatientViewContainer extends Component{
     }
     //on prescription click show sprescription details
     showPrescriptionDetails = (rowId) =>{
+        this.getPrescriptionUsage(rowId)
         this.loadSpecificPrescription(rowId);
     }
 
