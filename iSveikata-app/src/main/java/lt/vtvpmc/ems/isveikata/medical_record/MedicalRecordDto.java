@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MedicalRecordDto {
 
-	private Long id;
+	private Long id;	
 	private String doctorFullName;
 	private String icdCode;
 	private String icdDescription;
@@ -16,5 +16,6 @@ public class MedicalRecordDto {
 	private String appointmentDescription;
 	private boolean isCompensable;
 	private boolean isRepetitive;
+	private String patientFullName;
 
 }

@@ -18,7 +18,8 @@ public interface PrescriptionMapper {
 			@Mapping(source = "api.title", target = "apiTitle"),
 			@Mapping(source = "api.measurements", target ="apiUnits"),
 			@Mapping(target = "doctorFullName", expression = "java(prescription.getDoctor().getFirstName() + \" \" + prescription.getDoctor().getLastName())"),
-		})
+			@Mapping(target = "patientFullName", expression="java(prescription.getPatient().getFirstName() + \" \" + prescription.getPatient().getLastName())")
+	})
 	PrescriptionDto prescriptionToDto(Prescription prescription);
 
 	@InheritInverseConfiguration

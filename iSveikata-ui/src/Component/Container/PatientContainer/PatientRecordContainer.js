@@ -24,6 +24,7 @@ export default class PatientRecordContainer extends Component{
             opendRecordRow:'',
             viewContent:'',
             contentType:'record',
+            patientName:'',
 
             listInfo:'',
 
@@ -48,6 +49,7 @@ export default class PatientRecordContainer extends Component{
             }
             this.loadRecords(this.state.activePage);
     }
+
 
     //load all patient medical record and compose to view component
     loadRecords = (activePage) =>{
@@ -100,7 +102,8 @@ export default class PatientRecordContainer extends Component{
         axios.get('http://localhost:8080/api/record/'+recordId)
             .then((response) => {
             this.setState({
-                    infoDetails:this.composeSpecificRecord(response.data)
+                    infoDetails:this.composeSpecificRecord(response.data),
+                    infoHeader: this.composeSpecificRecordHeader(response.data)
                 })
             console.log(response.data)
         })
@@ -109,7 +112,13 @@ export default class PatientRecordContainer extends Component{
         })
     }
 
-    
+    composeSpecificRecordHeader = (record) => {  
+        return  (<div>
+                    <p>Pacientas: {record.patientFullName}</p>
+                </div>)
+                
+    }
+
     composeSpecificRecord = (record) => {
         var yesValue = 'Taip';
         var noValue = 'Ne';
@@ -170,7 +179,8 @@ export default class PatientRecordContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4><strong>Mano ligos istorijos įrašai</strong> (asmens kodas {this.session.patient.patientId})</h4>
+                            <h4><strong>Asmens kodas {this.session.patient.patientId}</strong></h4>
+                            <h3> Ligos istorijos įrašai</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

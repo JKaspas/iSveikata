@@ -118,7 +118,8 @@ class DruggistViewContainer extends Component{
         axios.get('http://localhost:8080/api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
-                    infoDetails:this.composeSpecificPrescription(response.data, prescriptionId)
+                    infoDetails:this.composeSpecificPrescription(response.data, prescriptionId),
+                    infoHeader:this.composeSpecificPrescriptionHeader(response.data, prescriptionId)
                 })
             console.log(response.data)
         })
@@ -126,6 +127,14 @@ class DruggistViewContainer extends Component{
             console.log(erorr)
         })
     }
+
+    composeSpecificPrescriptionHeader = (prescription) => {
+        return   (<div>
+                    <strong>Pacientas: {prescription.patientFullName}</strong>
+                    <p>Recepto turinys:</p>
+                 </div>)
+     }
+
     composeSpecificPrescription = (prescription, prescriptionId) => {
        
         return (<div>
@@ -189,7 +198,8 @@ class DruggistViewContainer extends Component{
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                            <h4>Pacientui išrašyti receptai</h4>
+                            <h4><strong>Asmens kodas: {this.props.params.patientId}</strong></h4>
+                            <h3>Išrašyti receptai</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
@@ -198,7 +208,7 @@ class DruggistViewContainer extends Component{
                                 {this.state.viewContent}
                                 {this.showPagination()}
                                 <DetailsModalView
-                                    infoHeader={"Recepto informacija"}
+                                    infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}
                                 />
 

@@ -10,7 +10,7 @@ import org.mapstruct.Mappings;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
 
-@Mapper(uses = { DoctorMapper.class }, componentModel = "spring")
+@Mapper(uses = { DoctorMapper.class} , componentModel = "spring")
 public interface MedicalRecordMapper {
 
 	@Mappings({ @Mapping(source = "appointment.date", target = "appointmentDate"),
@@ -18,7 +18,8 @@ public interface MedicalRecordMapper {
 			@Mapping(source = "appointment.description", target = "appointmentDescription"),
 			@Mapping(source = "icd.icdCode", target = "icdCode"),
 			@Mapping(source = "icd.title", target = "icdDescription"),
-			@Mapping(target = "doctorFullName", expression="java(medicalRecord.getDoctor().getFirstName() + \" \" + medicalRecord.getDoctor().getLastName())")
+			@Mapping(target = "doctorFullName", expression="java(medicalRecord.getDoctor().getFirstName() + \" \" + medicalRecord.getDoctor().getLastName())"),
+			@Mapping(target = "patientFullName", expression="java(medicalRecord.getPatient().getFirstName() + \" \" + medicalRecord.getPatient().getLastName())")
 	})
 	MedicalRecordDto medicalRecordToDto(MedicalRecord medicalRecord);
 

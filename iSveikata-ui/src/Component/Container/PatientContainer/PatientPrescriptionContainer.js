@@ -105,7 +105,8 @@ export default class PatientPrescriptionContainer extends Component{
         axios.get('http://localhost:8080/api/prescription/'+prescriptionId)
         .then((response) => {
             this.setState({
-                    infoDetails:this.composeSpecificPrescription(response.data)
+                    infoDetails:this.composeSpecificPrescription(response.data),
+                    infoHeader: this.composeSpecificPrescriptionHeader(response.data)
                 })
             console.log(response.status)
         })
@@ -113,6 +114,13 @@ export default class PatientPrescriptionContainer extends Component{
             console.log(erorr)
         })
     }
+
+    composeSpecificPrescriptionHeader = (prescription) => {
+       return   (<div>
+                     <p>Pacientas: {prescription.patientFullName}</p>
+                </div>)
+    }
+
     composeSpecificPrescription = (prescription) => {
        
         return (<div>
@@ -166,7 +174,8 @@ export default class PatientPrescriptionContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4><strong>Man išrašyti receptai </strong> (asmens kodas: {this.session.patient.patientId})</h4>
+                        <h4><strong>Asmens kodas {this.state.patient.patientId}</strong></h4>
+                            <h3> Receptai</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

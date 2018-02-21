@@ -16,5 +16,5 @@ public class PrescriptionDto {
     private String description;
     private Long useAmount;
     private String doctorFullName;
-
+    private String patientFullName;
 }
