@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {Link} from 'react-router'
 import Pagination from "react-js-pagination"
 
 
@@ -20,6 +19,8 @@ import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageLi
 export default class DoctorPatientViewContainer extends Component{
     constructor(props){
         super(props)
+        this.session =  JSON.parse(sessionStorage.getItem('session'))
+        this.patientId = sessionStorage.getItem('patientId')
         this.state = {
             patient:'',
             recordDetails:'',
@@ -33,6 +34,7 @@ export default class DoctorPatientViewContainer extends Component{
             activePage:1,
             itemsPerPage:8,
             listLength:'',
+            listIsEmpty:true,
 
             infoHeader:'',
             infoDetails:'',
@@ -43,8 +45,7 @@ export default class DoctorPatientViewContainer extends Component{
     }
 
     componentWillMount = () =>{
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'doctor'){
+        if(this.session === null || this.session.user.loggedIn !== true  || this.session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
         } 
@@ -54,20 +55,22 @@ export default class DoctorPatientViewContainer extends Component{
     //load all patient medical record and compose to view component
     loadRecords = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.props.params.patientId+'/record?page='
+        +this.patientId+'/record?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             document.getElementById("record-tab").style.background = "lightGrey"
 
             if(response.data.content.length === 0){
                 this.setState({
-                    viewContent:this.state.notFoundRecord
+                    viewContent:this.state.notFoundRecord,
+                    listIsEmpty:true
                 })
             }else{
                 this.setState({
                     viewContent:<RecordListViewDemo records={response.data.content.map(this.composeRecords)} />,
                     listInfo:response.data,
                     listLength:response.data.content.length,
+                    listIsEmpty:false
                 })
                 console.log(response.status)
             }
@@ -79,19 +82,21 @@ export default class DoctorPatientViewContainer extends Component{
      //load all patient prescriptions and compose to view component
      loadPrescriptions = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.props.params.patientId+'/prescription?page='
+        +this.patientId+'/prescription?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             if(response.data.content.length === 0){
                 this.setState({
-                    viewContent:this.state.notFoundPrescription
+                    viewContent:this.state.notFoundPrescription,
+                    listIsEmpty:true
                 })
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView 
-                                prescription={response.data.content.map(this.composePrescription)} />,
+                                prescription={response.data.content.map(this.composePrescriptions)} />,
                     listInfo:response.data,
                     listLength:response.data.content.length,
+                    listIsEmpty:false
                    
                 })
                 
@@ -119,7 +124,7 @@ export default class DoctorPatientViewContainer extends Component{
         )
     }
      //compose prescription list to specific listing item (view component)
-     composePrescription = (prescription, index) =>{
+     composePrescriptions = (prescription, index) =>{
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -205,7 +210,6 @@ export default class DoctorPatientViewContainer extends Component{
                 this.setState({
                     prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
                 })
-                
             }
             else{
                 this.setState({
@@ -216,7 +220,6 @@ export default class DoctorPatientViewContainer extends Component{
             console.log(response.status)
         })
         .catch((erorr) => {
-            
             //console.log(erorr)
         })
     }
@@ -256,6 +259,9 @@ export default class DoctorPatientViewContainer extends Component{
     //on medical record row click show record details
     showRecordDetails = (rowId) =>{
         this.loadSpecificRecord(rowId);
+        this.setState({
+            prescriptionUsage:null
+        })
     }
     //on prescription click show sprescription details
     showPrescriptionDetails = (rowId) =>{
@@ -281,6 +287,9 @@ export default class DoctorPatientViewContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
+            return ''
+          }
         return (
             <div className="col-sm-5 col-sm-offset-4">
             <Pagination

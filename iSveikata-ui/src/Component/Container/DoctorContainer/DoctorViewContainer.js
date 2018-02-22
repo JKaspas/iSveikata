@@ -10,6 +10,9 @@ import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink'
 import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 
+import {doctorViewPatient} from '../_action/index'
+import doctor from '../_reducers/doctorReducer';
+
 class DoctorViewContainer extends Component{
     constructor(props){
         super(props)
@@ -90,7 +93,9 @@ class DoctorViewContainer extends Component{
             //console.log(erorr)
         })
     }
-
+    viewPatientClickHandler = (patientId) =>{
+       sessionStorage.setItem("patientId", patientId)
+    }
     //compose patient list item (row) to show it in table
     composePatient = (patient, index) =>{
         let patientViewLink = null
@@ -98,7 +103,7 @@ class DoctorViewContainer extends Component{
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-            patientViewLink=(<td><DoctorViewPatientLink patientId={patient.id} /></td>)
+            patientViewLink=(<td><DoctorViewPatientLink clickHandler={this.viewPatientClickHandler} patientId={patient.id} /></td>)
         }
         return (
             <PatientListingItem
