@@ -77,7 +77,7 @@ public class EmployeesService {
 	 * @param patientId
 	 *            the patient id
 	 */
-	public void bindDoctorToPatient(String doctorId, Long patientId) {
+	public void bindDoctorToPatient(String doctorId, String patientId) {
 		Patient patient = patientRepository.findOne(patientId);
 		Doctor doctor = (Doctor) employeesRepository.findByUserName(doctorId);
 		if (doctor instanceof Doctor) {
@@ -181,7 +181,7 @@ public class EmployeesService {
 	 *            the patient id
 	 * @return true, if not
 	 */
-	public boolean validateBindDoctrorToPatient(String doctorId, Long patientId) {
+	public boolean validateBindDoctrorToPatient(String doctorId, String patientId) {
 		Patient patient = patientRepository.findOne(patientId);
 		Doctor doctor = (Doctor) employeesRepository.findByUserName(doctorId);
 		if (doctor instanceof Doctor) {

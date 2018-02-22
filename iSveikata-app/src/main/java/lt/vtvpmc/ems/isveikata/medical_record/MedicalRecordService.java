@@ -50,7 +50,7 @@ public class MedicalRecordService {
 		medicalRecord.setAppointment(appointment);
 		medicalRecord.setDoctor(
 				(Doctor) jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
-		medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), Long.class)));
+		medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), String.class)));
 		jpaMedicalRecordRepository.save(medicalRecord);
 		jpaAppointmentRepository.save(appointment);
 
