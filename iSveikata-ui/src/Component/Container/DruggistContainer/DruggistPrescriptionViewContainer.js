@@ -19,6 +19,7 @@ class DruggistViewContainer extends Component{
     constructor(props){
         super(props)
         this.session = JSON.parse(sessionStorage.getItem('session'))
+        this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
         this.state = {
             prescriptions:null,
             infoState:'',
@@ -32,6 +33,10 @@ class DruggistViewContainer extends Component{
             activePage:1,
             itemsPerPage:8,
             listLength:'',
+            listIsEmpty:false,
+
+            infoDetails:null,
+            infoHeader:"Recepto detali informacija"
         }
     }
 
@@ -42,6 +47,7 @@ class DruggistViewContainer extends Component{
             return '';
         }  
         this.getPatientPrescriptions(this.state.activePage)
+        console.log(this.patientInfo)
        
     }
 
@@ -52,13 +58,15 @@ class DruggistViewContainer extends Component{
         .then((response)=>{
             if(response.data.content.length === 0){
                 this.setState({
-                    viewContent:this.state.info
+                    viewContent:this.state.info,
+                    listIsEmpty:true
                 })
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>,
                     listInfo:response.data,
                     listLength:response.data.content.length,
+                    listIsEmpty:false
                     })
             }
            
@@ -70,6 +78,9 @@ class DruggistViewContainer extends Component{
         })
     }
     showDetails = (prescriptionId) =>{    
+        if(document.getElementById('myModal').style.display === '' || document.getElementById('myModal').style.display === 'none'){
+            document.getElementById('modalButton').click()
+        }
         this.loadSpecificPrescription(prescriptionId)
     }
 
@@ -103,6 +114,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
+            document.getElementById('modalButton').click()
             this.getPatientPrescriptions(this.state.activePage)
             console.log(response.status)
         })
@@ -120,7 +132,6 @@ class DruggistViewContainer extends Component{
         .then((response) => {
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId),
-                    infoHeader:this.composeSpecificPrescriptionHeader(response.data, prescriptionId)
                 })
             console.log(response.data)
         })
@@ -129,12 +140,6 @@ class DruggistViewContainer extends Component{
         })
     }
 
-    composeSpecificPrescriptionHeader = (prescription) => {
-        return   (<div>
-                    <strong>Pacientas: {prescription.patientFullName}</strong>
-                    <p>Recepto turinys:</p>
-                 </div>)
-     }
 
     composeSpecificPrescription = (prescription, prescriptionId) => {
        
@@ -175,6 +180,9 @@ class DruggistViewContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
+            return ''
+          }
         return (
             <div className="col-sm-5 col-sm-offset-4">
                 <Pagination
@@ -195,12 +203,14 @@ class DruggistViewContainer extends Component{
         return (
             <div className="container">
             <section>
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+            <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                            <h4><strong>Asmens kodas: {this.props.params.patientId}</strong></h4>
-                            <h3>Išrašyti receptai</h3>
+                            <h4>Klientas: {this.patientInfo.fullName}</h4>
+                            <p>Gimimo data: {this.patientInfo.birthDate}</p>
+                            <p>Asmens kodas: {this.patientInfo.id}</p>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
@@ -208,6 +218,7 @@ class DruggistViewContainer extends Component{
 
                                 {this.state.viewContent}
                                 {this.showPagination()}
+                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

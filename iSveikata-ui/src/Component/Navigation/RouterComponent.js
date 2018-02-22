@@ -26,6 +26,8 @@ import UserPasswordContainer from '../Container/PasswordComponent/UserPasswordCo
 import {InitialAdminApp, InitialPublicApp, InitialDoctorApp, InitialDruggistApp, InitialPatientApp, NoMatch} from './InitialAppComponents'
 import LogoutContainer from '../Container/LogoutContainer';
 
+import GeneruotiIrasus from '../Container/Generators/GeneruotiIrasus'
+
 
 
 var RouteComponent = () =>{
@@ -39,6 +41,7 @@ var RouteComponent = () =>{
             <Route path="/vartotojams" component={UserLoginContainer} />
           
             <Route path="/atsijungti" component={LogoutContainer} />
+            <Route path="/generuoti" component={GeneruotiIrasus} />
           </Route>
           <Route path="/admin" component={InitialAdminApp} >
             <IndexRoute component={AdminCreatePatientContainer} />

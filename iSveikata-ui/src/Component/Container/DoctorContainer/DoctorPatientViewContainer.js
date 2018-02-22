@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Pagination from "react-js-pagination"
+import { findDOMNode } from 'react-dom'
+import $ from 'jquery'
 
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
@@ -11,16 +13,13 @@ import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListView';
 import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
 
-// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
+
 
 export default class DoctorPatientViewContainer extends Component{
     constructor(props){
         super(props)
         this.session =  JSON.parse(sessionStorage.getItem('session'))
-        this.patientId = sessionStorage.getItem('patientId')
+        this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
         this.state = {
             patient:'',
             recordDetails:'',
@@ -50,12 +49,11 @@ export default class DoctorPatientViewContainer extends Component{
             return '';
         } 
        this.loadRecords(this.state.activePage);
-
     }
     //load all patient medical record and compose to view component
     loadRecords = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.patientId+'/record?page='
+        +this.patientInfo.id+'/record?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             document.getElementById("record-tab").style.background = "lightGrey"
@@ -82,7 +80,7 @@ export default class DoctorPatientViewContainer extends Component{
      //load all patient prescriptions and compose to view component
      loadPrescriptions = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.patientId+'/prescription?page='
+        +this.patientInfo.id+'/prescription?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             if(response.data.content.length === 0){
@@ -99,7 +97,6 @@ export default class DoctorPatientViewContainer extends Component{
                     listIsEmpty:false
                    
                 })
-                
             }
             console.log(response.status)
         })
@@ -258,6 +255,9 @@ export default class DoctorPatientViewContainer extends Component{
 
     //on medical record row click show record details
     showRecordDetails = (rowId) =>{
+        if(document.getElementById('myModal').style.display === '' || document.getElementById('myModal').style.display === 'none'){
+            document.getElementById('modalButton').click()
+        }
         this.loadSpecificRecord(rowId);
         this.setState({
             prescriptionUsage:null
@@ -265,6 +265,9 @@ export default class DoctorPatientViewContainer extends Component{
     }
     //on prescription click show sprescription details
     showPrescriptionDetails = (rowId) =>{
+        if(document.getElementById('myModal').style.display === '' || document.getElementById('myModal').style.display === 'none'){
+            document.getElementById('modalButton').click()
+        }
         this.getPrescriptionUsage(rowId)
         this.loadSpecificPrescription(rowId);
     }
@@ -312,8 +315,9 @@ export default class DoctorPatientViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Pacientas</h4>
-                            <p>{this.props.params.patientId}</p>
+                        <h4>Klientas: {this.patientInfo.fullName}</h4>
+                        <p>Gimimo data: {this.patientInfo.birthDate}</p>
+                        <p>Asmens kodas: {this.patientInfo.id}</p>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
@@ -332,7 +336,7 @@ export default class DoctorPatientViewContainer extends Component{
                                 <br/>
                                 {this.state.viewContent}
                                 {this.showPagination()}
-
+                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

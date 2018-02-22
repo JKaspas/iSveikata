@@ -93,8 +93,8 @@ class DoctorViewContainer extends Component{
             //console.log(erorr)
         })
     }
-    viewPatientClickHandler = (patientId) =>{
-       sessionStorage.setItem("patientId", patientId)
+    viewPatientClickHandler = (patientId, fullName, birthDate) =>{
+       sessionStorage.setItem("patientInfo", JSON.stringify({id:patientId, fullName:fullName, birthDate:birthDate}))
     }
     //compose patient list item (row) to show it in table
     composePatient = (patient, index) =>{
@@ -103,7 +103,10 @@ class DoctorViewContainer extends Component{
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-            patientViewLink=(<td><DoctorViewPatientLink clickHandler={this.viewPatientClickHandler} patientId={patient.id} /></td>)
+            patientViewLink=(<td><DoctorViewPatientLink clickHandler={this.viewPatientClickHandler} 
+                patientId={patient.id} 
+                fullName={patient.fullName}
+                birthDate={patient.birthDate}/></td>)
         }
         return (
             <PatientListingItem
