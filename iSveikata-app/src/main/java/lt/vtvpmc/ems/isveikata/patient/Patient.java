@@ -12,8 +12,6 @@ import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -28,19 +26,19 @@ import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @Entity
 @Table(indexes = {
-		@Index(name = "patient_firstName", columnList = "firstName"),
-		@Index(name = "patient_lastName", columnList = "lastName"),
-		@Index(name = "patient_patientId", columnList = "patientId")
+		@Index(name = "idx_firstName", columnList = "firstName"),
+		@Index(name = "idx_lastName", columnList = "lastName"),
+		@Index(name = "idx_first_lastName", columnList = "firstName,lastName")
 		})
 @Data
 public class Patient implements Serializable {
 	private static final long serialVersionUID = 416974951348630192L;
 
 	@Id
-	@Min(10_001_010_000L)
-	@Max(89_912_319_999L)
+//	@Min(10_001_010_000L)
+//	@Max(89_912_319_999L)
 	@Column(unique = true, nullable = false)
-	private Long patientId; // personal code
+	private String patientId; // personal code
 
 	@Type(type = "date")
 	private Date birthDate;

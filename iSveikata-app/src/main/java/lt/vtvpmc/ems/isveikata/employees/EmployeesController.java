@@ -113,7 +113,7 @@ public class EmployeesController {
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
-	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable Long patientId) {
+	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable String patientId) {
 		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
 			employeesService.bindDoctorToPatient(userName, patientId);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Pacientas priskirtas gydytojui");
@@ -269,7 +269,7 @@ public class EmployeesController {
 	 *            the patient id
 	 */
 	@DeleteMapping("/admin/delete/patient/{patientId}")
-	private void deletePatient(@PathVariable Long patientId) {
+	private void deletePatient(@PathVariable String patientId) {
 		patientService.deactivatePatient(patientId);
 	}
 

@@ -77,7 +77,7 @@ public class PatientService {
 	 * @param pageable
 	 * @return
 	 */
-	public Page<Patient> getAllPatientByPatientId(Long patientId, Pageable pageable) {
+	public Page<Patient> getAllPatientByPatientId(String patientId, Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		return patientRepository.findAllPatientByPatientId(patientId, request);
 	}
@@ -91,9 +91,10 @@ public class PatientService {
 	 */
 	public Page<PatientDto> getAllPagedPatientByDoctor(Pageable pageable, String userName) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllByDoctorUserName(userName, request);
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(doctorRepository.findByUserName(userName).getId());
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		Integer end = (request.getOffset()+request.getPageSize() > dtos.size() ? dtos.size():request.getOffset()+request.getPageSize());
+		return new PageImpl<>(dtos.subList(request.getOffset(),  end), request, dtos.size());
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient
 	 */
-	public PatientDto getPatient(Long patientId) {
+	public PatientDto getPatient(String patientId) {
 		return patientMapper.patientToDto(patientRepository.findOne(patientId));
 	}
 
@@ -169,7 +170,7 @@ public class PatientService {
 	 * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
-	public boolean updatePatientPassword(String oldPassword, final String newPassword, Long patientId) {
+	public boolean updatePatientPassword(String oldPassword, final String newPassword, String patientId) {
 		Patient pat = patientRepository.findOne(patientId);
 		if (Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))) {
 			pat.setPassword(newPassword);
@@ -213,7 +214,7 @@ public class PatientService {
 	 * @return true, if successful
 	 */
 	public boolean patientLogin(String patientId, String password) {
-		byte[] dbPassword = patientRepository.findOne(Long.parseLong(patientId)).getPassword();
+		byte[] dbPassword = patientRepository.findOne(patientId).getPassword();
 		return Passwords.isValid(Passwords.hashString(password), dbPassword);
 	}
 
@@ -238,8 +239,8 @@ public class PatientService {
 	 * @param patient_id
 	 *            the patient id
 	 */
-	public void deactivatePatient(Long patient_id) {
-		Patient patient = patientRepository.findOne(patient_id);
+	public void deactivatePatient(String patientId) {
+		Patient patient = patientRepository.findOne(patientId);
 		patient.setActive(false);
 		patientRepository.save(patient);
 	}
@@ -252,7 +253,7 @@ public class PatientService {
 	 */
 	public boolean isPatientActive(String patientId) {
 		if (patientId.matches("\\d+")) {
-			Patient patient = patientRepository.findOne(Long.parseLong(patientId));
+			Patient patient = patientRepository.findOne(patientId);
 			return patient != null ? patient.isActive() : false;
 		} else {
 			return false;
@@ -296,15 +297,10 @@ public class PatientService {
 	 */
 
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
-		Page<Patient> patientPage = null;
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		try {
-			Long numbers = Long.parseLong(searchValue);
-			System.out.println("numerelis");
-			patientPage = patientRepository.findByPatientIdStartingWith(searchValue, request); // findAllActivePatientBySearchId(searchValue, request);
-		} catch (NumberFormatException e) {
-			patientPage = patientRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchValue, searchValue, request);//findAllActivePatientBySearchValue(searchValue, request);
-		}
+	
+		Page<Patient> 	patientPage = patientRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchValue, searchValue,request);//findAllActivePatientBySearchValue(searchValue, request);
+		
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
