@@ -46,7 +46,7 @@ public class PrescriptionSevice {
         ObjectMapper mapper = new ObjectMapper();
         Prescription prescription = mapper.convertValue(map.get("prescription"), Prescription.class);
         Api api = apiRepository.findByTitle(mapper.convertValue(map.get("apiTitle"), String.class));
-        Long patientId = mapper.convertValue(map.get("patientId"), Long.class);
+        String patientId = mapper.convertValue(map.get("patientId"), String.class);
         Doctor doctor = (Doctor) employeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class));
 
         if(patientId != null) {
