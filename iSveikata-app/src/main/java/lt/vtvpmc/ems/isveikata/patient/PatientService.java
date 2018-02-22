@@ -124,7 +124,8 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public Page<MedicalRecordDto> getPatientRecordList(Long patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "id");
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
+				"id");
 		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId, request);
 		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage.getContent());
 		return new PageImpl<>(dtos, request, medicalRecordPage.getTotalElements());
@@ -138,7 +139,8 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<PrescriptionDto> getPatientPrescriptionList(Long patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC, "expirationDate");
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
+				"expirationDate");
 		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, request);
 		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
 		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
@@ -274,8 +276,9 @@ public class PatientService {
 	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
 			String searchValue) {
 		Doctor doctor = doctorRepository.findByUserName(userName);
-		PageRequest request = new PageRequest(pageable.getPageNumber()-1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor, request);
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		Page<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor,
+				request);
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
@@ -293,15 +296,22 @@ public class PatientService {
 	 */
 
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
+		Page<Patient> patientPage = null;
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllActivePatientBySearchValue(searchValue,request);
+		try {
+			Long numbers = Long.parseLong(searchValue);
+			System.out.println("numerelis");
+			patientPage = patientRepository.findByPatientIdStartingWith(searchValue, request); // findAllActivePatientBySearchId(searchValue, request);
+		} catch (NumberFormatException e) {
+			patientPage = patientRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchValue, searchValue, request);//findAllActivePatientBySearchValue(searchValue, request);
+		}
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
 
 	/**
-	 * Return all active not bind patient by searchValue (firstName, lastName, patientId)
-	 * patientId)
+	 * Return all active not bind patient by searchValue (firstName, lastName,
+	 * patientId) patientId)
 	 *
 	 * @param pageable
 	 *

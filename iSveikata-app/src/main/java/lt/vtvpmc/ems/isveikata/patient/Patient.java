@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,8 +24,14 @@ import lombok.Data;
 import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
+import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 
 @Entity
+@Table(indexes = {
+		@Index(name = "patient_firstName", columnList = "firstName"),
+		@Index(name = "patient_lastName", columnList = "lastName"),
+		@Index(name = "patient_patientId", columnList = "patientId")
+		})
 @Data
 public class Patient implements Serializable {
 	private static final long serialVersionUID = 416974951348630192L;
