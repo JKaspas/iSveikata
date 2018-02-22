@@ -199,7 +199,7 @@ export default class DoctorPatientViewContainer extends Component{
                 <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
-                <p>Aprašymas: {prescription.description}</p>
+                <p>Vartojimo aprašymas: {prescription.description}</p>
         </div>)
     }
 

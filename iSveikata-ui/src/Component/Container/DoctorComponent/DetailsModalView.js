@@ -1,8 +1,10 @@
 import React from 'react'
 
+import '../../../App.css';
+
 export const DetailsModalView = (props) =>{
     return(
-        <div id="myModal" className="modal fade" role="dialog">
+        <div id="myModal" className="modal right fade" role="dialog">
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                 <div className="modal-header">
