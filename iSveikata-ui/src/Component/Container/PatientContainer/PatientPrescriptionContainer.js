@@ -5,6 +5,9 @@ import Pagination from "react-js-pagination"
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'; 
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
+import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListView';
+import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
+
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
 
@@ -35,7 +38,9 @@ export default class PatientPrescriptionContainer extends Component{
             infoDetails:'',
             infoHeader:'',
 
-            prescriptionUsage:''
+            prescriptionUsage:'',
+            usage:null,
+            info:''
         }
     }
     componentDidCatch = (erorr, info) =>{
@@ -77,10 +82,10 @@ export default class PatientPrescriptionContainer extends Component{
 
 
     composePrescription = (prescription, index) =>{
-        var usageLink = '';
-        if(prescription.useAmount > 0){
-            usageLink=<Link onClick={this.hideModal} to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
-        }
+        // var usageLink = '';
+        // if(prescription.useAmount > 0){
+        //     usageLink=<Link onClick={this.hideModal} to={'/pacientas/receptas/'+prescription.id+'/panaudojimai'} className='btn btn-primary'>Recepto panaudojimai</Link>
+        // }
        
         return(
             <PrescriptionListingItem  
@@ -91,7 +96,7 @@ export default class PatientPrescriptionContainer extends Component{
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
                 useAmount={prescription.useAmount}
-                viewUsageLink={<td>{usageLink}</td>}
+                // viewUsageLink={<td>{usageLink}</td>}
                 showDetails={this.showPrescriptionDetails}
             />
         )
@@ -135,9 +140,43 @@ export default class PatientPrescriptionContainer extends Component{
         </div>)
     }
 
+
+    getPrescriptionUsage = (prescriptionId) =>{
+        axios.get('http://localhost:8080/api/prescription/'+prescriptionId+'/usages')
+        .then((response)=>{
+            
+            if (response.data.length === 0){
+                this.setState({
+                    info:(<h3>Recepto panaudojimų nerasta</h3>)
+                })
+            } else {
+                    this.setState({
+                      prescriptionUsage:<PrescriptionUsageListView 
+                                            usage={response.data.map(this.composeUsage)}/>
+                })
+            }
+            console.log(response.data)
+        })
+
+        .catch((erorr) => {
+            //console.log(erorr)
+        })
+    }
+
+    composeUsage= (usage, index) =>{
+        return (
+             <PrescriptionUsageListingItem
+                key={index}
+                date={usage.usageDate}
+                druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
+            />
+        )
+    }
+
     //on  record row click show prescription record details
     showPrescriptionDetails = (rowId) =>{
         this.loadSpecificPrescription(rowId);
+        this.getPrescriptionUsage(rowId);
         console.log(rowId)
     }
 
@@ -174,8 +213,8 @@ export default class PatientPrescriptionContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                        <h4><strong>Asmens kodas {this.state.patient.patientId}</strong></h4>
-                            <h3> Receptai</h3>
+                        <h4><strong>Asmens kodas {this.session.patient.patientId}</strong></h4>
+                        <h3> Receptai</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

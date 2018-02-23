@@ -225,11 +225,10 @@ export default class DoctorPatientViewContainer extends Component{
     }
     composeUsage= (usage, index) =>{
         return (
-            <PrescriptionUsageListingItem
+             <PrescriptionUsageListingItem
                 key={index}
                 date={usage.usageDate}
                 druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
-               
             />
         )
     }
