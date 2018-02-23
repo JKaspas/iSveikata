@@ -14,7 +14,6 @@ class DruggistViewContainer extends Component{
         this.state = {
             patient:'',
             searchValue:'',
-            info:'',
             
           
         }
@@ -37,13 +36,13 @@ class DruggistViewContainer extends Component{
             
             if(response.data.length === 0){
                 this.setState({
-                    info:(<h3>Klientų su tokiu asmens kodu nėra</h3>)
+                    patient:(<h3>Klientų su tokiu asmens kodu nėra</h3>)
                 })
             }else{
                 this.setState({
                     patient: <PatientListView  patients={this.composePatient(response.data)} />,
-                    
                 })
+                sessionStorage.setItem("patientInfo", JSON.stringify(response.data))
             }
                   
             console.log(response.status)
@@ -70,7 +69,6 @@ class DruggistViewContainer extends Component{
         this.setState({
             searchValue:e.target.value
         })
-        console.log(e.target.value)
     }
     searchHandler = (e) =>{
         e.preventDefault()
@@ -111,9 +109,7 @@ class DruggistViewContainer extends Component{
                             
                             <div className="col-sm-12">
                                {this.state.patient}                            
-                                {this.state.info}
-                                
-
+                        
                             </div>
                         </div> 
                     </div> 

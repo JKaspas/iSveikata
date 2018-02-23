@@ -79,7 +79,7 @@ public class PatientController {
 	 * @return patient by patientId
 	 */
 	@GetMapping("/{patientId}")
-	private PatientDto getPatientById(@PathVariable Long patientId) {
+	private PatientDto getPatientById(@PathVariable String patientId) {
 		return patientService.getPatient(patientId);
 	}
 
@@ -130,7 +130,7 @@ public class PatientController {
 	 */
 	@PutMapping("/{patientId}/password")
 	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields,
-			@PathVariable final Long patientId) {
+			@PathVariable final String patientId) {
 		boolean passwordChangeIsValid = patientService.updatePatientPassword(fields.get("oldPassword"),
 				fields.get("newPassword"), patientId);
 		return passwordChangeIsValid
@@ -152,7 +152,7 @@ public class PatientController {
 		if (patientService.isPatientActive(fields.get("patientId"))
 				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					"Sveiki, " + patientService.getPatient(Long.parseLong(fields.get("patientId"))).getFullName());
+					"Sveiki, " + patientService.getPatient(fields.get("patientId")).getFullName());
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
