@@ -1,6 +1,9 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -66,7 +69,7 @@ public class PatientService {
 	 */
 	public Page<PatientDto> getAllPagedActivePatient(Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findByIsActiveTrue(request);
+		Page<Patient> patientPage = patientRepository.findByActive(request);
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
@@ -147,6 +150,20 @@ public class PatientService {
 		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
 	}
 
+	/**
+	 * Gets the patient prescription list.
+	 *
+	 * @param patientId
+	 *            the patient id
+	 * @return the patient prescription list
+	 */
+	public Page<PrescriptionDto> getPatientPrescriptionListAfterDate(String patientId, Pageable pageable) {
+		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
+				"expirationDate");
+		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientIdAndDateAfter(patientId, new Date(), request);
+		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
+		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
+	}
 	// /**
 	// * Gets the patient record by id.
 	// *
@@ -323,4 +340,6 @@ public class PatientService {
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
+
+
 }

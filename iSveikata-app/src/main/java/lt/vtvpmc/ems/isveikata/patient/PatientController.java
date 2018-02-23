@@ -1,5 +1,6 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,18 +106,17 @@ public class PatientController {
 		return patientService.getPatientPrescriptionList(patientId, pageable);
 	}
 
-	// /**
-	// * Gets record with appointmet and with doctor by record id URL:
-	// * "/record/{record_id}"
-	// *
-	// * @param id
-	// * @return record with appointmet and with doctor by record id
-	// */
-	// @GetMapping("/record/{record_id}")
-	// private MedicalRecord getPatientRecordById(@PathVariable("record_id") Long
-	// id) {
-	// return patientService.getPatientRecordById(id);
-	// }
+	/**
+	 * Gets all records URL: api/{patientId}/prescription/druggist for druggist all valid date prescription
+	 *
+	 * @param patientId
+	 * @return list of all patient preascription that are valid by date
+	 */
+	@GetMapping("/{patientId}/prescription/druggist")
+	private Page<PrescriptionDto> getPrescriptionListForDruggist(@PathVariable("patientId") String patientId, Pageable pageable) {
+		return patientService.getPatientPrescriptionListAfterDate(patientId, pageable);
+	}
+
 
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password

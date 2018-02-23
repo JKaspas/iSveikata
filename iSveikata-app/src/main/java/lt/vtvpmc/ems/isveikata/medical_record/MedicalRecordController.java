@@ -38,7 +38,7 @@ public class MedicalRecordController {
 	/**
 	 * Get specific medical record
 	 *
-	 * @param medical
+	 * @param medicalRecordId
 	 *            medicalRecordId Medical record id
 	 *
 	 * @return medical record
