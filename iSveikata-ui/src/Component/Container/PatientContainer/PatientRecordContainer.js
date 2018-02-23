@@ -16,6 +16,7 @@ export default class PatientRecordContainer extends Component{
     constructor(props){
         super(props)
         this.session =  JSON.parse(sessionStorage.getItem('session'));
+        this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
         this.state = {
             records:null,
             notFoundRecord:(<h3>Ligos istorija tuščia</h3>),
@@ -114,7 +115,7 @@ export default class PatientRecordContainer extends Component{
 
     composeSpecificRecordHeader = (record) => {  
         return  (<div>
-                    <p>Pacientas: {record.patientFullName}</p>
+                    <p>"Ligos įrašo detali informacija"</p>
                 </div>)
                 
     }
@@ -137,10 +138,15 @@ export default class PatientRecordContainer extends Component{
         </div>)
     }
 
-    //on medical record row click show record details
-    showRecordDetails = (rowId) =>{
+     //on medical record row click show record details
+     showRecordDetails = (rowId) =>{
+        if(document.getElementById('myModal').style.display === '' || document.getElementById('myModal').style.display === 'none'){
+            document.getElementById('modalButton').click()
+        }
         this.loadSpecificRecord(rowId);
-       // console.log(rowId)
+        this.setState({
+            
+        })
     }
 
 
@@ -179,14 +185,15 @@ export default class PatientRecordContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4><strong>Asmens kodas {this.session.patient.patientId}</strong></h4>
+                        <h4>Klientas: {this.patientInfo.fullName}</h4>
+                        <p>Asmens kodas: {this.patientInfo.id}</p>
                             <h3> Ligos istorijos įrašai</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
                                 {this.state.viewContent}
                                 {this.showPagination()}
-
+                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}
