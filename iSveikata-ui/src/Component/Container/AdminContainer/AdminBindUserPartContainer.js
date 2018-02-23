@@ -57,7 +57,6 @@ export default class AdminBindUserPartContainer extends Component{
         axios.get(finalRequestLink)
         .then((response)=>{
             if(response.data.content.length === 0){
-                console.log("nieko nerasta ?")
                 this.setState({
                     patientList:(<h3>Pacientų nėrasta</h3>),
                     listIsEmpty:true,

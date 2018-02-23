@@ -90,7 +90,7 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/record")
-	private Page<MedicalRecordDto> getRecordList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+	private Page<MedicalRecordDto> getRecordList(@PathVariable("patientId") String patientId, Pageable pageable) {
 		return patientService.getPatientRecordList(patientId, pageable);
 	}
 
@@ -101,7 +101,7 @@ public class PatientController {
 	 * @return list of all patient
 	 */
 	@GetMapping("/{patientId}/prescription")
-	private Page<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") Long patientId, Pageable pageable) {
+	private Page<PrescriptionDto> getPrescriptionList(@PathVariable("patientId") String patientId, Pageable pageable) {
 		return patientService.getPatientPrescriptionList(patientId, pageable);
 	}
 
@@ -121,7 +121,7 @@ public class PatientController {
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
 	 * 
-	 * @param Map
+	 * @param fields
 	 *            with oldPassword and newPssword keys
 	 * 
 	 * @param patientId
@@ -141,7 +141,7 @@ public class PatientController {
 	/**
 	 * Login. URL: /patient/login Checks if entered password matches saved in db.
 	 * 
-	 * @param Map
+	 * @param fields
 	 *            with patientId and password keys
 	 * 
 	 * @return HttpStatus with message

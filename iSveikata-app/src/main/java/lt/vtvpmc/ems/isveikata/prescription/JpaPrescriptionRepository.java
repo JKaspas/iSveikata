@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaPrescriptionRepository extends JpaRepository<Prescription, Long> {
 
-    Page<Prescription> findAllByPatientPatientId(Long id, Pageable pageable);
+    Page<Prescription> findAllByPatientPatientId(String id, Pageable pageable);
 }
