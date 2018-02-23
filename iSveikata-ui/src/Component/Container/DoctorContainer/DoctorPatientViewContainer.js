@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import Pagination from "react-js-pagination"
 import { findDOMNode } from 'react-dom'
-import $ from 'jquery'
+// import $ from 'jquery'
 
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
