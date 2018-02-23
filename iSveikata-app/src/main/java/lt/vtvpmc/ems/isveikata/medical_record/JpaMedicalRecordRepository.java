@@ -10,6 +10,6 @@ public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord,
 
 	List<MedicalRecord> findAllByOrderByIdDesc();
 
-	Page<MedicalRecord> findAllByPatientPatientId(Long patientId, Pageable request);
+	Page<MedicalRecord> findAllByPatientPatientId(String patientId, Pageable request);
 
 }

@@ -124,7 +124,7 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient record list
 	 */
-	public Page<MedicalRecordDto> getPatientRecordList(Long patientId, Pageable pageable) {
+	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
 				"id");
 		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId, request);
@@ -139,7 +139,7 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
-	public Page<PrescriptionDto> getPatientPrescriptionList(Long patientId, Pageable pageable) {
+	public Page<PrescriptionDto> getPatientPrescriptionList(String patientId, Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
 				"expirationDate");
 		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, request);
@@ -236,7 +236,7 @@ public class PatientService {
 	/**
 	 * Deactivate patient.
 	 *
-	 * @param patient_id
+	 * @param patientId
 	 *            the patient id
 	 */
 	public void deactivatePatient(String patientId) {

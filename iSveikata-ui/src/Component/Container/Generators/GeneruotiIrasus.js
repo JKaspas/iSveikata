@@ -15,30 +15,56 @@ export default class GeneruotiIrasus extends Component {
             years:2000,
             month:1,
             day:20,
-            recordPerDay:1
+            recordPerDay:1,
+            totalRequest:0,
+            recordTotal:1,
+
+            page:20,
+
+            stopInterval:false
+            
         }
     }
 
 
     generateRecords = () =>{
+       
+        
+       
+
         for (let i = 0; i < this.state.amount; i++) { 
-            setInterval(() =>{
+           setInterval(() =>{
                 this.generateMedicalRecord()
-            } , 500 )  
+            } , 1000 )  
         }
     }
 
     generatePrescriptions = () =>{
+
         for (let i = 0; i < this.state.amount; i++) { 
-            setInterval(() =>{
+         setInterval(() =>{
                 this.generatePrescription()
-            } , 500 )  
+            } , 1000 )  
         }
     }
 
     generateMedicalRecord = () =>{
+        if(this.state.recordTotal > 20000){
+            let page = parseInt(this.state.page) + 1
+            this.getPatient(page)
+            console.log("Next patient page" + page)
+            this.setState({
+                recordTotal:0,
+                page:page
+            })
+            return ''
+        }
 
         if(this.state.years === 2018){
+            console.log("Jau 2018;/")
+            this.setState({
+                years:2000
+            })
             return ''
         }
         let newDate = this.state.years + '-' + this.state.month + '-' + this.state.day
@@ -64,9 +90,10 @@ export default class GeneruotiIrasus extends Component {
                     console.log(erorr)
                 })
 
-        if(this.state.recordPerDay < 30){
+        if(this.state.recordPerDay < 5001){
             this.setState({
-                recordPerDay:this.state.recordPerDay+1
+                recordPerDay:this.state.recordPerDay+1,
+                recordTotal:this.state.recordTotal+1
             })
         }else{
             if(this.state.day > 29){
@@ -88,7 +115,7 @@ export default class GeneruotiIrasus extends Component {
                 })
             }
             this.setState({
-                recordPerDay:Math.floor(Math.random() * 29)
+                recordPerDay:Math.floor(Math.random() * 900) + 4000,
             })
         }
         
@@ -98,8 +125,24 @@ export default class GeneruotiIrasus extends Component {
 
 
     generatePrescription = () =>{
+
+        if(this.state.recordTotal > 20000){
+            let page = parseInt(this.state.page) + 1
+            this.getPatient(page)
+            console.log("Next patient page " + page)
+            this.setState({
+                recordTotal:0,
+                page:page
+            })
+            return ''
+        }
+      
     
         if(this.state.years === 2018){
+            console.log("Jau 2018;/")
+            this.setState({
+                years:2000,
+            })
             return ''
         }
         let expDay = this.state.day + Math.floor(Math.random() * 30)
@@ -117,32 +160,14 @@ export default class GeneruotiIrasus extends Component {
             expMonth = expMonth + 1
             
         }
-        // if(this.state.recordPerDay > 10 && this.state.recordPerDay < 13 ){
-        //     if(expMonth > 6){
-        //         expMonth = 1 
-        //         expYears++
-        //     }else{
-        //         expMonth+6
-        //     }
-        // }else if(this.state.day === 1){
-        //     expDay = 30
-        // }else if(this.state.day < 25 && this.state.day > 20){
-        //     expDay = this.state.day + 5
-        // }else if(this.state.day < 20 ){
-        //     expDay = this.state.day + 10
-        // }
 
         let prescriptionDate = this.state.years + '-' + this.state.month + '-' + this.state.day
         let expirationDate = expYears + '-' + expMonth + '-' + expDay
 
-
-        console.log(prescriptionDate)
-        console.log(expirationDate)
-        
         axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
-                    expirationDate:prescriptionDate,
-                    prescriptionDate:expirationDate,
+                    expirationDate:expirationDate,
+                    prescriptionDate:prescriptionDate,
                     description:this.state.ipsum[Math.floor(Math.random() * this.state.ipsum.length)].substring(0, 255),
                     ingredientAmount:Math.floor(Math.random() * 20),
                     // ingredientUnit:this.state.substanceUnit,
@@ -159,9 +184,10 @@ export default class GeneruotiIrasus extends Component {
             })
 
 
-        if(this.state.recordPerDay < 30){
+        if(this.state.recordPerDay < 5001){
             this.setState({
-                recordPerDay:this.state.recordPerDay+1
+                recordPerDay:this.state.recordPerDay+1,
+                recordTotal:this.state.recordTotal+1
             })
         }else{
             if(this.state.day > 29){
@@ -184,16 +210,16 @@ export default class GeneruotiIrasus extends Component {
                 })
             }
             this.setState({
-                recordPerDay:Math.floor(Math.random() * 29)
+                recordPerDay:Math.floor(Math.random() * 900) + 4000,
             })
-            this.getImpsum()
+
             
         }
     }
 
     getData = () => {
         this.getDoctor()
-        this.getPatient()
+        this.getPatient(this.state.page)
         this.getIcd()
         this.getImpsum()
         this.getApi()
@@ -233,8 +259,8 @@ export default class GeneruotiIrasus extends Component {
         return {icd:icd.icdCode}
     }
 
-    getPatient = () =>{
-        axios.get('http://localhost:8080/api/patient/?page=1&size=10000')
+    getPatient = (page) =>{
+        axios.get('http://localhost:8080/api/patient/?page='+page+'&size=2000')
         .then((response)=>{
             this.setState({
                 patient:response.data.content.map(this.composePatients)
@@ -251,7 +277,7 @@ export default class GeneruotiIrasus extends Component {
     }
 
     getDoctor = () =>{
-        axios.get('http://localhost:8080/api/doctor?page=1&size=10000')
+        axios.get('http://localhost:8080/api/doctor?page=1&size=2000')
         .then((response)=>{
             this.setState({
                 doctor:response.data.content.map(this.composeDoctors)
@@ -268,23 +294,18 @@ export default class GeneruotiIrasus extends Component {
     }
 
     getConsoleData = () =>{
-        // console.log(this.state.doctor)
-        // console.log(this.state.patient)
-        // console.log(this.state.icd[1])
-        // console.log(this.state.icd[Math.floor(Math.random() * 1000)].icd)
-        // console.log(this.state.icd.length)
-        // console.log(this.state.doctor[Math.floor(Math.random() *this.state.doctor.length)])
-        // console.log(this.state.doctor[0])
-        //console.log(this.state.ipsum[Math.floor(Math.random() * this.state.ipsum.length)])
         console.log("Nera ka rodit ;/")
-
     }
 
     onChange = (e) =>{
         this.setState({
             amount:e.target.value
         })
-        console.log(e.target.value)
+    }
+    onChangePage = (e) =>{
+        this.setState({
+            page:e.target.value
+        })
     }
 
     getImpsum = () =>{
@@ -294,13 +315,12 @@ export default class GeneruotiIrasus extends Component {
                 this.setState({
                     ipsum:response.data
                 })
-                console.log(response.data)
+                //console.log(response.data)
             })
             .catch((erorr) => {
                 console.log(erorr)
             })
-       
-        
+    
     }
 
 
@@ -309,11 +329,15 @@ export default class GeneruotiIrasus extends Component {
             <div className="container">
                 <section>
                     <div >Generuoti irasus</div>
-                    <button onClick={this.getData}>Gauti duomenis</button>
                     <button onClick={this.generateRecords}>Generuoti irasus →</button>
                     <input onChange={this.onChange} placeholder="kiek?"/>
                     <button onClick={this.generatePrescriptions}>← Generuoti receptus</button>
                     <button onClick={this.getConsoleData}>Console</button>
+                    <input onChange={this.onChangePage} placeholder="pacientu puslapis..."/>
+                    <button onClick={this.getData}>Gauti duomenis</button>
+                    <button onClick={() => this.getPatient(this.state.page)}>Gauti patient</button>
+
+
                 </section>
             </div>)
     }
