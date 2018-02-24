@@ -26,9 +26,10 @@ class DruggistViewContainer extends Component{
             info:(<h3>Pacientui išrašytų receptų nerasta</h3>),
 
             viewContent:'',
+            allPrescription:null,
             contentType:'record',
 
-            listInfo:'',
+            totalElements:'',
 
             activePage:1,
             itemsPerPage:8,
@@ -36,7 +37,8 @@ class DruggistViewContainer extends Component{
             listIsEmpty:false,
 
             infoDetails:null,
-            infoHeader:"Recepto detali informacija"
+            infoHeader:"Recepto detali informacija",
+            notActivePrescription:0
         }
     }
 
@@ -46,14 +48,12 @@ class DruggistViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-        this.getPatientPrescriptions(this.state.activePage)
-        console.log(this.patientInfo)
-       
+        this.getPatientPrescriptions(this.state.activePage)       
     }
 
     getPatientPrescriptions = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.props.params.patientId+'/prescription?page='
+        +this.props.params.patientId+'/prescription/druggist?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
@@ -64,7 +64,8 @@ class DruggistViewContainer extends Component{
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>,
-                    listInfo:response.data,
+                    allPrescription:response.data.content,
+                    totalElements:response.data.totalElements,
                     listLength:response.data.content.length,
                     listIsEmpty:false
                     })
@@ -111,11 +112,11 @@ class DruggistViewContainer extends Component{
             userName:this.session.user.userName,
         })
         .then((response) => {
+            this.getPatientPrescriptions(this.state.activePage)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
             document.getElementById('modalButton').click()
-            this.getPatientPrescriptions(this.state.activePage)
             console.log(response.status)
         })
         .catch((erorr) =>{
@@ -123,7 +124,6 @@ class DruggistViewContainer extends Component{
                 infoState:<div className="alert alert-success"><strong>{erorr.response.data}</strong></div>,
             })
         })
-        this.closeOpenDetails();
     }
 
 
@@ -180,7 +180,7 @@ class DruggistViewContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
+        if(this.state.listLength === this.state.totalElements || this.state.listIsEmpty){
             return ''
           }
         return (
@@ -188,7 +188,7 @@ class DruggistViewContainer extends Component{
                 <Pagination
                 activePage={this.state.activePage}
                 itemsCountPerPage={this.state.itemsPerPage}
-                totalItemsCount={this.state.listInfo.totalElements}
+                totalItemsCount={this.state.totalElements}
                 pageRangeDisplayed={5}
                 onChange={this.handlePageChange}
                 />

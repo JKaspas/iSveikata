@@ -14,12 +14,18 @@ public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 
 	List<Patient> findByIsActiveTrue();
 
+	@Query("SELECT t FROM Patient t WHERE " +
+			"t.isActive = true AND  " +
+			"t.doctor is null")
 	Page<Patient> findByIsActiveTrueAndDoctorIsNull(Pageable pageable);
+
 	@Query(value = "SELECT * FROM PATIENT WHERE IS_ACTIVE = TRUE AND DOCTOR_ID = ?1", nativeQuery = true)
 	List<Patient> findPatientByDoctorUserName(Long doctorId);
 	//Page<Patient> findAllByDoctorUserName( String userName, Pageable pageable);
 
-	Page<Patient> findByIsActiveTrue(Pageable pageable);
+	@Query("SELECT t FROM Patient t WHERE " +
+			"t.isActive = true")
+	Page<Patient> findByActive(Pageable pageable);
 
 	@Query("SELECT t FROM Patient t WHERE " +
 			"t.isActive = true AND  " +
@@ -43,12 +49,12 @@ public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
 	Page<Patient> findAllActivePatientBySearchValue(@Param("searchValue") String searchValue, Pageable pageRequest);
 	
-	@Query("SELECT t FROM Patient t WHERE " +
-			"t.isActive = true AND  " +
-			"t.patientId LIKE CONCAT(:searchValue, '%')")
-	Page<Patient> findAllActivePatientBySearchId(@Param("searchValue") String searchValue, Pageable pageRequest);
-	
-	Page<Patient> findByFirstNameIgnoreCaseLikeOrLastNameIgnoreCaseLike(String firstName, String lastName, Pageable pageRequest);
+//	@Query("SELECT t FROM Patient t WHERE " +
+//			"t.isActive = true AND  " +
+//			"t.patientId LIKE CONCAT(:searchValue, '%')")
+//	Page<Patient> findAllActivePatientBySearchId(@Param("searchValue") String searchValue, Pageable pageRequest);
+//
+//	Page<Patient> findByFirstNameIgnoreCaseLikeOrLastNameIgnoreCaseLike(String firstName, String lastName, Pageable pageRequest);
 	
 	Page<Patient> findByFirstNameStartingWithOrLastNameStartingWith(String firstName, String lastName, Pageable pageRequest);
 	
