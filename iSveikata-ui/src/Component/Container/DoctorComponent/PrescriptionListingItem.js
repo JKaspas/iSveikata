@@ -12,7 +12,7 @@ const checkDate = (expirationDate) => {
 const PrescriptionListingItem = (props) =>{
 
     return (
-    <tr style={checkDate(props.expirationDate)} onClick={() => props.showDetails(props.id)}>
+    <tr style={checkDate(props.expirationDate)} onClick={() =>  props.showDetails(props.id)}>
             <td >{props.prescriptionDate}</td>
             <td>{props.expirationDate}</td>
             <td>{props.ingredientName}</td>
@@ -24,4 +24,3 @@ const PrescriptionListingItem = (props) =>{
 }
 
 export default PrescriptionListingItem;
-

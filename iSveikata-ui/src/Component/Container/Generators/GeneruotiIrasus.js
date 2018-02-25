@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import { compose } from '../../../../../../../../.cache/typescript/2.6/node_modules/redux';
+
 
 
 export default class GeneruotiIrasus extends Component {
@@ -29,9 +29,6 @@ export default class GeneruotiIrasus extends Component {
 
     generateRecords = () =>{
        
-        
-       
-
         for (let i = 0; i < this.state.amount; i++) { 
            setInterval(() =>{
                 this.generateMedicalRecord()
@@ -50,7 +47,7 @@ export default class GeneruotiIrasus extends Component {
 
     generateMedicalRecord = () =>{
         if(this.state.recordTotal > 10000){
-            let page = parseInt(this.state.page) + 1
+            let page = parseInt(this.state.page, 10) + 1
             this.getPatient(page)
             console.log("Next patient page" + page)
             this.setState({
@@ -126,16 +123,16 @@ export default class GeneruotiIrasus extends Component {
 
     generatePrescription = () =>{
 
-        // if(this.state.recordTotal > 20000){
-        //     let page = parseInt(this.state.page) + 1
-        //     this.getPatient(page)
-        //     console.log("Next patient page " + page)
-        //     this.setState({
-        //         recordTotal:0,
-        //         page:page
-        //     })
-        //     return ''
-        // }
+        if(this.state.recordTotal > 20000){
+            let page = parseInt(this.state.page, 10) + 1
+            this.getPatient(page)
+            console.log("Next patient page " + page)
+            this.setState({
+                recordTotal:0,
+                page:page
+            })
+            return ''
+        }
       
     
         if(this.state.years === 2018 && this.state.month === 2 && this.state.day === 30){
@@ -151,13 +148,13 @@ export default class GeneruotiIrasus extends Component {
 
         if(expDay > 30){
             
-            expDay = expDay - 30
+            expDay = parseInt(expDay, 10) - 30
             
             if(expMonth > 11){
                 expMonth = 1
-                expYears = expYears + 1
+                expYears = parseInt(expYears, 10) + 1
             }
-            expMonth = expMonth + 1
+            expMonth = parseInt(expMonth, 10) + 1
             
         }
 

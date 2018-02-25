@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { DateRangePicker, SingleDatePicker,isInclusivelyBeforeDay } from 'react-dates';
+import { DateRangePicker,isInclusivelyBeforeDay } from 'react-dates';
 
 
 import moment from 'moment';
@@ -90,8 +90,8 @@ export default class DoctorStatisticContainer extends Component{
 
     composeData = (data, index) =>{
         this.setState({
-            totalPatient: parseInt(this.state.totalPatient) + data[1],
-            totalTime: parseInt(this.state.totalTime) + data[2]
+            totalPatient: parseInt(this.state.totalPatient, 10) + data[1],
+            totalTime: parseInt(this.state.totalTime, 10) + data[2]
         })
 
         return {date:data[0], patient:data[1], time:data[2]}
@@ -149,7 +149,6 @@ export default class DoctorStatisticContainer extends Component{
                                 onDatesChange={({ startDate, endDate }) => { this.setState({ startDate:startDate, endDate:endDate })}}
                                 focusedInput={this.state.focusedInput}
                                 onFocusChange={(focusedInput) => { this.setState({ focusedInput })}}
-                                isOutsideRange={() => false}
                                 isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                 numberOfMonths={1}
                                 />
