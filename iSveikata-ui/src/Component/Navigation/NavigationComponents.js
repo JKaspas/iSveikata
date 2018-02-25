@@ -24,10 +24,12 @@ var AdminNavigation = (props) =>{
     return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
-        <a className="navbar-brand" href="#doctor">iSveikata</a>
+        <a className="navbar-brand" href="#gydytojas">iSveikata</a>
         <ul className="nav navbar-nav navbar-left">
-            <li><a className="" href="#doctor/patient">Pacientai</a></li>
-            <li><a className="" href="#doctor/password">Keisti slaptažodį</a></li>
+            <li><a className="" href="#gydytojas">Pradžia</a></li>
+            <li><a className="" href="#gydytojas/pacientai">Pacientai</a></li>
+            <li><a className="" href="#gydytojas/statistika">Darbo statistika</a></li>
+            <li><a className="" href="#gydytojas/slaptazodis">Keisti slaptažodį</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
         	<li><a className="" href="#atsijungti">Atsijungti</a></li>
@@ -77,6 +79,10 @@ var PublicNavigation = (props) =>{
       <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
         <a className="navbar-brand" href="#">iSveikata</a>
+        <ul className="nav navbar-nav">
+        	<li><a className="" href="#">Pradžia</a></li>
+	        <li><a className="" href="#statistika">Vieša statistika</a></li>
+        </ul>
         <ul className="nav navbar-nav navbar-right">
         	<li><a className="" href="#pacientams">Prisijungimas pacientams</a></li>
 	        <li><a className="" href="#vartotojams">Prisijungimas sistemos vartotojams</a></li>

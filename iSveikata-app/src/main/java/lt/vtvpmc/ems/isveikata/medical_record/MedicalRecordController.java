@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/record")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -49,5 +51,13 @@ public class MedicalRecordController {
 	private MedicalRecordDto getMedicalRecord(@PathVariable final Long medicalRecordId) {
 		return medicalRecordService.getMedicalRecord(medicalRecordId);
 	}
+
+
+	@GetMapping(value = "/doctor/{userName}/statistic/{dateFrom}/{dateTill}")
+	@ResponseStatus(HttpStatus.OK)
+	private List getDoctorWorkDaysStatistic(@PathVariable final String userName, @PathVariable final String dateFrom, @PathVariable final String dateTill){
+		return medicalRecordService.getDoctorWorkDaysStatistic(userName, dateFrom, dateTill);
+	}
+
 
 }

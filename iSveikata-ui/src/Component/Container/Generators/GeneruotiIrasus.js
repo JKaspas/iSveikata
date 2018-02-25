@@ -12,7 +12,7 @@ export default class GeneruotiIrasus extends Component {
             icd:null,
             amount:0,
             ipsum:[],
-            years:2000,
+            years:2010,
             month:1,
             day:20,
             recordPerDay:1,
@@ -49,7 +49,7 @@ export default class GeneruotiIrasus extends Component {
     }
 
     generateMedicalRecord = () =>{
-        if(this.state.recordTotal > 20000){
+        if(this.state.recordTotal > 10000){
             let page = parseInt(this.state.page) + 1
             this.getPatient(page)
             console.log("Next patient page" + page)
@@ -60,10 +60,10 @@ export default class GeneruotiIrasus extends Component {
             return ''
         }
 
-        if(this.state.years === 2018){
+        if(this.state.years === 2018 && this.state.month === 2 && this.state.day === 30){
             console.log("Jau 2018;/")
             this.setState({
-                years:2000
+                years:2010
             })
             return ''
         }
@@ -126,22 +126,22 @@ export default class GeneruotiIrasus extends Component {
 
     generatePrescription = () =>{
 
-        if(this.state.recordTotal > 20000){
-            let page = parseInt(this.state.page) + 1
-            this.getPatient(page)
-            console.log("Next patient page " + page)
-            this.setState({
-                recordTotal:0,
-                page:page
-            })
-            return ''
-        }
+        // if(this.state.recordTotal > 20000){
+        //     let page = parseInt(this.state.page) + 1
+        //     this.getPatient(page)
+        //     console.log("Next patient page " + page)
+        //     this.setState({
+        //         recordTotal:0,
+        //         page:page
+        //     })
+        //     return ''
+        // }
       
     
-        if(this.state.years === 2018){
+        if(this.state.years === 2018 && this.state.month === 2 && this.state.day === 30){
             console.log("Jau 2018;/")
             this.setState({
-                years:2000,
+                years:2010,
             })
             return ''
         }
@@ -184,37 +184,37 @@ export default class GeneruotiIrasus extends Component {
             })
 
 
-        if(this.state.recordPerDay < 5001){
-            this.setState({
-                recordPerDay:this.state.recordPerDay+1,
-                recordTotal:this.state.recordTotal+1
-            })
-        }else{
-            if(this.state.day > 29){
-                if(this.state.month > 11){
-                    this.setState({
-                        day:1,
-                        month:1,
-                        years:this.state.years+1
-                    })
+        // if(this.state.recordPerDay < 5001){
+        //     this.setState({
+        //         recordPerDay:this.state.recordPerDay+1,
+        //         recordTotal:this.state.recordTotal+1
+        //     })
+        // }else{
+        //     if(this.state.day > 29){
+        //         if(this.state.month > 11){
+        //             this.setState({
+        //                 day:1,
+        //                 month:1,
+        //                 years:this.state.years+1
+        //             })
                     
-                }else{
-                    this.setState({
-                        day:1,
-                        month:this.state.month+1
-                    })
-                }
-            }else{
-                this.setState({
-                    day:this.state.day+1
-                })
-            }
-            this.setState({
-                recordPerDay:Math.floor(Math.random() * 900) + 4000,
-            })
+        //         }else{
+        //             this.setState({
+        //                 day:1,
+        //                 month:this.state.month+1
+        //             })
+        //         }
+        //     }else{
+        //         this.setState({
+        //             day:this.state.day+1
+        //         })
+        //     }
+        //     this.setState({
+        //         recordPerDay:Math.floor(Math.random() * 900) + 4000,
+        //     })
 
             
-        }
+        // }
     }
 
     getData = () => {

@@ -21,7 +21,7 @@ public class Appointment implements Serializable {
 
 	private String description;
 
-	private String duration;
+	private Long duration;
 	
 	@Type(type = "date")
 	private Date date;

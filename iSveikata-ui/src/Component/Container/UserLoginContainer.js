@@ -34,7 +34,7 @@ class UserLoginContainer extends Component{
             .then((response) => {
                 this.props.dispatch(userLoggedIn(response.data, this.state.userName))
                 console.log(response.data)            
-                this.props.router.push('/'+response.data+'/'); 
+                this.handleUserRedirect(response.data)
             })
             .catch((error) => {
                 //console.log(error.response.data)
@@ -45,6 +45,20 @@ class UserLoginContainer extends Component{
         }else{
             this.setState({
                 infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
+            })
+        }
+    }
+
+    handleUserRedirect = (role) =>{
+        if(role === 'admin'){
+            this.props.router.push('/admin/')
+        }else if(role === 'doctor'){
+            this.props.router.push('/gydytojas/')
+        }else if(role === 'druggist'){
+            this.props.router.push('/druggist/')
+        }else{
+            this.setState({
+                infoState:(<div className="alert alert-danger"><strong>Tokių vartotoju sitemoje nėra...</strong></div>)
             })
         }
     }

@@ -7,13 +7,7 @@ import third from '../../images/third.png'
 var PublicViewComponent = () =>{
     return(
         <div>
-            <header className="bg-primary text-white">
-                <div className="container text-center">
-                    <h1>iSveikata</h1>
-                    <p className="lead">Sveikatos priežiūros sistema</p>
-                </div>
-            </header>
-
+        
             <section>
                 <div className="container">
                     <div className="row">

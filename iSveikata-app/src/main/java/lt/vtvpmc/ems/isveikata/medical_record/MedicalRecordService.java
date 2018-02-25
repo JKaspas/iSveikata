@@ -1,5 +1,7 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -60,4 +62,8 @@ public class MedicalRecordService {
 		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 	}
 
+    public List getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
+		Long doctorId = jpaEmployeesRepository.findByUserName(userName).getId();
+		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
+    }
 }
