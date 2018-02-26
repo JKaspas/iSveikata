@@ -7,12 +7,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
-import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
@@ -23,7 +26,7 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
  */
 @Service
 @Transactional
-public class EmployeesService {
+public class EmployeesService implements UserDetailsService {
 
 	/** The employees repository. */
 	@Autowired
@@ -43,8 +46,6 @@ public class EmployeesService {
 	@Autowired
 	private DoctorMapper doctorMapper;
 
-	@Autowired
-	private PatientMapper patientMapper;
 
 	/**
 	 * Adds new user.
@@ -207,4 +208,24 @@ public class EmployeesService {
 		Employee employee = employeesRepository.findByUserName(userNanme);
 		return employee != null ? employee.isActive() : false;
 	}
+
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		System.out.println("loadUserByUsername:" + userName);
+		Employee user = findByUserName(userName);
+		if (user == null)
+			throw new UsernameNotFoundException(userName + " not found.");
+		System.out.println("role_"+user.getClass().getSimpleName());
+		return new org.springframework.security.core.userdetails.User(
+				user.getUserName(),
+				new String(user.getPassword()),
+				AuthorityUtils.createAuthorityList(new String[] { "ROLE_" + user.getClass().getSimpleName() }));
+
+	}
+	
+	@Transactional(readOnly = true)
+	public Employee findByUserName(String userName) {
+		return employeesRepository.findByUserName(userName);
+ }
+
 }
