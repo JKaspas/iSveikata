@@ -1,12 +1,12 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,8 +62,14 @@ public class MedicalRecordService {
 		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 	}
 
-    public List getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
+    public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
 		Long doctorId = jpaEmployeesRepository.findByUserName(userName).getId();
 		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
     }
+
+	public List<Object> publicTlkStatistics() {
+		return jpaMedicalRecordRepository.getPublicTlkStatistics(new PageRequest(0, 10));
+
+	}
+
 }

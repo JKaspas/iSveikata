@@ -179,7 +179,6 @@ public class EmployeesController {
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
-
 	@ResponseStatus(HttpStatus.OK)
 	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
@@ -199,6 +198,7 @@ public class EmployeesController {
 			@PathVariable final String searchValue, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
 	}
+	
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
@@ -239,7 +239,8 @@ public class EmployeesController {
 					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
 		}
 	}
-
+	
+	
 	/**
 	 * Returns the user type.
 	 *

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import lt.vtvpmc.ems.isveikata.api.ApiStatDto;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @RestController
@@ -81,6 +82,11 @@ public class PrescriptionController {
         }else{
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Nesekmingas bandymas panaudoti recepta!");
         }
+    }
+    
+    @GetMapping("/statistics")
+    private List<ApiStatDto> getPublicApiStatistics(){
+    	return prescriptionSevice.getPublicApiStatistics();
     }
 
 }

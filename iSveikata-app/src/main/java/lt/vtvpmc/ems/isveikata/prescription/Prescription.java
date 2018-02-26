@@ -8,8 +8,10 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
@@ -23,6 +25,9 @@ import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @Entity
 @Data
+@Table(indexes = {
+		@Index(name = "idx_api", columnList = "api_id")
+		})
 public class Prescription implements Serializable {
 	private static final long serialVersionUID = -3936968052423037625L;
 
