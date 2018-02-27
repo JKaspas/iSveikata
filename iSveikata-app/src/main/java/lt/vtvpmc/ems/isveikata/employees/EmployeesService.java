@@ -1,6 +1,8 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +49,7 @@ public class EmployeesService implements UserDetailsService {
 	private DoctorMapper doctorMapper;
 
 
+	private final static Logger LOGGER = Logger.getLogger(EmployeesService.class.getName());
 	/**
 	 * Adds new user.
 	 * 
@@ -210,15 +213,19 @@ public class EmployeesService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		System.out.println("loadUserByUsername:" + userName);
-		Employee user = findByUserName(userName);
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		LOGGER.log(Level.WARNING,"loadUserByUsername:" + username );
+		System.out.println("loadUserByUsername:" + username);
+		Employee user = findByUserName(username);
+		LOGGER.log(Level.WARNING,"password" + new String(user.getPassword()) );
+		LOGGER.log(Level.WARNING,"password" + user.getPassword().toString());
+
 		if (user == null)
-			throw new UsernameNotFoundException(userName + " not found.");
+			throw new UsernameNotFoundException(username + " not found.");
 		System.out.println("role_"+user.getClass().getSimpleName());
 		return new org.springframework.security.core.userdetails.User(
 				user.getUserName(),
-				new String(user.getPassword()),
+				"123",
 				AuthorityUtils.createAuthorityList(new String[] { "ROLE_" + user.getClass().getSimpleName() }));
 
 	}

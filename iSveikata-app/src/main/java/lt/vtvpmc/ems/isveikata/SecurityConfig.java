@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	.successHandler(new SimpleUrlAuthenticationSuccessHandler())
 	// esant blogiems user/pass
 	.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-	.loginPage("/api/user/login").permitAll() // jis jau egzistuoja !
+	.loginPage("/login").permitAll() // jis jau egzistuoja !
 	//.usernameParameter("username").passwordParameter("password")
 	.and()
 	.logout().permitAll() // leidziam /logout
@@ -61,6 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)	throws Exception {
-		auth.userDetailsService(userDetails).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetails);
 	}
 }
