@@ -20,7 +20,8 @@ import lt.vtvpmc.ems.isveikata.patient.Patient;
 @Entity
 @Data
 @Table(indexes = {
-		@Index(name = "idx_icd", columnList = "icd_icd_code")
+		@Index(name = "idx_icd", columnList = "icd_icd_code"),
+		@Index(name = "idx_isRepetitive", columnList = "isRepetitive")
 		})
 public class MedicalRecord implements Serializable {
 	private static final long serialVersionUID = -5096487620147474408L;

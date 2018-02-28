@@ -31,7 +31,10 @@ public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord,
 			+ "group by DATE order by DATE", nativeQuery = true)
 	List<Object> getDoctorWorkDaysStatistic(Long doctorId, String dateFrom, String dateTill);
 
-	@Query("SELECT mr.icd, count(*) AS total FROM MedicalRecord mr GROUP BY mr.icd ORDER BY count(*) DESC ")
-	List<Object> getPublicTlkStatistics(Pageable pageable);
+	@Query("SELECT mr.icd, count(*) FROM MedicalRecord mr WHERE mr.isRepetitive = false GROUP BY mr.icd ORDER BY count(*) DESC ")
+	List<Object[]> getPublicTlkStatistics(Pageable pageable);
+
+	@Query("SELECT count(*) FROM MedicalRecord mr where mr.isRepetitive = false")
+	Integer getTotalMedicalRecord();
 
 }
