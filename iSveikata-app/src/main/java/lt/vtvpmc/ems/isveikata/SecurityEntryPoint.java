@@ -18,7 +18,7 @@ public class SecurityEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			org.springframework.security.core.AuthenticationException authException)
 			throws IOException, ServletException {
-
+	
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Faill my friend...");
 		
 	}

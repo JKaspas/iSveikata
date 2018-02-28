@@ -27,21 +27,24 @@ class UserLoginContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            axios.post('http://localhost:8080/api/user/login', {
-                userName:this.state.userName,
-                password:this.state.password
-            })
-            .then((response) => {
-                this.props.dispatch(userLoggedIn(response.data, this.state.userName))
-                console.log(response.data)            
-                this.props.router.push('/'+response.data+'/'); 
-            })
-            .catch((error) => {
-                //console.log(error.response.data)
-                this.setState({
-                    infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
-                })
-            })
+            let userData = new URLSearchParams();
+                userData.append('userName', this.state.userName);
+                userData.append('password', this.state.password);
+            console.log(userData);
+            axios.post('http://localhost:8080/api/user/login', userData,{headers:{'Content-type':'application/x-www-form-urlencoded'}})
+            .then((response) => { /* login ok */ })
+            .catch((e) => { console.log(e); });
+            // .then((response) => {
+            //     this.props.dispatch(userLoggedIn(response.data, this.state.userName))
+            //     console.log(response.data)            
+            //     this.props.router.push('/'+response.data+'/'); 
+            // })
+            // .catch((error) => {
+            //     //console.log(error.response.data)
+            //     this.setState({
+            //         infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
+            //     })
+            // })
         }else{
             this.setState({
                 infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
@@ -115,17 +118,17 @@ class UserLoginContainer extends Component{
                 //userNameValid = (value.length === 9) || (value === "root");
                 //fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą.';
                 // ARBA
-                userNameValid = value.match(/^(([A-Z]{1})([a-z]{2})){2}(\d{3})$/g) || (value === "root");
+                userNameValid = value.match(/^[a-zA-Z]+\d+$/g) || (value === "root");
                 // ^ Tikrina ar įrašytas teisingo formato vartotojo vardas. Sistemoje jis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus.
                 //Išimtis: administratoriaus vartotojo vardas.
-                fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą. Atkreipkite dėmesį į didžiąsias raides.';
+                fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą.';
                 
                 fieldValidationState.userName = userNameValid ? 'has-success' : 'has-error';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
                 //Čia "has-success" / "has-error" yra viena iš formos elemento klasių. 
                 break;
             case 'password':
-                passwordValid = (value.length >= 8) || (value === "123");
+                passwordValid = (value.length >= 3) ;
                 // ^ Tikrina ar įrašyta ne mažiau kaip 8 (ir formoje leidžiama įvesti ne daugiau kaip 15 simbolių). Išimtis: administratoriaus slaptažodis.
                 fieldValidationErrors.password = passwordValid ? '' : 'Slaptažodis per trumpas.';
                 fieldValidationState.password = passwordValid ? 'has-success' : 'has-error';

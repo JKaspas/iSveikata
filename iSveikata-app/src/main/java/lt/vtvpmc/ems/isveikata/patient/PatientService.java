@@ -1,12 +1,8 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
@@ -189,8 +186,8 @@ public class PatientService {
 	 */
 	public boolean updatePatientPassword(String oldPassword, final String newPassword, String patientId) {
 		Patient pat = patientRepository.findOne(patientId);
-		if (Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))) {
-			pat.setPassword(newPassword);
+		if (SHA256Encrypt.sswordEncoder.matches(oldPassword, pat.getPassword()) ) {
+			pat.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
 			patientRepository.save(pat);
 			return true;
 		} else {
@@ -231,8 +228,8 @@ public class PatientService {
 	 * @return true, if successful
 	 */
 	public boolean patientLogin(String patientId, String password) {
-		byte[] dbPassword = patientRepository.findOne(patientId).getPassword();
-		return Passwords.isValid(Passwords.hashString(password), dbPassword);
+		String dbPassword = patientRepository.findOne(patientId).getPassword();
+		return SHA256Encrypt.sswordEncoder.matches(password, dbPassword);
 	}
 
 	/**
@@ -340,6 +337,5 @@ public class PatientService {
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
 		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
 	}
-
 
 }

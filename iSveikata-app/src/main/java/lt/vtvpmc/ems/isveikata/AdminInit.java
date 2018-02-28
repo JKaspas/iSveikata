@@ -13,7 +13,7 @@ public class AdminInit {
 	@Bean
 	public CommandLineRunner createAdminOnCleanInstall(JpaEmployeesRepository<Admin> repo) {
 		if (repo.count() == 0) {
-			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", Passwords.hashString("123")));
+			return (args) -> repo.save(new Admin("vardenis", "pavardenis", "root", SHA256Encrypt.sswordEncoder.encode("123")));
 		} else {
 			return null;
 		}

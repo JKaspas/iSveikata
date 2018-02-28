@@ -19,7 +19,6 @@ import org.hibernate.annotations.Type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
@@ -50,7 +49,7 @@ public class Patient implements Serializable {
 	private String lastName;
 
 	@NotNull
-	private byte[] password;
+	private String password;
 
 	private boolean isActive = true;
 
@@ -65,9 +64,5 @@ public class Patient implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Prescription> prescriptions;
-
-	public void setPassword(String password) {
-		this.password = Passwords.hashString(password);
-	}
 
 }

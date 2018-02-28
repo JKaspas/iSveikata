@@ -1,7 +1,6 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
@@ -48,8 +47,8 @@ public class EmployeesService implements UserDetailsService {
 	@Autowired
 	private DoctorMapper doctorMapper;
 
-
 	private final static Logger LOGGER = Logger.getLogger(EmployeesService.class.getName());
+
 	/**
 	 * Adds new user.
 	 * 
@@ -69,7 +68,6 @@ public class EmployeesService implements UserDetailsService {
 			Doctor doctor = (Doctor) employeesRepository.save(employee);
 			doctor.setSpecialization(spec);
 		} else {
-			employeesRepository.save(employee);
 		}
 	}
 
@@ -129,8 +127,8 @@ public class EmployeesService implements UserDetailsService {
 	 */
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		if (Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
-			employee.setPassword(newPassword);
+		if (SHA256Encrypt.sswordEncoder.matches(newPassword, oldPassword)) {
+			employee.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
 			employeesRepository.save(employee);
 			return true;
 		} else {
@@ -148,8 +146,8 @@ public class EmployeesService implements UserDetailsService {
 	 * @return true, if valid
 	 */
 	public boolean userLogin(String userName, String password) {
-		byte[] dbPassword = employeesRepository.findByUserName(userName).getPassword();
-		return Passwords.isValid(Passwords.hashString(password), dbPassword);
+		String dbPassword = employeesRepository.findByUserName(userName).getPassword();
+		return SHA256Encrypt.sswordEncoder.matches(password, dbPassword);
 	}
 
 	/**
@@ -213,26 +211,33 @@ public class EmployeesService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		LOGGER.log(Level.WARNING,"loadUserByUsername:" + username );
-		System.out.println("loadUserByUsername:" + username);
-		Employee user = findByUserName(username);
-		LOGGER.log(Level.WARNING,"password" + new String(user.getPassword()) );
-		LOGGER.log(Level.WARNING,"password" + user.getPassword().toString());
-
-		if (user == null)
-			throw new UsernameNotFoundException(username + " not found.");
-		System.out.println("role_"+user.getClass().getSimpleName());
-		return new org.springframework.security.core.userdetails.User(
-				user.getUserName(),
-				"123",
-				AuthorityUtils.createAuthorityList(new String[] { "ROLE_" + user.getClass().getSimpleName() }));
-
-	}
-	
 	@Transactional(readOnly = true)
-	public Employee findByUserName(String userName) {
-		return employeesRepository.findByUserName(userName);
- }
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		String fullName;
+		String password;
+		String role;
+		LOGGER.info("UserName:" + userName);
+		try {
+			Long.parseLong(userName);
+			Patient user = patientRepository.findOne(userName);
+			fullName = user.getFirstName() + " " + user.getLastName();
+			password = user.getPassword();
+			role = "ROLE_" + user.getClass().getSimpleName();
+
+		} catch (Exception e) {
+
+		}
+		try {
+			Employee user = employeesRepository.findByUserName(userName);
+			fullName = user.getFirstName() + " " + user.getLastName();
+			password = user.getPassword();
+			role = "ROLE_" + user.getClass().getSimpleName();
+
+		} catch (Exception e) {
+			throw new UsernameNotFoundException(userName + " not found.");
+		}
+		return new org.springframework.security.core.userdetails.User(fullName,password,
+				AuthorityUtils.createAuthorityList(new String[] { role }));
+	}
 
 }
