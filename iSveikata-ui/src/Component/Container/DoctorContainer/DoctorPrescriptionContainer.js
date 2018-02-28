@@ -47,23 +47,17 @@ export default class DoctorPrescriptionContainer extends Component{
     } 
 
     loadApi = () =>{
-        axios.get('http://localhost:8080/api/api')
-        .then((response)=>{
-            this.setState({
-                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
-                apiUnits:response.data.map(this.mapApiUnitsWithTitle)
-            })
-            console.log(response.status)
-        })
-        .catch((error) => {
-            console.log(error)
+        this.setState({
+            apis:this.session.doctor.apiList.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
+            apiUnits:this.session.doctor.apiList.map(this.mapApiUnitsWithTitle)
         })
     } 
 
     mapApiUnitsWithTitle = (api, index) =>{
         return {
             "title": api.ingredientName,
-            "units": api.unit
+            "units": api.unit,
+            "desc":api.description
         }
     } 
     
@@ -146,11 +140,13 @@ export default class DoctorPrescriptionContainer extends Component{
             case 'substance':
                 substanceValid = value === "select" ? false : true;
                 substanceUnit = substanceValid ? this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units) : "";
+                this.setState({
+                    description:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.desc)
+                })
                 break;
             default:
                 break;
         }
-
         this.setState({[name]: value,
                     substanceUnit: substanceUnit,
                     daysToExpirationValid: daysToExpirationValid,

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
+import {doctorApiList, doctorIcdList} from '../../Container/_action'
+
 
 
 class DoctorViewContainer extends Component{
@@ -18,7 +20,12 @@ class DoctorViewContainer extends Component{
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'doctor'){
             this.props.router.push('/vartotojams');
             return '';
-        }  
+        } 
+        //get API list
+        doctorApiList()
+
+        //get ICD list 
+        doctorIcdList()
        
     }
     
@@ -35,7 +42,7 @@ class DoctorViewContainer extends Component{
                 
                 <section>
                     <div className="container">
-                        <div classmeNa="row">
+                        <div className="row">
                             <div className="col-sm-12 ">
                                 <div className="col-sm-4">
                                     <a href="#gydytojas/pacientai" className="thumbnail">

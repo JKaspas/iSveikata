@@ -44,22 +44,14 @@ export default class DoctorRecordContainer extends Component {
     this.loadIcd();
   };
   loadIcd = () => {
-    axios
-      .get("http://localhost:8080/api/icd")
-      .then(response => {
-        this.setState({
-          icds: response.data.map((icd, index) => (
-            <option key={index} value={icd.icdCode}>
-              {icd.icdCode} - {icd.title}
-            </option>
-          ))
-        });
-        console.log(response.status);
-      })
-      .catch(erorr => {
-        console.log(erorr);
-      });
-  };
+    this.setState({
+        icds: this.session.doctor.icdList.map((icd, index) => (
+          <option key={index} value={icd.icdCode}>
+            {icd.icdCode} - {icd.title}
+          </option>
+        ))
+    })
+}
 
   loadPatient = () => {
     axios

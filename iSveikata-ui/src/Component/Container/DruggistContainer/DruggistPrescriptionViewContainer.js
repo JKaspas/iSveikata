@@ -71,7 +71,7 @@ class DruggistViewContainer extends Component{
                     })
             }
            
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -86,9 +86,9 @@ class DruggistViewContainer extends Component{
     }
 
     composePrescription = (prescription, index) =>{
-        if(new Date(prescription.expirationDate) < new Date()){
-            return null
-        }
+        // if(new Date(prescription.expirationDate) < new Date()){
+        //     return null
+        // }
 
         return(
             <PrescriptionListingItem 
@@ -98,7 +98,7 @@ class DruggistViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
-                useAmount={prescription.useAmount}
+                useAmount="NaN"
                 showDetails={this.showDetails}
             />
         )
@@ -112,7 +112,6 @@ class DruggistViewContainer extends Component{
             userName:this.session.user.userName,
         })
         .then((response) => {
-            this.getPatientPrescriptions(this.state.activePage)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
@@ -133,7 +132,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId),
                 })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)

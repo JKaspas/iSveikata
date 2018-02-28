@@ -16,7 +16,7 @@ const PrescriptionListingItem = (props) =>{
             <td >{props.prescriptionDate}</td>
             <td>{props.expirationDate}</td>
             <td>{props.ingredientName}</td>
-            <td>{props.useAmount} kartų</td>
+            <td>{props.useAmount}</td>
             {props.viewUsageLink}
             
     </tr>
