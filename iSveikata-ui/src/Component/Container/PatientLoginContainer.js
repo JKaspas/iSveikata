@@ -27,18 +27,19 @@ class PatientLoginContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            axios.post('http://localhost:8080/api/patient/login', {
-                patientId:this.state.patientId,
-                password:this.state.password
-            })
+            let userData = new URLSearchParams();
+            userData.append('userName', this.state.patientId);
+            userData.append('password', this.state.password);
+            axios.post('http://localhost:8080/api/login', userData, {headers:{'Content-type':'application/x-www-form-urlencoded'}})
             .then((response) => {
+                console.log(response.data.fullName)
                 this.props.dispatch(patientLoggedIn(this.state.patientId))
                 this.props.router.push('/patient/');
                 console.log(this.props)
                 console.log(response.status)
             })
             .catch((error) => {
-                //console.log(error.response.data)
+                console.log(error)
                 this.setState({
                     infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
                 })

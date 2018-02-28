@@ -31,20 +31,18 @@ class UserLoginContainer extends Component{
                 userData.append('userName', this.state.userName);
                 userData.append('password', this.state.password);
             console.log(userData);
-            axios.post('http://localhost:8080/api/user/login', userData,{headers:{'Content-type':'application/x-www-form-urlencoded'}})
-            .then((response) => { /* login ok */ })
-            .catch((e) => { console.log(e); });
-            // .then((response) => {
-            //     this.props.dispatch(userLoggedIn(response.data, this.state.userName))
-            //     console.log(response.data)            
-            //     this.props.router.push('/'+response.data+'/'); 
-            // })
-            // .catch((error) => {
-            //     //console.log(error.response.data)
-            //     this.setState({
-            //         infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
-            //     })
-            // })
+            axios.post('http://localhost:8080/api/login', userData,{headers:{'Content-type':'application/x-www-form-urlencoded'}})
+            .then((response) => {
+                this.props.dispatch(userLoggedIn(response.data, this.state.userName))
+                console.log(response.data)           
+                //this.props.router.push('/'+response.data+'/'); 
+            })
+            .catch((error) => {
+                //console.log(error.response.data)
+                this.setState({
+                    infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
+                })
+            })
         }else{
             this.setState({
                 infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
@@ -118,7 +116,7 @@ class UserLoginContainer extends Component{
                 //userNameValid = (value.length === 9) || (value === "root");
                 //fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą.';
                 // ARBA
-                userNameValid = value.match(/^[a-zA-Z]+\d+$/g) || (value === "root");
+                userNameValid = value.match(/^[a-zA-Z0-9]+$/g); //|| (value === "root");
                 // ^ Tikrina ar įrašytas teisingo formato vartotojo vardas. Sistemoje jis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus.
                 //Išimtis: administratoriaus vartotojo vardas.
                 fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą.';

@@ -216,25 +216,25 @@ public class EmployeesService implements UserDetailsService {
 		String fullName;
 		String password;
 		String role;
-		LOGGER.info("UserName:" + userName);
-		try {
-			Long.parseLong(userName);
-			Patient user = patientRepository.findOne(userName);
-			fullName = user.getFirstName() + " " + user.getLastName();
-			password = user.getPassword();
-			role = "ROLE_" + user.getClass().getSimpleName();
+		
+		LOGGER.info("UserName:" + userName + " Skaitmeninis?"+userName.matches("\\d+") );
 
-		} catch (Exception e) {
-
-		}
 		try {
-			Employee user = employeesRepository.findByUserName(userName);
-			fullName = user.getFirstName() + " " + user.getLastName();
-			password = user.getPassword();
-			role = "ROLE_" + user.getClass().getSimpleName();
+			if (userName.matches("\\d+")) {
+				Patient user = patientRepository.findOne(userName);
+				fullName = user.getFirstName() + " " + user.getLastName();
+				password = user.getPassword();
+				role = "ROLE_" + user.getClass().getSimpleName();
+			} else {
+				Employee user = employeesRepository.findByUserName(userName);
+				fullName = user.getFirstName() + " " + user.getLastName();
+				password = user.getPassword();
+				role = "ROLE_" + user.getClass().getSimpleName();
+			}
 
 		} catch (Exception e) {
 			throw new UsernameNotFoundException(userName + " not found.");
+
 		}
 		return new org.springframework.security.core.userdetails.User(fullName,password,
 				AuthorityUtils.createAuthorityList(new String[] { role }));
