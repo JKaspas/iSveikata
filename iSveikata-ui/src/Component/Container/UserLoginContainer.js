@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 
 import LoginForm from '../LoginForm/LoginForm';
 import { userLoggedIn } from './_action/index';
+import {adminSpecializationList, doctorApiList, doctorIcdList} from '../Container/_action'
+
 
 class UserLoginContainer extends Component{
     constructor(props){
@@ -53,6 +55,10 @@ class UserLoginContainer extends Component{
         if(role === 'admin'){
             this.props.router.push('/admin/')
         }else if(role === 'doctor'){
+            //get API list
+            doctorApiList()
+            //get ICD list 
+            doctorIcdList()
             this.props.router.push('/gydytojas/')
         }else if(role === 'druggist'){
             this.props.router.push('/druggist/')

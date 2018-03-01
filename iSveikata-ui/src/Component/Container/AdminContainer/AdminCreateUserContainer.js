@@ -43,9 +43,6 @@ export default class AdminCreateUserContainer extends Component{
 
     }
 
-    fullCompanyName = () => {
-        return this.state.companyName + " " + this.state.companyType
-    }
 
     componentWillMount = () =>{
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
@@ -92,10 +89,6 @@ export default class AdminCreateUserContainer extends Component{
              this.setState({[name]: value},
             () => { this.validateField(name, value) });
         }
-       
-            
-        // console.log("Input field name: " + name);
-        // console.log("Input field value: " + value);
     }
 
     userObjectByType = () =>{
@@ -199,6 +192,10 @@ export default class AdminCreateUserContainer extends Component{
         }else{
             return null;
         }
+    }
+
+    fullCompanyName = () => {
+        return this.state.companyName + " " + this.state.companyType
     }
 
     //Užtikrina, kad vardas ir pavardė būtų iš didžiosios raidės, jei įvesta mažosiomis.

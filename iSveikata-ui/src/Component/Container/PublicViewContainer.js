@@ -5,8 +5,7 @@ import statistic from '../images/statistic.png'
 import doctor from '../images/doctor.png'
 import patient from '../images/patient.png'
 
-import {doctorApiList, doctorIcdList} from '../Container/_action'
-import {store} from '../Container/_store/store'
+import {adminSpecializationList} from '../Container/_action'
 
 class PublicViewContainer extends Component{
 
@@ -14,7 +13,7 @@ class PublicViewContainer extends Component{
 
     load = () =>{
        
-       
+        
     }
 
     render() {

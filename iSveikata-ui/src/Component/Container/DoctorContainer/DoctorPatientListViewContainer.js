@@ -24,7 +24,7 @@ export default class DoctorPatientListViewContainer extends Component{
 
             listInfo:'',
             listLength:'',
-            activePage:1,
+            activePage:0,
             itemsPerPage:8,
 
             listIsEmpty:false
@@ -46,14 +46,19 @@ export default class DoctorPatientListViewContainer extends Component{
         axios.get('http://localhost:8080/api/doctor/'+userName+'/patient?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    return ''
+                }
                 this.setState({
                     patientListView:(<h3>Jūs neturite priskirtų pacientų</h3>),
-                    listIsEmpty:true
-                })
+                    listIsEmpty:true,
+                })                
             }else{
                 this.setState({
                     patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
-                    listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false
                  })
@@ -71,9 +76,14 @@ export default class DoctorPatientListViewContainer extends Component{
         axios.get('http://localhost:8080/api/patient/?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    return ''
+                }
                 this.setState({
                     patientListView:(<h3>Sistemos klaida, pacientų nėra</h3>),
-                    listIsEmpty:true
                 })
             }else{
                 this.setState({
@@ -84,7 +94,7 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })  
             }         
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
             //console.log(erorr)
@@ -114,21 +124,32 @@ export default class DoctorPatientListViewContainer extends Component{
     
                 recordLink={<td><NewRecordLink  patientId={patient.id}/></td>}
                 prescriptionLink={<td><NewPrescriptionLink  patientId={patient.id}/></td>}
-                doctorViewPatient={patientViewLink}
-                  
-                    
+                doctorViewPatient={patientViewLink}                 
             />
         )
     }
 
     getDoctorPatientBySearchValue = (activePage, searchValue) =>{
+        console.log("ActivePage: " + activePage)
         axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient/'
         +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            patientListView:(<h3>Tokių pacientų nerasta</h3>)
+                        })
+                    }
+                    return ''
+                }
                 this.setState({
                     patientListView:(<h3>Tokių pacientų nerasta</h3>),
-                    listIsEmpty:true
+                    listIsEmpty:true,
+                    listLength:0
                 })
             }else{  
                 this.setState({
@@ -153,9 +174,20 @@ export default class DoctorPatientListViewContainer extends Component{
         +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            patientListView:(<h3>Tokių pacientų nerasta</h3>)
+                        })
+                    }
+                    return ''
+                }
                 this.setState({
                     patientListView:(<h3>Tokių pacientų nerasta</h3>),
-                    listIsEmpty:true
+                    
                 })
             }else{  
                 this.setState({
@@ -184,17 +216,27 @@ export default class DoctorPatientListViewContainer extends Component{
     //search button click handling 
     searchHandler = (e) =>{
         e.preventDefault()
+        console.log("Search.....")
         if(this.state.searchValue.length > 2){
             if(this.state.patientType){
-                this.getDoctorPatientBySearchValue(1, this.state.searchValue)   
+                setTimeout(() =>{
+                    this.getDoctorPatientBySearchValue(0, this.state.searchValue)  
+                } , 2000 )
+                
             }else{
-                this.getAllPatientBySearchValue(1, this.state.searchValue)            
+                setTimeout(() =>{
+                    this.getAllPatientBySearchValue(0, this.state.searchValue)          
+                } , 2000 )
             }
         }else if(this.state.searchValue.length === 0){
             if(this.state.patientType){
-                this.getDoctorPatient(this.session.user.userName, 1)  
+                setTimeout(() =>{
+                    this.getDoctorPatient(this.session.user.userName, 0)  
+                } , 1000 )
             }else{
-                this.getAllPatient(1)  
+                setTimeout(() =>{
+                    this.getAllPatient(0)  
+                } , 1000 )
             }
         }else{
             this.setState({
@@ -204,19 +246,19 @@ export default class DoctorPatientListViewContainer extends Component{
         }
         
         this.setState({
-            activePage:1,
+            activePage:0,
         })
     }
     //on button click chnage patient from doctor patient or all patient and vice versa
     changePatients = () =>{
         if(this.state.patientType){
-            this.getAllPatient(1)
+            this.getAllPatient(0)
             this.setState({
                 patientTypeName:"Mano pacientai",
                 searchOn:false
             })
         }else{
-            this.getDoctorPatient(this.session.user.userName,1)
+            this.getDoctorPatient(this.session.user.userName,0)
             this.setState({
                 patientTypeName:"Visi pacientai",
                 searchOn:false
@@ -230,7 +272,14 @@ export default class DoctorPatientListViewContainer extends Component{
 
     //handle paggination page changes 
     handlePageChange = (activePage) => {
-        
+        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
+ 
         //if patient type is true (means it's still doctor patient) 
         //request for new page with given active page number and doctro userName 
         if(this.state.patientType){
@@ -239,8 +288,6 @@ export default class DoctorPatientListViewContainer extends Component{
             }else{
                 this.getDoctorPatient(this.session.user.userName, activePage);
             }
-
-            console.log(`active page is doctor patient ${activePage}`);
         }else{
             if(this.state.searchOn){
                 this.getAllPatientBySearchValue(activePage, this.state.searchValue)
@@ -255,18 +302,14 @@ export default class DoctorPatientListViewContainer extends Component{
       }
       //Show paggination div with props from state
       showPagination = () =>{
-          if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
-            return ''
-          }
+        
           return (
               <div className="text-center">
-                <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={this.state.itemsPerPage}
-                totalItemsCount={this.state.listInfo.totalElements}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange}
-                />
+                <div>
+                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
+             
             </div>
           )
       }

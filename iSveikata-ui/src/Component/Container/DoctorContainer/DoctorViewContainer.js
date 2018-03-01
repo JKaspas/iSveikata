@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
-import {doctorApiList, doctorIcdList} from '../../Container/_action'
 
 
 
@@ -21,11 +20,7 @@ class DoctorViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         } 
-        //get API list
-        doctorApiList()
-
-        //get ICD list 
-        doctorIcdList()
+       
        
     }
     

@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,8 +114,8 @@ public class PatientController {
 	 * @return list of all patient preascription that are valid by date
 	 */
 	@GetMapping("/{patientId}/prescription/druggist")
-	private Page<PrescriptionDto> getPrescriptionListForDruggist(@PathVariable("patientId") String patientId, Pageable pageable) {
-		return patientService.getPatientPrescriptionListAfterDate(patientId, pageable);
+	private List<PrescriptionDto> getPrescriptionListForDruggist(@PathVariable("patientId") String patientId) {
+		return patientService.getPatientPrescriptionListAfterDate(patientId);
 	}
 
 

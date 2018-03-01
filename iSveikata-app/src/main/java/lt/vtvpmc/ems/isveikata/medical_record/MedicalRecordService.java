@@ -69,8 +69,8 @@ public class MedicalRecordService {
 		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
     }
 
-	public List<Object> publicTlkStatistics() {
-		List newList = new ArrayList<>();
+	public List<Map> publicTlkStatistics() {
+		List <Map> newList = new ArrayList<Map>();
 		List <Object[]> list = jpaMedicalRecordRepository.getPublicTlkStatistics(new PageRequest(0, 10));
 		Integer total = jpaMedicalRecordRepository.getTotalMedicalRecord();
 		for (Object[] obj: list){

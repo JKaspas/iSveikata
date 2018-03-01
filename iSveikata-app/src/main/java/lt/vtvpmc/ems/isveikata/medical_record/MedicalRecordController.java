@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +64,7 @@ public class MedicalRecordController {
 
 	@GetMapping(value = "/statistic/TLK/")
 	@ResponseStatus(HttpStatus.OK)
-	private List<Object> getPublicTlkStatistics(){
+	private List<Map> getPublicTlkStatistics(){
 		return medicalRecordService.publicTlkStatistics();
 	}
 

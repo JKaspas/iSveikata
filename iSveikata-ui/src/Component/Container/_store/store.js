@@ -8,8 +8,7 @@ const middleware = applyMiddleware(thunk, logger)
 export const store = createStore(rootReducer, middleware)
 
 store.subscribe(() => {
-    //this is just a function that saves state to sessionsStorage
-    sessionStorage.setItem("session", JSON.stringify(store.getState()))
+     sessionStorage.setItem("session", JSON.stringify(store.getState()))
 });
 
 

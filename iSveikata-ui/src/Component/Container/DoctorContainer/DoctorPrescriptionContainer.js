@@ -80,13 +80,24 @@ export default class DoctorPrescriptionContainer extends Component{
         let expDate = this.generateExpirationDate();
 
         e.preventDefault();
-
+        console.log({
+            prescription:{
+                expirationDate:expDate,
+                prescriptionDate:currentDate,
+                description:this.state.description,
+                ingredientAmount:this.state.substanceAmount,
+                // ingredientUnit:this.state.substanceUnit,
+            },
+            patientId: this.state.patientId,
+            userName: this.state.userName,
+            apiTitle:this.state.substance
+        })
         if(this.state.formValid){
             axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
                     expirationDate:expDate,
                     prescriptionDate:currentDate,
-                    description:this.state.description,
+                    description:this.state.description.toString(),
                     ingredientAmount:this.state.substanceAmount,
                     // ingredientUnit:this.state.substanceUnit,
                 },
@@ -105,8 +116,6 @@ export default class DoctorPrescriptionContainer extends Component{
                     formErrors: {substanceAmount: '', description: ''},
                     substanceAmountValid: false,
                     descriptionValid: false,    
-                    daysToExpirationValid: false,  
-                    substanceValid: false,
                     formValid: false,
                 })
             })
@@ -141,7 +150,7 @@ export default class DoctorPrescriptionContainer extends Component{
                 substanceValid = value === "select" ? false : true;
                 substanceUnit = substanceValid ? this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units) : "";
                 this.setState({
-                    description:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.desc)
+                    description:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.desc),
                 })
                 break;
             default:

@@ -19,7 +19,7 @@ export default class AdminBindUserPartContainer extends Component{
             
             listInfo:'',
 
-            activePage:1,
+            activePage:195,
             itemsPerPage:8,
             listLength:'',
 
@@ -57,6 +57,17 @@ export default class AdminBindUserPartContainer extends Component{
         axios.get(finalRequestLink)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            patientList:(<h3>Pacientų nėrasta</h3>)
+                        })
+                    }
+                    return ''
+                }
                 this.setState({
                     patientList:(<h3>Pacientų nėrasta</h3>),
                     listIsEmpty:true,
@@ -112,7 +123,7 @@ export default class AdminBindUserPartContainer extends Component{
     searchdHandler = (e) =>{
         e.preventDefault();
         setTimeout(() =>{
-            this.getPatientList(this.state.searchValue, 1)
+            this.getPatientList(this.state.searchValue, 0)
         } , 1000 )
         
         this.setState({
@@ -121,7 +132,14 @@ export default class AdminBindUserPartContainer extends Component{
     }
 
      //handle paggination page changes 
-    handlePageChange = (activePage) => {
+    handlePageChange = (activePage) => {        
+        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
         this.getPatientList(this.state.searchValue, activePage);  
 
         //change activePage state to new page number
@@ -132,19 +150,15 @@ export default class AdminBindUserPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
-            return ''
-        }
+       
         return (
-            <div className="col-sm-5 col-sm-offset-4">
-            <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.listInfo.totalElements}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-            />
-        </div>
+            <div className="text-center">
+                <div>
+                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
+             
+            </div>
         )
     }
 
