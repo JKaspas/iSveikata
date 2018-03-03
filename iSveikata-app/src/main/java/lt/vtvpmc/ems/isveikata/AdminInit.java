@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import lt.vtvpmc.ems.isveikata.employees.Admin;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 @Configuration
 public class AdminInit {

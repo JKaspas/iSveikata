@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import Pagination from "react-js-pagination"
 
 //import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -29,11 +28,6 @@ class DruggistViewContainer extends Component{
             allPrescription:null,
             contentType:'record',
 
-            totalElements:'',
-
-            activePage:1,
-            itemsPerPage:8,
-            listLength:'',
             listIsEmpty:false,
 
             infoDetails:null,
@@ -53,25 +47,22 @@ class DruggistViewContainer extends Component{
 
     getPatientPrescriptions = (activePage) =>{
         axios.get('http://localhost:8080/api/patient/'
-        +this.props.params.patientId+'/prescription/druggist?page='
-        +activePage+'&size='+this.state.itemsPerPage)
+        +this.props.params.patientId+'/prescription/druggist')
         .then((response)=>{
-            if(response.data.content.length === 0){
+            if(response.data.length === 0){
                 this.setState({
                     viewContent:this.state.info,
                     listIsEmpty:true
                 })
             }else{
                 this.setState({
-                    viewContent:<PrescriptionListView prescription={response.data.content.map(this.composePrescription)}/>,
+                    viewContent:<PrescriptionListView prescription={response.data.map(this.composePrescription)}/>,
                     allPrescription:response.data.content,
-                    totalElements:response.data.totalElements,
-                    listLength:response.data.content.length,
                     listIsEmpty:false
                     })
             }
            
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -86,10 +77,6 @@ class DruggistViewContainer extends Component{
     }
 
     composePrescription = (prescription, index) =>{
-        if(new Date(prescription.expirationDate) < new Date()){
-            return null
-        }
-
         return(
             <PrescriptionListingItem 
                 key={index}
@@ -98,7 +85,7 @@ class DruggistViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
-                useAmount={prescription.useAmount}
+                useAmount="NaN"
                 showDetails={this.showDetails}
             />
         )
@@ -112,7 +99,6 @@ class DruggistViewContainer extends Component{
             userName:this.session.user.userName,
         })
         .then((response) => {
-            this.getPatientPrescriptions(this.state.activePage)
             this.setState({
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
@@ -133,7 +119,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId),
                 })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) =>{
             console.log(erorr)
@@ -151,7 +137,7 @@ class DruggistViewContainer extends Component{
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
-                <button onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
+                <button id="prescriptionUsageSubmit" onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
                 
         </div>)
     }
@@ -165,38 +151,6 @@ class DruggistViewContainer extends Component{
         e.preventDefault()
        console.log("Searcrh search..."+ this.state.searchValue)
     }
-
-
-    //handle paggination page changes 
-    handlePageChange = (activePage) => {
-    //by content type (record/prescription) send request for specific page
-        this.getPatientPrescriptions(activePage);
-
-        //change activePage state to new page number
-        this.setState({
-            activePage:activePage
-        })  
-    }
-
-    //Show paggination div with props from state
-    showPagination = () =>{
-        if(this.state.listLength === this.state.totalElements || this.state.listIsEmpty){
-            return ''
-          }
-        return (
-            <div className="col-sm-5 col-sm-offset-4">
-                <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={this.state.itemsPerPage}
-                totalItemsCount={this.state.totalElements}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange}
-                />
-            </div>
-        )
-    }
-
-    
 
 
     render() {
@@ -217,7 +171,6 @@ class DruggistViewContainer extends Component{
                                 {this.state.infoState}
 
                                 {this.state.viewContent}
-                                {this.showPagination()}
                                 <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}

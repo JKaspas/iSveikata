@@ -47,23 +47,17 @@ export default class DoctorPrescriptionContainer extends Component{
     } 
 
     loadApi = () =>{
-        axios.get('http://localhost:8080/api/api')
-        .then((response)=>{
-            this.setState({
-                apis:response.data.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
-                apiUnits:response.data.map(this.mapApiUnitsWithTitle)
-            })
-            console.log(response.status)
-        })
-        .catch((error) => {
-            console.log(error)
+        this.setState({
+            apis:this.session.doctor.apiList.map((api,index) => (<option key={index} value={api.ingredientName}>{api.ingredientName}</option>)),
+            apiUnits:this.session.doctor.apiList.map(this.mapApiUnitsWithTitle)
         })
     } 
 
     mapApiUnitsWithTitle = (api, index) =>{
         return {
             "title": api.ingredientName,
-            "units": api.unit
+            "units": api.unit,
+            "desc":api.description
         }
     } 
     
@@ -86,13 +80,24 @@ export default class DoctorPrescriptionContainer extends Component{
         let expDate = this.generateExpirationDate();
 
         e.preventDefault();
-
+        console.log({
+            prescription:{
+                expirationDate:expDate,
+                prescriptionDate:currentDate,
+                description:this.state.description,
+                ingredientAmount:this.state.substanceAmount,
+                // ingredientUnit:this.state.substanceUnit,
+            },
+            patientId: this.state.patientId,
+            userName: this.state.userName,
+            apiTitle:this.state.substance
+        })
         if(this.state.formValid){
             axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
                     expirationDate:expDate,
                     prescriptionDate:currentDate,
-                    description:this.state.description,
+                    description:this.state.description.toString(),
                     ingredientAmount:this.state.substanceAmount,
                     // ingredientUnit:this.state.substanceUnit,
                 },
@@ -111,8 +116,6 @@ export default class DoctorPrescriptionContainer extends Component{
                     formErrors: {substanceAmount: '', description: ''},
                     substanceAmountValid: false,
                     descriptionValid: false,    
-                    daysToExpirationValid: false,  
-                    substanceValid: false,
                     formValid: false,
                 })
             })
@@ -146,11 +149,13 @@ export default class DoctorPrescriptionContainer extends Component{
             case 'substance':
                 substanceValid = value === "select" ? false : true;
                 substanceUnit = substanceValid ? this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.units) : "";
+                this.setState({
+                    description:this.state.apiUnits.filter((api) => api.title === e.target.value).map((api) => api.desc),
+                })
                 break;
             default:
                 break;
         }
-
         this.setState({[name]: value,
                     substanceUnit: substanceUnit,
                     daysToExpirationValid: daysToExpirationValid,

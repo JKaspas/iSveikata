@@ -6,8 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lt.vtvpmc.ems.isveikata.appointment.Appointment;
@@ -17,7 +19,10 @@ import lt.vtvpmc.ems.isveikata.patient.Patient;
 
 @Entity
 @Data
-
+@Table(indexes = {
+		@Index(name = "idx_icd", columnList = "icd_icd_code"),
+		@Index(name = "idx_isRepetitive", columnList = "isRepetitive")
+		})
 public class MedicalRecord implements Serializable {
 	private static final long serialVersionUID = -5096487620147474408L;
 

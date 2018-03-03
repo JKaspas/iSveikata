@@ -14,40 +14,49 @@ public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 
 	List<Patient> findByIsActiveTrue();
 
-	@Query("SELECT t FROM Patient t WHERE " +
-			"t.isActive = true AND  " +
-			"t.doctor is null")
-	Page<Patient> findByIsActiveTrueAndDoctorIsNull(Pageable pageable);
+	@Query(value = "SELECT * FROM Patient WHERE " +
+			"is_active = true AND  " +
+			"doctor_id is null LIMIT ?1, ?2", nativeQuery = true)
+	List<Patient> findByIsActiveTrueAndDoctorIsNull(int from, int to);
 
-	@Query(value = "SELECT * FROM PATIENT WHERE IS_ACTIVE = TRUE AND DOCTOR_ID = ?1", nativeQuery = true)
-	List<Patient> findPatientByDoctorUserName(Long doctorId);
-	//Page<Patient> findAllByDoctorUserName( String userName, Pageable pageable);
+	@Query(value = "SELECT * FROM PATIENT WHERE IS_ACTIVE = TRUE AND DOCTOR_ID = ?1 LIMIT ?2, ?3", nativeQuery = true)
+	List<Patient> findPatientByDoctorUserName(Long doctorId, int from, int to);
 
-	@Query("SELECT t FROM Patient t WHERE " +
-			"t.isActive = true")
-	Page<Patient> findByActive(Pageable pageable);
+	@Query(value = "SELECT * FROM Patient  WHERE " +
+			"IS_ACTIVE = true LIMIT ?1, ?2", nativeQuery = true)
+	List<Patient> findByActive(int from, int to);
 
 	@Query("SELECT t FROM Patient t WHERE " +
 			"t.isActive = true AND  " +
 			"t.patientId LIKE CONCAT(:patientId, '%') ")
 	Page<Patient> findAllPatientByPatientId(@Param("patientId") String patientId, Pageable pageRequest);
 
-	@Query("SELECT t FROM Patient t WHERE " +
-			"t.isActive = true AND  " +
-			"t.doctor = :doctor AND " +
-			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
-	Page<Patient> findAllActivePatientByDoctorIdAndSearchValue(@Param("searchValue") String searchValue,
-														 @Param("doctor") Doctor doctor,
-														 Pageable pageRequest);
+//	@Query("SELECT t FROM Patient t WHERE " +
+//			"t.isActive = true AND  " +
+//			"t.doctor = :doctor AND " +
+//			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
+	@Query(value = "SELECT * FROM Patient WHERE " +
+			"IS_ACTIVE = true  AND DOCTOR_ID = ?2 AND " +
+			"(first_name LIKE ?1% OR last_name LIKE ?1%) LIMIT ?3, ?4", nativeQuery = true)
+	List<Patient> findAllActivePatientByDoctorIdAndSearchValue(String searchValue,
+														 Long doctorId, int from, int to);
 
-	@Query("SELECT t FROM Patient t WHERE " +
-			"t.isActive = true AND  " +
-			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
-	Page<Patient> findAllActivePatientBySearchValue(@Param("searchValue") String searchValue, Pageable pageRequest);
+//	@Query("SELECT t FROM Patient t WHERE " +
+//			"t.isActive = true AND  " +
+//			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
+	@Query(value = "SELECT * FROM Patient WHERE " +
+			"IS_ACTIVE = true  AND first_name LIKE ?1% " +
+			"OR last_name LIKE ?1% LIMIT ?2, ?3", nativeQuery = true)
+	List<Patient> findAllPatientByGivenSearchValue(String searchValue, int from, int to);
+
+	@Query(value = "SELECT * FROM Patient WHERE " +
+			"IS_ACTIVE = true AND patient_id LIKE ?1% " +
+			"LIMIT ?2, ?3", nativeQuery = true)
+	List<Patient> findAllPatientByPatientId(String searchValue, int from, int to);
 	
 //	@Query("SELECT t FROM Patient t WHERE " +
 //			"t.isActive = true AND  " +
@@ -56,13 +65,17 @@ public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 //
 //	Page<Patient> findByFirstNameIgnoreCaseLikeOrLastNameIgnoreCaseLike(String firstName, String lastName, Pageable pageRequest);
 	
-	Page<Patient> findByFirstNameStartingWithOrLastNameStartingWith(String firstName, String lastName, Pageable pageRequest);
+//	Page<Patient> findByFirstNameStartingWithOrLastNameStartingWith(String firstName, String lastName, Pageable pageRequest);
 	
-	@Query("SELECT t FROM Patient t WHERE " +
-			"(t.isActive = true AND  " +
-			"t.doctor IS NULL) AND" +
-			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
-			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
-	Page<Patient> findAllActiveNotBindPatientBySearchValue(@Param("searchValue") String searchValue, Pageable pageable);
+//	@Query("SELECT t FROM Patient t WHERE " +
+//			"(t.isActive = true AND  " +
+//			"t.doctor IS NULL) AND" +
+//			"(LOWER(t.firstName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.lastName) LIKE LOWER(CONCAT(:searchValue, '%')) OR " +
+//			"LOWER(t.patientId) LIKE LOWER(CONCAT(:searchValue, '%')))")
+	@Query(value = "SELECT * FROM Patient WHERE " +
+			"is_active = true AND  doctor_id is null AND " +
+			"(first_name LIKE ?1% OR last_name LIKE ?1% OR patient_id LIKE ?1%) " +
+			"LIMIT ?2, ?3", nativeQuery = true)
+	List<Patient> findAllActiveNotBindPatientBySearchValue(String searchValue, int from, int to);
 }

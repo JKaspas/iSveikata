@@ -1,52 +1,33 @@
 import React from 'react'
-import first from '../../images/first.png'
-import second from '../../images/second.gif'
-import third from '../../images/third.png'
 
 
-var PublicViewComponent = () =>{
+
+var PublicViewComponent = (props) =>{
     return(
-        <div>
-            <header className="bg-primary text-white">
-                <div className="container text-center">
-                    <h1>iSveikata</h1>
-                    <p className="lead">Sveikatos priežiūros sistema</p>
-                </div>
-            </header>
-
-            <section>
-                <div className="container">
-                    <div className="row">
-                    <div className="col-lg-12 mx-auto">
-                        <h2>Susirgimų statistika</h2>
-                        <img className="col-lg-12" src={first} alt="Mountain View"/>
-                    </div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div className="container">
-                    <div className="row">
-                    <div className="col-lg-12 mx-auto">
-                        <h2>Vaistų vartojimo statistika</h2>
-                        <img className="col-lg-12" src={second} alt="Mountain View"/>
-                    </div>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <div className="container">
-                    <div className="row">
-                    <div className="col-lg-12 mx-auto">
-                        <h2>Papildoma statistika</h2>
-                        <img className="col-lg-12" src={third} alt="Mountain View"/>
-                    </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <div>
+        <section>
+            <div className="container">           
+                <div className="panel-group">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h3>Susirgimų statistika</h3>
+                        </div>
+                        <div className="panel-body">
+                        <button className="btn btn-primary" onClick={props.showIcdStatistic}>Pateikti dažniausias sergamų ligų statistiką pagal TLK-10 </button>
+                        <button className="btn btn-primary" onClick={props.showApiStatistic}>Pateikti Vaisto aktyviu medžiagu panaudojimo statistika</button>
+                           {props.icdStatistic}
+                            {props.icdButton}
+                           {props.icdTable}
+                           
+                           {props.apiStatistic}
+                            {props.apiButton}
+                           {props.apiTable}
+                        </div> 
+                    </div> 
+                </div>           
+            </div>
+        </section>
+    </div>
     )
 }
 

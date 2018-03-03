@@ -205,6 +205,7 @@ public class EmployeesController {
 			@PathVariable final String searchValue, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctorAndBySearchValue(pageable, userName, searchValue);
 	}
+	
 
 	/**
 	 * Change employee password in data base. URL: /{userName}/password
@@ -248,16 +249,17 @@ public class EmployeesController {
 //	}
 
     	
-	/**
-	 * Returns the user type.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @return the user type
-	 */
-	private String getUserType(String userName) {
-		return employeesService.getType(userName);
-	}
+
+//	/**
+//	 * Returns the user type.
+//	 *
+//	 * @param userName
+//	 *            the user name
+//	 * @return the user type
+//	 */
+//	private String getUserType(String userName) {
+//		return employeesService.getType(userName);
+//	}
 
 	/**
 	 * Delete user.

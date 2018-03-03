@@ -2,18 +2,23 @@ import React from 'react'
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 
 import PublicViewContainer from '../Container/PublicViewContainer';
+import PublicStatisticContainer from '../Container/PublicStatisticContainer'
+
 import UserLoginContainer from '../Container/UserLoginContainer'
 import PatientLoginContainer from '../Container/PatientLoginContainer'
 import AdminCreateUserContainer from '../Container/AdminContainer/AdminCreateUserContainer';
 import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer'
 import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer'
 import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer'
+import AdminViewContainer from '../Container/AdminContainer/AdminViewContainer'
 
 import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
 import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
 import DoctorPrescriptionContainer from '../Container/DoctorContainer/DoctorPrescriptionContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
-import DoctorPrescriptionUsageViewContainer from '../Container/DoctorContainer/DoctorPrescriptionUsageViewContainer'
+import DoctorPatientListViewContainer from '../Container/DoctorContainer/DoctorPatientListViewContainer'
+import DoctorStatisticContainer from '../Container/DoctorContainer/DoctorStatisticContainer'
+
 import PatientPrescriptionUsageViewContainer from '../Container/PatientContainer/PatientPrescriptionUsageViewContainer'
 
 import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
@@ -36,6 +41,7 @@ var RouteComponent = () =>{
           <Route path="/" component={InitialPublicApp} >
             <IndexRoute component={PublicViewContainer} />
             <Route path="/" component={PublicViewContainer} />
+            <Route path="/statistika" component={PublicStatisticContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
 
             <Route path="/vartotojams" component={UserLoginContainer} />
@@ -43,8 +49,9 @@ var RouteComponent = () =>{
             <Route path="/atsijungti" component={LogoutContainer} />
             <Route path="/generuoti" component={GeneruotiIrasus} />
           </Route>
+
           <Route path="/admin" component={InitialAdminApp} >
-            <IndexRoute component={AdminCreatePatientContainer} />
+            <IndexRoute component={AdminViewContainer} />
             <Route path="/admin/create/user" component={AdminCreateUserContainer} />
             <Route path="/admin/create/patient" component={AdminCreatePatientContainer} />
             <Route path="/admin/edit" component={NoMatch} />
@@ -56,17 +63,18 @@ var RouteComponent = () =>{
 
             <Route path="*" component={NoMatch}/>
           </Route>
-          <Route path="/doctor" component={InitialDoctorApp} >
+
+          <Route path="/gydytojas" component={InitialDoctorApp} >
             <IndexRoute component={DoctorViewContainer} />
-            <Route path="/doctor/patient" component={DoctorViewContainer} />
+            <Route path="/gydytojas/pacientai" component={DoctorPatientListViewContainer} />
+            <Route path="/gydytojas/statistika" component={DoctorStatisticContainer} />
             <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
             <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
-            <Route path="/gydytojas/pacientas/receptas/:prescriptionId/panaudojimai" component={DoctorPrescriptionUsageViewContainer} />
-            {/* <Route path="/gydytojas/pacientas/ligos-irasas/:recordId" component={NoMatch} /> */}
             <Route path="/gydytojas/pacientas/perziura" component={DoctorPatientViewContainer} />
-            <Route path="/doctor/password" component={UserPasswordContainer} />
+            <Route path="/gydytojas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
+
           <Route path="/druggist" component={InitialDruggistApp} >
             <IndexRoute component={DruggistViewContainer} />
             <Route path="/druggist" component={DruggistViewContainer} />

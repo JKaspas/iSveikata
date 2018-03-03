@@ -12,12 +12,13 @@ import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 export default class AdminBindDoctorPartContainer extends Component{
     constructor(props){
         super(props);
+        this.timeOut=''
         this.state = {
             search:'',
             doctorList:'',
             listInfo:'',
 
-            activePage:1,
+            activePage:0,
             itemsPerPage:8,
             listLength:'',
             listIsEmpty:false,
@@ -41,10 +42,10 @@ export default class AdminBindDoctorPartContainer extends Component{
        
     }
 
-    getAllDoctor = (searchValue, activeNumber) =>{
+    getAllDoctor = (searchValue, activePage) =>{
 
-        let allDoctorRequestLink = 'http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage
-        let searchDoctorrequestLink = 'http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activeNumber+'&size='+this.state.itemsPerPage
+        let allDoctorRequestLink = 'http://localhost:8080/api/doctor?page='+activePage+'&size='+this.state.itemsPerPage
+        let searchDoctorrequestLink = 'http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage
         let finalRequestLink = allDoctorRequestLink;
 
         if(searchValue.length > 2){
@@ -61,6 +62,17 @@ export default class AdminBindDoctorPartContainer extends Component{
         axios.get(finalRequestLink)
         .then((response)=>{
             if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                           doctorList:(<h3>Gydytojų nerasta</h3>)
+                        })
+                    }
+                    return ''
+                }
                 this.setState({
                     doctorList:(<h3>Gydytojų nerasta</h3>),
                     listIsEmpty:true,
@@ -68,7 +80,6 @@ export default class AdminBindDoctorPartContainer extends Component{
             }else{
                 this.setState({
                     doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
-                    listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false,
                 })
@@ -87,7 +98,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                 fullName={doctor.fullName}
                 userName={doctor.userName}
                 specialization={doctor.specialization}
-                doctorBindLink={<DoctorBindLink userName={doctor.userName}/>}
+                doctorBindLink={<DoctorBindLink index={index} userName={doctor.userName}/>}
             />)
     }
     
@@ -99,10 +110,15 @@ export default class AdminBindDoctorPartContainer extends Component{
     }
 
     
+    
     searchdHandler = (e) =>{
+        
         e.preventDefault();
-        setTimeout(() =>{
-            this.getAllDoctor(this.state.searchValue, 1)
+
+        clearTimeout(this.timeOut)
+
+        this.timeOut = setTimeout(() =>{
+            this.getAllDoctor(this.state.searchValue, 0)
          } , 1000 )
         
         this.setState({
@@ -112,7 +128,14 @@ export default class AdminBindDoctorPartContainer extends Component{
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
-        this.getAllDoctor(this.state.searchValue, 1)
+        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
+        this.getAllDoctor(this.state.searchValue, activePage)
         
         //change activePage state to new page number
         this.setState({
@@ -122,19 +145,15 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
-            return ''
-        }
+       
         return (
-            <div className="col-sm-5 col-sm-offset-4">
-            <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.listInfo.totalElements}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-            />
-        </div>
+            <div className="text-center">
+                <div>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
+             
+            </div>
         )
     }
 

@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
@@ -94,10 +93,11 @@ public class EmployeesService implements UserDetailsService {
 	 * @return the active doctors list
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Doctor> doctorPage = doctorRepository.findAllDoctor(request);
-		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
-		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
+		List<Doctor> doctorPage = doctorRepository.findAllDoctor(
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -109,10 +109,13 @@ public class EmployeesService implements UserDetailsService {
 	 * @return the active doctor list by searchValue
 	 */
 	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(searchValue, request);
-		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage.getContent());
-		return new PageImpl<>(dtos, request, doctorPage.getTotalElements());
+		//PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
+		List<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(
+				searchValue,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**

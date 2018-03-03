@@ -70,10 +70,14 @@ class DruggistViewContainer extends Component{
             searchValue:e.target.value
         })
     }
+
+
     searchHandler = (e) =>{
         e.preventDefault()
         if(this.state.searchValue.length === 11){
-            this.searchForPatientById(this.state.searchValue)
+            setTimeout(() =>{
+                this.searchForPatientById(this.state.searchValue)
+            } , 1000 )
         }else{
             this.setState({
                 patient:(<h3>Įveskite taisyklingą asmens kodą</h3>)

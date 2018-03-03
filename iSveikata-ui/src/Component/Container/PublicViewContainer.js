@@ -1,12 +1,71 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux';
 
-import PublicViewComponent from './PublicComponent/PublicViewComponent'
+import statistic from '../images/statistic.png'
+import doctor from '../images/doctor.png'
+import patient from '../images/patient.png'
 
-export default class PublicViewContainer extends Component{
+
+class PublicViewContainer extends Component{
+
+
+
+    load = () =>{
+       
+        
+    }
 
     render() {
         return (
-            <PublicViewComponent/>
+            <div>
+                <header className="bg-primary text-white">
+                    <div className="container text-center">
+                        <h1>iSveikata</h1>
+                        <p className="lead">Sveikatos priežiūros sistema</p>
+                        {/* <button className="btn btn-success" onClick={this.load}>Load</button> */}
+                    </div>
+                
+                <section>
+                    <div className="container">
+                    
+                        <div className="row">
+                            <div className="col-sm-12 ">
+                                <div className="col-sm-4">
+                                    <a href="#pacientams" id="publicPatient" className="thumbnail">
+                                    <img  src={patient} alt="Mountain View"/>
+                                    <h4 className="text-center">Prisijungimas pacientams</h4>
+                                    </a>
+                                </div>
+                                <div className="col-sm-4">
+                                    <a href="#statistika" id="publicStatistic" className="thumbnail">
+                                    <img  src={statistic} alt="Mountain View"/>
+                                    <h4 className="text-center">Vieša statistika</h4>
+                                    </a>
+                                </div>
+                                <div className="col-sm-4">
+                                    <a href="#vartotojams" id="publicUsers" className="thumbnail">
+                                    <img  src={doctor} alt="Mountain View"/>
+                                    <h4 className="text-center">Prisijungimas sistemos vartotojams</h4>
+                                    </a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                </header>
+                {/* <PublicViewComponent/> */}
+            </div>
         )
     }
 }
+
+
+const mapStateToProps = (state) =>{
+    return{
+        user:state.user
+    }
+}
+  
+export default connect(mapStateToProps)(PublicViewContainer);
+  

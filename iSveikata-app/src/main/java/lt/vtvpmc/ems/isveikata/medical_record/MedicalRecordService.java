@@ -1,10 +1,14 @@
 package lt.vtvpmc.ems.isveikata.medical_record;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +62,28 @@ public class MedicalRecordService {
 
 	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
 		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
+	}
+
+    public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
+		Long doctorId = jpaEmployeesRepository.findByUserName(userName).getId();
+		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
+    }
+
+	public List<Map> publicTlkStatistics() {
+		List <Map> newList = new ArrayList<Map>();
+		List <Object[]> list = jpaMedicalRecordRepository.getPublicTlkStatistics(new PageRequest(0, 10));
+		Integer total = jpaMedicalRecordRepository.getTotalMedicalRecord();
+		for (Object[] obj: list){
+			final Map objectMap = new HashMap<String, Object>();
+			objectMap.put("info", obj[0]);
+			objectMap.put("totalProc", (long)obj[1] * (double)100 / total);
+			objectMap.put("totalCount", obj[1]);
+			newList.add(objectMap);
+
+		}
+
+		return newList;
+
 	}
 
 }

@@ -9,11 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
@@ -25,6 +23,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
 import lt.vtvpmc.ems.isveikata.prescription.JpaPrescriptionRepository;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 /**
  * The Class PatientService.
@@ -65,10 +64,12 @@ public class PatientService {
 	 * @return
 	 */
 	public Page<PatientDto> getAllPagedActivePatient(Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findByActive(request);
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		List<Patient> patientPage = patientRepository.findByActive(
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		return new PageImpl<>(dtos, request, dtos.size());
 	}
 
 	/**
@@ -90,11 +91,15 @@ public class PatientService {
 	 * @return Page<List> of patient
 	 */
 	public Page<PatientDto> getAllPagedPatientByDoctor(Pageable pageable, String userName) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(doctorRepository.findByUserName(userName).getId());
+		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		Long doctorId = doctorRepository.findByUserName(userName).getId();
+		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(
+						doctorId,
+						pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+						pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
-		Integer end = (request.getOffset()+request.getPageSize() > dtos.size() ? dtos.size():request.getOffset()+request.getPageSize());
-		return new PageImpl<>(dtos.subList(request.getOffset(),  end), request, dtos.size());
+		return new PageImpl<>(dtos);
+
 	}
 
 	/**
@@ -125,11 +130,14 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-				"id");
-		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId, request);
-		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage.getContent());
-		return new PageImpl<>(dtos, request, medicalRecordPage.getTotalElements());
+//		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
+//				"id");
+		List<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(
+				patientId,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize() );
+		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -140,11 +148,13 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<PrescriptionDto> getPatientPrescriptionList(String patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-				"expirationDate");
-		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, request);
-		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
-		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
+
+		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(
+				patientId,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -154,12 +164,9 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
-	public Page<PrescriptionDto> getPatientPrescriptionListAfterDate(String patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-				"expirationDate");
-		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientIdAndDateAfter(patientId, new Date(), request);
-		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
-		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
+	public List<PrescriptionDto> getPatientPrescriptionListAfterDate(String patientId) {
+		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientIdAndDateAfter(patientId, new Date());
+		return prescriptionMapper.prescriptionsToDto(prescriptionsPage);
 	}
 	// /**
 	// * Gets the patient record by id.
@@ -212,10 +219,11 @@ public class PatientService {
 	 * @return the patient list without doctor
 	 */
 	public Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findByIsActiveTrueAndDoctorIsNull(pageable.previousOrFirst());
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		List<Patient> patientPage = patientRepository.findByIsActiveTrueAndDoctorIsNull(
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -290,12 +298,14 @@ public class PatientService {
 
 	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
 			String searchValue) {
-		Doctor doctor = doctorRepository.findByUserName(userName);
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctor,
-				request);
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		Long doctorId = doctorRepository.findByUserName(userName).getId();
+		List<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(
+				searchValue,
+				doctorId,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -311,12 +321,23 @@ public class PatientService {
 	 */
 
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-	
-		Page<Patient> 	patientPage = patientRepository.findByFirstNameStartingWithOrLastNameStartingWith(searchValue, searchValue,request);//findAllActivePatientBySearchValue(searchValue, request);
+		//PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
+		List<Patient> 	patientPage = null;
+		if(searchValue.matches("\\d+")){
+			System.out.println("Number!");
+			patientPage = patientRepository.findAllPatientByPatientId(searchValue,
+					pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+					pageable.getPageSize());
+		}else{
+			System.out.println("Not number!");
+			patientPage = patientRepository.findAllPatientByGivenSearchValue(
+					searchValue,
+					pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+					pageable.getPageSize() );
+		}
 		
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -332,10 +353,12 @@ public class PatientService {
 	 */
 
 	public Page<PatientDto> getPatientListWithoutDoctorBySearchValue(String searchValue, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
-		Page<Patient> patientPage = patientRepository.findAllActiveNotBindPatientBySearchValue(searchValue, request);
-		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage.getContent());
-		return new PageImpl<>(dtos, request, patientPage.getTotalElements());
+		List<Patient> patientPage = patientRepository.findAllActiveNotBindPatientBySearchValue(
+				searchValue,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize() );
+		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+		return new PageImpl<>(dtos);
 	}
 
 }

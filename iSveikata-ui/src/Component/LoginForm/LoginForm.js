@@ -15,7 +15,7 @@ var LoginForm = (props) =>{
                             {props.infoState}
                         </div>
                         <div className={'form-group form-group-lg has-feedback ' + (props.loginValue.length === 0 ? 'is-empty' : props.classNameLoginValue)}>
-                            <input type="text" className="form-control" name={props.loginValueName} 
+                            <input id="loginFormFirstInput" type="text" className="form-control" name={props.loginValueName} 
                             value={props.loginValue} placeholder={props.loginPlaceholder} maxLength="11" autoComplete="off"
                             onChange={props.fieldHandler}
                             onFocus={props.fieldOnFocusHandler}
@@ -24,7 +24,7 @@ var LoginForm = (props) =>{
                             <span className="help-block">{props.errorMessageLoginValue}</span>  
                         </div>
                         <div className={'form-group form-group-lg has-feedback ' + (props.password.length === 0 ? 'is-empty' : props.classNamePassword)}>
-                            <input type="password" className="form-control" name="password"
+                            <input id="loginFormSecondInput" type="password" className="form-control" name="password"
                             value={props.password} placeholder="Slaptažodis" maxLength="15" autoComplete="off"
                             onChange={props.fieldHandler}
                             onFocus={props.fieldOnFocusHandler}
@@ -33,7 +33,7 @@ var LoginForm = (props) =>{
                             <span className="help-block">{props.errorMessagePassword}</span>  
                         </div>
                         <div className="form-group">        
-                            <button className="btn btn-primary btn-lg btn-block" type="submit">Prisijungti</button>
+                            <button id="loginFomrSubmit" className="btn btn-primary btn-lg btn-block" type="submit">Prisijungti</button>
                         </div>
                     </form>
                 </div>
