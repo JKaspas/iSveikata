@@ -10,6 +10,8 @@ import RecordListViewDemo from '../DoctorComponent/RecordListViewDemo';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListView';
 import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
+import { NewRecordLink } from '../LinksAndButtons/NewRecordLink';
+import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 
 
 
@@ -101,6 +103,7 @@ export default class DoctorPatientViewContainer extends Component{
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView 
+                                 useAmountColumnName={<th>Panaudojimai</th>}
                                 prescription={response.data.content.map(this.composePrescriptions)} />,
                     listLength:response.data.content.length,
                     listIsEmpty:false
@@ -171,6 +174,7 @@ export default class DoctorPatientViewContainer extends Component{
         return (<div>
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
+                <p>Ligos kodo aprašymas: {record.icdDescription}</p>
                 <p>Ligos aprasymas: {record.icdDescription}</p>
                 <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
                 <p>Vizito trukmė: {record.appoitmentDuration}</p>
@@ -322,7 +326,9 @@ export default class DoctorPatientViewContainer extends Component{
             <div className="container">
             <section>
             <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-            
+            <NewRecordLink  patientId={this.patientInfo.id} />
+            <NewPrescriptionLink  patientId={this.patientInfo.id}/>
+                
             <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">

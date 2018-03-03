@@ -85,7 +85,6 @@ class DruggistViewContainer extends Component{
                 prescriptionDate={prescription.prescriptionDate}
                 expirationDate={prescription.expirationDate}
                 ingredientName={prescription.apiTitle}
-                useAmount="NaN"
                 showDetails={this.showDetails}
             />
         )

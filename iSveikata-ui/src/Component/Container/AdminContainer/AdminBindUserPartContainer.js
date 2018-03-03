@@ -124,7 +124,9 @@ export default class AdminBindUserPartContainer extends Component{
         e.preventDefault();
         clearTimeout(this.timeOut)
         this.timeOut = setTimeout(() =>{
-            this.getPatientList(this.state.searchValue, 0)
+            this.getPatientList( 
+                (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim(),
+                0)
         } , 1000 )
         
         this.setState({

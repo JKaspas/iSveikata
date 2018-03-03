@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import PatientInfoCard from '../DoctorComponent/PatientInfoCard';
 import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
+import { NewRecordLink } from '../LinksAndButtons/NewRecordLink';
 
 export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
@@ -270,6 +271,7 @@ export default class DoctorPrescriptionContainer extends Component{
             <div className='container'>
                 <section>
                     <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+                    <NewRecordLink  patientId={this.state.patient.id} />
                     <h2>Naujas receptas</h2>
                     <PatientInfoCard 
                     patientFullName={this.state.patient.fullName}

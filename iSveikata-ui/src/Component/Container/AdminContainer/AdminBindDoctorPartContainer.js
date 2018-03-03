@@ -118,7 +118,9 @@ export default class AdminBindDoctorPartContainer extends Component{
         clearTimeout(this.timeOut)
 
         this.timeOut = setTimeout(() =>{
-            this.getAllDoctor(this.state.searchValue, 0)
+            this.getAllDoctor(
+                (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim(),
+                0)
          } , 1000 )
         
         this.setState({

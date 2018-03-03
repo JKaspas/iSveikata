@@ -24,7 +24,6 @@ export const doctorIcdList = () =>{
         axios.get('http://localhost:8080/api/icd')
         .then((response)=> {
             dispatch({ type:'FETCH_ICD_LIST', payload:response.data})
-            console.log("FETCH_ICD_LIST") 
         })
         .catch((erorr) =>{
             console.log(erorr)

@@ -11,7 +11,7 @@ const PrescriptionListView = (props) =>{
                     <th>Išrašymo data</th>
                     <th>Galiojimo data</th>
                     <th>Vaisto aktyvioji medžiaga</th>
-                    <th>Panaudojimai</th>
+                    {props.useAmountColumnName}
                 </tr>
             </thead>
             <tbody>

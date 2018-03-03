@@ -12,6 +12,7 @@ import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 export default class DoctorPatientListViewContainer extends Component{
     constructor(props){
         super(props)
+        this.timeOut= ''
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patientListView:null,
@@ -129,7 +130,6 @@ export default class DoctorPatientListViewContainer extends Component{
     }
 
     getDoctorPatientBySearchValue = (activePage, searchValue) =>{
-        console.log("ActivePage: " + activePage)
         axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient/'
         +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
@@ -214,28 +214,32 @@ export default class DoctorPatientListViewContainer extends Component{
     }
     //search button click handling 
     searchHandler = (e) =>{
+        clearTimeout(this.timeOut)
         e.preventDefault()
-        console.log("Search.....")
         if(this.state.searchValue.length > 2){
             if(this.state.patientType){
-                setTimeout(() =>{
-                    this.getDoctorPatientBySearchValue(0, this.state.searchValue)  
-                } , 2000 )
+                this.timeOut = setTimeout(() =>{
+                    this.getDoctorPatientBySearchValue(
+                        0, 
+                        (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim())  
+                } , 500 )
                 
             }else{
-                setTimeout(() =>{
-                    this.getAllPatientBySearchValue(0, this.state.searchValue)          
-                } , 2000 )
+                this.timeOut =  setTimeout(() =>{
+                    this.getAllPatientBySearchValue(
+                        0,
+                        this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1).trim())          
+                } , 500 )
             }
         }else if(this.state.searchValue.length === 0){
             if(this.state.patientType){
-                setTimeout(() =>{
+                this.timeOut = setTimeout(() =>{
                     this.getDoctorPatient(this.session.user.userName, 0)  
-                } , 1000 )
+                } , 500 )
             }else{
-                setTimeout(() =>{
+                this.timeOut = setTimeout(() =>{
                     this.getAllPatient(0)  
-                } , 1000 )
+                } , 500 )
             }
         }else{
             this.setState({
