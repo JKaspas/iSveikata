@@ -1,6 +1,5 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
@@ -137,27 +134,6 @@ public class PatientController {
 		return passwordChangeIsValid
 				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
 				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
-	}
-
-	/**
-	 * Login. URL: /patient/login Checks if entered password matches saved in db.
-	 * 
-	 * @param fields
-	 *            with patientId and password keys
-	 * 
-	 * @return HttpStatus with message
-	 */
-	@PostMapping("/login")
-	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
-		if (patientService.isPatientActive(fields.get("patientId"))
-				&& (patientService.patientLogin(fields.get("patientId"), fields.get("password")))) {
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-					"Sveiki, " + patientService.getPatient(fields.get("patientId")).getFullName());
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
-		}
 	}
 
 }

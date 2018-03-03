@@ -1,7 +1,5 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,8 +66,6 @@ public class EmployeesController {
 		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
 		final Specialization specialization = mapper.convertValue(map.get("specialization"), Specialization.class);
-		// final String drugStore = mapper.convertValue(map.get("drugStore"),
-		// String.class);
 
 		if (employeesService.validateAddNewUser(employee)) {
 			employeesService.addEmployee(employee, specialization);
@@ -217,40 +212,6 @@ public class EmployeesController {
 		return passwordChangeIsValid
 				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
 				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
-	}
-
-	/**
-	 * Login. URL: /user/login
-	 *
-	 * @param fields
-	 *            the fields
-	 * @return the response entity
-	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
-	 */
-	@PostMapping("/user/login")
-	@ResponseBody
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields)
-			throws NoSuchAlgorithmException {
-		if ((employeesService.isUserActive(fields.get("userName")))
-				&& (employeesService.userLogin(fields.get("userName"), fields.get("password")))) {
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
-		}
-	}
-	
-	
-	/**
-	 * Returns the user type.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @return the user type
-	 */
-	private String getUserType(String userName) {
-		return employeesService.getType(userName);
 	}
 
 	/**

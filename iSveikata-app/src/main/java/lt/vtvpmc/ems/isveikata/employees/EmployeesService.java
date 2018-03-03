@@ -5,16 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.mappers.DoctorMapper;
-import lt.vtvpmc.ems.isveikata.mappers.PatientMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 import lt.vtvpmc.ems.isveikata.specialization.JpaSpecializationRepository;
 import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
@@ -23,6 +22,7 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
  */
 @Service
 @Transactional
+@PreAuthorize("hasRole('Admin')")
 public class EmployeesService {
 
 	/** The employees repository. */
@@ -36,15 +36,13 @@ public class EmployeesService {
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
+	
 	/** The specialization repository */
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
 
 	@Autowired
 	private DoctorMapper doctorMapper;
-
-	@Autowired
-	private PatientMapper patientMapper;
 
 	/**
 	 * Adds new user.
@@ -93,7 +91,7 @@ public class EmployeesService {
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
 		List<Doctor> doctorPage = doctorRepository.findAllDoctor(
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				getPageFrom(pageable),
 				pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
@@ -108,11 +106,8 @@ public class EmployeesService {
 	 * @return the active doctor list by searchValue
 	 */
 	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
-		//PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		List<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(
-				searchValue,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+				searchValue, getPageFrom(pageable),	pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
 	}
@@ -127,41 +122,16 @@ public class EmployeesService {
 	 * @param userName
 	 *            the user name
 	 */
+	@PreAuthorize("hasRole('Admin') or hasRole('Doctor') or hasRole('Druggist')")
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		if (Passwords.isValid(employee.getPassword(), Passwords.hashString(oldPassword))) {
-			employee.setPassword(newPassword);
+		if (SHA256Encrypt.sswordEncoder.matches(newPassword, oldPassword)) {
+			employee.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
 			employeesRepository.save(employee);
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * user password validation.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @param password
-	 *            the password
-	 * @return true, if valid
-	 */
-	public boolean userLogin(String userName, String password) {
-		byte[] dbPassword = employeesRepository.findByUserName(userName).getPassword();
-		return Passwords.isValid(Passwords.hashString(password), dbPassword);
-	}
-
-	/**
-	 * Gets the user type.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @return the type
-	 */
-	public String getType(String userName) {
-		Employee user = employeesRepository.findByUserName(userName);
-		return user.getClass().getSimpleName().toLowerCase();
 	}
 
 	/**
@@ -211,4 +181,9 @@ public class EmployeesService {
 		Employee employee = employeesRepository.findByUserName(userNanme);
 		return employee != null ? employee.isActive() : false;
 	}
+
+	private int getPageFrom(Pageable pageable) {
+		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
+	}
+
 }

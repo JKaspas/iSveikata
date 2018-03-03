@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 import lombok.Data;
-import lt.vtvpmc.ems.isveikata.Passwords;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 @Entity
 @Data
@@ -39,22 +39,22 @@ public abstract class Employee {
 	private String lastName;
 
 	@NotNull
-	private byte[] password;
+	private String password;
 
 	private boolean isActive = true;
 
 	public Employee() {
 	}
 
-	public Employee(String firstName, String lastName, String userName, byte[] password) {
+	public Employee(String firstName, String lastName, String userName, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
 		this.password = password;
 	}
-
-	public void setPassword(String password) {
-		this.password = Passwords.hashString(password);
+	
+	public void setPassword(String rawPassword) {
+		this.password = SHA256Encrypt.sswordEncoder.encode(rawPassword);
 	}
 
 }

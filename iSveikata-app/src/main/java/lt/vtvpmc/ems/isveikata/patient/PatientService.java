@@ -1,22 +1,18 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lt.vtvpmc.ems.isveikata.Passwords;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
 import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
@@ -28,6 +24,7 @@ import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
 import lt.vtvpmc.ems.isveikata.prescription.JpaPrescriptionRepository;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 /**
  * The Class PatientService.
@@ -67,11 +64,11 @@ public class PatientService {
 	 * @param pageable
 	 * @return
 	 */
+	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedActivePatient(Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
 		List<Patient> patientPage = patientRepository.findByActive(
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+				getPageFrom(pageable), pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos, request, dtos.size());
 	}
@@ -82,6 +79,7 @@ public class PatientService {
 	 * @param pageable
 	 * @return
 	 */
+	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<Patient> getAllPatientByPatientId(String patientId, Pageable pageable) {
 		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		return patientRepository.findAllPatientByPatientId(patientId, request);
@@ -94,13 +92,11 @@ public class PatientService {
 	 * @param userName
 	 * @return Page<List> of patient
 	 */
+	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctor(Pageable pageable, String userName) {
-		PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
 		Long doctorId = doctorRepository.findByUserName(userName).getId();
-		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(
-						doctorId,
-						pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-						pageable.getPageSize());
+		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(doctorId,
+				getPageFrom(pageable),	pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
 
@@ -111,6 +107,7 @@ public class PatientService {
 	 *
 	 * @return the patient list
 	 */
+	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public List<PatientDto> getActivePatientList() {
 		return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
 	}
@@ -122,6 +119,7 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient
 	 */
+	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor') OR hasRole('Druggist')")
 	public PatientDto getPatient(String patientId) {
 		return patientMapper.patientToDto(patientRepository.findOne(patientId));
 	}
@@ -133,13 +131,10 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient record list
 	 */
+	@PreAuthorize("hasRole('Doctor')")
 	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
-//		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-//				"id");
-		List<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(
-				patientId,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize() );
+		List<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId,
+				getPageFrom(pageable),	pageable.getPageSize());
 		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage);
 		return new PageImpl<>(dtos);
 	}
@@ -151,12 +146,10 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
+	@PreAuthorize("hasRole('Patient') OR hasRole('Doctor') OR hasRole('Druggist')")
 	public Page<PrescriptionDto> getPatientPrescriptionList(String patientId, Pageable pageable) {
-
-		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(
-				patientId,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId,
+				getPageFrom(pageable),	pageable.getPageSize());
 		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage);
 		return new PageImpl<>(dtos);
 	}
@@ -168,20 +161,12 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient prescription list
 	 */
+	@PreAuthorize("hasRole('Druggist')")
 	public List<PrescriptionDto> getPatientPrescriptionListAfterDate(String patientId) {
-		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientIdAndDateAfter(patientId, new Date());
+		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientIdAndDateAfter(patientId,
+				new Date());
 		return prescriptionMapper.prescriptionsToDto(prescriptionsPage);
 	}
-	// /**
-	// * Gets the patient record by id.
-	// *
-	// * @param id
-	// * the id
-	// * @return the patient record by id
-	// */
-	// public MedicalRecord getPatientRecordById(Long id) {
-	// return medicalRecordRepository.findOne(id);
-	// }
 
 	/**
 	 * Update patient password.
@@ -195,10 +180,11 @@ public class PatientService {
 	 * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 */
+	@PreAuthorize("hasRole('Patient')")
 	public boolean updatePatientPassword(String oldPassword, final String newPassword, String patientId) {
 		Patient pat = patientRepository.findOne(patientId);
-		if (Passwords.isValid(pat.getPassword(), Passwords.hashString(oldPassword))) {
-			pat.setPassword(newPassword);
+		if (SHA256Encrypt.sswordEncoder.matches(oldPassword, pat.getPassword())) {
+			pat.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
 			patientRepository.save(pat);
 			return true;
 		} else {
@@ -213,6 +199,7 @@ public class PatientService {
 	 * @param patient
 	 *            the patient
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public void addNewPatient(Patient patient) {
 		patientRepository.save(patient);
 	}
@@ -222,26 +209,12 @@ public class PatientService {
 	 *
 	 * @return the patient list without doctor
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
 		List<Patient> patientPage = patientRepository.findByIsActiveTrueAndDoctorIsNull(
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+				getPageFrom(pageable),	pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
-	}
-
-	/**
-	 * Patient login.
-	 *
-	 * @param patientId
-	 *            the patient id
-	 * @param password
-	 *            the password
-	 * @return true, if successful
-	 */
-	public boolean patientLogin(String patientId, String password) {
-		byte[] dbPassword = patientRepository.findOne(patientId).getPassword();
-		return Passwords.isValid(Passwords.hashString(password), dbPassword);
 	}
 
 	/**
@@ -251,6 +224,7 @@ public class PatientService {
 	 *            the patient
 	 * @return true, if successful
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public boolean validateAddNewPatient(Patient patient) {
 		if (patientRepository.exists(patient.getPatientId())) {
 			return false;
@@ -265,6 +239,7 @@ public class PatientService {
 	 * @param patientId
 	 *            the patient id
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public void deactivatePatient(String patientId) {
 		Patient patient = patientRepository.findOne(patientId);
 		patient.setActive(false);
@@ -299,15 +274,12 @@ public class PatientService {
 	 *
 	 * @return paged list of patient
 	 */
-
+	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
 			String searchValue) {
 		Long doctorId = doctorRepository.findByUserName(userName).getId();
-		List<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(
-				searchValue,
-				doctorId,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+		List<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue,
+				doctorId, getPageFrom(pageable),pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
 	}
@@ -323,23 +295,19 @@ public class PatientService {
 	 *
 	 * @return paged list of patient
 	 */
-
+	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
-		//PageRequest request = new PageRequest(pageable.getPageNumber(), pageable.getPageSize());
-		List<Patient> 	patientPage = null;
-		if(searchValue.matches("\\d+")){
-			System.out.println("Number!");
+		List<Patient> patientPage = null;
+		if (searchValue.matches("\\d+")) {
 			patientPage = patientRepository.findAllPatientByPatientId(searchValue,
-					pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+					getPageFrom(pageable),
 					pageable.getPageSize());
-		}else{
-			System.out.println("Not number!");
-			patientPage = patientRepository.findAllPatientByGivenSearchValue(
-					searchValue,
-					pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-					pageable.getPageSize() );
+		} else {
+			patientPage = patientRepository.findAllPatientByGivenSearchValue(searchValue,
+					getPageFrom(pageable),
+					pageable.getPageSize());
 		}
-		
+
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
 	}
@@ -355,15 +323,17 @@ public class PatientService {
 	 *
 	 * @return paged list of patient
 	 */
-
+	@PreAuthorize("hasRole('Admin')")
 	public Page<PatientDto> getPatientListWithoutDoctorBySearchValue(String searchValue, Pageable pageable) {
-		List<Patient> patientPage = patientRepository.findAllActiveNotBindPatientBySearchValue(
-				searchValue,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize() );
+		List<Patient> patientPage = patientRepository.findAllActiveNotBindPatientBySearchValue(searchValue,
+				getPageFrom(pageable),
+				pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
 	}
-
+	
+	private int getPageFrom(Pageable pageable) {
+		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
+	}
 
 }

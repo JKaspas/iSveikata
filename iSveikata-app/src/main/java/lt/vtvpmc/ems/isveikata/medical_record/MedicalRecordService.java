@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,8 @@ public class MedicalRecordService {
 	private JpaIcdRepository jpaIcdRepository;
 	@Autowired
 	private MedicalRecordMapper mapper;
-
+	
+	@PreAuthorize("hasRole('Doctor')")
 	public void createNewRecord(Map<String, Object> map) {
 		final ObjectMapper mapper = new ObjectMapper(); 
 
@@ -59,31 +61,30 @@ public class MedicalRecordService {
 		jpaAppointmentRepository.save(appointment);
 
 	}
-
+	
+	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
 		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 	}
-
+	
+	@PreAuthorize("hasRole('Doctor')")
     public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
 		Long doctorId = jpaEmployeesRepository.findByUserName(userName).getId();
 		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
     }
 
-	public List<Map> publicTlkStatistics() {
-		List <Map> newList = new ArrayList<Map>();
+	public List<Map<String,Object>> publicTlkStatistics() {
+		List <Map<String,Object>> newList = new ArrayList<Map<String,Object>>();
 		List <Object[]> list = jpaMedicalRecordRepository.getPublicTlkStatistics(new PageRequest(0, 10));
 		Integer total = jpaMedicalRecordRepository.getTotalMedicalRecord();
 		for (Object[] obj: list){
-			final Map objectMap = new HashMap<String, Object>();
+			final Map<String, Object> objectMap = new HashMap<String, Object>();
 			objectMap.put("info", obj[0]);
 			objectMap.put("totalProc", (long)obj[1] * (double)100 / total);
 			objectMap.put("totalCount", obj[1]);
 			newList.add(objectMap);
-
 		}
-
 		return newList;
-
 	}
 
 }

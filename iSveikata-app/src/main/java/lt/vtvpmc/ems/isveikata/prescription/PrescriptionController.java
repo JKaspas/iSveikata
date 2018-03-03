@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import lt.vtvpmc.ems.isveikata.api.ApiStatDto;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
 @RestController
@@ -84,9 +83,6 @@ public class PrescriptionController {
         }
     }
     
-    @GetMapping("/statistics")
-    private List<ApiStatDto> getPublicApiStatistics(){
-    	return prescriptionSevice.getPublicApiStatistics();
-    }
+
 
 }
