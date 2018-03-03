@@ -1,16 +1,12 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +22,8 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
  */
 @Service
 @Transactional
-public class EmployeesService implements UserDetailsService {
+@PreAuthorize("hasRole('Admin')")
+public class EmployeesService {
 
 	/** The employees repository. */
 	@Autowired
@@ -39,14 +36,13 @@ public class EmployeesService implements UserDetailsService {
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
+	
 	/** The specialization repository */
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
 
 	@Autowired
 	private DoctorMapper doctorMapper;
-
-	private final static Logger LOGGER = Logger.getLogger(EmployeesService.class.getName());
 
 	/**
 	 * Adds new user.
@@ -67,6 +63,7 @@ public class EmployeesService implements UserDetailsService {
 			Doctor doctor = (Doctor) employeesRepository.save(employee);
 			doctor.setSpecialization(spec);
 		} else {
+			employeesRepository.save(employee);
 		}
 	}
 
@@ -94,7 +91,7 @@ public class EmployeesService implements UserDetailsService {
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
 		List<Doctor> doctorPage = doctorRepository.findAllDoctor(
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				getPageFrom(pageable),
 				pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
@@ -109,11 +106,8 @@ public class EmployeesService implements UserDetailsService {
 	 * @return the active doctor list by searchValue
 	 */
 	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
-		//PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize());
 		List<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(
-				searchValue,
-				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
-				pageable.getPageSize());
+				searchValue, getPageFrom(pageable),	pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
 	}
@@ -128,6 +122,7 @@ public class EmployeesService implements UserDetailsService {
 	 * @param userName
 	 *            the user name
 	 */
+	@PreAuthorize("hasRole('Admin') or hasRole('Doctor') or hasRole('Druggist')")
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
 		if (SHA256Encrypt.sswordEncoder.matches(newPassword, oldPassword)) {
@@ -137,32 +132,6 @@ public class EmployeesService implements UserDetailsService {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * user password validation.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @param password
-	 *            the password
-	 * @return true, if valid
-	 */
-	public boolean userLogin(String userName, String password) {
-		String dbPassword = employeesRepository.findByUserName(userName).getPassword();
-		return SHA256Encrypt.sswordEncoder.matches(password, dbPassword);
-	}
-
-	/**
-	 * Gets the user type.
-	 *
-	 * @param userName
-	 *            the user name
-	 * @return the type
-	 */
-	public String getType(String userName) {
-		Employee user = employeesRepository.findByUserName(userName);
-		return user.getClass().getSimpleName().toLowerCase();
 	}
 
 	/**
@@ -213,34 +182,8 @@ public class EmployeesService implements UserDetailsService {
 		return employee != null ? employee.isActive() : false;
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		String fullName;
-		String password;
-		String role;
-		
-		LOGGER.info("UserName:" + userName + " Skaitmeninis?"+userName.matches("\\d+") );
-
-		try {
-			if (userName.matches("\\d+")) {
-				Patient user = patientRepository.findOne(userName);
-				fullName = user.getFirstName() + " " + user.getLastName();
-				password = user.getPassword();
-				role = "ROLE_" + user.getClass().getSimpleName();
-			} else {
-				Employee user = employeesRepository.findByUserName(userName);
-				fullName = user.getFirstName() + " " + user.getLastName();
-				password = user.getPassword();
-				role = "ROLE_" + user.getClass().getSimpleName();
-			}
-
-		} catch (Exception e) {
-			throw new UsernameNotFoundException(userName + " not found.");
-
-		}
-		return new org.springframework.security.core.userdetails.User(fullName,password,
-				AuthorityUtils.createAuthorityList(new String[] { role }));
+	private int getPageFrom(Pageable pageable) {
+		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
 	}
 
 }

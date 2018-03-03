@@ -28,7 +28,7 @@ export default class PublicStatisticContainer extends Component{
     }
 
     getApiData = () =>{
-        axios.get("http://localhost:8080/api/prescription/statistics")
+        axios.get("http://localhost:8080/statistics/api/")
             .then((response) =>{
                 if(response.data.length === 0){
                     this.setState({
@@ -45,7 +45,7 @@ export default class PublicStatisticContainer extends Component{
     }
 
     getIcdData = () =>{
-        axios.get("http://localhost:8080/api/record/statistic/TLK/")
+        axios.get("http://localhost:8080/statistics/tlk/")
             .then((response) =>{
                 if(response.data.length === 0){
                     this.setState({

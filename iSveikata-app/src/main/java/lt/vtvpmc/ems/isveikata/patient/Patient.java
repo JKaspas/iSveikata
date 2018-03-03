@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -16,6 +23,7 @@ import lombok.Data;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecord;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
+import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 @Entity
 @Table(indexes = {
@@ -28,8 +36,6 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = 416974951348630192L;
 
 	@Id
-//	@Min(10_001_010_000L)
-//	@Max(89_912_319_999L)
 	@Column(unique = true, nullable = false)
 	private String patientId; // personal code
 
@@ -58,5 +64,8 @@ public class Patient implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "patient")
 	private List<Prescription> prescriptions;
-
+	
+	public void setPassword(String rawPassword) {
+		this.password = SHA256Encrypt.sswordEncoder.encode(rawPassword);
+	}
 }

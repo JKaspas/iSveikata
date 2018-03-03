@@ -8,10 +8,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,41 +26,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetails;
-
+	
+	@Autowired
+	private RESTAuthenticationFailureHandler authenticationFailureHandler;
+	
+	@Autowired
+	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
-				.antMatchers("/", "/swagger-ui.html").permitAll()
+				.antMatchers("/", "/swagger-ui.html", "/statistics").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
-				.antMatchers("/api/**").authenticated().and().formLogin() // leidziam login
-				// prisijungus
-				.successHandler((req, res, auth) -> { // Success handler invoked after successful authentication
-					String userRoles = "";
-					for (GrantedAuthority authority : auth.getAuthorities()) {
-						if (userRoles.length() > 0)
-							userRoles = userRoles + ";";
-						userRoles = userRoles + authority.getAuthority();
-					}
-					res.addHeader("Content-Type", "application/json; charset=utf-8x");
-					res.getWriter().print("{\"fullName\":\"" + auth.getName() + "\",\"role\":\"" + userRoles + "\"}");
-					res.getWriter().flush();
-					// res.addCookie(new Cookie("userName", auth.getName()));
-					// res.addHeader("userName", auth.getName());
-					// res.sendRedirect("/"); // Redirect user to index/home page
-				})
-				// .successHandler(new SimpleUrlAuthenticationSuccessHandler())
-				// esant blogiems user/pass
-				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
-				.loginPage("/api/login").permitAll() // jis	jau egzistuoja!
-				.usernameParameter("userName").passwordParameter("password").and().logout()
-				// .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.permitAll() // leidziam /logout
-				.and().csrf().disable() // nenaudojam tokenu
+				.antMatchers("/api/**").authenticated();
+		http.formLogin().successHandler(authenticationSuccessHandler);
+		http.formLogin().failureHandler(authenticationFailureHandler)//new SimpleUrlAuthenticationFailureHandler())
+				.loginPage("/api/login").permitAll() 
+				.usernameParameter("userName").passwordParameter("password")
+				.and().logout().permitAll();				// .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				 // leidziam /logout
+		http.csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai
-				.exceptionHandling().authenticationEntryPoint(securityEntryPoint).and().headers().frameOptions()
-				.disable() // H2 konsolei
+				.exceptionHandling().authenticationEntryPoint(securityEntryPoint)
+				.and().headers().frameOptions().disable() // H2 konsolei
 				.and().cors();
 	}
 

@@ -2,7 +2,6 @@ package lt.vtvpmc.ems.isveikata.medical_record;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,7 +31,7 @@ public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord,
 	// by DATE order by DATE
 	@Query(value = "SELECT DATE, count(*) as visits, " + "sum(DURATION) as duration   FROM MEDICAL_RECORD "
 			+ "join APPOINTMENT on MEDICAL_RECORD.APPOINTMENT_ID = APPOINTMENT.ID "
-			+ "where MEDICAL_RECORD.DOCTOR_ID = ?1 " + "and APPOINTMENT.DATE > ?2 " + "and APPOINTMENT.DATE < ?3 "
+			+ "where MEDICAL_RECORD.DOCTOR_ID = ?1 " + "and APPOINTMENT.DATE >= ?2 " + "and APPOINTMENT.DATE <= ?3 "
 			+ "group by DATE order by DATE", nativeQuery = true)
 	List<Object> getDoctorWorkDaysStatistic(Long doctorId, String dateFrom, String dateTill);
 

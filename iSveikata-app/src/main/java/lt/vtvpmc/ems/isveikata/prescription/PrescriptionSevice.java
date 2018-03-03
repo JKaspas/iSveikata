@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +49,8 @@ public class PrescriptionSevice {
 
 	@Autowired
 	private ApiMapper apiMapper;
-
+	
+	@PreAuthorize("hasRole('Doctor')")
 	public void createNewPrescription(Map<String, Object> map) {
 		ObjectMapper mapper = new ObjectMapper();
 		Prescription prescription = mapper.convertValue(map.get("prescription"), Prescription.class);
@@ -69,19 +71,23 @@ public class PrescriptionSevice {
 
 		prescriptionRepository.save(prescription);
 	}
-
+	
+	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public List<PrescriptionDto> getAllPrescriptions() {
 		return mapper.prescriptionsToDto(prescriptionRepository.findAll());
 	}
-
+	
+	@PreAuthorize("hasRole('Doctor')")
 	public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
 		return prescriptionRepository.findOne(prescriptionId).getPrescriptionUsage();
 	}
-
+	
+	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient') OR hasRole('Druggist')")
 	public PrescriptionDto getPrescription(Long prescriptionId) {
 		return mapper.prescriptionToDto(prescriptionRepository.findOne(prescriptionId));
 	}
-
+	
+	@PreAuthorize("hasRole('Druggist')")
 	public boolean createUsageForPrescription(Map<String, Object> map, Long prescriptionId) {
 		ObjectMapper mapper = new ObjectMapper();
 		PrescriptionUsage prescriptionUsage = mapper.convertValue(map.get("usage"), PrescriptionUsage.class);

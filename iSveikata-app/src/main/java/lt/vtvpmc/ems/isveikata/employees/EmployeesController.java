@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,13 +62,10 @@ public class EmployeesController {
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/user")
-	@PreAuthorize("hasRole('Admin')")
 	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
 		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
 		final Specialization specialization = mapper.convertValue(map.get("specialization"), Specialization.class);
-		// final String drugStore = mapper.convertValue(map.get("drugStore"),
-		// String.class);
 
 		if (employeesService.validateAddNewUser(employee)) {
 			employeesService.addEmployee(employee, specialization);
@@ -90,7 +86,6 @@ public class EmployeesController {
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/patient")
-	@PreAuthorize("hasRole('Admin')")
 	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
 		if (patientService.validateAddNewPatient(patient)) {
 			patientService.addNewPatient(patient);
@@ -114,7 +109,6 @@ public class EmployeesController {
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/bind/{userName}/to/{patientId}")
-	@PreAuthorize("hasRole('Admin')")
 	private ResponseEntity<String> bindingValid(@PathVariable String userName, @PathVariable String patientId) {
 		if (employeesService.validateBindDoctrorToPatient(userName, patientId)) {
 			employeesService.bindDoctorToPatient(userName, patientId);
@@ -137,7 +131,6 @@ public class EmployeesController {
 	 *            userName
 	 */
 	@PostMapping("/doctor/new/record")
-	@PreAuthorize("hasRole('Doctor')")
 	@ResponseStatus(HttpStatus.CREATED)
 	private <T extends Object> void createRecord(@RequestBody Map<String, Object> map) {
 		medicalRecordService.createNewRecord(map);
@@ -147,7 +140,6 @@ public class EmployeesController {
 	 *
 	 */
 	@PostMapping("/doctor/new/prescription")
-	@PreAuthorize("hasRole('Doctor')")
 	@ResponseStatus(HttpStatus.CREATED)
 	private <T extends Object> void createPrescription(@RequestBody Map<String, Object> map) {
 		prescriptionSevice.createNewPrescription(map);
@@ -159,7 +151,6 @@ public class EmployeesController {
 	 * @return list of all doctors
 	 */
 	@GetMapping("/doctor")
-	@PreAuthorize("hasRole('Admin')")
 	private Page<DoctorDto> getAllDoctors(Pageable pageable) {
 		return employeesService.getActiveDoctorsList(pageable);
 	}
@@ -171,7 +162,6 @@ public class EmployeesController {
 	 * @return list of active doctor by searchValue
 	 */
 	@GetMapping("/doctor/{searchValue}/search")
-	@PreAuthorize("hasRole('Admin')")
 	private Page<DoctorDto> getAllDoctorBySearchValue(@PathVariable String searchValue, Pageable pageable) {
 		return employeesService.getActiveDoctorBySearchValue(searchValue, pageable);
 	}
@@ -185,7 +175,6 @@ public class EmployeesController {
 	 * @return list of all patient of current doctor
 	 */
 	@GetMapping("/doctor/{userName}/patient")
-	@PreAuthorize("hasRole('Admin') or hasRole('Doctor')")
 	@ResponseStatus(HttpStatus.OK)
 	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
@@ -224,42 +213,6 @@ public class EmployeesController {
 				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
 				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
-
-//	/**
-//	 * Login. URL: /user/login
-//	 *
-//	 * @param fields
-//	 *            the fields
-//	 * @return 
-//	 * @return 
-//	 * @return the response entity
-//	 * @throws NoSuchAlgorithmException
-//	 *             the no such algorithm exception
-//	 */
-//	@PostMapping("/user/login")
-//	@ResponseBody
-//	private  ResponseEntity<String> update(@RequestBody final Map<String, String> fields) {
-//		if ((employeesService.isUserActive(fields.get("userName")))
-//				&& (employeesService.userLogin(fields.get("userName"), fields.get("password")))) {
-//			return ResponseEntity.status(HttpStatus.ACCEPTED).body(getUserType(fields.get("userName")).toLowerCase());
-//		} else {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//					.body("Vartotojas nerastas, neteisingi prisijungimo duomenis");
-//		}
-//	}
-
-    	
-
-//	/**
-//	 * Returns the user type.
-//	 *
-//	 * @param userName
-//	 *            the user name
-//	 * @return the user type
-//	 */
-//	private String getUserType(String userName) {
-//		return employeesService.getType(userName);
-//	}
 
 	/**
 	 * Delete user.
