@@ -137,7 +137,7 @@ class DruggistViewContainer extends Component{
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
-                <button onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
+                <button id="prescriptionUsageSubmit" onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
                 
         </div>)
     }

@@ -12,14 +12,14 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.oldPassword.length === 0 ? 'is-empty' : (props.classNameOldPassword + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="oldPassword">Dabartinis slaptažodis:</label>
                     <div className="col-sm-9">
-                        <input type="password" className="form-control" id="oldPassword" name="oldPassword" 
+                        <input id="pasFormOldPasswordInput" type="password" className="form-control" id="oldPassword" name="oldPassword" 
                         value={props.oldPassword} maxLength="15" autoComplete="off"
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
                         onBlur={props.fieldValidationHandler}
                         onContextMenu={props.disableActions}
                         onCopy={props.disableActions}
-                        onPaste={props.disableActions}
+                        // onPaste={props.disableActions}
                         onCut={props.disableActions} />
                         <span className={props.classNameOldPassword !== 'is-empty' ? (props.classNameOldPassword === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : ''}></span>
                         <span className="help-block">{props.errorMessageOldPassword}</span>
@@ -28,7 +28,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.newPassword.length === 0 ? 'is-empty' : (props.classNameNewPassword + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="newPassword">Naujas slaptažodis:</label>
                     <div className="col-sm-9">
-                        <input type="password" className="form-control" id="newPassword" name="newPassword" 
+                        <input id="pasFormNewPasswordInputFirst" type="password" className="form-control" id="newPassword" name="newPassword" 
                         value={props.newPassword}  maxLength="15" autoComplete="off" 
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
@@ -44,7 +44,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.newPasswordRepeat.length === 0 ? 'is-empty' : (props.classNameNewPasswordRepeat + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="newPasswordRepeat">Pakartokite naują slaptažodį:</label>
                     <div className="col-sm-9">
-                        <input type="password" className="form-control" id="newPasswordRepeat" name="newPasswordRepeat" 
+                        <input id="pasFormNewPasswordInputSecond" type="password" className="form-control" id="newPasswordRepeat" name="newPasswordRepeat" 
                         value={props.newPasswordRepeat}  maxLength="15" autoComplete="off"
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
@@ -59,7 +59,7 @@ export const ChangePasswordForm = (props) =>{
                 </div>
                 <div className="form-group">        
                     <div className="col-sm-offset-3 col-sm-9">
-                        <button type="submit" className="btn btn-primary">Pakeisti</button>
+                        <button id="pasFormNSubmit"type="submit" className="btn btn-primary">Pakeisti</button>
                     </div>
                 </div>
             </form>

@@ -134,11 +134,14 @@ public class PatientService {
 	 * @return the patient record list
 	 */
 	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-				"id");
-		Page<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId, request);
-		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage.getContent());
-		return new PageImpl<>(dtos, request, medicalRecordPage.getTotalElements());
+//		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
+//				"id");
+		List<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(
+				patientId,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize() );
+		List<MedicalRecordDto> dtos = medicalRecordMapper.medicalRecordsToDto(medicalRecordPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**
@@ -149,11 +152,13 @@ public class PatientService {
 	 * @return the patient prescription list
 	 */
 	public Page<PrescriptionDto> getPatientPrescriptionList(String patientId, Pageable pageable) {
-		PageRequest request = new PageRequest(pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.Direction.DESC,
-				"expirationDate");
-		Page<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(patientId, request);
-		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage.getContent());
-		return new PageImpl<>(dtos, request, prescriptionsPage.getTotalElements());
+
+		List<Prescription> prescriptionsPage = prescriptionRepository.findAllByPatientPatientId(
+				patientId,
+				pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize(),
+				pageable.getPageSize());
+		List<PrescriptionDto> dtos = prescriptionMapper.prescriptionsToDto(prescriptionsPage);
+		return new PageImpl<>(dtos);
 	}
 
 	/**

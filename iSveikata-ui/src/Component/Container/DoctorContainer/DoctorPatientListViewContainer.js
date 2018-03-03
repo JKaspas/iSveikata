@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Pagination from "react-js-pagination"
 
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
@@ -110,7 +109,7 @@ export default class DoctorPatientListViewContainer extends Component{
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-            patientViewLink=(<td><DoctorViewPatientLink clickHandler={this.viewPatientClickHandler} 
+            patientViewLink=(<td><DoctorViewPatientLink index={index} clickHandler={this.viewPatientClickHandler} 
                 patientId={patient.id} 
                 fullName={patient.fullName}
                 birthDate={patient.birthDate}/></td>)
@@ -122,8 +121,8 @@ export default class DoctorPatientListViewContainer extends Component{
                 birthDate={patient.birthDate}
                 fullName={patient.fullName}
     
-                recordLink={<td><NewRecordLink  patientId={patient.id}/></td>}
-                prescriptionLink={<td><NewPrescriptionLink  patientId={patient.id}/></td>}
+                recordLink={<td><NewRecordLink index={index} patientId={patient.id}/></td>}
+                prescriptionLink={<td><NewPrescriptionLink index={index} patientId={patient.id}/></td>}
                 doctorViewPatient={patientViewLink}                 
             />
         )
@@ -306,10 +305,9 @@ export default class DoctorPatientListViewContainer extends Component{
           return (
               <div className="text-center">
                 <div>
-                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
-                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
-             
             </div>
           )
       }
@@ -335,7 +333,7 @@ export default class DoctorPatientListViewContainer extends Component{
                                     searchPlaceHolder={"Pacientų paieška"}
                                     searchType={"text"}
                                 />
-                                <button className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
+                                <button id="doctorChangePatientList" className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                             </div>
                             <div className="col-sm-12">
                                 {this.state.patientListView}

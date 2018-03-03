@@ -11,7 +11,12 @@ public interface JpaMedicalRecordRepository extends JpaRepository<MedicalRecord,
 
 	List<MedicalRecord> findAllByOrderByIdDesc();
 
-	Page<MedicalRecord> findAllByPatientPatientId(String patientId, Pageable request);
+
+	@Query(value = "SELECT * FROM MEDICAL_RECORD " +
+			"JOIN APPOINTMENT ON MEDICAL_RECORD.APPOINTMENT_ID = APPOINTMENT.ID "+
+			"where patient_patient_id = ?1 ORDER BY DATE DESC " +
+			"LIMIT ?2, ?3 ", nativeQuery = true)
+	List<MedicalRecord> findAllByPatientPatientId(String patientId, int form, int to);
 
 	// @Query("SELECT a.DATE, count(*) as visits, sum(a.DURATION) as duration " +
 	// "FROM t medicalRecord join a appointment " +

@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Pagination from "react-js-pagination"
 
 
 
@@ -13,13 +12,14 @@ export default class AdminBindUserPartContainer extends Component{
     constructor(){
         super();
         this.session =  JSON.parse(sessionStorage.getItem('session'))
+        this.timeOut=''
         this.state = {
             patientList:'',
             infoState:'',
             
             listInfo:'',
 
-            activePage:195,
+            activePage:0,
             itemsPerPage:8,
             listLength:'',
 
@@ -109,7 +109,7 @@ export default class AdminBindUserPartContainer extends Component{
                 patientId={patient.id}
                 birthDate={patient.birthDate}
                 fullName={patient.fullName}
-                patientBindLink={<td><PatientBindLink bindClick={this.bindClick} patientId={patient.id}/></td>}
+                patientBindLink={<td><PatientBindLink index={index} bindClick={this.bindClick} patientId={patient.id}/></td>}
             />
         )
     }
@@ -122,7 +122,8 @@ export default class AdminBindUserPartContainer extends Component{
     
     searchdHandler = (e) =>{
         e.preventDefault();
-        setTimeout(() =>{
+        clearTimeout(this.timeOut)
+        this.timeOut = setTimeout(() =>{
             this.getPatientList(this.state.searchValue, 0)
         } , 1000 )
         
@@ -154,8 +155,8 @@ export default class AdminBindUserPartContainer extends Component{
         return (
             <div className="text-center">
                 <div>
-                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
-                    <button className="btn btn-default" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
              
             </div>

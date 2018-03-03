@@ -22,7 +22,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Asmens kodas:</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className={'form-control ' + props.errorClassPatientId} name="patientId" 
+                                            <input id="patientPatientIdInput" type="text" className={'form-control ' + props.errorClassPatientId} name="patientId" 
                                             value={props.patientId} required maxLength="11" placeholder="Asmens kodas"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />
@@ -34,7 +34,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Gimimo data:</label>
                                         <div className="col-sm-9">
-                                            <input type="text" readOnly className="form-control" name="birthDate"
+                                            <input id="patientBirthDateInput" type="text" readOnly className="form-control" name="birthDate"
                                             value={props.generateBirthDate} required placeholder="yyyy-MM-dd"
                                             onChange={props.fieldHandler} />
                                         </div>
@@ -42,7 +42,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3">Vardas:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className={'form-control ' + props.errorClassFirstName} name="firstName"
+                                            <input id="patientFistNameInput" type="text" className={'form-control ' + props.errorClassFirstName} name="firstName"
                                             value={props.firstName} required maxLength="225" placeholder="Paciento vardas"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />
@@ -51,7 +51,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3" >Pavardė:</label>
                                         <div className="col-sm-9">          
-                                            <input type="text" className={'form-control ' + props.errorClassLastName} name="lastName"
+                                            <input id="patientLastNameInput" type="text" className={'form-control ' + props.errorClassLastName} name="lastName"
                                             value={props.lastName} required maxLength="225" placeholder="Paciento pavardė"
                                             onChange={props.fieldHandler}
                                             onBlur={props.fieldValidationHandler} />
@@ -60,7 +60,7 @@ const PatientForm = (props) => {
                                     <div className="form-group">
                                         <label className="control-label col-sm-3" >Slaptažodis:</label>
                                         <div className="col-sm-9">          
-                                            <input type={props.passwordMasked ? "password" : "text"} readOnly className="form-control" name="password"
+                                            <input id="patientPasswordInput" type={props.passwordMasked ? "password" : "text"} readOnly className="form-control" name="password"
                                             value={props.generatePassword} required placeholder="Slaptažodis" autoComplete="off"
                                             onChange={props.fieldHandler}
                                             onClick={props.handlePasswordMasking} />
@@ -68,7 +68,7 @@ const PatientForm = (props) => {
                                     </div>
                                     <div className="form-group">        
                                         <div className="col-sm-offset-3 col-sm-9">
-                                            <button className="btn btn-default" type="submit" disabled={!props.formValid}>Registruoti</button>
+                                            <button id="patientFormSubmit" className="btn btn-default" type="submit" disabled={!props.formValid}>Registruoti</button>
                                         </div>
                                     </div>
                                 </form>

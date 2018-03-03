@@ -26,9 +26,7 @@ export default class DoctorPatientViewContainer extends Component{
             viewContent:'',
             contentType:'record',
 
-            listInfo:'',
-
-            activePage:1,
+            activePage:0,
             itemsPerPage:8,
             listLength:'',
             listIsEmpty:true,
@@ -57,14 +55,20 @@ export default class DoctorPatientViewContainer extends Component{
             document.getElementById("record-tab").style.background = "lightGrey"
 
             if(response.data.content.length === 0){
-                this.setState({
-                    viewContent:this.state.notFoundRecord,
-                    listIsEmpty:true
-                })
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    return ''
+                }else{
+                    this.setState({
+                        viewContent:this.state.notFoundRecord,
+                        listIsEmpty:true
+                    })
+                }
             }else{
                 this.setState({
                     viewContent:<RecordListViewDemo records={response.data.content.map(this.composeRecords)} />,
-                    listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false
                 })
@@ -82,15 +86,22 @@ export default class DoctorPatientViewContainer extends Component{
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
             if(response.data.content.length === 0){
-                this.setState({
-                    viewContent:this.state.notFoundPrescription,
-                    listIsEmpty:true
-                })
+                if(activePage !== 0){
+                    console.log()
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    return ''
+                }else{
+                    this.setState({
+                        viewContent:this.state.notFoundPrescription,
+                        listIsEmpty:true
+                    })
+                }
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView 
                                 prescription={response.data.content.map(this.composePrescriptions)} />,
-                    listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false
                    
@@ -110,6 +121,7 @@ export default class DoctorPatientViewContainer extends Component{
         return(
             <RecordListingItemDemo
                 key={index}
+                index={index}
                 id={record.id}
                 appDate={record.appointmentDate}
                 icd={record.icdCode}
@@ -233,10 +245,10 @@ export default class DoctorPatientViewContainer extends Component{
         document.getElementById("prescription-tab").style.background = "none"
         
         this.setState({
-            activePage:1,
+            activePage:0,
             contentType:'record'
         })
-        this.loadRecords(1)
+        this.loadRecords(0)
     }
     //on prescription tab click show list of prescription
     showPrescription = () =>{
@@ -244,10 +256,10 @@ export default class DoctorPatientViewContainer extends Component{
         document.getElementById("prescription-tab").style.background = "lightGrey"
 
         this.setState({
-            activePage:1,
+            activePage:0,
             contentType:'prescription'
         })
-        this.loadPrescriptions(1) 
+        this.loadPrescriptions(0) 
     }
 
     //on medical record row click show record details
@@ -273,6 +285,13 @@ export default class DoctorPatientViewContainer extends Component{
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
+        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
         //by content type (record/prescription) send request for specific page
        if(this.state.contentType === 'record'){
             this.loadRecords(activePage);
@@ -287,19 +306,14 @@ export default class DoctorPatientViewContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
-            return ''
-          }
+        
         return (
-            <div className="col-sm-5 col-sm-offset-4">
-            <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.listInfo.totalElements}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-            />
-        </div>
+            <div className="text-center">
+                <div>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
+            </div>
         )
     }
 
@@ -308,6 +322,7 @@ export default class DoctorPatientViewContainer extends Component{
             <div className="container">
             <section>
             <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+            
             <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">

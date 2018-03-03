@@ -138,8 +138,9 @@ export default class DoctorStatisticContainer extends Component{
                         </div>
                         <div className="panel-body">
                     
-                           <h5>Pasirinkite intervala darbo dienu statistikai pateikti</h5>
+                           
                             <div className="text-center">
+                            <h4>Pasirinkite intervala darbo dienu statistikai pateikti</h4>
                             <DateRangePicker
                                 startDate={this.state.startDate}
                                 endDate={this.state.endDate}
@@ -152,7 +153,7 @@ export default class DoctorStatisticContainer extends Component{
                                 isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                 numberOfMonths={1}
                                 />
-                                <button onClick={this.submitHandler} className="btn btn-primary" type="submit" >Pateikti statistika</button>  
+                                <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-primary" type="submit" >Pateikti statistika</button>  
                             </div>
                             
                            {/* <form onSubmit={this.submitHandler}>

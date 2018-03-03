@@ -15,7 +15,7 @@ var RecordForm = props => {
             TLK-10 ligos kodas:
           </label>
           <div className="col-sm-10">
-            <select type="text" className="form-control" name="icdCode" placeholder="X##(.###) arba specialus kodas" maxLength="8" 
+            <select id="recordIcdCodeSelectInput" type="text" className="form-control" name="icdCode" placeholder="X##(.###) arba specialus kodas" maxLength="8" 
             value={props.icdCode.toUpperCase()} required onChange={props.fieldHandler} id={props.errorClassIcd}>
               {props.icds}
             </select>
@@ -24,13 +24,13 @@ var RecordForm = props => {
         <div className="form-group">
           <label className="control-label col-sm-2">Vizito aprašymas:</label>
           <div className="col-sm-10">
-            <textarea className="form-control" name="description" rows="3" required onChange={props.fieldHandler} value={props.description} 
+            <textarea id="recordDescriptionInput" className="form-control" name="description" rows="3" required onChange={props.fieldHandler} value={props.description} 
             id={props.errorClassDescription} maxLength="225" />
           </div>
         </div>
         <div className="form-group">
           <div className="form-check col-sm-10 col-sm-offset-2">
-            <input type="checkbox" className="form-check-input" id="CheckIfCompensable" name="isCompensable" checked={props.isCompensable} 
+            <input id="recordIsCompensableCheckBoxInput" type="checkbox" className="form-check-input" id="CheckIfCompensable" name="isCompensable" checked={props.isCompensable} 
             onChange={props.fieldHandler} />
             <label className="form-check-label" htmlFor="CheckIfCompensable">
               Vizitas <strong>
@@ -41,7 +41,7 @@ var RecordForm = props => {
             </label>
           </div>
           <div className="form-check col-sm-10 col-sm-offset-2">
-            <input type="checkbox" className="form-check-input" id="CheckIfRepetitive" name="isRepetitive" checked={props.isRepetitive} 
+            <input id="recordIsRepetitiveCheckBoxInput" type="checkbox" className="form-check-input" id="CheckIfRepetitive" name="isRepetitive" checked={props.isRepetitive} 
             onChange={props.fieldHandler} />
             <label className="form-check-label" htmlFor="CheckIfRepetitive">
               Vizitas <strong>
@@ -55,13 +55,13 @@ var RecordForm = props => {
             Vizito trukmė (minutėmis):
           </label>
           <div className="col-sm-10">
-            <input type="number" className="form-control" name="duration" placeholder="Trukmė" maxLength="3" value={props.duration} required 
+            <input id="recordDurationInput" type="number" className="form-control" name="duration" placeholder="Trukmė" maxLength="3" value={props.duration} required 
             onChange={props.fieldHandler} id={props.errorClassDuration} />
           </div>
         </div>
         <div className="form-group">
           <div className="col-sm-offset-2 col-sm-10">
-            <button type="submit" className="btn btn-default" disabled={!props.formValid}>
+            <button id="recordFormSubmit" type="submit" className="btn btn-default" disabled={!props.formValid}>
               Sukurti įrašą
             </button>
           </div>

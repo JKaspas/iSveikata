@@ -10,12 +10,12 @@ import AdminCreateUserContainer from '../Container/AdminContainer/AdminCreateUse
 import AdminCreatePatientContainer from '../Container/AdminContainer/AdminCreatePatientContainer'
 import AdminBindDoctorPartContainer from '../Container/AdminContainer/AdminBindDoctorPartContainer'
 import AdminBindUserPartContainer from '../Container/AdminContainer/AdminBindUserPartContainer'
+import AdminViewContainer from '../Container/AdminContainer/AdminViewContainer'
 
 import DoctorViewContainer from '../Container/DoctorContainer/DoctorViewContainer'
 import DoctorRecordContainer from '../Container/DoctorContainer/DoctorRecordContainer'
 import DoctorPrescriptionContainer from '../Container/DoctorContainer/DoctorPrescriptionContainer'
 import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatientViewContainer'
-import DoctorPrescriptionUsageViewContainer from '../Container/DoctorContainer/DoctorPrescriptionUsageViewContainer'
 import DoctorPatientListViewContainer from '../Container/DoctorContainer/DoctorPatientListViewContainer'
 import DoctorStatisticContainer from '../Container/DoctorContainer/DoctorStatisticContainer'
 
@@ -51,7 +51,7 @@ var RouteComponent = () =>{
           </Route>
 
           <Route path="/admin" component={InitialAdminApp} >
-            <IndexRoute component={AdminCreatePatientContainer} />
+            <IndexRoute component={AdminViewContainer} />
             <Route path="/admin/create/user" component={AdminCreateUserContainer} />
             <Route path="/admin/create/patient" component={AdminCreatePatientContainer} />
             <Route path="/admin/edit" component={NoMatch} />
@@ -70,8 +70,6 @@ var RouteComponent = () =>{
             <Route path="/gydytojas/statistika" component={DoctorStatisticContainer} />
             <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
             <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
-            <Route path="/gydytojas/pacientas/receptas/:prescriptionId/panaudojimai" component={DoctorPrescriptionUsageViewContainer} />
-            {/* <Route path="/gydytojas/pacientas/ligos-irasas/:recordId" component={NoMatch} /> */}
             <Route path="/gydytojas/pacientas/perziura" component={DoctorPatientViewContainer} />
             <Route path="/gydytojas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>

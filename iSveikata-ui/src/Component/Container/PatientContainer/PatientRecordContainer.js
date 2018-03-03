@@ -29,7 +29,7 @@ export default class PatientRecordContainer extends Component{
 
             listInfo:'',
 
-            activePage:1,
+            activePage:0,
             itemsPerPage:8,
             listLength:'',
             
@@ -58,7 +58,18 @@ export default class PatientRecordContainer extends Component{
         +this.session.patient.patientId+'/record?page='
         +activePage+'&size='+this.state.itemsPerPage)
         .then((response) => {
-                if(response.data.content.length === 0){
+            if(response.data.content.length === 0){
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            patientList:(<h3>Pacientų nėrasta</h3>)
+                        })
+                    }
+                    return ''
+                }
                 this.setState({
                     viewContent:this.state.notFoundRecord
                 })
@@ -152,6 +163,13 @@ export default class PatientRecordContainer extends Component{
 
     //handle paggination page changes 
     handlePageChange = (activePage) => {
+        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
     
         //by content type (record/prescription) send request for specific page
         this.loadRecords(activePage);
@@ -166,14 +184,11 @@ export default class PatientRecordContainer extends Component{
     //Show paggination div with props from state
     showPagination = () =>{
         return (
-            <div className="col-sm-5 col-sm-offset-4">
-                <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={this.state.itemsPerPage}
-                totalItemsCount={this.state.listInfo.totalElements}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange}
-                />
+            <div className="text-center">
+                <div>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
             </div>
         )
     }
@@ -185,8 +200,8 @@ export default class PatientRecordContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                        <h4>Klientas: {this.patientInfo.fullName}</h4>
-                        <p>Asmens kodas: {this.patientInfo.id}</p>
+                        {/* <h4>Klientas: {this.patientInfo.fullName}</h4>
+                        <p>Asmens kodas: {this.patientInfo.id}</p> */}
                             <h3> Ligos istorijos įrašai</h3>
                         </div>
                         <div className="panel-body">

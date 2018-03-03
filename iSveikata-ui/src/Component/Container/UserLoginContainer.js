@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import LoginForm from '../LoginForm/LoginForm';
 import { userLoggedIn } from './_action/index';
-import {adminSpecializationList, doctorApiList, doctorIcdList} from '../Container/_action'
+import {doctorApiList, doctorIcdList} from '../Container/_action'
 
 
 class UserLoginContainer extends Component{

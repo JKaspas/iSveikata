@@ -11,7 +11,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface JpaPrescriptionRepository extends JpaRepository<Prescription, Long> {
 
-    Page<Prescription> findAllByPatientPatientId(String id, Pageable pageable);
+
+    @Query(value = "SELECT * FROM PRESCRIPTION WHERE " +
+            "patient_patient_id = ?1 ORDER BY EXPIRATION_DATE DESC " +
+            "LIMIT ?2, ?3 ", nativeQuery = true)
+    List<Prescription> findAllByPatientPatientId(String id, int from, int to);
 
 //    SELECT * FROM PRESCRIPTION where PATIENT_PATIENT_ID  = 31202290012 and EXPIRATION_DATE > '2018-01-01'
     @Query("SELECT t FROM Prescription t WHERE " +

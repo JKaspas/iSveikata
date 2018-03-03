@@ -19,13 +19,17 @@ public interface JpaEmployeesRepository<T extends Employee> extends JpaRepositor
 	//@Query("select e from Employee e where e.dtype = :type")
 	List<T> findAllByType(String type);
 
-	@Query("select e from Doctor e where isActive = true")
-	Page<Doctor> findAllDoctor(Pageable pageable);
+	@Query(value = "SELECT * FROM EMPLOYEE WHERE DTYPE = 'doctor' and IS_ACTIVE = true LIMIT ?1, ?2", nativeQuery = true)
+	List<Doctor> findAllDoctor(int from, int to);
 
-	@Query("SELECT t FROM Doctor t WHERE " +
-			"t.isActive = true AND  " +
-			"(LOWER(t.firstName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
-			"LOWER(t.lastName) LIKE LOWER(CONCAT('%',:searchValue, '%')))")
-	Page<Doctor> findAllActiveDoctorBySearchValue(@Param("searchValue") String searchValue,
-													Pageable pageable);
+//	@Query("SELECT t FROM Doctor t WHERE " +
+//			"t.isActive = true AND  " +
+//			"(LOWER(t.firstName) LIKE LOWER(CONCAT('%',:searchValue, '%')) OR " +
+//			"LOWER(t.lastName) LIKE LOWER(CONCAT('%',:searchValue, '%')))")
+	@Query(value = "SELECT * FROM EMPLOYEE WHERE " +
+			"DTYPE = 'doctor' and IS_ACTIVE = true " +
+			"AND (first_name LIKE ?1% OR last_name LIKE ?1%)" +
+			"LIMIT ?2, ?3", nativeQuery = true)
+	List<Doctor> findAllActiveDoctorBySearchValue(String searchValue,
+													int from, int to);
 }
