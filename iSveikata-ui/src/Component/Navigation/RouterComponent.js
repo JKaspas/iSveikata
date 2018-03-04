@@ -66,8 +66,8 @@ var RouteComponent = () =>{
             <IndexRoute component={DoctorViewContainer} />
             <Route path="/gydytojas/pacientai" component={DoctorPatientListViewContainer} />
             <Route path="/gydytojas/statistika" component={DoctorStatisticContainer} />
-            <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
-            <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
+            <Route path="/doctor/patient/record" component={DoctorRecordContainer} />
+            <Route path="/doctor/patient/prescription" component={DoctorPrescriptionContainer} />
             <Route path="/gydytojas/pacientas/perziura" component={DoctorPatientViewContainer} />
             <Route path="/gydytojas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>

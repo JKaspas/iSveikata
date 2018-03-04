@@ -9,8 +9,8 @@ export default class DoctorRecordContainer extends Component {
   constructor(props) {
     super(props);
     this.session = JSON.parse(sessionStorage.getItem("session"));
+    this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
     this.state = {
-      patient: "",
       icds: "",
 
       icdCode: "",
@@ -19,7 +19,6 @@ export default class DoctorRecordContainer extends Component {
       duration: "",
       description: "",
 
-      patientId: props.params.patientId,
       userName: this.session.user.userName,
 
       formErrors: { icd: "", description: "", duration: "" },
@@ -41,7 +40,7 @@ export default class DoctorRecordContainer extends Component {
       this.props.router.push("/vartotojams");
       return "";
     }
-    this.loadPatient();
+
     this.loadIcd();
   };
   loadIcd = () => {
@@ -52,20 +51,8 @@ export default class DoctorRecordContainer extends Component {
           </option>
         ))
     })
-}
+  }
 
-  loadPatient = () => {
-    axios
-      .get("http://localhost:8080/api/patient/" + this.props.params.patientId)
-      .then(response => {
-        this.setState({
-          patient: response.data
-        });
-      })
-      .catch(erorr => {
-        console.log(erorr);
-      });
-  };
 
   submitHandler = e => {
     let date = new Date();
@@ -85,7 +72,7 @@ export default class DoctorRecordContainer extends Component {
           repetitive: this.state.isRepetitive
         },
         icdCode: this.state.icdCode,
-        patientId: this.state.patientId,
+        patientId: this.patientInfo.id,
         userName: this.state.userName
       })
       .then(response => {
@@ -206,12 +193,12 @@ export default class DoctorRecordContainer extends Component {
       <div className="container">
         <section>
           <button onClick={() => this.props.router.goBack()}  className="btn btn-primary" >Atgal</button>
-          <NewPrescriptionLink  patientId={this.state.patient.id}/>
+          <NewPrescriptionLink  patientId={this.patientInfo.id}/>
           <h2>Naujas ligos įrašas</h2>
           <PatientInfoCard
-            patientFullName={this.state.patient.fullName}
-            date={this.state.patient.birthDate}
-            patientId={this.state.patient.id}
+            patientFullName={this.patientInfo.fullName}
+            date={this.patientInfo.birthDate}
+            patientId={this.patientInfo.id}
             form={
               <RecordForm
                 erorrClassIcd={this.errorClass(this.state.formErrors.icd)}

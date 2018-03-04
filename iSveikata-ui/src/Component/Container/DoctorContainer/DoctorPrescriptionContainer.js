@@ -9,13 +9,11 @@ export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
         super(props);
         this.session =  JSON.parse(sessionStorage.getItem('session'));
+        this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
         this.state = {
-            patient: '',
-            patientFullName: '',
             apis: '',
             apiUnits: '',
 
-            patientId: props.params.patientId,
             userName: this.session.user.userName,
 
             infoState: '',
@@ -43,7 +41,6 @@ export default class DoctorPrescriptionContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-        this.loadPatient();
         this.loadApi();
     } 
 
@@ -61,19 +58,6 @@ export default class DoctorPrescriptionContainer extends Component{
             "desc":api.description
         }
     } 
-    
-    loadPatient = () =>{
-        axios.get('http://localhost:8080/api/patient/'+ this.props.params.patientId)
-        .then((response)=>{
-            this.setState({
-                patient:response.data
-            })
-            console.log(response.status)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
  
     submitHandler = (e) => {
         let date = new Date()
@@ -81,18 +65,6 @@ export default class DoctorPrescriptionContainer extends Component{
         let expDate = this.generateExpirationDate();
 
         e.preventDefault();
-        console.log({
-            prescription:{
-                expirationDate:expDate,
-                prescriptionDate:currentDate,
-                description:this.state.description,
-                ingredientAmount:this.state.substanceAmount,
-                // ingredientUnit:this.state.substanceUnit,
-            },
-            patientId: this.state.patientId,
-            userName: this.state.userName,
-            apiTitle:this.state.substance
-        })
         if(this.state.formValid){
             axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
@@ -102,7 +74,7 @@ export default class DoctorPrescriptionContainer extends Component{
                     ingredientAmount:this.state.substanceAmount,
                     // ingredientUnit:this.state.substanceUnit,
                 },
-                patientId: this.state.patientId,
+                patientId: this.patientInfo.id,
                 userName: this.state.userName,
                 apiTitle:this.state.substance
             })
@@ -271,12 +243,12 @@ export default class DoctorPrescriptionContainer extends Component{
             <div className='container'>
                 <section>
                     <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-                    <NewRecordLink  patientId={this.state.patient.id} />
+                    <NewRecordLink  patientId={this.patientInfo.id} />
                     <h2>Naujas receptas</h2>
                     <PatientInfoCard 
-                    patientFullName={this.state.patient.fullName}
-                    date={this.state.patient.birthDate}
-                    patientId={this.state.patient.id}
+                    patientFullName={this.patientInfo.fullName}
+                    date={this.patientInfo.birthDate}
+                    patientId={this.patientInfo.id}
                     form={
                         <PrescriptionForm 
                         classNameDescription={this.state.fieldState.description}

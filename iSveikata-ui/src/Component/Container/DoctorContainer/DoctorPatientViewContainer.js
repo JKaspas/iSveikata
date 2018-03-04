@@ -315,6 +315,7 @@ export default class DoctorPatientViewContainer extends Component{
             <div className="text-center">
                 <div>
                     <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default">{this.state.activePage + 1}</button>
                     <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
             </div>
