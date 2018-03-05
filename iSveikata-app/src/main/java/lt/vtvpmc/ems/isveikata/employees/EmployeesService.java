@@ -36,7 +36,7 @@ public class EmployeesService {
 	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
-	
+
 	/** The specialization repository */
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
@@ -90,9 +90,7 @@ public class EmployeesService {
 	 * @return the active doctors list
 	 */
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
-		List<Doctor> doctorPage = doctorRepository.findAllDoctor(
-				getPageFrom(pageable),
-				pageable.getPageSize());
+		List<Doctor> doctorPage = doctorRepository.findAllDoctor(getPageFrom(pageable), pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
 	}
@@ -106,8 +104,8 @@ public class EmployeesService {
 	 * @return the active doctor list by searchValue
 	 */
 	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
-		List<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(
-				searchValue, getPageFrom(pageable),	pageable.getPageSize());
+		List<Doctor> doctorPage = doctorRepository.findAllActiveDoctorBySearchValue(searchValue, getPageFrom(pageable),
+				pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);
 		return new PageImpl<>(dtos);
 	}
@@ -125,8 +123,8 @@ public class EmployeesService {
 	@PreAuthorize("hasRole('Admin') or hasRole('Doctor') or hasRole('Druggist')")
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
 		Employee employee = employeesRepository.findByUserName(userName);
-		if (SHA256Encrypt.sswordEncoder.matches(newPassword, oldPassword)) {
-			employee.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
+		if (SHA256Encrypt.sswordEncoder.matches(oldPassword, employee.getPassword())) {
+			employee.setPassword(newPassword);
 			employeesRepository.save(employee);
 			return true;
 		} else {

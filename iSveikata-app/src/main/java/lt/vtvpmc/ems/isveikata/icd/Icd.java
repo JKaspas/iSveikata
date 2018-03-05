@@ -25,6 +25,8 @@ public class Icd implements Serializable {
 	
 	@NotNull
 	private String title;
+	
+	private Long counter;
 
 }
 

@@ -41,47 +41,48 @@ public class MedicalRecordService {
 
 	@Autowired
 	private JpaIcdRepository jpaIcdRepository;
+
 	@Autowired
 	private MedicalRecordMapper mapper;
-	
+
 	@PreAuthorize("hasRole('Doctor')")
 	public void createNewRecord(Map<String, Object> map) {
-		final ObjectMapper mapper = new ObjectMapper(); 
-
+		final ObjectMapper mapper = new ObjectMapper();
 		Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
 		MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
 		Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
-
+		if (!medicalRecord.isRepetitive())
+			icd.setCounter(icd.getCounter() + 1);
 		medicalRecord.setIcd(icd);
 		medicalRecord.setAppointment(appointment);
 		medicalRecord.setDoctor(
 				(Doctor) jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
 		medicalRecord.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), String.class)));
 		jpaMedicalRecordRepository.save(medicalRecord);
+		jpaIcdRepository.save(icd);
 		jpaAppointmentRepository.save(appointment);
-
 	}
-	
+
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
 		return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 	}
-	
+
 	@PreAuthorize("hasRole('Doctor')")
-    public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
+	public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
 		Long doctorId = jpaEmployeesRepository.findByUserName(userName).getId();
 		return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
-    }
+	}
 
-	public List<Map<String,Object>> publicTlkStatistics() {
-		List <Map<String,Object>> newList = new ArrayList<Map<String,Object>>();
-		List <Object[]> list = jpaMedicalRecordRepository.getPublicTlkStatistics(new PageRequest(0, 10));
-		Integer total = jpaMedicalRecordRepository.getTotalMedicalRecord();
-		for (Object[] obj: list){
+	public List<Map<String, Object>> publicTlkStatistics() {
+		List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();
+		List<Icd> list = jpaIcdRepository.findAllByOrderByCounterDesc(new PageRequest(0, 10));
+		Integer total = jpaMedicalRecordRepository.getTotalNonRepetitiveMedicalRecordCount();
+		for (Icd icd : list) {
 			final Map<String, Object> objectMap = new HashMap<String, Object>();
-			objectMap.put("info", obj[0]);
-			objectMap.put("totalProc", (long)obj[1] * (double)100 / total);
-			objectMap.put("totalCount", obj[1]);
+			objectMap.put("info", icd.getTitle());
+			objectMap.put("totalProc", (long) icd.getCounter() * (double) 100 / total);
+			objectMap.put("totalCount", icd.getCounter());
 			newList.add(objectMap);
 		}
 		return newList;
