@@ -3,8 +3,6 @@ package lt.vtvpmc.ems.isveikata.security;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lt.vtvpmc.ems.isveikata.IsveikataApplication;
-
 public class SHA256Encrypt implements PasswordEncoder {
 	
 	private final ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
@@ -18,10 +16,6 @@ public class SHA256Encrypt implements PasswordEncoder {
 
 	@Override
 	public boolean matches(CharSequence rawPassword, String encodedPassword) {
-		IsveikataApplication.LOGGER.info("dbssword: " + encodedPassword);
-		IsveikataApplication.LOGGER.info("password: " + encode(rawPassword));
-
-
 		return encoder.isPasswordValid(encodedPassword, rawPassword.toString(), salt);
 	}
 

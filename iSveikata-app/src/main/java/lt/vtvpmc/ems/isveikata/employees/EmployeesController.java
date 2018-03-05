@@ -205,7 +205,7 @@ public class EmployeesController {
 	 *            the user name
 	 */
 	@PutMapping("/{userName}/password")
-	private ResponseEntity<String> update(@RequestBody final Map<String, String> fields,
+	private ResponseEntity<String> updatePassword(@RequestBody final Map<String, String> fields,
 			@PathVariable final String userName) {
 		boolean passwordChangeIsValid = employeesService.updateUserPassword(fields.get("oldPassword"),
 				fields.get("newPassword"), userName);
