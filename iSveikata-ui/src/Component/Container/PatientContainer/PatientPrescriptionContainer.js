@@ -8,6 +8,7 @@ import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListV
 import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
 
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 
@@ -216,11 +217,10 @@ export default class PatientPrescriptionContainer extends Component{
         return (
             <div className="container">
             <section>
+            <UserDetailsComponent fullName={this.session.patient.fullName} />
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                        {/* <h4><strong>Vardas, pavardė: {this.patientInfo.fullName}</strong></h4>
-                        <p>Asmens kodas: {this.patientInfo.id}</p> */}
                         <h3> Receptai</h3>
                         </div>
                         <div className="panel-body">

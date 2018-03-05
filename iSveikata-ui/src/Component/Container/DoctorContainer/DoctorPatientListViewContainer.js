@@ -8,6 +8,7 @@ import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink';
 import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 export default class DoctorPatientListViewContainer extends Component{
@@ -411,18 +412,22 @@ export default class DoctorPatientListViewContainer extends Component{
         return (
             <div className="container">
             <section>
+                <UserDetailsComponent fullName={this.session.user.fullName}
+                    other={<div className="navbar-text">
+                                <button className="btn btn-default pull-right" onClick={this.generateCSVFile}>
+                                    {this.state.CSVButtonTitle}
+                                </button>
+                                {this.state.downloadCSV}
+                            </div>} />
+
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            
-                            <button className="btn btn-default pull-right" onClick={this.generateCSVFile}>
-                                {this.state.CSVButtonTitle}
-                            </button>
-                            {this.state.downloadCSV}
-                            <h4>Priskirtų pacientų sąrašas</h4>
+                            <h3>Pacientų sąrašas</h3>
                         </div>
                         <div className="panel-body">
                             <div className="text-center">
+                                
                                 <h4>Prašome įvesti bent 3 simbolius</h4>
                                 <SearchFieldForm 
                                     searchHandler={this.searchHandler}
@@ -433,6 +438,7 @@ export default class DoctorPatientListViewContainer extends Component{
                                 />
                                 <button id="doctorResetPatientList" className='btn btn-default pull-left' onClick={this.resetDoctorInfoSession}>Atnaujinti pacientų sąrasą</button>
                                 <button id="doctorChangePatientList" className='btn btn-default pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
+                               
                             </div>
                             <div className="col-sm-12">
                                 {this.state.patientListView}

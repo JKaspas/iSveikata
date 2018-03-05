@@ -6,6 +6,7 @@ import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import { DruggistPrescriptionLink } from '../LinksAndButtons/DruggistPrescriptionLink';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 class DruggistViewContainer extends Component{
     constructor(props){
@@ -89,6 +90,7 @@ class DruggistViewContainer extends Component{
         return (
             <div className="container">
             <section>
+            <UserDetailsComponent fullName={this.session.user.fullName} />
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">

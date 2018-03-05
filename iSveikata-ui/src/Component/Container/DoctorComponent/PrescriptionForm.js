@@ -10,7 +10,7 @@ var PrescriptionForm = (props) =>{
             <div className={'form-group ' + (props.daysToExpiration === "select" ? 'is-empty' : 'has-success has-feedback')}>
                 <label className="control-label col-sm-3" htmlFor="daysToExpiration">Recepto galiojimo trukmė:</label>
                 <div className="col-sm-9">          
-                    <select id="prescriptionExpirationSelectInput" className="form-control" id="daysToExpiration" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler} onFocus={props.fieldOnFocusHandler}>
+                    <select className="form-control" id="daysToExpiration" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler} onFocus={props.fieldOnFocusHandler}>
                         <option value="select">Pasirinkite</option>
                         <option value="5">5 dienos</option>
                         <option value="10">10 dienų</option>
@@ -79,7 +79,7 @@ var PrescriptionForm = (props) =>{
             </div>   
             <div className="form-group">        
                 <div className="col-sm-offset-3 col-sm-9">
-                    {props.formValid ? <button type="submit" className="btn btn-success">Išrašyti receptą</button> : <button type="submit" className="btn btn-primary">Validuoti</button>}
+                    {props.formValid ? <button type="submit" className="btn btn-success">Išrašyti receptą</button> : <button type="submit" className="btn btn-default">Validuoti</button>}
                 </div>
             </div>
         </form>   

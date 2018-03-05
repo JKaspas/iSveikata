@@ -3,10 +3,12 @@ import axios from "axios";
 
 import PatientInfoCard from "../DoctorComponent/PatientInfoCard";
 import RecordForm from "../DoctorComponent/RecordForm";
+import { UserDetailsComponent } from "../AdminComponent/UserDetailsComponent";
 
 export default class DoctorRecordContainer extends Component{
   constructor(props){
     super(props);
+    this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
     this.session = JSON.parse(sessionStorage.getItem("session"));
     this.state = {
       patient: "",
@@ -64,34 +66,20 @@ export default class DoctorRecordContainer extends Component{
   }; 
 
   loadIcd = () => {
-    axios
-      .get("http://localhost:8080/api/icd")
-      .then(response => {
-        this.setState({
-          icds: response.data.map((icd, index) => (
-            <option key={index} value={icd.icdCode}>
-              {icd.icdCode} - {icd.title}
-            </option>
-          ))
-        });
-        console.log(response.status);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.setState({
+      icds: this.session.doctor.icdList.map((icd, index) => (
+        <option key={index} value={icd.icdCode}>
+          {icd.icdCode} - {icd.title}
+        </option>
+      ))
+    })
   };
 
   loadPatient = () => {
-    axios
-      .get("http://localhost:8080/api/patient/" + this.props.params.patientId)
-      .then(response => {
-        this.setState({
-          patient: response.data
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.setState({
+          patient: this.patientInfo
+    });
+
   }; 
 
   submitHandler = (e) => {
@@ -295,12 +283,15 @@ export default class DoctorRecordContainer extends Component{
     return (
       <div className="container">
         <section>
-          <button onClick={() => this.props.router.goBack()} className="btn btn-primary">Atgal</button>
-          <h2>Naujas ligos įrašas</h2>
+          <UserDetailsComponent fullName={this.session.user.fullName}
+              other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
+          />
+
           <PatientInfoCard
             patientFullName={this.state.patient.fullName}
             date={this.state.patient.birthDate}
             patientId={this.state.patient.id}
+            slogan={"Ligos įrašo pildymo forma"}
             form={
               <RecordForm
               classNameDescription={this.state.fieldState.description}

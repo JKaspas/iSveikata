@@ -10,6 +10,7 @@ import 'moment/locale/lt'
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 export default class DoctorStatisticContainer extends Component{
@@ -131,10 +132,12 @@ export default class DoctorStatisticContainer extends Component{
         return (
             <div className="container">
             <section>
+            <UserDetailsComponent fullName={this.session.user.fullName} />
+            
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Gydytojo darbo dienų statistika</h4>
+                            <h3>Gydytojo darbo dienų statistika</h3>
                         </div>
                         <div className="panel-body">
                     
@@ -153,7 +156,9 @@ export default class DoctorStatisticContainer extends Component{
                                 isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                 numberOfMonths={1}
                                 />
-                                <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-primary" type="submit" >Pateikti statistika</button>  
+                            </div>
+                            <div className="text-center">
+                                <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-default" type="submit" >Pateikti statistika</button> 
                             </div>
                             
                            {/* <form onSubmit={this.submitHandler}>

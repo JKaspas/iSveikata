@@ -5,17 +5,19 @@ import DoctorListView from '../AdminComponent/DoctorListView'
 import DoctorListingItem from '../AdminComponent/DoctorListingItem'
 import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 export default class AdminBindDoctorPartContainer extends Component{
     constructor(props){
         super(props);
+        this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             search:'',
             doctorList:'',
             listInfo:'',
 
-            activePage:1,
+            activePage:0,
             itemsPerPage:8,
             listLength:'',
             listIsEmpty:false,
@@ -29,8 +31,8 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     componentWillMount = () =>{
 
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'admin'){
+       
+        if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }
@@ -137,9 +139,7 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
-            return ''
-        }
+       
         return (
             <div className="text-center">
                 <div>
@@ -158,10 +158,11 @@ export default class AdminBindDoctorPartContainer extends Component{
         return(
         <div className="container">
             <section>  
+            <UserDetailsComponent  fullName={this.session.user.fullName} />
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Priskirkite gydytojui pacientą</h4>
+                            <h3>Priskirkite gydytojui pacientą</h3>
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

@@ -89,6 +89,7 @@ public class EmployeesService {
 	 *
 	 * @return the active doctors list
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public Page<DoctorDto> getActiveDoctorsList(Pageable pageable) {
 		List<Doctor> doctorPage = doctorRepository.findAllDoctor(getPageFrom(pageable), pageable.getPageSize());
 		List<DoctorDto> dtos = doctorMapper.doctorsToDto(doctorPage);

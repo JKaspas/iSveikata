@@ -1,8 +1,8 @@
 
 
-export const patientLoggedIn = (patientId) =>{
+export const patientLoggedIn = (patientId, fullName) =>{
     return{
-        type:'PATIENT_LOGGED_IN', payload:patientId
+        type:'PATIENT_LOGGED_IN', payload:patientId, fullName:fullName
     }
 }
 

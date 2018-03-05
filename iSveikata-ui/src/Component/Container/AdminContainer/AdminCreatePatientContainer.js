@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 import PatientForm from '../AdminComponent/PatientForm';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 export default class AdminCreatePatientContainer extends Component{
     constructor(props){
         super(props);
+        this.session =  JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patientId:'',
             firstName:'',
@@ -27,8 +29,7 @@ export default class AdminCreatePatientContainer extends Component{
     }
 
     componentWillMount = () => {
-        var session =  JSON.parse(sessionStorage.getItem('session'))
-        if(session === null || session.user.loggedIn !== true || session.user.userType !== 'admin'){
+        if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }  
@@ -314,7 +315,9 @@ export default class AdminCreatePatientContainer extends Component{
     render(){
         return(
             <div className="container">
+               
                 <section>     
+                <UserDetailsComponent fullName={this.session.user.fullName} />
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h3>Naujo paciento registravimo forma</h3>

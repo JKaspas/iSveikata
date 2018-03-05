@@ -10,6 +10,7 @@ import PrescriptionUsageListView from '../DoctorComponent/PrescriptionUsageListV
 import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageListingItem';
 import { NewRecordLink } from '../LinksAndButtons/NewRecordLink';
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 
@@ -324,17 +325,24 @@ export default class DoctorPatientViewContainer extends Component{
         return (
             <div className="container">
             <section>
-            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
-            <NewRecordLink  patientId={this.patientInfo.id} />
-            <NewPrescriptionLink  patientId={this.patientInfo.id}/>
-                
+            <UserDetailsComponent fullName={this.session.user.fullName} 
+                other={<div className="navbar-text">
+                        <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+                    </div>}
+            />    
             <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
+                        <h3>Paciento kortele</h3>
+                        <div className="text-center">
+                        <NewRecordLink  patientId={this.patientInfo.id} />
+                        <NewPrescriptionLink  patientId={this.patientInfo.id}/>
+                        </div>
                         <h4>Klientas: {this.patientInfo.fullName}</h4>
                         <p>Gimimo data: {this.patientInfo.birthDate}</p>
                         <p>Asmens kodas: {this.patientInfo.id}</p>
+                       
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">

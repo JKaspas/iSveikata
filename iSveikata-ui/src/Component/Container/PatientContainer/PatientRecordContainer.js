@@ -5,6 +5,7 @@ import axios from 'axios'
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 
 
@@ -195,11 +196,10 @@ export default class PatientRecordContainer extends Component{
         return (
             <div className="container">
             <section>
+                <UserDetailsComponent fullName={this.session.patient.fullName} />
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                        {/* <h4>Klientas: {this.patientInfo.fullName}</h4>
-                        <p>Asmens kodas: {this.patientInfo.id}</p> */}
                             <h3> Ligos istorijos įrašai</h3>
                         </div>
                         <div className="panel-body">

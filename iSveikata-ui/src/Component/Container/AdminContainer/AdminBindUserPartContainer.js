@@ -5,6 +5,7 @@ import PatientListView from '../AdminComponent/PatientListView'
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 export default class AdminBindUserPartContainer extends Component{
     constructor(){
@@ -169,12 +170,18 @@ export default class AdminBindUserPartContainer extends Component{
         return(
         <div className="container">
             <section>
+            <UserDetailsComponent  fullName={this.session.user.fullName}  other={
+            <li className="navbar-text">
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+            </li>
+            }/>
+        
                 <div className="panel-group">
-                <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+                
                 <p/>
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h4>Priskirkite pacientą gydytojui</h4>
+                            <h3>Priskirkite pacientą gydytojui</h3>
                         </div>
                         <div className="panel-body">
                             {this.state.infoState}

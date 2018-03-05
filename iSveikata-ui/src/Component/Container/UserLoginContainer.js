@@ -44,12 +44,12 @@ class UserLoginContainer extends Component {
         .then(response => {
           clearTimeout(this.loginTimer)
           this.props.dispatch(
-            userLoggedIn(response.data.role, this.state.userName)
+            userLoggedIn(response.data.role, this.state.userName, response.data.fullName)
           );
           this.handleUserRedirect(response.data.role);
         })
         .catch(error => {
-          if ((error.response.data.status = "401")) {
+          if (error.response.data.status = "401") {
             this.setState({
               infoState: (
                 <div className="alert alert-danger"> <strong>Vartotojas nerastas</strong></div>
@@ -83,8 +83,7 @@ class UserLoginContainer extends Component {
     
   };
 
-  handleUserRedirect = role => {
-    console.log("role:" + role);
+  handleUserRedirect = (role) => {
     if (role === "admin") {
       this.props.router.push("/admin/");
     } else if (role === "doctor") {

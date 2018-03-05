@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 // var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
 //                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
@@ -136,7 +137,7 @@ class DruggistViewContainer extends Component{
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
-                <button id="prescriptionUsageSubmit" onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-primary'>Pažymėti pirkimo faktą</button>
+                <button id="prescriptionUsageSubmit" onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-default'>Pažymėti pirkimo faktą</button>
                 
         </div>)
     }
@@ -156,7 +157,11 @@ class DruggistViewContainer extends Component{
         return (
             <div className="container">
             <section>
-            <button onClick={() =>  this.props.router.goBack()} className="btn btn-primary"> Atgal </button>
+            <UserDetailsComponent fullName={this.session.user.fullName}
+                other={
+                <button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>
+                }
+            />
             <p/>
                 <div className="panel-group">
                     <div className="panel panel-default">

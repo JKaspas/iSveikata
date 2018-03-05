@@ -11,7 +11,7 @@
 }
 
 section {
-  padding: 100px 0;
+  padding: 70px 0;
 }
 
 .bg-4 { 
@@ -141,6 +141,10 @@ td:hover{
   cursor: pointer
 }
 
+.right-navbar{
+  margin-right:0px !important;
+}
 
-/* Date picker css */
-
+.DateInput{
+  width: 180px !important
+}

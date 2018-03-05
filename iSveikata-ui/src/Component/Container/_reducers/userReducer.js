@@ -3,9 +3,8 @@
 export default function user( state={
     userType:'',
     userName:'',
+    fullName:'',
     loggedIn:'false',
-    doctorList:[],
-    patientList:[]
    }, action){
     // if(action.type === "INC"){
     //   return {...state, number:action.payload};
@@ -14,17 +13,11 @@ export default function user( state={
     // }
       switch (action.type){
           case "USER_LOGGED_IN":{
-              return {...state, loggedIn:action.loggedIn, userType:action.userType, userName:action.userName}
+              return {...state, loggedIn:action.loggedIn, userType:action.userType, userName:action.userName, fullName:action.fullName}
           }
           case "USER_LOGGED_OUT":{
-              return {...state, loggedIn:false, userType:'', userName:''}
+              return {...state, loggedIn:false, userType:'', userName:'', fullName:''}
           }
-          case "USER_UPDATE_DOCTOR_LIST":{
-              return {...state, doctorList:action.payload}
-          }
-          case "USER_UPDATE_PATIENT_LIST":{
-            return {...state, patientList:action.payload}
-        }
           default:{
               return state
           }

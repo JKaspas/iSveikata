@@ -12,7 +12,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.oldPassword.length === 0 ? 'is-empty' : (props.classNameOldPassword + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="oldPassword">Dabartinis slaptažodis:</label>
                     <div className="col-sm-9">
-                        <input id="pasFormOldPasswordInput" type="password" className="form-control" id="oldPassword" name="oldPassword" 
+                        <input  type="password" className="form-control" id="oldPassword" name="oldPassword" 
                         value={props.oldPassword} maxLength="15" autoComplete="off"
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
@@ -28,7 +28,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.newPassword.length === 0 ? 'is-empty' : (props.classNameNewPassword + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="newPassword">Naujas slaptažodis:</label>
                     <div className="col-sm-9">
-                        <input id="pasFormNewPasswordInputFirst" type="password" className="form-control" id="newPassword" name="newPassword" 
+                        <input  type="password" className="form-control" id="newPassword" name="newPassword" 
                         value={props.newPassword}  maxLength="15" autoComplete="off" 
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
@@ -44,7 +44,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className={'form-group ' + (props.newPasswordRepeat.length === 0 ? 'is-empty' : (props.classNameNewPasswordRepeat + ' has-feedback'))}>
                     <label className="control-label col-sm-3" htmlFor="newPasswordRepeat">Pakartokite naują slaptažodį:</label>
                     <div className="col-sm-9">
-                        <input id="pasFormNewPasswordInputSecond" type="password" className="form-control" id="newPasswordRepeat" name="newPasswordRepeat" 
+                        <input  type="password" className="form-control" id="newPasswordRepeat" name="newPasswordRepeat" 
                         value={props.newPasswordRepeat}  maxLength="15" autoComplete="off"
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}

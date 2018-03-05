@@ -5,6 +5,7 @@ import UsersForm from '../AdminComponent/UsersForm';
 import { UserFormSpecInput } from '../AdminComponent/UserFormSpecInput';
 import { UserFormSpecOtherInput } from '../AdminComponent/UserFormSpecOtherInput';
 import { UserFormDrugStoreInput } from '../AdminComponent/UserFormDrugStoreInput';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 
 export default class AdminCreateUserContainer extends Component{
     constructor(props){
@@ -485,6 +486,7 @@ export default class AdminCreateUserContainer extends Component{
         return(
             <div className="container">
                 <section>
+                <UserDetailsComponent fullName={this.session.user.fullName} />
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h3>Naujo sistemos vartotojo registravimo forma</h3>
