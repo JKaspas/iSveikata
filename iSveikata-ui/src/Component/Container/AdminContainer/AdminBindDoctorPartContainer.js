@@ -112,7 +112,7 @@ export default class AdminBindDoctorPartContainer extends Component{
             this.getAllDoctor(1)
         }else{
             this.setState({
-                doctorList:(<h3>Įveskit bent 3 simbolius</h3>),
+                doctorList:(<h3>Įveskite bent 3 simbolius</h3>),
                 listIsEmpty:true,
             })
         }

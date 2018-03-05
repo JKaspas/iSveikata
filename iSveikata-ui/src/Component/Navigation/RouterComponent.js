@@ -36,7 +36,7 @@ var RouteComponent = () =>{
             <Route path="/" component={PublicViewContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
 
-            <Route path="/vartotojams" component={UserLoginContainer} />
+            <Route path="/vartotojams" component={UserLoginContainer} /> 
           
             <Route path="/atsijungti" component={LogoutContainer} />
           </Route>

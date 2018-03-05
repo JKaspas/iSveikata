@@ -1,71 +1,74 @@
 import React from 'react';
-import { FormErrors } from './Form_errors';
 import '../../../Form.css';
 
-
-const UsersForm = (props) => {
-    return (       
-    <div className="col-sm-10"> 
-        <div className="col-sm-9 col-sm-offset-3"> 
-            <FormErrors formErrors={props.formErrors}/>
-        </div>
-        <form onSubmit={props.submitHandler} className="form-horizontal" >
+const UsersForm = (props) =>{
+    return (        
+        <form className="form-horizontal" onSubmit={props.submitHandler}>
             <div className="form-group">
                 <div className="radio col-sm-9 col-sm-offset-3">
-                    <label><input onChange={props.fieldHandler} type="radio" value="doctor" name="type"/>Gydytojas</label>
+                    <label><input onChange={props.resetHandler} type="radio" value="doctor" name="type" checked={props.type === 'doctor'} />Gydytojas</label>
                 </div>
                 <div className="radio col-sm-9 col-sm-offset-3">
-                    <label><input onChange={props.fieldHandler} type="radio" value="admin" name="type"/>Administratorius</label>
+                    <label><input onChange={props.resetHandler} type="radio" value="druggist" name="type" checked={props.type === 'druggist'}/>Vaistininkas</label>
                 </div>
                 <div className="radio col-sm-9 col-sm-offset-3">
-                    <label><input onChange={props.fieldHandler} type="radio" value="druggist" name="type"/>Vaistininkas</label>
+                    <label><input onChange={props.resetHandler} type="radio" value="admin" name="type" checked={props.type === 'admin'}/>Administratorius</label>
+                </div>
+            </div>
+            <div className="form-group">        
+                {props.infoState}
+            </div>
+            <div className={'form-group has-feedback ' + props.classNameFirstName}>   
+                <label className="control-label col-sm-3" htmlFor="firstName">Vardas:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="firstName" name="firstName"
+                    value={props.firstName} placeholder="Vardas" maxLength="225" autoComplete="off" 
+                    onChange={props.fieldHandler}
+                    onFocus={props.fieldOnFocusHandler}
+                    onBlur={props.fieldValidationHandler} />
+                    <span className={props.classNameFirstName !== 'is-empty' ? (props.classNameFirstName === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
+                    <span className="help-block">{props.errorMessageFirstName}</span>
+                </div>
+            </div> 
+            <div className={'form-group has-feedback ' + props.classNameLastName}>   
+                <label className="control-label col-sm-3" htmlFor="lastName">Pavardė:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="lastName" name="lastName"
+                    value={props.lastName} placeholder="Pavardė" maxLength="225" autoComplete="off" 
+                    onChange={props.fieldHandler}
+                    onFocus={props.fieldOnFocusHandler}
+                    onBlur={props.fieldValidationHandler} />
+                    <span className={props.classNameLastName !== 'is-empty' ? (props.classNameLastName === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
+                    <span className="help-block">{props.errorMessageLastName}</span>
+                </div>
+            </div> 
+            <div className="form-group">
+                <label className="control-label col-sm-3" htmlFor="userName">Vartotojo vardas:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="userName" name="userName" readOnly required
+                    value={props.userName} placeholder="Vartotojo vardas" />
+                    <span className="help-block"></span>
                 </div>
             </div>
             <div className="form-group">
-                <label className="control-label col-sm-3">Vardas:</label>
-                <div className="col-sm-9">          
-                    <input type="text" className="form-control"  name="firstName"
-                    placeholder="Paciento vardas" value={props.firstName} required
-                    onChange={props.fieldHandler} 
-                    id={props.formErrorsFirstName} maxLength="225"/>
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="control-label col-sm-3">Pavardė:</label>
-                <div className="col-sm-9">          
-                    <input type="text" className="form-control"  name="lastName"
-                    placeholder="Paciento pavardė" value={props.lastName} required
-                    onChange={props.fieldHandler} 
-                    id={props.formErrorsLastName} maxLength="225" />
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="control-label col-sm-3">Vartotojo vardas:</label>
-                <div className="col-sm-9">          
-                    <input type="text" readOnly className="form-control" name="userName"
-                    placeholder="Vartotojo vardas" value={props.userName} required
-                    onChange={props.fieldHandler} maxLength="225"/>
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="control-label col-sm-3">Slaptažodis:</label>
-                <div className="col-sm-9">          
-                    <input type={props.passwordMasked ? "password" : "text"} readOnly className="form-control" name="password"
-                    placeholder="Slaptažodis" value={props.password} required
-                    onChange={props.fieldHandler} onClick={props.handlePasswordMasking} 
-                    autoComplete='off' />
+                <label className="control-label col-sm-3" htmlFor="password">Slaptažodis:</label>
+                <div className="col-sm-9">
+                    <input type={props.passwordMasked ? "password" : "text"} className="form-control" id="password" name="password" readOnly required
+                    value={props.formValid ? props.password : ""} placeholder="Slaptažodis"
+                    onClick={props.handlePasswordMasking} />
+                    <span className="help-block"></span>
                 </div>
             </div>
             {props.specializationInput}
             {props.drugStoreInput}
             <div className="form-group">        
                 <div className="col-sm-offset-3 col-sm-9">
-                    <button className="btn btn-default" type="submit" disabled={!props.formValid}>Registruoti</button>
+                    {props.formValid ? <button type="submit" className="btn btn-success">Registruoti</button> : <button type="submit" className="btn btn-primary">Validuoti</button>}
                 </div>
             </div>
         </form>
-    </div>)  
-  }
+    )  
+};
 
 export default UsersForm;
 
