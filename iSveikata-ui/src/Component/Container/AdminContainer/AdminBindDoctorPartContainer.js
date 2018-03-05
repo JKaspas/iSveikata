@@ -141,15 +141,14 @@ export default class AdminBindDoctorPartContainer extends Component{
             return ''
         }
         return (
-            <div className="col-sm-5 col-sm-offset-4">
-            <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={this.state.itemsPerPage}
-            totalItemsCount={this.state.listInfo.totalElements}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-            />
-        </div>
+            <div className="text-center">
+                <div>
+                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default">{this.state.activePage + 1}</button>
+                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
+                </div>
+             
+            </div>
         )
     }
 
