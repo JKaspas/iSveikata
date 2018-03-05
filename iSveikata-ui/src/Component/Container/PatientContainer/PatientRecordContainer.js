@@ -1,15 +1,11 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Pagination from "react-js-pagination"
+
 
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 
-// var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
-//                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
-// var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
-//                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
 
 export default class PatientRecordContainer extends Component{

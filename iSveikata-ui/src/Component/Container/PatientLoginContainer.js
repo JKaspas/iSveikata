@@ -14,6 +14,9 @@ class PatientLoginContainer extends Component{
             patientId:'',
             password:'',
 
+            loginCount:0,
+            loginTimer:'',
+
             infoState:'',
 
             formErrors: {patientId: '', password: ''},
@@ -28,7 +31,10 @@ class PatientLoginContainer extends Component{
 
         e.preventDefault();
 
-        if(this.state.formValid){
+        if(this.state.formValid && this.state.loginCount < 3){
+            this.setState({
+                loginCount:this.state.loginCount + 1
+              })
             let userData = new URLSearchParams();
             userData.append('userName', this.state.patientId);
             userData.append('password', this.state.password);
@@ -47,9 +53,25 @@ class PatientLoginContainer extends Component{
                 })
             })
         }else{
-            this.setState({
-                infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
-            })
+            if(this.state.loginCount > 2){
+                clearTimeout(this.loginTimer)
+                this.setState({
+                  infoState: (<div className="alert alert-info">
+                                <strong>Prisijungti nepavyko, Bandykite dar karta po 15 sekundžių.</strong>
+                              </div>)})
+                this.loginTimer = setTimeout(()=>
+                  this.setState({
+                    loginCount:0,
+                    infoState:(<div className="alert alert-info">
+                                <strong>Galite bandyt prisijungti</strong>
+                              </div>)
+                  })
+                , 15000)
+            }else{
+                this.setState({
+                    infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
+                })
+            }
         }   
     }
     

@@ -7,7 +7,7 @@ var SearchFieldForm = (props) =>{
             <input id="searchFormInput" onKeyUp={props.searchHandler} type={props.searchType} className="form-control" value={props.searchValue} onChange={props.fielddHandler} placeholder={props.searchPlaceHolder} name="userName" />
         </div>
         <div className="form-group">     
-            <button id="searchFormSubmit" type="submit" className="btn btn-primary" >
+            <button id="searchFormSubmit" type="submit" className="btn btn-default" >
             <i className="glyphicon glyphicon-search"></i>
             </button>
         </div>

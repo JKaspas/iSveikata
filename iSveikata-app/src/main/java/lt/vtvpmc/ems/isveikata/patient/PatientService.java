@@ -2,7 +2,9 @@ package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -95,11 +97,18 @@ public class PatientService {
 	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctor(Pageable pageable, String userName) {
 		Long doctorId = doctorRepository.findByUserName(userName).getId();
-		List<Patient> patientPage = patientRepository.findPatientByDoctorUserName(doctorId,
+		List<Patient> patientPage = patientRepository.findPatientByDoctor(doctorId,
 				getPageFrom(pageable),	pageable.getPageSize());
 		List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 		return new PageImpl<>(dtos);
 
+	}
+
+	@PreAuthorize("hasRole('Doctor')")
+	public List getAllPagedPatientByDoctorForCsv(String userName) {
+		Long doctorId = doctorRepository.findByUserName(userName).getId();
+		List patientList = patientRepository.findAllPatientByDoctorCSV(doctorId);
+		return patientList;
 	}
 
 	/**
@@ -131,7 +140,7 @@ public class PatientService {
 	 *            the patient id
 	 * @return the patient record list
 	 */
-	@PreAuthorize("hasRole('Doctor')")
+	@PreAuthorize("hasRole('Patient') OR hasRole('Doctor')")
 	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
 		List<MedicalRecord> medicalRecordPage = medicalRecordRepository.findAllByPatientPatientId(patientId,
 				getPageFrom(pageable),	pageable.getPageSize());
@@ -335,5 +344,6 @@ public class PatientService {
 	private int getPageFrom(Pageable pageable) {
 		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
 	}
+
 
 }

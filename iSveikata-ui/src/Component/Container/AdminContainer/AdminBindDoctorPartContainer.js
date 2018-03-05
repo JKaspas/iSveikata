@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Pagination from "react-js-pagination"
-
 
 import DoctorListView from '../AdminComponent/DoctorListView'
 import DoctorListingItem from '../AdminComponent/DoctorListingItem'

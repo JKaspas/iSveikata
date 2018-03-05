@@ -10,13 +10,13 @@ var PrescriptionForm = (props) =>{
             <div className={'form-group ' + (props.daysToExpiration === "select" ? 'is-empty' : 'has-success has-feedback')}>
                 <label className="control-label col-sm-3" htmlFor="daysToExpiration">Recepto galiojimo trukmė:</label>
                 <div className="col-sm-9">          
-                    <select className="form-control" id="daysToExpiration" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler} onFocus={props.selectOnFocusHandler}>
-                        <option value="select">PASIRINKITE</option>
-                        <option value="5">5 DIENOS</option>
-                        <option value="10">10 DIENŲ</option>
-                        <option value="30">30 DIENŲ</option>
-                        <option value="180">180 DIENŲ</option>
-                        <option value="360">NETERMINUOTAS</option>
+                    <select id="prescriptionExpirationSelectInput" className="form-control" id="daysToExpiration" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler} onFocus={props.fieldOnFocusHandler}>
+                        <option value="select">Pasirinkite</option>
+                        <option value="5">5 dienos</option>
+                        <option value="10">10 dienų</option>
+                        <option value="30">30 dienų</option>
+                        <option value="180">180 dienų</option>
+                        <option value="36500">neterminuotas</option>
                     </select>
                     <span className={props.daysToExpiration === "select" ? 'form-control-feedback' : 'glyphicon glyphicon-ok form-control-feedback'}></span>
                     <span className="help-block"></span>
