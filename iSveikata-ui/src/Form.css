@@ -33,8 +33,18 @@ label {
 	color: #000000 !important;
 }
 
+.form-check-label {
+	font-weight: normal;
+	padding-left: 10px;
+}
+
 h2 {
-	padding-bottom: 30px;
+	padding-bottom: 20px;
+}
+
+h3 {
+	text-align: center;
+	font-weight: bold;
 }
 
 .signin-form {
@@ -57,4 +67,5 @@ h2 {
 select + span {
 	padding-right: 30px;
 }
+
 

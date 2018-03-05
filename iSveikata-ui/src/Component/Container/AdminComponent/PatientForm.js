@@ -1,84 +1,72 @@
-import React from 'react'
-import { FormErrors } from '../AdminComponent/Form_errors'
-import '../../../Form.css'
+import React from 'react';
+import '../../../Form.css';
 
-
-const PatientForm = (props) => {
-    return (
-        <div className="container">
-            <section>     
-                <div className="panel-group">
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <h4>Naujo paciento registravimo forma</h4>
-                        </div>
-                        <div className="panel-body">
-                            <div className="col-sm-10">
-                            {props.infoState}
-                                <div className="col-sm-9 col-sm-offset-3"> 
-                                <FormErrors formErrors={props.formErrors} />
-                                </div>
-                                <form onSubmit={props.submitHandler} className="form-horizontal" >
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-3">Asmens kodas:</label>
-                                        <div className="col-sm-9">
-                                            <input id="patientPatientIdInput" type="text" className={'form-control ' + props.errorClassPatientId} name="patientId" 
-                                            value={props.patientId} required maxLength="11" placeholder="Asmens kodas"
-                                            onChange={props.fieldHandler}
-                                            onBlur={props.fieldValidationHandler} />
-                                        </div>
-                                    </div>
-                                    {/* id={this.errorClass(this.state.formErrors.patientId)}
-                                    id={this.errorClass(this.state.formErrors.firstName)}
-                                    id={this.errorClass(this.state.formErrors.lastName)} */}
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-3">Gimimo data:</label>
-                                        <div className="col-sm-9">
-                                            <input id="patientBirthDateInput" type="text" readOnly className="form-control" name="birthDate"
-                                            value={props.generateBirthDate} required placeholder="yyyy-MM-dd"
-                                            onChange={props.fieldHandler} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-3">Vardas:</label>
-                                        <div className="col-sm-9">          
-                                            <input id="patientFistNameInput" type="text" className={'form-control ' + props.errorClassFirstName} name="firstName"
-                                            value={props.firstName} required maxLength="225" placeholder="Paciento vardas"
-                                            onChange={props.fieldHandler}
-                                            onBlur={props.fieldValidationHandler} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-3" >Pavardė:</label>
-                                        <div className="col-sm-9">          
-                                            <input id="patientLastNameInput" type="text" className={'form-control ' + props.errorClassLastName} name="lastName"
-                                            value={props.lastName} required maxLength="225" placeholder="Paciento pavardė"
-                                            onChange={props.fieldHandler}
-                                            onBlur={props.fieldValidationHandler} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-3" >Slaptažodis:</label>
-                                        <div className="col-sm-9">          
-                                            <input id="patientPasswordInput" type={props.passwordMasked ? "password" : "text"} readOnly className="form-control" name="password"
-                                            value={props.generatePassword} required placeholder="Slaptažodis" autoComplete="off"
-                                            onChange={props.fieldHandler}
-                                            onClick={props.handlePasswordMasking} />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">        
-                                        <div className="col-sm-offset-3 col-sm-9">
-                                            <button id="patientFormSubmit" className="btn btn-default" type="submit" disabled={!props.formValid}>Registruoti</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>   
-                        </div> 
-                    </div> 
-                </div>           
-            </section>
-        </div>     )  
-  }
+const PatientForm = (props) =>{
+    return(                  
+        <form className="form-horizontal" onSubmit={props.submitHandler}>
+            <div className="form-group">        
+                {props.infoState}
+            </div>
+            <div className={'form-group has-feedback ' + props.classNamePatientId}>   
+                <label className="control-label col-sm-3" htmlFor="patientId">Asmens kodas:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="patientId" name="patientId"
+                    value={props.patientId} placeholder="Asmens kodas" maxLength="11" autoComplete="off" 
+                    onChange={props.fieldHandler}
+                    onFocus={props.fieldOnFocusHandler}
+                    onBlur={props.fieldValidationHandler} />
+                    <span className={props.classNamePatientId !== 'is-empty' ? (props.classNamePatientId === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
+                    <span className="help-block">{props.errorMessagePatientId}</span>
+                </div>
+            </div>  
+            <div className="form-group">
+                <label className="control-label col-sm-3" htmlFor="birthDate">Gimimo data:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="birthDate" name="birthDate" readOnly required
+                    value={props.generateBirthDate} placeholder="yyyy-MM-dd" />
+                    <span className="help-block"></span>
+                </div>
+            </div>
+            <div className={'form-group has-feedback ' + props.classNameFirstName}>   
+                <label className="control-label col-sm-3" htmlFor="firstName">Vardas:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="firstName" name="firstName"
+                    value={props.firstName} placeholder="Paciento vardas" maxLength="225" autoComplete="off" 
+                    onChange={props.fieldHandler}
+                    onFocus={props.fieldOnFocusHandler}
+                    onBlur={props.fieldValidationHandler} />
+                    <span className={props.classNameFirstName !== 'is-empty' ? (props.classNameFirstName === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
+                    <span className="help-block">{props.errorMessageFirstName}</span>
+                </div>
+            </div> 
+            <div className={'form-group has-feedback ' + props.classNameLastName}>   
+                <label className="control-label col-sm-3" htmlFor="lastName">Pavardė:</label>
+                <div className="col-sm-9">
+                    <input type="text" className="form-control" id="lastName" name="lastName"
+                    value={props.lastName} placeholder="Paciento pavardė" maxLength="225" autoComplete="off" 
+                    onChange={props.fieldHandler}
+                    onFocus={props.fieldOnFocusHandler}
+                    onBlur={props.fieldValidationHandler} />
+                    <span className={props.classNameLastName !== 'is-empty' ? (props.classNameLastName === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
+                    <span className="help-block">{props.errorMessageLastName}</span>
+                </div>
+            </div> 
+            <div className="form-group">
+                <label className="control-label col-sm-3" htmlFor="password">Slaptažodis:</label>
+                <div className="col-sm-9">
+                    <input type={props.passwordMasked ? "password" : "text"} className="form-control" id="password" name="password" readOnly required
+                    value={props.generatePassword} placeholder="Slaptažodis"
+                    onClick={props.handlePasswordMasking} />
+                    <span className="help-block"></span>
+                </div>
+            </div>
+            <div className="form-group">        
+                <div className="col-sm-offset-3 col-sm-9">
+                    {props.formValid ? <button type="submit" className="btn btn-success">Registruoti</button> : <button type="submit" className="btn btn-primary">Validuoti</button>}
+                </div>
+            </div>
+        </form>
+    )  
+};
 
 export default PatientForm;
-

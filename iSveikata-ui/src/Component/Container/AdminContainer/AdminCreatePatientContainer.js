@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import PatientForm from '../AdminComponent/PatientForm';
 
-
 export default class AdminCreatePatientContainer extends Component{
     constructor(props){
         super(props);
@@ -12,72 +11,156 @@ export default class AdminCreatePatientContainer extends Component{
             firstName:'',
             lastName:'',
 
-            formErrors: {firstName: '', lastName: '', patientId: ''},
-            fieldState: {firstName: 'is-empty', lastName: 'is-empty', patientId: 'is-empty'},
+            infoState:'',
+
+            formErrors: {patientId: '', firstName: '', lastName: ''},
+            fieldState: {patientId: 'is-empty', firstName: 'is-empty', lastName: 'is-empty'},
+            patientIdValid: false, 
             firstNameValid: false,
             lastNameValid: false,
-            patientIdValid: false,                  
+                             
             formValid: false,
+
             passwordMasked: true,
-            generatedNumber: (Math.floor(Math.random() * (99 - 10 +1)) + 10).toString(),
-            infoState:''
+            generatedNumber: (Math.floor(Math.random() * (99 - 10 +1)) + 10).toString()   
         };
     }
 
-    componentWillMount = () =>{
+    componentWillMount = () => {
         var session =  JSON.parse(sessionStorage.getItem('session'))
         if(session === null || session.user.loggedIn !== true || session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }  
+    } 
+
+    submitHandler = (e) => {
+
+        e.preventDefault();
+
+        if(this.state.formValid){
+            axios.post('http://localhost:8080/api/admin/new/patient', {
+                patientId:this.state.patientId,
+                birthDate:this.generateBirthDate(),  
+                firstName:this.state.firstName,  
+                lastName:this.state.lastName,    
+                password:this.generatePassword()   
+            })
+            .then((response)=>{
+                console.log(response.status)
+                this.setState({
+                  //infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
+                    infoState:<div className="alert alert-success"><strong>Naujo paciento paskyra sėkmingai sukurta.</strong></div>,
+
+                    patientId:'',
+                    firstName:'',
+                    lastName:'',
+
+                    formErrors: {patientId: '', firstName: '', lastName: ''},
+                    fieldState: {patientId: 'is-empty', firstName: 'is-empty', lastName: 'is-empty'},
+                    patientIdValid: false, 
+                    firstNameValid: false,
+                    lastNameValid: false,                                    
+                    formValid: false,
+
+                    passwordMasked: true,
+                    generatedNumber: (Math.floor(Math.random() * (99 - 10 +1)) + 10).toString()                      
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                this.setState({
+                  //infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
+                    infoState:<div className="alert alert-danger"><strong>Nesėkmingas paciento paskyros kūrimas.</strong></div>
+                })
+            })
+        }else{
+            this.setState({
+                infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus.</strong></div>
+            })
+        }
     }
 
-
     fieldHandler = (e) => {
+        // e === event
         const name = e.target.name;
         const value = e.target.value;
 
-        this.setState({[name]: value});
+        switch (name) {
+            case 'patientId':
+                let patientId = this.state.patientId;
+                patientId = value.replace(/\D/g, "");
+                this.setState({patientId: patientId});   
+                break;
+            case 'firstName':
+                let firstName = this.state.firstName;
+                firstName = value.replace(/[^a-z ąčęėįšųūž]/gi, "");
+                this.setState({firstName: firstName});   
+                break; 
+            case 'lastName':
+                let lastName = this.state.lastName;
+                lastName = value.replace(/[^a-z ąčęėįšųūž]/gi, "");
+                this.setState({lastName: lastName});   
+                break;   
+            default:
+                this.setState({[name]: value});  
+                break;
+        }
     }
 
+    fieldOnFocusHandler = (e) => {
+        // e === event
+        const name = e.target.name;
+    
+        let fieldValidationState = this.state.fieldState;
+      
+        switch (name) {
+            case 'patientId':
+                fieldValidationState.patientId = 'is-empty';
+                break;
+            case 'firstName':
+                fieldValidationState.firstName = 'is-empty';
+                break;
+            case 'lastName':
+                fieldValidationState.lastName = 'is-empty';
+                break;
+            default:
+                break;
+        }
+        this.setState({fieldState: fieldValidationState, infoState: '', formValid: false});
+    }
 
     fieldValidationHandler = (e) => {
         // e === event
         const name = e.target.name;
         const value = e.target.value;
       
-        this.validateField(name, value);
-    }
-
-
-    submitHandler = (e) =>{
-        e.preventDefault();
+        if(value.length !== 0) {
+    
+            this.validateField(name, value);
+        } else {
+            let nameValid = name + 'Valid';
         
-        axios.post('http://localhost:8080/api/admin/new/patient', {
-            patientId:this.state.patientId,
-            birthDate:this.generateBirthDate(),  //this.generateBirthDate(),  (?)
-            firstName:this.state.firstName,  //this.capitalizeFirstLetter(this.state.firstName),  (?)  
-            lastName:this.state.lastName,    //this.capitalizeFirstLetter(this.state.lastName),  (?)
-            password:this.generatePassword(),    //this.generatePassword(),  (?) 
-        })
-        .then((response)=>{
-            console.log(response.status)
-            this.setState({
-                infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
-                patientId:'',
-                firstName:'',
-                lastName:'',
-                formValid:false
-            })
-
-        })
-        .catch((erorr) => {
-            console.log(erorr)
-            this.setState({
-                infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
-            })
-        })
+            let fieldValidationErrors = this.state.formErrors;
+            switch (name) {
+                case 'patientId':
+                    fieldValidationErrors.patientId = '';
+                    break;
+                case 'firstName':
+                    fieldValidationErrors.firstName = '';
+                    break;
+                case 'lastName':
+                    fieldValidationErrors.lastName = '';
+                    break;
+                default:
+                    break;
+            }
+            this.setState({[nameValid]: false,
+                formErrors: fieldValidationErrors
+                }, this.validateForm);
+        }    
     }
+
     capitalizeFirstLetter = (string) => { 
         return string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
@@ -95,12 +178,13 @@ export default class AdminCreatePatientContainer extends Component{
             
             if(patientIdAsString.charAt(0) === "3" || patientIdAsString.charAt(0) === "4") {
                 birthDateAutoInput = "19" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
-            } else if(patientIdAsString.charAt(0) === "5" || patientIdAsString.charAt(0) === "6") {
+            } 
+          //else if(patientIdAsString.charAt(0) === "1" || patientIdAsString.charAt(0) === "2") {
+          //    birthDateAutoInput = "18" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
+          //} 
+            else {
                 birthDateAutoInput = "20" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
             } 
-            // else {
-            //     birthDateAutoInput = "18" + birthYearLastdigitsAsString + "-" + birthMonthAsString + "-" + birthDayAsString;
-            // } 
         }
         return birthDateAutoInput;  
     }
@@ -108,7 +192,7 @@ export default class AdminCreatePatientContainer extends Component{
     //Slaptažodis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio dviženklio skaičiaus. 
     generatePassword = () => {
         let generatedPassword = ''; 
-        if(this.state.formValid) {
+        if(this.state.firstNameValid && this.state.lastNameValid) {
             generatedPassword = this.state.firstName.substring(0, 3) + this.state.lastName.substring(0, 3) + this.state.generatedNumber;    
         }
         return generatedPassword;
@@ -119,28 +203,33 @@ export default class AdminCreatePatientContainer extends Component{
         this.setState(prevState => ({passwordMasked: !prevState.passwordMasked}));
     }
      //Formos laukų validacija:
-     validateField(fieldName, value) {
+     validateField = (fieldName, value) => {
         let fieldValidationErrors = this.state.formErrors;
         let fieldValidationState = this.state.fieldState;
         let firstNameValid = this.state.firstNameValid;
         let lastNameValid = this.state.lastNameValid;
         let patientIdValid = this.state.patientIdValid;
+
+        let firstName = this.state.firstName;
+        let lastName = this.state.lastName;
       
         switch (fieldName) {
             case 'firstName':
-                firstNameValid = value.match(/^[a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+( [a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+)*$/g);
-                // ^ Tikrina ar įrašytos tik raidės. Tarp žodžių leidžiamas vienas tarpas.
+                firstName = this.capitalizeFirstLetter(value.trim());
+                firstNameValid = firstName.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
+                // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 //Vėliau su XRegExp galima būtų padaryti kad atpažintų ir kitų kalbų raides;
                 fieldValidationErrors.firstName = firstNameValid ? '' : 'Įveskite vardą.';
-                fieldValidationState.firstName = firstNameValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.firstName = firstNameValid ? 'has-success' : 'has-error';
                 //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-                //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
+                //Čia "has-success" ir "is-invalid" yra viena iš formos elemento klasių. 
                 break;
             case 'lastName':
-                lastNameValid = value.match(/^[a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+( [a-zA-ZĄČĘĖĮŠŲŪŽąčęėįšųūž]+)*$/g);
-                // ^ Tikrina ar įrašytos tik raidės. Tarp žodžių leidžiamas vienas tarpas.
+                lastName = this.capitalizeFirstLetter(value.trim());
+                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
+                // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
-                fieldValidationState.lastName = lastNameValid ? 'is-valid' : 'is-invalid';
+                fieldValidationState.lastName = lastNameValid ? 'has-success' : 'has-error';
                 break;
             case 'patientId':
             //Patikrinama ar įrašyta 11 skaitmenų.
@@ -199,15 +288,15 @@ export default class AdminCreatePatientContainer extends Component{
                     fieldValidationErrors.patientId = 'Įveskite 11 skaitmenų asmens kodą.';
                 }
 
-                fieldValidationState.patientId = patientIdValid ? 'is-valid' : 'is-invalid';
-                //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-                //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
+                fieldValidationState.patientId = patientIdValid ? 'has-success' : 'has-error';
                 break;
             default:
                 break;
         }
         this.setState({formErrors: fieldValidationErrors,
                         fieldState: fieldValidationState,
+                        firstName: firstName,
+                        lastName: lastName,
                         firstNameValid: firstNameValid,
                         lastNameValid: lastNameValid,
                         patientIdValid: patientIdValid
@@ -216,33 +305,50 @@ export default class AdminCreatePatientContainer extends Component{
 
     //Paspausti "submit" leidžiama tik jei visi laukai įvesti teisingai.
     validateForm = () => {
-        this.setState({formValid: this.state.firstNameValid && this.state.lastNameValid && this.state.patientIdValid});
+        this.setState({formValid: 
+            this.state.firstNameValid && 
+            this.state.lastNameValid && 
+            this.state.patientIdValid});
     }
-    
-    
+      
     render(){
         return(
-            <PatientForm 
-            errorClassPatientId={this.state.fieldState.patientId}
-            errorClassFirstName={this.state.fieldState.firstName}
-            errorClassLastName={this.state.fieldState.lastName}
-            infoState={this.state.infoState}
-            formErrors={this.state.formErrors}
-            formValid={this.state.formValid}
+            <div className="container">
+                <section>     
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h3>Naujo paciento registravimo forma</h3>
+                        </div>
+                        <div className="panel-body">
+                            <PatientForm
+                            classNamePatientId={this.state.fieldState.patientId}
+                            classNameFirstName={this.state.fieldState.firstName}
+                            classNameLastName={this.state.fieldState.lastName}
+                            errorMessagePatientId={this.state.formErrors.patientId}
+                            errorMessageFirstName={this.state.formErrors.firstName}
+                            errorMessageLastName={this.state.formErrors.lastName}
+                            infoState={this.state.infoState}
+                            formValid={this.state.formValid}
 
-            generateBirthDate={this.generateBirthDate()}
-            generatePassword={this.generatePassword()}
+                            patientId={this.state.patientId}
+                            firstName={this.state.firstName}
+                            lastName={this.state.lastName}
+                            
+                            generateBirthDate={this.generateBirthDate()}
+                            generatePassword={this.generatePassword()}
 
-            passwordMasked={this.state.passwordMasked}
-            handlePasswordMasking={this.handlePasswordMasking}
+                            passwordMasked={this.state.passwordMasked}
+                            handlePasswordMasking={this.handlePasswordMasking}
 
-            patientId={this.state.patientId}
-            firstName={this.capitalizeFirstLetter(this.state.firstName)}
-            lastName={this.capitalizeFirstLetter(this.state.lastName)}
-
-            fieldValidationHandler={this.fieldValidationHandler}
-            fieldHandler={this.fieldHandler}
-            submitHandler={this.submitHandler}/>)
+                            fieldValidationHandler={this.fieldValidationHandler}
+                            fieldHandler={this.fieldHandler}
+                            fieldOnFocusHandler={this.fieldOnFocusHandler}
+                            submitHandler={this.submitHandler} />
+                        </div> 
+                    </div>        
+                </section>
+            </div>
+        );
     }
 }
 

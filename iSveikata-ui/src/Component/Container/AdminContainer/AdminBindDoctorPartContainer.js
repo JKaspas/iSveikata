@@ -12,13 +12,12 @@ import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 export default class AdminBindDoctorPartContainer extends Component{
     constructor(props){
         super(props);
-        this.timeOut=''
         this.state = {
             search:'',
             doctorList:'',
             listInfo:'',
 
-            activePage:0,
+            activePage:1,
             itemsPerPage:8,
             listLength:'',
             listIsEmpty:false,
@@ -38,48 +37,44 @@ export default class AdminBindDoctorPartContainer extends Component{
             return '';
         }
 
-        this.getAllDoctor(this.state.searchValue, this.state.activePage)
+        this.getAllDoctor(this.state.activePage)
        
     }
 
-    getAllDoctor = (searchValue, activePage) =>{
-
-        let allDoctorRequestLink = 'http://localhost:8080/api/doctor?page='+activePage+'&size='+this.state.itemsPerPage
-        let searchDoctorrequestLink = 'http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage
-        let finalRequestLink = allDoctorRequestLink;
-
-        if(searchValue.length > 2){
-           finalRequestLink = searchDoctorrequestLink
-        }else if(searchValue.length === 0){
-           finalRequestLink = allDoctorRequestLink
-        }else{
-            this.setState({
-                doctorList:(<h3>Įveskit bent 3 simbolius</h3>),
-                listIsEmpty:true,
-            })
-            return ''
-        }
-        axios.get(finalRequestLink)
+    getAllDoctor = (activeNumber) =>{
+        axios.get('http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
-                if(activePage !== 0){
-                    this.setState({
-                        activePage:activePage - 1
-                    })
-                    if(this.state.searchValue > 2){
-                        this.setState({
-                           doctorList:(<h3>Gydytojų nerasta</h3>)
-                        })
-                    }
-                    return ''
-                }
                 this.setState({
-                    doctorList:(<h3>Gydytojų nerasta</h3>),
+                    doctorList:(<h3>Sistemoje nesukurta nė viena gydytojo paskyra.</h3>),
                     listIsEmpty:true,
                 })
             }else{
                 this.setState({
                     doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                    listIsEmpty:false,
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((erorr) => {
+            console.log(erorr.response.data)
+        })
+    }
+    getAllDoctorBySearchValue = (searchValue, activeNumber) =>{
+        axios.get('http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activeNumber+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            if(response.data.content.length === 0){
+                this.setState({
+                    doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                    listIsEmpty:true,
+                })
+            }else{
+                this.setState({
+                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
+                    listInfo:response.data,
                     listLength:response.data.content.length,
                     listIsEmpty:false,
                 })
@@ -98,7 +93,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                 fullName={doctor.fullName}
                 userName={doctor.userName}
                 specialization={doctor.specialization}
-                doctorBindLink={<DoctorBindLink index={index} userName={doctor.userName}/>}
+                doctorBindLink={<DoctorBindLink userName={doctor.userName}/>}
             />)
     }
     
@@ -108,21 +103,19 @@ export default class AdminBindDoctorPartContainer extends Component{
             searchValue:e.target.value
         })
     }
-
-    
     
     searchdHandler = (e) =>{
-        
         e.preventDefault();
-
-        clearTimeout(this.timeOut)
-
-        this.timeOut = setTimeout(() =>{
-            this.getAllDoctor(
-                (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim(),
-                0)
-         } , 1000 )
-        
+        if(this.state.searchValue.length > 2){
+            this.getAllDoctorBySearchValue(this.state.searchValue, 1)
+        }else if(this.state.searchValue.length === 0){
+            this.getAllDoctor(1)
+        }else{
+            this.setState({
+                doctorList:(<h3>Įveskite bent 3 simbolius</h3>),
+                listIsEmpty:true,
+            })
+        }
         this.setState({
             activePage:1
         })
@@ -130,14 +123,13 @@ export default class AdminBindDoctorPartContainer extends Component{
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
-        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
-            if(this.state.activePage > activePage && activePage > -1){
-               
-            }else{
-                return ''
-            }
+        if(this.state.searchValue.length > 2){
+            //sen request for specific page when search value length more than 2
+            this.getAllDoctorBySearchValue(this.state.searchValue, activePage)
+        }else{
+            //send request for specific page when there is not search value
+            this.getAllDoctor(activePage);
         }
-        this.getAllDoctor(this.state.searchValue, activePage)
         
         //change activePage state to new page number
         this.setState({
@@ -147,16 +139,19 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     //Show paggination div with props from state
     showPagination = () =>{
-       
+        if(this.state.listLength === this.state.listInfo.totalElements || this.state.listIsEmpty){
+            return ''
+        }
         return (
-            <div className="text-center">
-                <div>
-                    <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
-                    <button className="btn btn-default">{this.state.activePage + 1}</button>
-                    <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
-                </div>
-             
-            </div>
+            <div className="col-sm-5 col-sm-offset-4">
+            <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemsPerPage}
+            totalItemsCount={this.state.listInfo.totalElements}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+            />
+        </div>
         )
     }
 
@@ -193,5 +188,4 @@ export default class AdminBindDoctorPartContainer extends Component{
         </div>)
     }
 }
-
 

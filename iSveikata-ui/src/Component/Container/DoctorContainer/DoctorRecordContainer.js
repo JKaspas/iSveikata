@@ -3,32 +3,51 @@ import axios from "axios";
 
 import PatientInfoCard from "../DoctorComponent/PatientInfoCard";
 import RecordForm from "../DoctorComponent/RecordForm";
-import { NewPrescriptionLink } from "../LinksAndButtons/NewPrescriptionLink";
 
-export default class DoctorRecordContainer extends Component {
-  constructor(props) {
+export default class DoctorRecordContainer extends Component{
+  constructor(props){
     super(props);
     this.session = JSON.parse(sessionStorage.getItem("session"));
-    this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
     this.state = {
+      patient: "",
       icds: "",
 
-      icdCode: "",
+      patientId: props.params.patientId,
+      userName: this.session.user.userName,
+
+      infoState: "",
+
+      icdCode: "select",
+      description: "",
       isCompensable: false,
       isRepetitive: false,
       duration: "",
-      description: "",
-
-      userName: this.session.user.userName,
-
-      formErrors: { icd: "", description: "", duration: "" },
-      icdValid: true,
+      
+      formErrors: {description: "", duration: ""},
+      fieldState: {description: "is-empty", duration: "is-empty"},
       descriptionValid: false,
       durationValid: false,
+
+      icdCodeValid: false,
+      
       formValid: false,
 
-      infoState: ""
+      minutes: 0
     };
+  };
+
+  timerTick() {
+    this.setState(prevState => ({
+      minutes: prevState.minutes + 1
+    }));
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => this.timerTick(), 60000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   componentWillMount = () => {
@@ -40,123 +59,212 @@ export default class DoctorRecordContainer extends Component {
       this.props.router.push("/vartotojams");
       return "";
     }
-
+    this.loadPatient();
     this.loadIcd();
-  };
+  }; 
+
   loadIcd = () => {
-    this.setState({
-        icds: this.session.doctor.icdList.map((icd, index) => (
-          <option key={index} value={icd.icdCode}>
-            {icd.icdCode} - {icd.title}
-          </option>
-        ))
-    })
-  }
-
-
-  submitHandler = e => {
-    let date = new Date();
-    let newDate =
-      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-    e.preventDefault();
-    console.log(newDate);
     axios
-      .post("http://localhost:8080/api/doctor/new/record", {
-        appointment: {
-          duration: this.state.duration,
-          description: this.state.description,
-          date: newDate
-        },
-        medicalRecord: {
-          compensable: this.state.isCompensable,
-          repetitive: this.state.isRepetitive
-        },
-        icdCode: this.state.icdCode,
-        patientId: this.patientInfo.id,
-        userName: this.state.userName
-      })
+      .get("http://localhost:8080/api/icd")
       .then(response => {
+        this.setState({
+          icds: response.data.map((icd, index) => (
+            <option key={index} value={icd.icdCode}>
+              {icd.icdCode} - {icd.title}
+            </option>
+          ))
+        });
         console.log(response.status);
-        this.setState({
-          infoState: (
-            <div className="alert alert-success">
-              <strong>Naujas įrašas sekmingai sukurtas </strong>
-            </div>
-          ),
-          isCompensable: false,
-          isRepetitive: false,
-          duration: "",
-          description: "",
-          formErrors: { icd: "", description: "", duration: "" },
-          icdValid: true,
-          descriptionValid: false, //turejo buti false
-          durationValid: false,
-          formValid: false
-        });
       })
-      .catch(erorr => {
-        console.log(erorr);
-        this.setState({
-          infoState: (
-            <div className="alert alert-danger">
-              <strong>Nesekmingas įrašo kurimas {erorr.response.data}</strong>
-            </div>
-          )
-        });
+      .catch(error => {
+        console.log(error);
       });
   };
 
-  fieldHandler = e => {
+  loadPatient = () => {
+    axios
+      .get("http://localhost:8080/api/patient/" + this.props.params.patientId)
+      .then(response => {
+        this.setState({
+          patient: response.data
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }; 
+
+  submitHandler = (e) => {
+    let date = new Date();
+    let currentDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    
+    e.preventDefault();
+    console.log(currentDate);
+
+    if(this.state.formValid){
+      axios
+        .post("http://localhost:8080/api/doctor/new/record", {
+          appointment: {
+            duration: this.state.duration,
+            description: this.state.description,
+            date: currentDate
+          },
+          medicalRecord: {
+            compensable: this.state.isCompensable,
+            repetitive: this.state.isRepetitive
+          },
+          icdCode: this.state.icdCode,
+          patientId: this.state.patientId,
+          userName: this.state.userName
+        })
+        .then(response => {
+          console.log(response.status);
+          this.setState({
+            infoState:<div className="alert alert-success"><strong>Naujas įrašas sėkmingai sukurtas</strong></div>,
+            
+            icdCode: "select",
+            description: "",
+            isCompensable: false,
+            isRepetitive: false,
+            duration: "",
+            
+            formErrors: {description: "", duration: ""},
+            fieldState: {description: "is-empty", duration: "is-empty"},
+            descriptionValid: false,
+            durationValid: false,
+            icdCodeValid: false,
+            formValid: false,
+
+            minutes: 0
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({
+            infoState:<div className="alert alert-danger"><strong>Nesėkmingas įrašo kūrimas</strong></div>,
+          });
+        });
+    }else{
+      this.setState({
+          infoState:<div className="alert alert-danger"><strong>Prašome taisyklingai užpildyti visus laukus ir pasirinkti reikiamą reikšmę iš sąrašo.</strong></div>
+      })
+    }
+  };
+
+  fieldHandler = (e) => {
     // e === event
     const name = e.target.name;
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
 
-    this.setState({ [name]: value }, () => {
-      this.validateField(name, value);
-    });
+    switch (name) {
+      case 'icdCode':
+          let icdCodeValid = this.state.icdCodeValid;
+          icdCodeValid = value === "select" ? false : true;
+          this.setState({icdCode: value,
+                        icdCodeValid: icdCodeValid}, this.validateForm);   
+          break;
+      case 'duration':
+          let duration = this.state.duration;
+          duration = value.replace(/\D/g, "");
+          this.setState({duration: duration});   
+          break;  
+      default:
+          this.setState({[name]: value});  
+          break;
+    }
+      
   };
+
+  fieldOnFocusHandler = (e) => {
+    // e === event
+    const name = e.target.name;
+
+    let fieldValidationState = this.state.fieldState;
+  
+    switch (name) {
+        case 'description':
+            fieldValidationState.description = 'is-empty';
+            break;
+        case 'duration':
+            fieldValidationState.duration = 'is-empty';
+            break;
+        default:
+            break;
+    }
+    this.setState({fieldState: fieldValidationState, infoState: '', formValid: false});
+  }
+
+  selectOnFocusHandler = (e) => {
+    // e === event
+    this.setState({infoState: ''});
+  }
+
+  fieldValidationHandler = (e) => {
+    // e === event
+    const name = e.target.name;
+    const value = e.target.value;
+
+    if(value.length !== 0) {
+    
+        this.validateField(name, value);
+    } else {
+        let nameValid = name + 'Valid';
+    
+        let fieldValidationErrors = this.state.formErrors;
+        switch (name) {
+            case 'description':
+                fieldValidationErrors.description = '';
+                break;
+            case 'duration':
+                fieldValidationErrors.duration = '';
+                break;
+            default:
+                break;
+        }
+        this.setState({[nameValid]: false,
+            formErrors: fieldValidationErrors
+            }, this.validateForm);
+    }    
+  }
 
   //Formos laukų validacija:
   validateField = (fieldName, value) => {
     let fieldValidationErrors = this.state.formErrors;
-    let icdValid = this.state.icdValid;
+    let fieldValidationState = this.state.fieldState;
+    let icdCodeValid = this.state.icdCodeValid;
     let descriptionValid = this.state.descriptionValid;
     let durationValid = this.state.durationValid;
 
     switch (fieldName) {
       case "icdCode":
         if (value.match(/^[a-zA-Z]\d{2}(\.[a-zA-Z0-9]{1,4})?$/g)) {
-          icdValid = true;
+          icdCodeValid = true;
         } else if (value.match(/^[1-7]{1}$/g)) {
-          icdValid = true;
+          icdCodeValid = true;
         } else if (value.match(/^[lL]\d{3}$/g)) {
-          icdValid = true;
+          icdCodeValid = true;
         } else if (value.match(/^[8-9]{1}\d{0,1}(\d-[mM]\d{2})?$/g)) {
-          icdValid = true;
+          icdCodeValid = true;
         } else {
-          icdValid = false;
+          icdCodeValid = false;
         }
         // ^ [RAIDĖ][SKAIČIUS][SKAIČIUS](.)(SKAIČIUS*)(SKAIČIUS*)(SKAIČIUS*)(RAIDĖ ARBA SKAIČIUS).
         //*rečiau, raidė, arba X -> jei yra 7-ta pozicija, o kitų pozicijų nėra, šios iki septintosios užpildomos raide X.
         //Specialūs kodai Lietuvoje - [RAIDĖ L][SKAIČIUS][SKAIČIUS][SKAIČIUS]. [SKAIČIUS NUO 1 IKI 7]. [SKAIČIUS 8 ARBA 9](SKAIČIUS)(SKAIČIUS -M SKAIČIUS SKAIČIUS).
-        fieldValidationErrors.icd = icdValid
-          ? ""
-          : "Įveskite taisyklingą TLK-10 kodą.";
+        fieldValidationErrors.icdCode = icdCodeValid ? "" : "Įveskite taisyklingą TLK-10 kodą.";
+        fieldValidationState.icdCode = icdCodeValid ? 'has-success' : 'has-error';
         break;
       case "description":
-        descriptionValid = value.length >= 3;
-        // ^ Tikrina ar įrašyta bent kažkas.
-        fieldValidationErrors.description = descriptionValid
-          ? ""
-          : "Aprašykite vizitą.";
+        descriptionValid = value.match(/^([\d\w"+-]{1})([\S ]*)$/g);
+        // ^ Tikrina ar įrašytas bent simbolis, išskyrus tarpą, tašką, kablelį ir pabraukimą. Toliau jie leidžiami.
+        fieldValidationErrors.description = descriptionValid ? "" : "Aprašykite vizitą.";
+        fieldValidationState.description = descriptionValid ? 'has-success' : 'has-error';
         break;
       case "duration":
-        durationValid = value.match(/^\d{1,3}$/g);
-        // ^ Tikrina ar įrašytas teigiamas skaičius.
-        fieldValidationErrors.duration = durationValid
-          ? ""
-          : "Įveskite vizito trukmę.";
+        durationValid = value.match(/^([1-9]{1})([0-9]{0,2})$/g);
+        // ^ Tikrina ar įrašytas teigiamas (max. triženklis) skaičius. Negali būti nulis.
+        fieldValidationErrors.duration = durationValid ? "" : "Įveskite vizito trukmę.";
+        fieldValidationState.duration = durationValid ? 'has-success' : 'has-error';
         break;
       default:
         break;
@@ -164,7 +272,8 @@ export default class DoctorRecordContainer extends Component {
     this.setState(
       {
         formErrors: fieldValidationErrors,
-        icdValid: icdValid,
+        fieldState: fieldValidationState,
+        //icdCodeValid: icdCodeValid,
         descriptionValid: descriptionValid,
         durationValid: durationValid
       },
@@ -176,55 +285,49 @@ export default class DoctorRecordContainer extends Component {
   validateForm = () => {
     this.setState({
       formValid:
-        this.state.icdValid &&
+        this.state.icdCodeValid &&
         this.state.descriptionValid &&
         this.state.durationValid
     });
-  };
-
-  //Jei įvesties lauko rėmelis žalias - informacija įvesta teisingai, jei raudonas - neteisingai.
-  //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile.
-  errorClass = erorr => {
-    return erorr.length === 0 ? "is-valid" : "is-invalid";
   };
 
   render() {
     return (
       <div className="container">
         <section>
-          <button onClick={() => this.props.router.goBack()}  className="btn btn-primary" >Atgal</button>
-          <NewPrescriptionLink  patientId={this.patientInfo.id}/>
+          <button onClick={() => this.props.router.goBack()} className="btn btn-primary">Atgal</button>
           <h2>Naujas ligos įrašas</h2>
           <PatientInfoCard
-            patientFullName={this.patientInfo.fullName}
-            date={this.patientInfo.birthDate}
-            patientId={this.patientInfo.id}
+            patientFullName={this.state.patient.fullName}
+            date={this.state.patient.birthDate}
+            patientId={this.state.patient.id}
             form={
               <RecordForm
-                erorrClassIcd={this.errorClass(this.state.formErrors.icd)}
-                errorClassDescription={this.errorClass(
-                  this.state.formErrors.description
-                )}
-                errorClassDuration={this.errorClass(
-                  this.state.formErrors.duration
-                )}
-                infoState={this.state.infoState}
-                icds={this.state.icds}
-                icd={this.state.icd}
-                icdCode={this.state.icdCode}
-                formErrors={this.state.formErrors}
-                description={this.state.description}
-                isCompensable={this.state.isCompensable}
-                isRepetitive={this.state.isRepetitive}
-                duration={this.state.duration}
-                formValid={this.state.formValid}
-                submitHandler={this.submitHandler}
-                fieldHandler={this.fieldHandler}
-              />
-            }
-          />
+              classNameDescription={this.state.fieldState.description}
+              classNameDuration={this.state.fieldState.duration}
+              errorMessageDescription={this.state.formErrors.description}
+              errorMessageDuration={this.state.formErrors.duration}
+              infoState={this.state.infoState}
+              formValid={this.state.formValid}
+ 
+              icds={this.state.icds}
+
+              icdCode={this.state.icdCode}
+              description={this.state.description}
+              isCompensable={this.state.isCompensable}
+              isRepetitive={this.state.isRepetitive}
+              duration={this.state.duration}
+              
+              fieldValidationHandler={this.fieldValidationHandler}
+              fieldHandler={this.fieldHandler}
+              fieldOnFocusHandler={this.fieldOnFocusHandler}
+              selectOnFocusHandler={this.selectOnFocusHandler}
+              submitHandler={this.submitHandler}
+
+              minutes={this.state.minutes} />
+            } />
         </section>
       </div>
     );
-  }
+  } 
 }
