@@ -29,7 +29,11 @@ export default class DoctorPatientListViewContainer extends Component{
             activePage:0,
             itemsPerPage:8,
 
-            CSVData:''
+            
+
+            CSVData:'',
+            downloadCSV:'',
+            CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV)'
         }
     }
 
@@ -39,15 +43,14 @@ export default class DoctorPatientListViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-        console.log(this.doctorInfo)
         if(this.doctorInfo !== null){
             if(this.doctorInfo.patientType){
                 this.doctorInfo.searchOn ? 
-                    this.getDoctorPatientBySearchValue(this.doctorInfo.activePage, this.doctorInfo.searchValue) : 
+                    this.getDoctorPatientBySearchValue(this.doctorInfo.patientPage, this.doctorInfo.searchValue) : 
                     this.getDoctorPatient (this.doctorInfo.patientPage)
             }else{
                 this.doctorInfo.searchOn ? 
-                this.getAllPatientBySearchValue(this.doctorInfo.activePage, this.doctorInfo.searchValue) :
+                this.getAllPatientBySearchValue(this.doctorInfo.patientPage, this.doctorInfo.searchValue) :
                 this.getAllPatient(this.doctorInfo.patientPage) 
             }
             this.setState({
@@ -75,7 +78,31 @@ export default class DoctorPatientListViewContainer extends Component{
     }
 
     generateCSVFile = () =>{
-        console.log("generuojam.. :D")
+
+        this.setState({
+            CSVButtonTitle:'Generuojama...'
+        })
+        axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient/csv')
+        .then((response)=>{
+            let data = response.data.map(this.composeCSVData);
+            let date = new Date()
+            this.setState({
+                CSVData:data,
+                CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV)',
+                downloadCSV:(<CSVLink 
+                            className="btn btn-default pull-right" data={data} 
+                            filename={'Pacientų sarašas_' + 
+                            date.getFullYear() + '-' + 
+                            (date.getMonth() + 1) + '-' + 
+                            date.getDay() + '.csv'} >
+                                Atsisiusti sarašą
+                            </CSVLink>)
+            })
+        }) 
+    }
+
+    composeCSVData = (data, index) =>{
+        return {"Vardas": data[0], "Pavardė": data[1], "Asmen kodas": data[2], "Gimimo data": data[3] }
     }
     //sen request for a list of patient wich ir bind to doctor userName and some paging info
     getDoctorPatient = (activePage) =>{
@@ -98,7 +125,7 @@ export default class DoctorPatientListViewContainer extends Component{
                     searchOn:false
                  })
             } 
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -129,10 +156,10 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })  
             }         
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((erorr) => {
-            //console.log(erorr)
+            console.log(erorr)
         })
     }
     patientClicSessionkHandler = (patientId, fullName, birthDate) =>{
@@ -389,10 +416,9 @@ export default class DoctorPatientListViewContainer extends Component{
                         <div className="panel-heading">
                             
                             <button className="btn btn-default pull-right" onClick={this.generateCSVFile}>
-                                <CSVLink data={this.state.CSVData} >
-                                    Generuoti priskirtų pacientų sąrasą (CSV)
-                                </CSVLink>
+                                {this.state.CSVButtonTitle}
                             </button>
+                            {this.state.downloadCSV}
                             <h4>Priskirtų pacientų sąrašas</h4>
                         </div>
                         <div className="panel-body">
@@ -406,7 +432,7 @@ export default class DoctorPatientListViewContainer extends Component{
                                     searchType={"text"}
                                 />
                                 <button id="doctorResetPatientList" className='btn btn-default pull-left' onClick={this.resetDoctorInfoSession}>Atnaujinti pacientų sąrasą</button>
-                                <button id="doctorChangePatientList" className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
+                                <button id="doctorChangePatientList" className='btn btn-default pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                             </div>
                             <div className="col-sm-12">
                                 {this.state.patientListView}

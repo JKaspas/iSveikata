@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import Pagination from "react-js-pagination"
+
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'; 
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -126,15 +126,11 @@ export default class PatientPrescriptionContainer extends Component{
                 <p>Vaisto aktyvioji medžiaga: <strong> {prescription.apiTitle}</strong></p>
                 <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
-                <p>Vartojimo aprašymas: {prescription.description}</p>
-                <br/>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
                 <p>Recepto galiojimo data: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-               
-                
-
+                <p>Vartojimo aprašymas: {prescription.description}</p>
         </div>)
     }
 

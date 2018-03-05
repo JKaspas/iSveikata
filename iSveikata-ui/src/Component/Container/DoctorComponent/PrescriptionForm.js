@@ -16,7 +16,7 @@ var PrescriptionForm = (props) =>{
                         <option value="10">10 dienų</option>
                         <option value="30">30 dienų</option>
                         <option value="180">180 dienų</option>
-                        <option value="360">neterminuotas</option>
+                        <option value="36500">neterminuotas</option>
                     </select>
                     <span className={props.daysToExpiration === "select" ? 'form-control-feedback' : 'glyphicon glyphicon-ok form-control-feedback'}></span>
                     <span className="help-block"></span>

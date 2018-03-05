@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
-
-
 import PatientListView from '../AdminComponent/PatientListView'
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';

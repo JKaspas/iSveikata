@@ -1,5 +1,7 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,6 +180,20 @@ public class EmployeesController {
 	@ResponseStatus(HttpStatus.OK)
 	private Page<PatientDto> getAllPagedPatientByDoctor(@PathVariable final String userName, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctor(pageable, userName);
+	}
+
+	/**
+	 * Gets all active patient nu doctor userName for csv export:
+	 * /api/doctor/{userName}/patient/csv.
+	 *
+	 * @param userName
+	 *            the user name
+	 * @return list of all patient of current doctor
+	 */
+	@GetMapping("/doctor/{userName}/patient/csv")
+	@ResponseStatus(HttpStatus.OK)
+	private List getAllPagedPatientByDoctorForCsv(@PathVariable final String userName, Pageable pageable) {
+		return patientService.getAllPagedPatientByDoctorForCsv(userName);
 	}
 
 	/**
