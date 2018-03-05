@@ -10,6 +10,7 @@ import { DruggistPrescriptionLink } from '../LinksAndButtons/DruggistPrescriptio
 class DruggistViewContainer extends Component{
     constructor(props){
         super(props)
+        this.timeOut = ''
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patient:'',
@@ -19,16 +20,12 @@ class DruggistViewContainer extends Component{
         }
     }
 
-
     componentWillMount = () =>{
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'druggist'){
             this.props.router.push('/vartotojams');
             return '';
         }  
-
-        
     }
-
    
     searchForPatientById = (patientId) =>{
         axios.get(' http://localhost:8080/api/patient/'+patientId)
@@ -74,8 +71,9 @@ class DruggistViewContainer extends Component{
 
     searchHandler = (e) =>{
         e.preventDefault()
+        clearTimeout(this.timeOut)
         if(this.state.searchValue.length === 11){
-            setTimeout(() =>{
+           this.timeOut = setTimeout(() =>{
                 this.searchForPatientById(this.state.searchValue)
             } , 1000 )
         }else{
@@ -85,9 +83,6 @@ class DruggistViewContainer extends Component{
         }
     }
 
- 
-
-    
 
 
     render() {

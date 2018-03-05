@@ -124,7 +124,9 @@ export default class AdminBindUserPartContainer extends Component{
         e.preventDefault();
         clearTimeout(this.timeOut)
         this.timeOut = setTimeout(() =>{
-            this.getPatientList(this.state.searchValue, 0)
+            this.getPatientList( 
+                (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim(),
+                0)
         } , 1000 )
         
         this.setState({
@@ -156,6 +158,7 @@ export default class AdminBindUserPartContainer extends Component{
             <div className="text-center">
                 <div>
                     <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default">{this.state.activePage + 1}</button>
                     <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
              

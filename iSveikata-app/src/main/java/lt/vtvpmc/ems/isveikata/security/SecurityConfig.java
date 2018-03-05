@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin().failureHandler(authenticationFailureHandler)//new SimpleUrlAuthenticationFailureHandler())
 				.loginPage("/api/login").permitAll() 
 				.usernameParameter("userName").passwordParameter("password")
-				.and().logout().permitAll();				// .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.and().logout().logoutSuccessUrl("/").permitAll();				// .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				 // leidziam /logout
 		http.csrf().disable() // nenaudojam tokenu
 				// toliau forbidden klaidai

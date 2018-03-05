@@ -6,6 +6,7 @@ import LoginForm from '../LoginForm/LoginForm';
 import { userLoggedIn } from './_action/index';
 import {doctorApiList, doctorIcdList} from '../Container/_action'
 
+axios.defaults.withCredentials = true;
 
 class UserLoginContainer extends Component {
   constructor(props) {

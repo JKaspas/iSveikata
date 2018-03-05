@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import LoginForm from '../LoginForm/LoginForm';
 import { patientLoggedIn } from './_action/index';
 
+axios.defaults.withCredentials = true;
+
 class PatientLoginContainer extends Component{
     constructor(props){
         super(props);

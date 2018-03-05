@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import {CSVLink} from 'react-csv';
 
 import PatientListingItem from '../AdminComponent/PatientListingItem'
 import PatientListView from '../AdminComponent/PatientListView'
@@ -12,12 +13,14 @@ import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 export default class DoctorPatientListViewContainer extends Component{
     constructor(props){
         super(props)
+        this.timeOut= ''
         this.session = JSON.parse(sessionStorage.getItem('session'))
+        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor'))
         this.state = {
             patientListView:null,
            
             searchValue:'',
-            patientTypeName:'Visi pacientai',
+            patientTypeName:'Matyti visus pacientus',
             patientType:true,
             searchOn:false,
 
@@ -26,8 +29,7 @@ export default class DoctorPatientListViewContainer extends Component{
             activePage:0,
             itemsPerPage:8,
 
-            listIsEmpty:false
-
+            CSVData:''
         }
     }
 
@@ -37,12 +39,47 @@ export default class DoctorPatientListViewContainer extends Component{
             this.props.router.push('/vartotojams');
             return '';
         }  
-        //load patient wich is bind to specific doctor by doctor userName
-        this.getDoctorPatient(this.session.user.userName, this.state.activePage);
+        console.log(this.doctorInfo)
+        if(this.doctorInfo !== null){
+            if(this.doctorInfo.patientType){
+                this.doctorInfo.searchOn ? 
+                    this.getDoctorPatientBySearchValue(this.doctorInfo.activePage, this.doctorInfo.searchValue) : 
+                    this.getDoctorPatient (this.doctorInfo.patientPage)
+            }else{
+                this.doctorInfo.searchOn ? 
+                this.getAllPatientBySearchValue(this.doctorInfo.activePage, this.doctorInfo.searchValue) :
+                this.getAllPatient(this.doctorInfo.patientPage) 
+            }
+            this.setState({
+                activePage:this.doctorInfo.patientPage,
+                patientType:this.doctorInfo.patientType,
+                searchValue:this.doctorInfo.searchValue,
+                searchOn:this.doctorInfo.searchOn,
+                patientTypeName:this.doctorInfo.patientTypeName
+            })
+        }else{
+            this.getDoctorPatient(this.state.activePage);
+        }
+    }
+
+    resetDoctorInfoSession = () =>{
+        sessionStorage.setItem('doctor', null)
+        this.getDoctorPatient(0);
+        this.setState({
+            activePage:0,
+            patientType:true,
+            searchValue:'',
+            searchOn:false,
+            patientTypeName:'Matyti visus pacientus',
+        })
+    }
+
+    generateCSVFile = () =>{
+        console.log("generuojam.. :D")
     }
     //sen request for a list of patient wich ir bind to doctor userName and some paging info
-    getDoctorPatient = (userName, activePage) =>{
-        axios.get('http://localhost:8080/api/doctor/'+userName+'/patient?page='+activePage+'&size='+this.state.itemsPerPage)
+    getDoctorPatient = (activePage) =>{
+        axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
                 if(activePage !== 0){
@@ -53,16 +90,15 @@ export default class DoctorPatientListViewContainer extends Component{
                 }
                 this.setState({
                     patientListView:(<h3>Jūs neturite priskirtų pacientų</h3>),
-                    listIsEmpty:true,
                 })                
             }else{
                 this.setState({
                     patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
                     listLength:response.data.content.length,
-                    listIsEmpty:false
+                    searchOn:false
                  })
             } 
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             console.log(erorr)
@@ -89,17 +125,17 @@ export default class DoctorPatientListViewContainer extends Component{
                     patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
                     listInfo:response.data,
                     listLength:response.data.content.length,
-                    listIsEmpty:false
+                    searchOn:false
 
                 })  
             }         
-            console.log(response.status)
+            console.log(response.data)
         })
         .catch((erorr) => {
             //console.log(erorr)
         })
     }
-    viewPatientClickHandler = (patientId, fullName, birthDate) =>{
+    patientClicSessionkHandler = (patientId, fullName, birthDate) =>{
        sessionStorage.setItem("patientInfo", JSON.stringify({id:patientId, fullName:fullName, birthDate:birthDate}))
     }
     //compose patient list item (row) to show it in table
@@ -109,10 +145,10 @@ export default class DoctorPatientListViewContainer extends Component{
         //if composing patient by doctor userName add link to view patient details
         //else do not show patient details button
         if(this.state.patientType){
-            patientViewLink=(<td><DoctorViewPatientLink index={index} clickHandler={this.viewPatientClickHandler} 
-                patientId={patient.id} 
-                fullName={patient.fullName}
-                birthDate={patient.birthDate}/></td>)
+            patientViewLink=(
+                <td><DoctorViewPatientLink index={index} 
+                clickHandler={() => this.patientClicSessionkHandler(patient.id, patient.fullName, patient.birthDate)} 
+                /></td>)
         }
         return (
             <PatientListingItem
@@ -121,15 +157,20 @@ export default class DoctorPatientListViewContainer extends Component{
                 birthDate={patient.birthDate}
                 fullName={patient.fullName}
     
-                recordLink={<td><NewRecordLink index={index} patientId={patient.id}/></td>}
-                prescriptionLink={<td><NewPrescriptionLink index={index} patientId={patient.id}/></td>}
+                recordLink={<td><NewRecordLink 
+                    index={index}  patientId={patient.id}
+                    clickHandler={() => this.patientClicSessionkHandler(patient.id, patient.fullName, patient.birthDate)}
+                    /></td>}
+                prescriptionLink={<td><NewPrescriptionLink 
+                    index={index} patientId={patient.id}
+                    clickHandler={() => this.patientClicSessionkHandler(patient.id, patient.fullName, patient.birthDate)}
+                    /></td>}
                 doctorViewPatient={patientViewLink}                 
             />
         )
     }
 
     getDoctorPatientBySearchValue = (activePage, searchValue) =>{
-        console.log("ActivePage: " + activePage)
         axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient/'
         +searchValue+'?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
@@ -147,7 +188,6 @@ export default class DoctorPatientListViewContainer extends Component{
                 }
                 this.setState({
                     patientListView:(<h3>Tokių pacientų nerasta</h3>),
-                    listIsEmpty:true,
                     listLength:0
                 })
             }else{  
@@ -155,7 +195,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
                     listInfo:response.data,
                     listLength:response.data.content.length,
-                    listIsEmpty:false,
                     searchOn:true
 
                 })
@@ -193,7 +232,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     patientListView:<PatientListView patients={response.data.content.map(this.composePatient)} />,
                     listInfo:response.data,
                     listLength:response.data.content.length,
-                    listIsEmpty:false,
                     searchOn:true
                 })
             }
@@ -211,38 +249,50 @@ export default class DoctorPatientListViewContainer extends Component{
         this.setState({
             searchValue:e.target.value
         })
+        
     }
     //search button click handling 
     searchHandler = (e) =>{
+        clearTimeout(this.timeOut)
         e.preventDefault()
-        console.log("Search.....")
         if(this.state.searchValue.length > 2){
             if(this.state.patientType){
-                setTimeout(() =>{
-                    this.getDoctorPatientBySearchValue(0, this.state.searchValue)  
-                } , 2000 )
+                this.timeOut = setTimeout(() =>{
+                    this.getDoctorPatientBySearchValue(
+                        0, 
+                        (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim())  
+                } , 500 )
                 
             }else{
-                setTimeout(() =>{
-                    this.getAllPatientBySearchValue(0, this.state.searchValue)          
-                } , 2000 )
+                this.timeOut =  setTimeout(() =>{
+                    this.getAllPatientBySearchValue(
+                        0,
+                        this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1).trim())          
+                } , 500 )
             }
         }else if(this.state.searchValue.length === 0){
             if(this.state.patientType){
-                setTimeout(() =>{
-                    this.getDoctorPatient(this.session.user.userName, 0)  
-                } , 1000 )
+                this.timeOut = setTimeout(() =>{
+                    this.getDoctorPatient(0)  
+                } , 500 )
             }else{
-                setTimeout(() =>{
+                this.timeOut = setTimeout(() =>{
                     this.getAllPatient(0)  
-                } , 1000 )
+                } , 500 )
             }
         }else{
             this.setState({
                 patientListView:(<h3>Įveskit bent 3 simbolius</h3>),
-                listIsEmpty:true
             })
         }
+
+        sessionStorage.setItem('doctor', JSON.stringify({
+            patientType:this.state.patientType,
+            patientPage:0,
+            searchValue:this.state.searchValue,
+            searchOn:(this.state.searchValue.length > 2 ? true : false),
+            patientTypeName:this.state.patientTypeName
+        }))
         
         this.setState({
             activePage:0,
@@ -253,19 +303,26 @@ export default class DoctorPatientListViewContainer extends Component{
         if(this.state.patientType){
             this.getAllPatient(0)
             this.setState({
-                patientTypeName:"Mano pacientai",
+                patientTypeName:"Matyti savo pacientus",
                 searchOn:false
             })
         }else{
-            this.getDoctorPatient(this.session.user.userName,0)
+            this.getDoctorPatient(0)
             this.setState({
-                patientTypeName:"Visi pacientai",
+                patientTypeName:"Matyti visus pacientus",
                 searchOn:false
             })
         }
+        sessionStorage.setItem('doctor', JSON.stringify({
+            patientType:!this.state.patientType,
+            patientPage:0,
+            searchValue:this.state.searchValue,
+            searchOn:false,
+            patientTypeName:this.state.patientTypeName
+        }))
         this.setState({
             patientType:!this.state.patientType,
-            activePage:1
+            activePage:0
         })
     }
 
@@ -285,7 +342,7 @@ export default class DoctorPatientListViewContainer extends Component{
             if(this.state.searchOn){
                 this.getDoctorPatientBySearchValue(activePage, this.state.searchValue)
             }else{
-                this.getDoctorPatient(this.session.user.userName, activePage);
+                this.getDoctorPatient(activePage);
             }
         }else{
             if(this.state.searchOn){
@@ -294,6 +351,14 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.getAllPatient(activePage)
             }
         }
+
+        sessionStorage.setItem('doctor', JSON.stringify({
+            patientType:this.state.patientType,
+            patientPage:activePage,
+            searchValue:this.state.searchValue,
+            searchOn:this.state.searchOn,
+            patientTypeName:this.state.patientTypeName
+        }))
         //change activePage state to new page number
         this.setState({
             activePage:activePage
@@ -306,6 +371,7 @@ export default class DoctorPatientListViewContainer extends Component{
               <div className="text-center">
                 <div>
                     <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default">{this.state.activePage + 1}</button>
                     <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
             </div>
@@ -321,6 +387,12 @@ export default class DoctorPatientListViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
+                            
+                            <button className="btn btn-default pull-right" onClick={this.generateCSVFile}>
+                                <CSVLink data={this.state.CSVData} >
+                                    Generuoti priskirtų pacientų sąrasą (CSV)
+                                </CSVLink>
+                            </button>
                             <h4>Priskirtų pacientų sąrašas</h4>
                         </div>
                         <div className="panel-body">
@@ -333,6 +405,7 @@ export default class DoctorPatientListViewContainer extends Component{
                                     searchPlaceHolder={"Pacientų paieška"}
                                     searchType={"text"}
                                 />
+                                <button id="doctorResetPatientList" className='btn btn-default pull-left' onClick={this.resetDoctorInfoSession}>Atnaujinti pacientų sąrasą</button>
                                 <button id="doctorChangePatientList" className='btn btn-success pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                             </div>
                             <div className="col-sm-12">

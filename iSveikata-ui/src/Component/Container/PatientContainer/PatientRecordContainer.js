@@ -141,6 +141,7 @@ export default class PatientRecordContainer extends Component{
         return (<div >
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
+                <p>Ligos kodo aprašymas: {record.icdDescription}</p>
                 <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
                 <p>Vizito trukmė: {record.appoitmentDuration}</p>
                 <p>Vizitas kompensuojamas? {compensable}</p>
@@ -187,6 +188,7 @@ export default class PatientRecordContainer extends Component{
             <div className="text-center">
                 <div>
                     <button className="btn btn-default" id="previousPage" onClick={() => this.handlePageChange(this.state.activePage - 1)}>⟨</button>
+                    <button className="btn btn-default">{this.state.activePage + 1}</button>
                     <button className="btn btn-default" id="nextPage" onClick={() => this.handlePageChange(this.state.activePage + 1)}>⟩</button>
                 </div>
             </div>

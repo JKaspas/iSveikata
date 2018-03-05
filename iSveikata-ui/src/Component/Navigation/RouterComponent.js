@@ -19,8 +19,6 @@ import DoctorPatientViewContainer from '../Container/DoctorContainer/DoctorPatie
 import DoctorPatientListViewContainer from '../Container/DoctorContainer/DoctorPatientListViewContainer'
 import DoctorStatisticContainer from '../Container/DoctorContainer/DoctorStatisticContainer'
 
-import PatientPrescriptionUsageViewContainer from '../Container/PatientContainer/PatientPrescriptionUsageViewContainer'
-
 import DruggistViewContainer from '../Container/DruggistContainer/DruggistViewContainer'
 import DruggistPrescriptionViewContainer from '../Container/DruggistContainer/DruggistPrescriptionViewContainer'
 
@@ -68,8 +66,8 @@ var RouteComponent = () =>{
             <IndexRoute component={DoctorViewContainer} />
             <Route path="/gydytojas/pacientai" component={DoctorPatientListViewContainer} />
             <Route path="/gydytojas/statistika" component={DoctorStatisticContainer} />
-            <Route path="/doctor/patient/:patientId/record" component={DoctorRecordContainer} />
-            <Route path="/doctor/patient/:patientId/prescription" component={DoctorPrescriptionContainer} />
+            <Route path="/doctor/patient/record" component={DoctorRecordContainer} />
+            <Route path="/doctor/patient/prescription" component={DoctorPrescriptionContainer} />
             <Route path="/gydytojas/pacientas/perziura" component={DoctorPatientViewContainer} />
             <Route path="/gydytojas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
@@ -87,7 +85,6 @@ var RouteComponent = () =>{
             <Route path="/patient/record" component={PatientRecordContainer} />
             <Route path="/patient/prescription" component={PatientPrescriptionContainer} />
             <Route path="/patient/password" component={PatientPasswordContainer} />
-            <Route path="/pacientas/receptas/:prescriptionId/panaudojimai" component={PatientPrescriptionUsageViewContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
       </Router>)
