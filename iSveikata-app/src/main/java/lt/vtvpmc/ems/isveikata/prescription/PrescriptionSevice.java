@@ -19,7 +19,6 @@ import lt.vtvpmc.ems.isveikata.api.JpaApiRepository;
 import lt.vtvpmc.ems.isveikata.employees.Doctor;
 import lt.vtvpmc.ems.isveikata.employees.Druggist;
 import lt.vtvpmc.ems.isveikata.employees.JpaEmployeesRepository;
-import lt.vtvpmc.ems.isveikata.mappers.ApiMapper;
 import lt.vtvpmc.ems.isveikata.mappers.PrescriptionMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
@@ -47,9 +46,6 @@ public class PrescriptionSevice {
 	@Autowired
 	private PrescriptionMapper mapper;
 
-	@Autowired
-	private ApiMapper apiMapper;
-	
 	@PreAuthorize("hasRole('Doctor')")
 	public void createNewPrescription(Map<String, Object> map) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -71,22 +67,22 @@ public class PrescriptionSevice {
 
 		prescriptionRepository.save(prescription);
 	}
-	
+
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public List<PrescriptionDto> getAllPrescriptions() {
 		return mapper.prescriptionsToDto(prescriptionRepository.findAll());
 	}
-	
+
 	@PreAuthorize("hasRole('Doctor')")
 	public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
 		return prescriptionRepository.findOne(prescriptionId).getPrescriptionUsage();
 	}
-	
+
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient') OR hasRole('Druggist')")
 	public PrescriptionDto getPrescription(Long prescriptionId) {
 		return mapper.prescriptionToDto(prescriptionRepository.findOne(prescriptionId));
 	}
-	
+
 	@PreAuthorize("hasRole('Druggist')")
 	public boolean createUsageForPrescription(Map<String, Object> map, Long prescriptionId) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -97,6 +93,8 @@ public class PrescriptionSevice {
 			Prescription prescription = prescriptionRepository.findOne(prescriptionId);
 			prescriptionUsage.setPrescription(prescription);
 			prescription.addUsage();
+			Api api = prescription.getApi();
+			api.setCounter(api.getCounter()+1);
 			prescriptionUsage.setDruggist((Druggist) employeesRepository.findByUserName(userName));
 			prescriptionUsageRepository.save(prescriptionUsage);
 			return true;
@@ -105,15 +103,15 @@ public class PrescriptionSevice {
 		}
 	}
 
+
 	public List<ApiStatDto> getPublicApiStatistics() {
 		List<ApiStatDto> stat = new ArrayList<ApiStatDto>();
-		List<Object[]> result = prescriptionRepository.getPublicApiStatistics(new PageRequest(0, 10));
-		for (Object[] o : result) {
-			Api api = apiRepository.findOne((Long) o[0]);
+		List<Api> result = apiRepository.findAllByOrderByCounterDesc(new PageRequest(0, 10));
+		for (Api api : result) {
 			ApiStatDto apiStatDto = new ApiStatDto();
 			apiStatDto.setDescription(api.getDescription());
 			apiStatDto.setIngredientName(api.getTitle());
-			apiStatDto.setUsedTimes((Long) o[1]);
+			apiStatDto.setUsedTimes(api.getCounter());
 			stat.add(apiStatDto);
 		}
 		return stat;

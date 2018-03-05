@@ -22,5 +22,7 @@ public class Api implements Serializable {
 	private String title;
 	private String description;
 	private String measurements;
+	private Long counter;
+
 
 }

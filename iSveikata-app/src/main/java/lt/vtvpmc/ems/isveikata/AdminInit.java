@@ -18,6 +18,9 @@ public class AdminInit {
 			return null;
 		}
 	}
-
+//	 @Bean
+//	    public CommandLineRunner statisticsQuery(JpaMedicalRecordRepository medRecordSrvc) {
+//	        return (args) -> medRecordSrvc.getTotalNonRepetitiveMedicalRecordCount();
+//	    }
 
 }
