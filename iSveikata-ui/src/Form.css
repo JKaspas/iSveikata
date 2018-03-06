@@ -72,18 +72,21 @@ select + span {
 	box-shadow: 0 0 2px darkblue;
 }
 
-.input-append button {
+.input-append i {
 	border: 0;
 	background: none;
-	padding: 2px 5px;
+	padding:  5px;
 	margin-top: 2px;
 	position: relative;
+	opacity: 0.5;
 	left: -28px;
 	margin-bottom: 0;
 }
 
-.input-append button:hover {
+.input-append i:hover {
 	background: none;
 	transform: scale(1.2);
+	opacity: 1;
 	transition: transform .2s;
 }
+
