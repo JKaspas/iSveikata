@@ -68,4 +68,22 @@ select + span {
 	padding-right: 30px;
 }
 
+.input-append input:hover {
+	box-shadow: 0 0 2px darkblue;
+}
 
+.input-append button {
+	border: 0;
+	background: none;
+	padding: 2px 5px;
+	margin-top: 2px;
+	position: relative;
+	left: -28px;
+	margin-bottom: 0;
+}
+
+.input-append button:hover {
+	background: none;
+	transform: scale(1.2);
+	transition: transform .2s;
+}
