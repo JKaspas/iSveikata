@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 				// be saugumo UI dalis ir swaggeris
-				.antMatchers("/", "/swagger-ui.html", "/statistics").permitAll()
+				.antMatchers("/", "/swagger-ui.html", "/statistics", "/api/icd", "/api/specialization", "/api/api").permitAll()
 				// visi /api/ saugus (dar galima .anyRequest() )
 				.antMatchers("/api/**").authenticated();
 		http.formLogin().successHandler(authenticationSuccessHandler);

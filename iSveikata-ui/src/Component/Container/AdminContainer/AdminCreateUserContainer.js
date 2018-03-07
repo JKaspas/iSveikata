@@ -106,11 +106,12 @@ export default class AdminCreateUserContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            //console.log(this.userObjectByType()); 
+            console.log({user:this.userObjectByType(), type:this.state.specialization}); 
             //console.log(this.fullCompanyName());
 
             axios.post('http://localhost:8080/api/admin/new/user', {
-                employee:this.userObjectByType()  
+                employee:this.userObjectByType() ,
+                specialization:this.state.type === "doctor" ? this.state.specialization : null
             })
             .then((response)=>{
                 console.log(response.status);
@@ -173,7 +174,6 @@ export default class AdminCreateUserContainer extends Component{
                     lastName:this.state.lastName,
                     userName:this.generateUsername(),
                     password:this.state.password,
-                    specialization:this.state.specialization,
                     type:this.state.type,}
         }else{
             return{ firstName:this.state.firstName,

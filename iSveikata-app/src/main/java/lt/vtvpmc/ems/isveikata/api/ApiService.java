@@ -13,7 +13,7 @@ import lt.vtvpmc.ems.isveikata.mappers.ApiMapper;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('Doctor')")
+//@PreAuthorize("hasRole('Doctor')")
 public class ApiService {
 
     @Autowired

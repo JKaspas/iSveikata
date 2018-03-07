@@ -60,6 +60,7 @@ public class PrescriptionSevice {
 		}
 		if (api != null) {
 			prescription.setApi(api);
+			api.setCounter(api.getCounter()+1l);
 		}
 		if (doctor != null) {
 			prescription.setDoctor(doctor);

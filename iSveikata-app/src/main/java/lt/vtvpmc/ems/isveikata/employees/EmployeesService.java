@@ -1,7 +1,11 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.vtvpmc.ems.isveikata.IsveikataApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,27 +48,41 @@ public class EmployeesService {
 	@Autowired
 	private DoctorMapper doctorMapper;
 
+
+
 	/**
 	 * Adds new user.
 	 * 
-	 * @param employee
-	 *            the employee
-	 * @param specialization
+	 * @param objectMap
+	 *            the employee, specialization
 	 */
-	public void addEmployee(Employee employee, Specialization specialization) {
-		if (employee instanceof Doctor) {
-			Specialization spec = null;
-			if (specializationRepository.findByTitle(specialization.getTitle()) == null) {
-				spec = specializationRepository.save(specialization);
-			} else {
-				spec = specializationRepository.findByTitle(specialization.getTitle());
+	public boolean addEmployee(Map<String, Object> objectMap) {
+		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+
+		final Employee employee = mapper.convertValue(objectMap.get("employee"), Employee.class);
+		final String specializationTitle =  mapper.convertValue(objectMap.get("specialization"), String.class);
+		Specialization specialization = null;
+		if (specializationTitle != null) {
+			if(specializationRepository.findByTitle(specializationTitle) == null){
+				specialization = new Specialization();
+				specialization.setTitle(specializationTitle);
+				specialization = specializationRepository.save(specialization);
+			}else{
+				specialization = specializationRepository.findByTitle(specializationTitle);
 			}
 
-			Doctor doctor = (Doctor) employeesRepository.save(employee);
-			doctor.setSpecialization(spec);
+			try {
+				Doctor doctor = (Doctor) employeesRepository.save(employee);
+				doctor.setSpecialization(specialization);
+			}catch (IllegalArgumentException ex){
+				IsveikataApplication.LOGGER.info("Doctor or specialization exeption... " + ex);
+				return false;
+			}
+
 		} else {
 			employeesRepository.save(employee);
 		}
+		return true;
 	}
 
 	/**

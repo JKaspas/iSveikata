@@ -65,12 +65,7 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/user")
 	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
-		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
-		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
-		final Specialization specialization = mapper.convertValue(map.get("specialization"), Specialization.class);
-
-		if (employeesService.validateAddNewUser(employee)) {
-			employeesService.addEmployee(employee, specialization);
+		if (employeesService.addEmployee(map)) {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
