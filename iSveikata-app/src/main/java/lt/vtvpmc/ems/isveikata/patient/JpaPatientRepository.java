@@ -1,16 +1,12 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
 
 public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 
@@ -25,7 +21,7 @@ public interface JpaPatientRepository extends JpaRepository<Patient, String> {
 	List<Patient> findPatientByDoctor(Long doctorId, int from, int to);
 
 	@Query(value = "SELECT first_name, last_name, patient_id, birth_date  FROM PATIENT WHERE IS_ACTIVE = TRUE AND DOCTOR_ID = ?1", nativeQuery = true)
-	List findAllPatientByDoctorCSV(Long doctorId);
+	List<Object> findAllPatientByDoctorCSV(Long doctorId);
 
 	@Query(value = "SELECT * FROM Patient  WHERE " +
 			"IS_ACTIVE = true LIMIT ?1, ?2", nativeQuery = true)
