@@ -11,6 +11,7 @@ axios.defaults.withCredentials = true;
 class UserLoginContainer extends Component {
   constructor(props) {
     super(props);
+    this.logoutInfo = JSON.parse(sessionStorage.getItem("401"))
     this.state = {
       userName: "",
       password: "",
@@ -24,8 +25,24 @@ class UserLoginContainer extends Component {
       fieldState: { userName: "is-empty", password: "is-empty" },
       userNameValid: false,
       passwordValid: false,
-      formValid: false
+      formValid: false,
+
+      logoutUserName:null,
     };
+  }
+
+  componentWillMount = () =>{
+    if(this.logoutInfo !== null){
+      this.setState({
+        userName:this.logoutInfo.userName,
+        userNameValid:true,
+        infoState:(<div className="alert alert-info">
+                      <strong>{this.logoutInfo.info}</strong>
+                    </div>)
+      })
+      sessionStorage.setItem("401", null)
+      
+    }
   }
 
   submitHandler = e => {

@@ -7,6 +7,7 @@ import PatientListView from '../AdminComponent/PatientListView'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import { DruggistPrescriptionLink } from '../LinksAndButtons/DruggistPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 class DruggistViewContainer extends Component{
     constructor(props){
@@ -45,8 +46,11 @@ class DruggistViewContainer extends Component{
                   
             console.log(response.status)
         })
-        .catch((erorr) => {
-            
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 

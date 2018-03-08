@@ -6,6 +6,7 @@ import DoctorListingItem from '../AdminComponent/DoctorListingItem'
 import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 export default class AdminBindDoctorPartContainer extends Component{
@@ -59,17 +60,12 @@ export default class AdminBindDoctorPartContainer extends Component{
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            if(erorr.response.data != null && erorr.response.data.status === 401){
-                sessionStorage.setItem("401", 
-                    JSON.stringify({
-                        info:"Prisijungimo sesija pasibaigė, prisijunkite iš naujo",
-                        userName:this.session.user.userName,
-                        patientId:this.session.patient.patientId
-                    }))
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                console.log("401....")
                 this.props.router.push("/atsijungti")
             }
-            console.log(erorr.response.data)
         })
     }
     getAllDoctorBySearchValue = (searchValue, activeNumber) =>{
@@ -90,8 +86,11 @@ export default class AdminBindDoctorPartContainer extends Component{
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr.response.data)
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 

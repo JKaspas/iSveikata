@@ -6,6 +6,7 @@ import { UserFormSpecInput } from '../AdminComponent/UserFormSpecInput';
 import { UserFormSpecOtherInput } from '../AdminComponent/UserFormSpecOtherInput';
 import { UserFormDrugStoreInput } from '../AdminComponent/UserFormDrugStoreInput';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class AdminCreateUserContainer extends Component{
     constructor(props){
@@ -116,7 +117,6 @@ export default class AdminCreateUserContainer extends Component{
             .then((response)=>{
                 console.log(response.status);
                 this.setState({
-                    //infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
                     infoState:<div className="alert alert-success"><strong>Naujo vartotojo paskyra sėkmingai sukurta.</strong></div>,
                     
                     firstName: '',
@@ -148,9 +148,11 @@ export default class AdminCreateUserContainer extends Component{
                 this.getAllSpecialization()
             })
             .catch((error) => {
-                console.log(error)
+                if(error.response.data != null && error.response.data.status === 401){
+                    UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                    this.props.router.push("/atsijungti")
+                }
                 this.setState({
-                    //infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
                     infoState:<div className="alert alert-danger"><strong>Nesėkmingas vartotojo paskyros kūrimas.</strong></div>
                 })
             })
@@ -193,7 +195,10 @@ export default class AdminCreateUserContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            console.log(error)
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     } 
 

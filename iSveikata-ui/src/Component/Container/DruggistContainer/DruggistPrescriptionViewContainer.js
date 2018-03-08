@@ -7,6 +7,7 @@ import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 // var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
 //                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
@@ -65,8 +66,11 @@ class DruggistViewContainer extends Component{
            
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
 
         })
     }
@@ -105,9 +109,13 @@ class DruggistViewContainer extends Component{
             document.getElementById('modalButton').click()
             console.log(response.status)
         })
-        .catch((erorr) =>{
+        .catch((error) =>{
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
             this.setState({
-                infoState:<div className="alert alert-success"><strong>{erorr.response.data}</strong></div>,
+                infoState:<div className="alert alert-success"><strong>{error.response.data}</strong></div>,
             })
         })
     }
@@ -121,8 +129,11 @@ class DruggistViewContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 

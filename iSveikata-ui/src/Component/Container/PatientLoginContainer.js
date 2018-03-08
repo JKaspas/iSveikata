@@ -10,6 +10,7 @@ axios.defaults.withCredentials = true;
 class PatientLoginContainer extends Component{
     constructor(props){
         super(props);
+        this.logoutInfo = JSON.parse(sessionStorage.getItem("401"))
         this.state = {
             patientId:'',
             password:'',
@@ -26,6 +27,21 @@ class PatientLoginContainer extends Component{
             formValid: false,
         };
     }
+
+    componentWillMount = () =>{
+        if(this.logoutInfo !== null){
+          this.setState({
+            patientId:this.logoutInfo.patientId,
+            patientIdValid:true,
+            infoState:(<div className="alert alert-info">
+                          <strong>{this.logoutInfo.info}</strong>
+                        </div>)
+        })
+        sessionStorage.setItem("401", null)
+        
+        }
+    }
+    
     
     submitHandler = (e) => {
 
@@ -40,16 +56,14 @@ class PatientLoginContainer extends Component{
             userData.append('password', this.state.password);
             axios.post('http://localhost:8080/api/login', userData, {headers:{'Content-type':'application/x-www-form-urlencoded'}})
             .then((response) => {
-                console.log(response.data.fullName)
                 this.props.dispatch(patientLoggedIn(this.state.patientId, response.data.fullName))
                 this.props.router.push('/patient/');
-                console.log(this.props)
                 console.log(response.status)
             })
             .catch((error) => {
                 console.log(error)
                 this.setState({
-                    infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
+                    infoState:(<div className="alert alert-danger"><strong> {error.response.data}</strong></div>)
                 })
             })
         }else{

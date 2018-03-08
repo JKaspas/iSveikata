@@ -6,6 +6,7 @@ import PatientListingItem from '../AdminComponent/PatientListingItem'
 import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class AdminBindUserPartContainer extends Component{
     constructor(){
@@ -81,8 +82,11 @@ export default class AdminBindUserPartContainer extends Component{
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 
@@ -92,10 +96,13 @@ export default class AdminBindUserPartContainer extends Component{
             console.log(response.status)
             this.getPatientList(this.state.searchValue, this.state.activePage);  
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
             this.setState({
-                infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
+                infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
             })
         })
 

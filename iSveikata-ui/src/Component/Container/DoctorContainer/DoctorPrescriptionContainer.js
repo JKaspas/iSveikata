@@ -4,6 +4,7 @@ import axios from 'axios';
 import PatientInfoCard from '../DoctorComponent/PatientInfoCard';
 import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
@@ -118,7 +119,10 @@ export default class DoctorPrescriptionContainer extends Component{
                 })
             })
             .catch((error) => {
-                console.log(error)
+                if(error.response.data != null && error.response.data.status === 401){
+                    UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                    this.props.router.push("/atsijungti")
+                }
                 this.setState({
                     infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas.</strong></div>
                 })

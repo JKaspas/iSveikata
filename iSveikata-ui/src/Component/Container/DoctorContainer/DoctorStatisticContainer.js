@@ -11,6 +11,7 @@ import 'moment/locale/lt'
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 export default class DoctorStatisticContainer extends Component{
@@ -81,11 +82,12 @@ export default class DoctorStatisticContainer extends Component{
                 this.showStatistic()
             }
             console.log(response.status)
-            console.log(response.data)
-            
         })
-        .catch(erorr => {
-            console.log(erorr);
+        .catch(error => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
           });
     }
 

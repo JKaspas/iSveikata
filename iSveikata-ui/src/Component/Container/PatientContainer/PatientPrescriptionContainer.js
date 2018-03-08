@@ -9,6 +9,7 @@ import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageLi
 
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 
@@ -40,11 +41,7 @@ export default class PatientPrescriptionContainer extends Component{
             info:''
         }
     }
-    componentDidCatch = (erorr, info) =>{
-        console.log(erorr)
-        console.log(info)
-    }
-   
+      
     componentWillMount = () =>{
         
         if(this.session === null || this.session.patient.loggedIn !== true){
@@ -78,8 +75,11 @@ export default class PatientPrescriptionContainer extends Component{
             }
             console.log(response.data)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 
@@ -109,8 +109,11 @@ export default class PatientPrescriptionContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
         })
     }
 
@@ -153,8 +156,12 @@ export default class PatientPrescriptionContainer extends Component{
             console.log(response.data)
         })
 
-        .catch((erorr) => {
-            //console.log(erorr)
+        .catch((error) => {
+            if(error.response.data != null && error.response.data.status === 401){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }
+            console.log(error.response)
         })
     }
 
