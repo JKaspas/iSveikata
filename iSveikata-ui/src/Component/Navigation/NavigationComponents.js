@@ -78,7 +78,6 @@ var PublicNavigation = (props) =>{
       <div className="container">
         <a className="navbar-brand" id="homeHome" href="#">iSveikata</a>
         <ul className="nav navbar-nav">
-        	<li><a className="" id="home" href="#">Pradžia</a></li>
 	        <li><a className="" id="publicStatistic" href="#statistika">Vieša statistika</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">

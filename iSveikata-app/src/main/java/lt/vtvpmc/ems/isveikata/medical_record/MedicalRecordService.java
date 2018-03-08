@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
 
+import lt.vtvpmc.ems.isveikata.IsveikataApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,12 +80,17 @@ public class MedicalRecordService {
 		List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();
 		List<Icd> list = jpaIcdRepository.findAllByOrderByCounterDesc(new PageRequest(0, 10));
 		Integer total = jpaMedicalRecordRepository.getTotalNonRepetitiveMedicalRecordCount();
+
 		for (Icd icd : list) {
 			final Map<String, Object> objectMap = new HashMap<String, Object>();
-			objectMap.put("info", icd.getTitle());
-			objectMap.put("totalProc", (long) icd.getCounter() * (double) 100 / total);
-			objectMap.put("totalCount", icd.getCounter());
-			newList.add(objectMap);
+			try {
+				objectMap.put("info", icd.getTitle());
+				objectMap.put("totalProc", (long) icd.getCounter() * (double) 100 / total);
+				objectMap.put("totalCount", icd.getCounter());
+				newList.add(objectMap);
+			}catch (NullPointerException ex){
+				IsveikataApplication.LOGGER.warning("Gotten values where null..." + ex);
+			}
 		}
 		return newList;
 	}

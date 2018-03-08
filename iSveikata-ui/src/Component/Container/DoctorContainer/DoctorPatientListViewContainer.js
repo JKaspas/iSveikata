@@ -87,18 +87,24 @@ export default class DoctorPatientListViewContainer extends Component{
         .then((response)=>{
             let data = response.data.map(this.composeCSVData);
             let date = new Date()
-            this.setState({
-                CSVData:data,
-                CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV)',
-                downloadCSV:(<CSVLink 
-                            className="btn btn-default pull-right" data={data} 
-                            filename={'Pacientų sarašas_' + 
-                            date.getFullYear() + '-' + 
-                            (date.getMonth() + 1) + '-' + 
-                            date.getDay() + '.csv'} >
-                                Atsisiusti sarašą
-                            </CSVLink>)
-            })
+            if(response.data.length === 0 ){
+                this.setState({
+                    CSVButtonTitle:"Priskirtų pacientų  nerasta"
+                })
+            }else{
+                this.setState({
+                    CSVData:data,
+                    CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV formatu)',
+                    downloadCSV:(<CSVLink 
+                                className="btn btn-default pull-right" data={data} 
+                                filename={'Pacientų sarašas_' + 
+                                date.getFullYear() + '-' + 
+                                (date.getMonth() + 1) + '-' + 
+                                date.getDay() + '.csv'} >
+                                    Atsisiusti sarašą
+                                </CSVLink>)
+                })
+            }
         }) 
     }
 

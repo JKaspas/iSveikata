@@ -9,5 +9,5 @@ public interface JpaApiRepository extends JpaRepository<Api, Long> {
 
 	Api findByTitle(String title);
 
-	List<Api> findAllByOrderByCounterDesc(Pageable pageeable);
+	List<Api> findAllByCounterGreaterThanOrderByCounterDesc(Long number,  Pageable pageeable);
 }
