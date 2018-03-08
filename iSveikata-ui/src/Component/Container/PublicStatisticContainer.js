@@ -20,6 +20,9 @@ export default class PublicStatisticContainer extends Component{
             showHideApiButton:"Pateikti duomenis lentėje",
             icdButton:null,
             apiButton:null,
+
+            icdButtonDisabled:false,
+            tlkButtonDisabled:false
         }
     }
     componentWillMount = () =>{
@@ -33,14 +36,16 @@ export default class PublicStatisticContainer extends Component{
                 if(response.data.length === 0){
                     this.setState({
                         apiButton:null,
-                        apiStatistic:(<h4>Statistiniu duomenų nerasta</h4>)
+                        apiStatistic:(<h4>Statistiniu duomenų apie dažniausiai naudojamas vaistų aktyviasias medžiagas nėra</h4>),
+                        tlkButtonDisabled:true
                     })
                 }else{
                     this.setState({
-                        apiData:response.data,                       
+                        apiData:response.data, 
+                        tlkButtonDisabled:false                      
                     })
                 }
-                console.log(response.data)               
+                console.log(response.status)               
             })
     }
 
@@ -50,11 +55,14 @@ export default class PublicStatisticContainer extends Component{
                 if(response.data.length === 0){
                     this.setState({
                        icdButton:null,
-                       icdStatistic:(<h4>Statistiniu duomenų nerasta</h4>)
+                       icdStatistic:(<h4>Statistiniu duomenų apie dažniausiai sergamas ligas nėra</h4>),
+                       icdButtonDisabled:true,
+            
                     })
                 }else{
                     this.setState({
                         icdData:response.data.map(this.composeIcdData),
+                        icdButtonDisabled:false
                     })
                     
                 }
@@ -211,6 +219,9 @@ export default class PublicStatisticContainer extends Component{
                     icdStatistic={ this.state.icdStatistic} 
                     icdButton={this.state.icdButton}
                     icdTable={this.state.icdStatisticTable}
+
+                    icdButtonDisabled={this.state.icdButtonDisabled}
+                    tlkButtonDisabled={this.state.tlkButtonDisabled}
 
                     apiStatistic={this.state.apiStatistic}
                     apiButton={this.state.apiButton}

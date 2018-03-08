@@ -361,7 +361,7 @@ export default class DoctorPatientViewContainer extends Component{
                                 <br/>
                                 {this.state.viewContent}
                                 {this.showPagination()}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

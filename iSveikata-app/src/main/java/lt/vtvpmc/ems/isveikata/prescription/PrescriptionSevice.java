@@ -161,7 +161,7 @@ public class PrescriptionSevice {
 	public List<ApiStatDto> getPublicApiStatistics() {
 		try {
 			List<ApiStatDto> stat = new ArrayList<ApiStatDto>();
-			List<Api> result = apiRepository.findAllByOrderByCounterDesc(new PageRequest(0, 10));
+			List<Api> result = apiRepository.findAllByCounterGreaterThanOrderByCounterDesc(0l, new PageRequest(0, 10));
 			for (Api api : result) {
 				ApiStatDto apiStatDto = new ApiStatDto();
 				apiStatDto.setDescription(api.getDescription());

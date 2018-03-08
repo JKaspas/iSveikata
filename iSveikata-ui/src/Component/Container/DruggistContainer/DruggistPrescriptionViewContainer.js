@@ -175,7 +175,7 @@ class DruggistViewContainer extends Component{
                                 {this.state.infoState}
 
                                 {this.state.viewContent}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

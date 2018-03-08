@@ -14,7 +14,6 @@ export default class DoctorRecordContainer extends Component{
       patient: "",
       icds: "",
 
-      patientId: props.params.patientId,
       userName: this.session.user.userName,
 
       infoState: "",
@@ -102,7 +101,7 @@ export default class DoctorRecordContainer extends Component{
             repetitive: this.state.isRepetitive
           },
           icdCode: this.state.icdCode,
-          patientId: this.state.patientId,
+          patientId: this.state.patient.id,
           userName: this.state.userName
         })
         .then(response => {
