@@ -135,6 +135,15 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((erorr) => {
+            if(erorr.response.data != null && erorr.response.data.status === 401){
+                sessionStorage.setItem("401", 
+                    JSON.stringify({
+                        info:"Prisijungimo sesija pasibaigė, prisijunkite iš naujo",
+                        userName:this.session.user.userName,
+                        patientId:this.session.patient.patientId
+                    }))
+                this.props.router.push("/atsijungti")
+            }
             console.log(erorr)
 
         })
@@ -166,6 +175,15 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((erorr) => {
+            if(erorr.response.data != null && erorr.response.data.status === 401){
+                sessionStorage.setItem("401", 
+                    JSON.stringify({
+                        info:"Prisijungimo sesija pasibaigė, prisijunkite iš naujo",
+                        userName:this.session.user.userName,
+                        patientId:this.session.patient.patientId
+                    }))
+                this.props.router.push("/atsijungti")
+            }
             console.log(erorr)
         })
     }
