@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,8 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 		response.getWriter()
 				.print("{\"fullName\":\"" + authentication.getName() + "\",\"role\":\"" + userRoles + "\"}");
 		response.getWriter().flush();
-		;
+		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(15*60); // 15 min.
 		clearAuthenticationAttributes(request);
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
