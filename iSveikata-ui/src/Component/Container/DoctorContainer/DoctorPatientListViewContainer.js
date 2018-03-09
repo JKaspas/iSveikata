@@ -9,6 +9,7 @@ import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink'
 import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 export default class DoctorPatientListViewContainer extends Component{
@@ -29,8 +30,6 @@ export default class DoctorPatientListViewContainer extends Component{
             listLength:'',
             activePage:0,
             itemsPerPage:8,
-
-            
 
             CSVData:'',
             downloadCSV:'',
@@ -105,7 +104,17 @@ export default class DoctorPatientListViewContainer extends Component{
                                 </CSVLink>)
                 })
             }
-        }) 
+        })
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    CSVButtonTitle:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
+        })
     }
 
     composeCSVData = (data, index) =>{
@@ -134,9 +143,15 @@ export default class DoctorPatientListViewContainer extends Component{
             } 
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
-
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -165,8 +180,15 @@ export default class DoctorPatientListViewContainer extends Component{
             }         
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
     patientClicSessionkHandler = (patientId, fullName, birthDate) =>{
@@ -235,9 +257,15 @@ export default class DoctorPatientListViewContainer extends Component{
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
-
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -271,9 +299,15 @@ export default class DoctorPatientListViewContainer extends Component{
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
-
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 

@@ -6,6 +6,7 @@ import DoctorListingItem from '../AdminComponent/DoctorListingItem'
 import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 export default class AdminBindDoctorPartContainer extends Component{
@@ -20,7 +21,6 @@ export default class AdminBindDoctorPartContainer extends Component{
             activePage:0,
             itemsPerPage:8,
             listLength:'',
-            listIsEmpty:false,
 
             searchValue:''
 
@@ -31,61 +31,104 @@ export default class AdminBindDoctorPartContainer extends Component{
 
     componentWillMount = () =>{
 
-       
+       //before mount check if user are logged in and userType is admin if not redirect to login page
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }
-
+        //load all active doctor from api
         this.getAllDoctor(this.state.activePage)
        
     }
-
-    getAllDoctor = (activeNumber) =>{
-        axios.get('http://localhost:8080/api/doctor?page='+activeNumber+'&size='+this.state.itemsPerPage)
+    //method to load all doctor from api
+    getAllDoctor = (activePage) =>{
+        //activeNumber is a page number
+        axios.get('http://localhost:8080/api/doctor?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
             if(response.data.content.length === 0){
+                //if givent activePage number is not 0 and the response data lenght is 0 
+                //do not change content and stay at the same page
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            doctorList:(<h3>Pacientų nėrasta</h3>)
+                        })
+                    }
+                    return ''
+                }
+                //if active page is 0 so no doctor found at all
                 this.setState({
                     doctorList:(<h3>Sistemoje nesukurta nė viena gydytojo paskyra.</h3>),
-                    listIsEmpty:true,
                 })
             }else{
+                //if some content found set that content to doctorList as table view
                 this.setState({
                     doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
                     listInfo:response.data,
                     listLength:response.data.content.length,
-                    listIsEmpty:false,
                 })
             }
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr.response.data)
-        })
-    }
-    getAllDoctorBySearchValue = (searchValue, activeNumber) =>{
-        axios.get('http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activeNumber+'&size='+this.state.itemsPerPage)
-        .then((response)=>{
-            if(response.data.content.length === 0){
-                this.setState({
-                    doctorList:(<h3>Tokio gydytojo nėra</h3>),
-                    listIsEmpty:true,
-                })
+        .catch((error) => {
+            //if server response as 401 (Unauthorized) redirect to logout page
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
-                    listInfo:response.data,
-                    listLength:response.data.content.length,
-                    listIsEmpty:false,
+                    doctorList:(<h3>Serverio klaida</h3>)
                 })
             }
-            console.log(response.status)
-        })
-        .catch((erorr) => {
-            console.log(erorr.response.data)
         })
     }
 
+    //on search get all doctor by search value and specific page by activePage
+    getAllDoctorBySearchValue = (searchValue, activePage) =>{
+        axios.get('http://localhost:8080/api/doctor/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage)
+        .then((response)=>{
+            if(response.data.content.length === 0){
+                //if givent activePage number is not 0 and the response data lenght is 0 
+                //do not change content and stay at the same page
+                if(activePage !== 0){
+                    this.setState({
+                        activePage:activePage - 1
+                    })
+                    if(this.state.searchValue > 2){
+                        this.setState({
+                            doctorList:(<h3>Pacientų nėrasta</h3>)
+                        })
+                    }
+                    return ''
+                }
+                //if active page is 0 so no doctor found by search value
+                this.setState({
+                    doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                })
+            }else{
+                this.setState({
+                    doctorList:<DoctorListView doctors={response.data.content.map(this.composeDoctor)}/>,
+                    listInfo:response.data,
+                    listLength:response.data.content.length,
+                })
+            }
+            console.log(response.status)
+        })
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    doctorList:(<h3>Serverio klaida</h3>)
+                })
+            }
+        })
+    }
+    //compose any given doctor to a table row 
     composeDoctor = (doctor, index) =>{
         return(
             <DoctorListingItem
@@ -97,32 +140,45 @@ export default class AdminBindDoctorPartContainer extends Component{
             />)
     }
     
-    
+    //handle search field changes
     fielddHandler = (e) =>{
         this.setState({
             searchValue:e.target.value
         })
     }
-    
+    //handle search request and decide to search by searchValue or call for a normal request for a doctors
     searchdHandler = (e) =>{
         e.preventDefault();
         if(this.state.searchValue.length > 2){
-            this.getAllDoctorBySearchValue(this.state.searchValue, 1)
+            this.getAllDoctorBySearchValue(this.state.searchValue, 0)
         }else if(this.state.searchValue.length === 0){
-            this.getAllDoctor(1)
+            this.getAllDoctor(0)
         }else{
+            //if searchValue is too short give a message about it
             this.setState({
                 doctorList:(<h3>Įveskite bent 3 simbolius</h3>),
-                listIsEmpty:true,
             })
         }
+
         this.setState({
-            activePage:1
+            activePage:0
         })
     }
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
+        //if active page is less than 1 
+        //check is that page is 0 and stop from geting lower than 0 activePage
+        if(activePage < 1){
+            if(this.state.activePage > activePage && activePage > -1){
+               
+            }else{
+                return ''
+            }
+        }
+        //if searchValue longer than 2 letter call for search request to api
+        //else call for normal request to api
+        //decide which request to call
         if(this.state.searchValue.length > 2){
             //sen request for specific page when search value length more than 2
             this.getAllDoctorBySearchValue(this.state.searchValue, activePage)

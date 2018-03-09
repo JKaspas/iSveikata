@@ -33,7 +33,7 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 				.print("{\"fullName\":\"" + authentication.getName() + "\",\"role\":\"" + userRoles + "\"}");
 		response.getWriter().flush();
 		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(15*60); // 15 min.
+		session.setMaxInactiveInterval(30*60); // 15 min.
 		clearAuthenticationAttributes(request);
 		IsveikataApplication.loggMsg(Level.INFO, authentication.getName(), authentication.getAuthorities().toString(), "sucessfuly loged in");
 		super.onAuthenticationSuccess(request, response, authentication);

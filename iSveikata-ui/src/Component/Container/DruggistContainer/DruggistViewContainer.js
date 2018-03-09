@@ -7,6 +7,7 @@ import PatientListView from '../AdminComponent/PatientListView'
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import { DruggistPrescriptionLink } from '../LinksAndButtons/DruggistPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 class DruggistViewContainer extends Component{
     constructor(props){
@@ -45,8 +46,15 @@ class DruggistViewContainer extends Component{
                   
             console.log(response.status)
         })
-        .catch((erorr) => {
-            
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patient:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -76,7 +84,7 @@ class DruggistViewContainer extends Component{
         if(this.state.searchValue.length === 11){
            this.timeOut = setTimeout(() =>{
                 this.searchForPatientById(this.state.searchValue)
-            } , 1000 )
+            } , 500 )
         }else{
             this.setState({
                 patient:(<h3>Įveskite taisyklingą asmens kodą</h3>)

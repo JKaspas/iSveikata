@@ -100,7 +100,7 @@ public class PrescriptionSevice {
 		}
 	}
 
-	@PreAuthorize("hasRole('Doctor')")
+	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
 		try {
 			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching all prescription usages");

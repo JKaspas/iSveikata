@@ -4,6 +4,7 @@ import axios from "axios";
 import PatientInfoCard from "../DoctorComponent/PatientInfoCard";
 import RecordForm from "../DoctorComponent/RecordForm";
 import { UserDetailsComponent } from "../AdminComponent/UserDetailsComponent";
+import { UnauthorizedComponent } from "../UnauthorizedComponent";
 
 export default class DoctorRecordContainer extends Component{
   constructor(props){
@@ -126,10 +127,14 @@ export default class DoctorRecordContainer extends Component{
           });
         })
         .catch((error) => {
-          console.log(error);
-          this.setState({
-            infoState:<div className="alert alert-danger"><strong>Nesėkmingas įrašo kūrimas</strong></div>,
-          });
+          if(error.response.data.status > 400 && error.response.data.status < 500){
+            UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+            this.props.router.push("/atsijungti")
+        }else{
+            this.setState({
+                infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+            })
+        }
         });
     }else{
       this.setState({
