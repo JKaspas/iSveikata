@@ -47,7 +47,7 @@ class PatientLoginContainer extends Component{
                 console.log(response.status)
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error.response.data.status)
                 this.setState({
                     infoState:(<div className="alert alert-danger"><strong>{error.response.data}</strong></div>)
                 })

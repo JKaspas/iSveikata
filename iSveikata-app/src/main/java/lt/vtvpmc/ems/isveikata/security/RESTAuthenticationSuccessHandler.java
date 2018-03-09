@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.security;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import lt.vtvpmc.ems.isveikata.IsveikataApplication;
 
 @Component
 public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -32,6 +35,7 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(15*60); // 15 min.
 		clearAuthenticationAttributes(request);
+		IsveikataApplication.loggMsg(Level.INFO, authentication.getName(), authentication.getAuthorities().toString(), "sucessfuly loged in");
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
 }
