@@ -148,13 +148,14 @@ export default class AdminCreateUserContainer extends Component{
                 this.getAllSpecialization()
             })
             .catch((error) => {
-                if(error.response.data != null && error.response.data.status === 401){
+                if(error.response.data.status > 400 && error.response.data.status < 500){
                     UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                     this.props.router.push("/atsijungti")
+                }else{
+                    this.setState({
+                        infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    })
                 }
-                this.setState({
-                    infoState:<div className="alert alert-danger"><strong>Nesėkmingas vartotojo paskyros kūrimas.</strong></div>
-                })
             })
         }else{
             this.setState({
@@ -195,9 +196,13 @@ export default class AdminCreateUserContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoState:(<h3>Serverio klaida, nepavyko gauti specializacijų</h3>)
+                })
             }
         })
     } 

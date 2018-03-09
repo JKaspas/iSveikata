@@ -23,21 +23,22 @@ export default class AdminBindUserPartContainer extends Component{
             itemsPerPage:8,
             listLength:'',
 
-            listIsEmpty:false,
 
             searchValue:''
         }
     }
-  
     componentWillMount = () =>{
+        //before mount check if user are logged in and userType is admin if not redirect to login page
         if(this.session === null || this.session.user.loggedIn !== true || this.session.user.userType !== 'admin'){
             this.props.router.push('/vartotojams');
             return '';
         }
+        //request for patient list with default state of searchValue and activePage number
         this.getPatientList(this.state.searchValue, this.state.activePage);  
     }
 
     getPatientList = (searchValue, activePage) =>{
+        
         let allPatientRequestLink = 'http://localhost:8080/api/patient/notbind?page='+activePage+'&size='+this.state.itemsPerPage
         let searchPatientrequestLink = 'http://localhost:8080/api/patient/notbind/'+searchValue+'/search?page='+activePage+'&size='+this.state.itemsPerPage
         let finalRequestLink = allPatientRequestLink;
@@ -49,7 +50,6 @@ export default class AdminBindUserPartContainer extends Component{
         }else{
             this.setState({
                 patientList:(<h3>Įveskit bent 3 simbolius</h3>),
-                listIsEmpty:true,
             })
             return ''
         }
@@ -70,22 +70,24 @@ export default class AdminBindUserPartContainer extends Component{
                 }
                 this.setState({
                     patientList:(<h3>Pacientų nėrasta</h3>),
-                    listIsEmpty:true,
                 })
             }else{
                 this.setState({
                     patientList:<PatientListView patients={response.data.content.map(this.composePatient)}/>,
                     listInfo:response.data,
                     listLength:response.data.content.length,
-                    listIsEmpty:false
                 })
             }
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientList:(<h3>Serverio klaida</h3>)
+                })
             }
         })
     }
@@ -97,13 +99,14 @@ export default class AdminBindUserPartContainer extends Component{
             this.getPatientList(this.state.searchValue, this.state.activePage);  
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientList:(<h3>Serverio klaida</h3>)
+                })
             }
-            this.setState({
-                infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
-            })
         })
 
     }
@@ -136,13 +139,13 @@ export default class AdminBindUserPartContainer extends Component{
         } , 1000 )
         
         this.setState({
-            activePage:1
+            activePage:0
         })
     }
 
      //handle paggination page changes 
     handlePageChange = (activePage) => {        
-        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+        if(activePage < 1){
             if(this.state.activePage > activePage && activePage > -1){
                
             }else{

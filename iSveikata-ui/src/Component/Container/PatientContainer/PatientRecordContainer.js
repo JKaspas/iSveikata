@@ -77,9 +77,13 @@ export default class PatientRecordContainer extends Component{
            
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientList:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -110,9 +114,13 @@ export default class PatientRecordContainer extends Component{
             console.log(response.data)
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -149,9 +157,7 @@ export default class PatientRecordContainer extends Component{
             document.getElementById('modalButton').click()
         }
         this.loadSpecificRecord(rowId);
-        this.setState({
-            
-        })
+       
     }
 
 

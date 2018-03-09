@@ -30,8 +30,6 @@ class DruggistViewContainer extends Component{
             allPrescription:null,
             contentType:'record',
 
-            listIsEmpty:false,
-
             infoDetails:null,
             infoHeader:"Recepto detali informacija",
             notActivePrescription:0
@@ -54,22 +52,24 @@ class DruggistViewContainer extends Component{
             if(response.data.length === 0){
                 this.setState({
                     viewContent:this.state.info,
-                    listIsEmpty:true
                 })
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView prescription={response.data.map(this.composePrescription)}/>,
                     allPrescription:response.data.content,
-                    listIsEmpty:false
                     })
             }
            
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
 
         })
@@ -110,13 +110,14 @@ class DruggistViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
-            this.setState({
-                infoState:<div className="alert alert-success"><strong>{error.response.data}</strong></div>,
-            })
         })
     }
 
@@ -130,9 +131,13 @@ class DruggistViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }

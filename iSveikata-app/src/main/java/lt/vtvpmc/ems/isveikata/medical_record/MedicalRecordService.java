@@ -118,7 +118,8 @@ public class MedicalRecordService {
 			Integer total = jpaMedicalRecordRepository.getTotalNonRepetitiveMedicalRecordCount();
 			for (Icd icd : list) {
 				final Map<String, Object> objectMap = new HashMap<String, Object>();
-				objectMap.put("info", icd.getTitle());
+				objectMap.put("title", icd.getTitle());
+				objectMap.put("icdCode", icd.getIcdCode());
 				objectMap.put("totalProc", (long) icd.getCounter() * (double) 100 / total);
 				objectMap.put("totalCount", icd.getCounter());
 				newList.add(objectMap);

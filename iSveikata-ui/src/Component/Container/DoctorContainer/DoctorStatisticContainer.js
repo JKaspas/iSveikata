@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DateRangePicker,isInclusivelyBeforeDay } from 'react-dates';
 
 
@@ -84,9 +84,13 @@ export default class DoctorStatisticContainer extends Component{
             console.log(response.status)
         })
         .catch(error => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    chart:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
           });
     }
@@ -110,16 +114,18 @@ export default class DoctorStatisticContainer extends Component{
         let minutes = Math.floor(Math.round(((this.state.totalTime / 60 - hours) * 60) * 10) / 10)
        
         this.setState({
-            chart:( <LineChart width={1000} height={300} data={this.state.data} 
-                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                    <XAxis dataKey="date"/>
-                    <YAxis dataKey="time"/>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <Tooltip/>
-                    <Legend verticalAlign="top" height={36} iconSize={20} />
-                    <Line type="monotone" dataKey="patient" name="Pacientai per diena" stroke="#8884d8" activeDot={{r: 8}}/>
-                    <Line type="monotone" dataKey="time" name="Bendras dienos vizitų laikas" unit=" min" stroke="#82ca9d" />
-                    </LineChart>),
+            chart:(  <ResponsiveContainer height={300}>
+                        <LineChart width={1000} height={300} data={this.state.data} 
+                        margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                        <XAxis dataKey="date"/>
+                        <YAxis dataKey="time"/>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <Tooltip/>
+                        <Legend verticalAlign="top" height={36} iconSize={20} />
+                        <Line type="monotone" dataKey="patient" name="Pacientai per diena" stroke="#8884d8" activeDot={{r: 8}}/>
+                        <Line type="monotone" dataKey="time" name="Bendras dienos vizitų laikas" unit=" min" stroke="#82ca9d" />
+                        </LineChart>
+                    </ResponsiveContainer>),
             total:(<div>
                     <p><strong>Per pasirinkta laikotarpi priimta <i> {this.state.totalPatient}</i> pacientų </strong></p>
                     <p><strong>Bendra pasirinkto laikotarpio vizitų trukmė sudarė <i> {hours} h {minutes} min </i></strong></p>

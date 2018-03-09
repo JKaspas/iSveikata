@@ -31,8 +31,6 @@ export default class DoctorPatientListViewContainer extends Component{
             activePage:0,
             itemsPerPage:8,
 
-            
-
             CSVData:'',
             downloadCSV:'',
             CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV)'
@@ -108,9 +106,13 @@ export default class DoctorPatientListViewContainer extends Component{
             }
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    CSVButtonTitle:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -142,9 +144,13 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -175,9 +181,13 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -248,9 +258,13 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -286,9 +300,13 @@ export default class DoctorPatientListViewContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }

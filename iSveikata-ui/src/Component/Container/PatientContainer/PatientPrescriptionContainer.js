@@ -76,9 +76,13 @@ export default class PatientPrescriptionContainer extends Component{
             console.log(response.data)
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -110,9 +114,13 @@ export default class PatientPrescriptionContainer extends Component{
             console.log(response.status)
         })
         .catch((error) =>{
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
         })
     }
@@ -145,7 +153,7 @@ export default class PatientPrescriptionContainer extends Component{
             
             if (response.data.length === 0){
                 this.setState({
-                    info:(<h3>Recepto panaudojimų nerasta</h3>)
+                    prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
                 })
             } else {
                     this.setState({
@@ -157,11 +165,14 @@ export default class PatientPrescriptionContainer extends Component{
         })
 
         .catch((error) => {
-            if(error.response.data != null && error.response.data.status === 401){
+            if(error.response.data.status > 400 && error.response.data.status < 500){
                 UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                 this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    prescriptionUsage:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
             }
-            console.log(error.response)
         })
     }
 

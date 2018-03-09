@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
-import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts'
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
 
 import PublicViewComponent from './PublicComponent/PublicViewComponent'
 
@@ -21,8 +21,8 @@ export default class PublicStatisticContainer extends Component{
             icdButton:null,
             apiButton:null,
 
-            icdButtonDisabled:false,
-            tlkButtonDisabled:false
+            icdButtonDisabled:true,
+            tlkButtonDisabled:true
         }
     }
     componentWillMount = () =>{
@@ -74,9 +74,9 @@ export default class PublicStatisticContainer extends Component{
         return {
             count:icd.totalCount,
             proc: Math.round(icd.totalProc * 1000) / 1000,
-            icd:icd.info.icdCode + ' - ' + icd.info.title,
-            icdCode:icd.info.icdCode,
-            title:icd.info.title
+            icd:icd.icdCode + ' - ' + icd.title,
+            icdCode:icd.icdCode,
+            title:icd.title
         }
     }
 
@@ -154,17 +154,19 @@ export default class PublicStatisticContainer extends Component{
         }else{
             this.setState({
                 apiStatistic: (
-                    <div>
+                    <div className="col-sm-12">
                         <h4>Pateikiama 10 dažniausiai panaudojamų vaisto veikliūjų medžiagų statistika</h4>
-                    <BarChart width={800} height={300}  data={this.state.apiData}
-                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                    <XAxis dataKey="ingredientName" name="Vaisto veiklioji medžiaga"/>
-                    <YAxis/>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <Tooltip/>
-                    <Legend verticalAlign="top" height={36} iconSize={20} />
-                    <Bar stackId="one" dataKey="usedTimes" barSize={45} fill="#8884d8" background={true} name="Pirkimai"  />
-                    </BarChart>
+                    <ResponsiveContainer height={300}>
+                        <BarChart width={800} height={300}  data={this.state.apiData}
+                        margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                        <XAxis dataKey="ingredientName" name="Vaisto veiklioji medžiaga"/>
+                        <YAxis/>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <Tooltip/>
+                        <Legend verticalAlign="top" height={36} iconSize={20} />
+                        <Bar stackId="one" dataKey="usedTimes" barSize={40} fill="#8884d8" background={true} name="Pirkimai" />
+                        </BarChart>
+                    </ResponsiveContainer >
                     </div>),
                 apiButton:(<div className="text-center">
                             <button className="btn btn=primary" onClick={this.showApiTable} >{this.state.showHideApiButton}</button>
@@ -183,19 +185,21 @@ export default class PublicStatisticContainer extends Component{
         }else{
             this.setState({
                 icdStatistic: (
-                    <div>
-                        <h4>Pateikiama 10 dažniausiai pasitaikančių ligų pagal jų kodus</h4>
-                    <BarChart width={800} height={300}  data={this.state.icdData}
-                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                    <XAxis dataKey="icdCode" name="Ligos kodas"/>
-                    <YAxis/>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <Tooltip/>
-                    <Legend verticalAlign="top" height={36} iconSize={20} />
-                    <Bar stackId="one" dataKey="title" barSize={45} fill="#8884d8" background={true} name="Ligos pavadinimas"  />
-                    <Bar stackId="one" dataKey="proc" barSize={45} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" %" />
-                    <Bar stackId="one"  legendType="none" dataKey="count" barSize={45} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" kartai" />
-                    </BarChart>
+                    <div className="col-sm-12">
+                        <h4>Pateikiama 10 dažniausiai pasitaikančių ligų pagal TLK-10 kodus</h4>
+                    <ResponsiveContainer height={300}>
+                        <BarChart width={800} height={300}  data={this.state.icdData}
+                        margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                        <XAxis dataKey="icdCode" name="Ligos kodas"/>
+                        <YAxis/>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <Tooltip/>
+                        <Legend verticalAlign="top" height={36} iconSize={20} />
+                        <Bar stackId="one"  legendType="none" dataKey="title" barSize={40} fill="none" background={true} name="Ligos pavadinimas"  />
+                        <Bar stackId="one" dataKey="proc" barSize={40} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" %" />
+                        <Bar stackId="one"  legendType="none" dataKey="count" barSize={40} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" kartai" />
+                        </BarChart>
+                    </ResponsiveContainer>
                     </div>),
                 icdButton: (<div className="text-center">
                             <button className="btn btn=primary" onClick={this.showIcdTable} >{this.state.showHideIcdButton}</button>

@@ -66,12 +66,14 @@ class UserLoginContainer extends Component {
           this.handleUserRedirect(response.data.role);
         })
         .catch(error => {
-          if (error.response.data.status = "401") {
+          if(error.response.data.status > 400 && error.response.data.status < 500 ){
             this.setState({
-              infoState: (
-                <div className="alert alert-danger"> <strong>Vartotojas nerastas</strong></div>
-              )
-            });
+                infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko, patikrinkite prisijungimo duomenis ir bandykite dar karta</strong></div>)
+            })
+          }else{
+              this.setState({
+                  infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko dėl serverio klaidos, bandykite dar karta veliau</strong></div>)
+              })
           }
         });
     } else {
