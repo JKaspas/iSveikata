@@ -89,7 +89,7 @@ public class EmployeesService {
 						"created new doctor with " + doctor.getUserName() + " username");
 			} catch (IllegalArgumentException e) {
 				IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-						"Doctor or specialization exeption... " + e);
+						"Doctor or specialization exeption... " + e.getMessage());
 				return false;
 			}
 
@@ -108,7 +108,7 @@ public class EmployeesService {
 
 			} catch (Exception e) {
 				IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-						"employee not created... " + e);
+						"employee not created... " + e.getMessage());
 				return false;
 			}
 		}
@@ -153,7 +153,7 @@ public class EmployeesService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching doctors list:" + e);
+					"Error fetching doctors list:" + e.getMessage());
 			return null;
 		}
 	}
@@ -176,7 +176,7 @@ public class EmployeesService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching doctors list by search value:" + searchValue + "\r\n" + e);
+					"Error fetching doctors list by search value:" + searchValue + "\r\n" + e.getMessage());
 			return null;
 		}
 
@@ -206,7 +206,7 @@ public class EmployeesService {
 						"Password not changed. Passwords do not match");
 			return false;
 		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(), "Error fetching passwords:" + e);
+			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(), "Error fetching passwords:" + e.getMessage());
 			return false;
 		}
 	}

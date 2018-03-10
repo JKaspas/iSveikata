@@ -1,6 +1,7 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -99,7 +100,7 @@ public class PatientService {
 			return new PageImpl<>(dtos, request, dtos.size());
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching ptients list:" + e);
+					"Error fetching ptients list:" + e.getMessage());
 			return null;
 		}
 
@@ -119,7 +120,7 @@ public class PatientService {
 			return patientRepository.findAllPatientByPatientId(patientId, request);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient list by patient id" + e);
+					"Error fetching patient list by patient id" + e.getMessage());
 			return null;
 		}
 
@@ -143,7 +144,7 @@ public class PatientService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient list by dorctor" + e);
+					"Error fetching patient list by dorctor" + e.getMessage());
 			return null;
 		}
 	}
@@ -159,7 +160,7 @@ public class PatientService {
 			return patientList;
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient list for csv" + e);
+					"Error fetching patient list for csv" + e.getMessage());
 			return null;
 		}
 
@@ -177,7 +178,7 @@ public class PatientService {
 			return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching active patient list" + e);
+					"Error fetching active patient list" + e.getMessage());
 			return null;
 		}
 	}
@@ -196,7 +197,7 @@ public class PatientService {
 			return patientMapper.patientToDto(patientRepository.findOne(patientId));
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient by id" + e);
+					"Error fetching patient by id" + e.getMessage());
 			return null;
 		}
 
@@ -218,7 +219,8 @@ public class PatientService {
 			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching patient record list");
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(), "Error fetching record list" + e);
+			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
+					"Error fetching record list" + e.getMessage());
 			return null;
 		}
 
@@ -243,7 +245,7 @@ public class PatientService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient " + patientId + " prescription list" + e);
+					"Error fetching patient " + patientId + " prescription list" + e.getMessage());
 			return null;
 		}
 
@@ -267,7 +269,7 @@ public class PatientService {
 			return prescriptionMapper.prescriptionsToDto(prescriptionsPage);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient " + patientId + " prescription list after date" + e);
+					"Error fetching patient " + patientId + " prescription list after date" + e.getMessage());
 			return null;
 		}
 
@@ -301,7 +303,7 @@ public class PatientService {
 			}
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error changing patient " + patientId + " password " + e);
+					"Error changing patient " + patientId + " password " + e.getMessage());
 			return false;
 		}
 
@@ -326,7 +328,7 @@ public class PatientService {
 			}
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error creating patient " + patient.getPatientId() + e);
+					"Error creating patient " + patient.getPatientId() + e.getMessage());
 			return false;
 		}
 	}
@@ -347,7 +349,7 @@ public class PatientService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient list not bind to any doctor " + e);
+					"Error fetching patient list not bind to any doctor " + e.getMessage());
 			return null;
 		}
 
@@ -370,11 +372,12 @@ public class PatientService {
 			} else {
 				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
 						"patient can be created");
+
 				return true;
 			}
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error validating patien " + patient.getPatientId() + "\r\n" + e);
+					"Error validating patien " + patient.getPatientId() + "\r\n" + e.getMessage());
 			return false;
 		}
 
@@ -424,19 +427,27 @@ public class PatientService {
 	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
 			String searchValue) {
+		List<Patient> patientPage = new ArrayList<Patient>();
 		try {
 			Long doctorId = doctorRepository.findByUserName(userName).getId();
-			List<Patient> patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue,
-					doctorId, getPageFrom(pageable), pageable.getPageSize());
-			List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+			if (searchValue.matches("\\d+")) {
+				patientPage = patientRepository.findAllPatientByPatientIdAndDoctorId(doctorId, searchValue,
+						getPageFrom(pageable), pageable.getPageSize());
+			} else if (searchValue.matches("^[A-Z]{1}\\d{2}$")) {
+				patientPage = patientRepository.findAllByDoctorIdAndIcdCode(doctorId, searchValue,
+						getPageFrom(pageable), pageable.getPageSize());
+			} else {
+				patientPage = patientRepository.findAllActivePatientByDoctorIdAndSearchValue(searchValue, doctorId,
+						getPageFrom(pageable), pageable.getPageSize());
+			}
 			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
 					"fetching patient list by doctor " + userName + " and search value:" + searchValue);
-
+			List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
 					"Error fetching patient list by doctor " + userName + " and search value of " + searchValue
-							+ " \r\n" + e);
+							+ " \r\n" + e.getMessage());
 			return null;
 		}
 
@@ -464,7 +475,6 @@ public class PatientService {
 				patientPage = patientRepository.findAllPatientByGivenSearchValue(searchValue, getPageFrom(pageable),
 						pageable.getPageSize());
 			}
-
 			List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
 			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
 					"fetching patient by search value:" + searchValue);
@@ -472,7 +482,7 @@ public class PatientService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient by search value of " + searchValue + "\r\n" + e);
+					"Error fetching patient by search value of " + searchValue + "\r\n" + e.getMessage());
 			return null;
 		}
 
@@ -501,7 +511,8 @@ public class PatientService {
 			return new PageImpl<>(dtos);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching patient list not bind to doctor by search value of " + searchValue + "\r\n" + e);
+					"Error fetching patient list not bind to doctor by search value of " + searchValue + "\r\n"
+							+ e.getMessage());
 			return null;
 		}
 
@@ -509,6 +520,25 @@ public class PatientService {
 
 	private int getPageFrom(Pageable pageable) {
 		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
+	}
+
+	@PreAuthorize("hasRole('Doctor')")
+	public Page<PatientDto> getAllPagedPatientByDoctorAndIcdCode(Pageable pageable, String userName, String icdCode) {
+		try {
+			Doctor doctor = doctorRepository.findByUserName(userName);
+			List<Patient> patientPage = patientRepository.findAllByDoctorIdAndIcdCode(doctor.getId(), icdCode,
+					getPageFrom(pageable), pageable.getPageSize());
+			List<PatientDto> dtos = patientMapper.patiensToDto(patientPage);
+			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
+					"fetching patient list to doctor by ICD code:" + icdCode);
+
+			return new PageImpl<>(dtos);
+		} catch (Exception e) {
+			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
+					"Error fetching patient list by doctorid " + userName + " and ICD code of " + icdCode + "\r\n"
+							+ e.getMessage());
+			return null;
+		}
 	}
 
 }

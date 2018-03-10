@@ -82,7 +82,7 @@ public class PrescriptionSevice {
 					doctor.getUserName() + " created new precription for " + patientId);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error create new prescription:" + e);
+					"Error create new prescription:" + e.getMessage());
 		}
 
 	}
@@ -95,7 +95,7 @@ public class PrescriptionSevice {
 
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching all prescriptions:" + e);
+					"Error fetching all prescriptions:" + e.getMessage());
 			return null;
 		}
 	}
@@ -108,7 +108,7 @@ public class PrescriptionSevice {
 
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching prescription " + prescriptionId + " usage \r\n" + e);
+					"Error fetching prescription " + prescriptionId + " usage \r\n" + e.getMessage());
 			return null;
 		}
 	}
@@ -121,7 +121,7 @@ public class PrescriptionSevice {
 
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching prescription " + prescriptionId + "\r\n" + e);
+					"Error fetching prescription " + prescriptionId + "\r\n" + e.getMessage());
 			return null;
 		}
 	}
@@ -152,7 +152,7 @@ public class PrescriptionSevice {
 			}
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error creating prescription:" + e);
+					"Error creating prescription:" + e.getMessage());
 			return false;
 		}
 
@@ -172,7 +172,7 @@ public class PrescriptionSevice {
 			IsveikataApplication.loggMsg(Level.FINE, "public", "[public]", "fetching public API statistics");
 			return stat;
 		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]", "Error fetching public statistics " + e);
+			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]", "Error fetching public statistics " + e.getMessage());
 			return null;
 		}
 
