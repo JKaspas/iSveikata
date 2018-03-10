@@ -37,20 +37,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.authorizeRequests()
-				// be saugumo UI dalis ir swaggeris
 				.antMatchers("/", "/swagger-ui.html", "/statistics").permitAll()
-				// visi /api/ saugus (dar galima .anyRequest() )
 				.antMatchers("/api/**").authenticated();
 		http.formLogin().successHandler(authenticationSuccessHandler);
-		http.formLogin().failureHandler(authenticationFailureHandler)//new SimpleUrlAuthenticationFailureHandler())
+		http.formLogin().failureHandler(authenticationFailureHandler)
 				.loginPage("/api/login").permitAll() 
 				.usernameParameter("userName").passwordParameter("password")
-				.and().logout().logoutSuccessUrl("/").permitAll();				// .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				 // leidziam /logout
-		http.csrf().disable() // nenaudojam tokenu
-				// toliau forbidden klaidai
+				.and().logout().logoutSuccessUrl("/").permitAll();				
+		http.csrf().disable() 
 				.exceptionHandling().authenticationEntryPoint(securityEntryPoint)
-				.and().headers().frameOptions().disable() // H2 konsolei
+				.and().headers().frameOptions().disable() 
 				.and().cors();
 	}
 
@@ -58,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public CorsConfigurationSource corsConfigurationSource() {
 		final CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(ImmutableList.of("*"));
-		configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+		configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE"));
 		// setAllowCredentials(true) is important, otherwise:
 		// The value of the 'Access-Control-Allow-Origin' header in the response must
 		// not be the wildcard '*' when the request's credentials mode is 'include'.

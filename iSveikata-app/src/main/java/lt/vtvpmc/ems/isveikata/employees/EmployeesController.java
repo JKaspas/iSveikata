@@ -1,6 +1,5 @@
 package lt.vtvpmc.ems.isveikata.employees;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,14 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.patient.Patient;
 import lt.vtvpmc.ems.isveikata.patient.PatientDto;
 import lt.vtvpmc.ems.isveikata.patient.PatientService;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionSevice;
-import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesController.
@@ -65,12 +61,7 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/user")
 	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
-		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
-		final Employee employee = mapper.convertValue(map.get("employee"), Employee.class);
-		final Specialization specialization = mapper.convertValue(map.get("specialization"), Specialization.class);
-
-		if (employeesService.validateAddNewUser(employee)) {
-			employeesService.addEmployee(employee, specialization);
+		if (employeesService.addEmployee(map)) {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -192,7 +183,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor/{userName}/patient/csv")
 	@ResponseStatus(HttpStatus.OK)
-	private List getAllPagedPatientByDoctorForCsv(@PathVariable final String userName, Pageable pageable) {
+	private List<Object> getAllPagedPatientByDoctorForCsv(@PathVariable final String userName, Pageable pageable) {
 		return patientService.getAllPagedPatientByDoctorForCsv(userName);
 	}
 

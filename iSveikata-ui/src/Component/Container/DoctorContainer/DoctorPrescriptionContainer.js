@@ -4,6 +4,7 @@ import axios from 'axios';
 import PatientInfoCard from '../DoctorComponent/PatientInfoCard';
 import PrescriptionForm from '../DoctorComponent/PrescriptionForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class DoctorPrescriptionContainer extends Component{
     constructor(props){
@@ -16,7 +17,6 @@ export default class DoctorPrescriptionContainer extends Component{
             apis: '',
             apiUnits: '',
 
-            patientId: props.params.patientId,
             userName: this.session.user.userName,
 
             infoState: '',
@@ -74,9 +74,18 @@ export default class DoctorPrescriptionContainer extends Component{
         let date = new Date()
         let currentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
         let expDate = this.generateExpirationDate();
-        console.log(expDate)
         e.preventDefault();
-
+        console.log({
+            prescription:{
+                expirationDate:expDate,
+                prescriptionDate:currentDate,
+                description:this.state.description.toString(),
+                ingredientAmount:this.state.substanceAmount
+            },
+            patientId: this.state.patient.id,
+            userName: this.state.userName,
+            apiTitle: this.state.substance
+        })
         if(this.state.formValid){
             axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
@@ -85,7 +94,7 @@ export default class DoctorPrescriptionContainer extends Component{
                     description:this.state.description.toString(),
                     ingredientAmount:this.state.substanceAmount
                 },
-                patientId: this.state.patientId,
+                patientId: this.state.patient.id,
                 userName: this.state.userName,
                 apiTitle: this.state.substance
             })
@@ -110,10 +119,14 @@ export default class DoctorPrescriptionContainer extends Component{
                 })
             })
             .catch((error) => {
-                console.log(error)
-                this.setState({
-                    infoState:<div className="alert alert-danger"><strong>Nesėkmingas recepto kūrimas.</strong></div>
-                })
+                if(error.response.data.status > 400 && error.response.data.status < 500){
+                    UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                    this.props.router.push("/atsijungti")
+                }else{
+                    this.setState({
+                        infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    })
+                }
             })
         }else{
             this.setState({

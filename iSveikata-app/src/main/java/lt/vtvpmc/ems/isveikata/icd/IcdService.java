@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-@PreAuthorize("hasRole('Doctor')")
+//@PreAuthorize("hasRole('Doctor')")
 public class IcdService {
 
     @Autowired

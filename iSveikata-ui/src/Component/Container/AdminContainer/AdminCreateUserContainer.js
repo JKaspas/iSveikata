@@ -6,6 +6,7 @@ import { UserFormSpecInput } from '../AdminComponent/UserFormSpecInput';
 import { UserFormSpecOtherInput } from '../AdminComponent/UserFormSpecOtherInput';
 import { UserFormDrugStoreInput } from '../AdminComponent/UserFormDrugStoreInput';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class AdminCreateUserContainer extends Component{
     constructor(props){
@@ -106,16 +107,16 @@ export default class AdminCreateUserContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            //console.log(this.userObjectByType()); 
+            console.log({user:this.userObjectByType(), type:this.state.specialization}); 
             //console.log(this.fullCompanyName());
 
             axios.post('http://localhost:8080/api/admin/new/user', {
-                employee:this.userObjectByType()  
+                employee:this.userObjectByType() ,
+                specialization:this.state.type === "doctor" ? this.state.specialization : null
             })
             .then((response)=>{
                 console.log(response.status);
                 this.setState({
-                    //infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
                     infoState:<div className="alert alert-success"><strong>Naujo vartotojo paskyra sėkmingai sukurta.</strong></div>,
                     
                     firstName: '',
@@ -147,11 +148,14 @@ export default class AdminCreateUserContainer extends Component{
                 this.getAllSpecialization()
             })
             .catch((error) => {
-                console.log(error)
-                this.setState({
-                    //infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
-                    infoState:<div className="alert alert-danger"><strong>Nesėkmingas vartotojo paskyros kūrimas.</strong></div>
-                })
+                if(error.response.data.status > 400 && error.response.data.status < 500){
+                    UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                    this.props.router.push("/atsijungti")
+                }else{
+                    this.setState({
+                        infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    })
+                }
             })
         }else{
             this.setState({
@@ -173,7 +177,6 @@ export default class AdminCreateUserContainer extends Component{
                     lastName:this.state.lastName,
                     userName:this.generateUsername(),
                     password:this.state.password,
-                    specialization:this.state.specialization,
                     type:this.state.type,}
         }else{
             return{ firstName:this.state.firstName,
@@ -193,7 +196,14 @@ export default class AdminCreateUserContainer extends Component{
             console.log(response.status)
         })
         .catch((error) => {
-            console.log(error)
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoState:(<h3>Serverio klaida, nepavyko gauti specializacijų</h3>)
+                })
+            }
         })
     } 
 

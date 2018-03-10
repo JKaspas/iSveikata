@@ -11,6 +11,7 @@ import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageLi
 import { NewRecordLink } from '../LinksAndButtons/NewRecordLink';
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 
@@ -30,7 +31,6 @@ export default class DoctorPatientViewContainer extends Component{
             activePage:0,
             itemsPerPage:8,
             listLength:'',
-            listIsEmpty:true,
 
             infoHeader:'',
             infoDetails:'',
@@ -64,20 +64,25 @@ export default class DoctorPatientViewContainer extends Component{
                 }else{
                     this.setState({
                         viewContent:this.state.notFoundRecord,
-                        listIsEmpty:true
                     })
                 }
             }else{
                 this.setState({
                     viewContent:<RecordListViewDemo records={response.data.content.map(this.composeRecords)} />,
                     listLength:response.data.content.length,
-                    listIsEmpty:false
                 })
                 console.log(response.status)
             }
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
      //load all patient prescriptions and compose to view component
@@ -96,7 +101,6 @@ export default class DoctorPatientViewContainer extends Component{
                 }else{
                     this.setState({
                         viewContent:this.state.notFoundPrescription,
-                        listIsEmpty:true
                     })
                 }
             }else{
@@ -104,15 +108,20 @@ export default class DoctorPatientViewContainer extends Component{
                     viewContent:<PrescriptionListView 
                                  useAmountColumnName={<th>Panaudojimai</th>}
                                 prescription={response.data.content.map(this.composePrescriptions)} />,
-                    listLength:response.data.content.length,
-                    listIsEmpty:false
-                   
+                    listLength:response.data.content.length,                   
                 })
             }
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
     composeRecords = (record,index) =>{
@@ -159,8 +168,15 @@ export default class DoctorPatientViewContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
     composeSpecificRecord = (record) => {
@@ -194,8 +210,15 @@ export default class DoctorPatientViewContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
     //compose single object to spcific view object
@@ -229,8 +252,15 @@ export default class DoctorPatientViewContainer extends Component{
             }     
             console.log(response.status)
         })
-        .catch((erorr) => {
-            //console.log(erorr)
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    prescriptionUsage:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
     composeUsage= (usage, index) =>{
@@ -288,9 +318,9 @@ export default class DoctorPatientViewContainer extends Component{
 
      //handle paggination page changes 
      handlePageChange = (activePage) => {
-        if(activePage < 1 || this.state.listLength < this.state.itemsPerPage ){
+        if(activePage < 1){
             if(this.state.activePage > activePage && activePage > -1){
-               
+    
             }else{
                 return ''
             }
@@ -361,7 +391,7 @@ export default class DoctorPatientViewContainer extends Component{
                                 <br/>
                                 {this.state.viewContent}
                                 {this.showPagination()}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

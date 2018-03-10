@@ -13,8 +13,10 @@ var PublicViewComponent = (props) =>{
                             <h3>Susirgimų statistika</h3>
                         </div>
                         <div className="panel-body">
-                        <button className="btn btn-primary" onClick={props.showIcdStatistic}>Pateikti dažniausias sergamų ligų statistiką pagal TLK-10 </button>
-                        <button className="btn btn-primary" onClick={props.showApiStatistic}>Pateikti Vaisto aktyviu medžiagu panaudojimo statistika</button>
+                        <div className="col-sm-12">
+                            <button className="btn btn-default" disabled={props.icdButtonDisabled} onClick={props.showIcdStatistic}>Pateikti dažniausias sergamų ligų statistiką pagal TLK-10 </button>
+                            <button className="btn btn-default pull-right" disabled={props.tlkButtonDisabled} onClick={props.showApiStatistic}>Pateikti vaisto aktyviu medžiagu panaudojimo statistiką</button>
+                        </div>
                            {props.icdStatistic}
                             {props.icdButton}
                            {props.icdTable}

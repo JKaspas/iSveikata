@@ -1,5 +1,7 @@
 package lt.vtvpmc.ems.isveikata.security;
 
+import java.util.logging.Level;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,8 +31,6 @@ public class AuthenticationService implements UserDetailsService {
 		String fullName;
 		String password;
 		String role;
-		
-		IsveikataApplication.LOGGER.info("User " + userName + " tries to log in");
 
 		try {
 			if (userName.matches("\\d+")) {
@@ -46,10 +46,9 @@ public class AuthenticationService implements UserDetailsService {
 			}
 
 		} catch (Exception e) {
+			IsveikataApplication.loggMsg(Level.WARNING, "", "", " user name " + userName + " not found\r\n" + e.getMessage());
 			throw new UsernameNotFoundException(userName + " not found.");
 		}
-
-		IsveikataApplication.LOGGER.info("User " + fullName + " sucessfuly loged in with " + role);
 
 		return new org.springframework.security.core.userdetails.User(fullName, password,
 				AuthorityUtils.createAuthorityList(new String[] { role }));

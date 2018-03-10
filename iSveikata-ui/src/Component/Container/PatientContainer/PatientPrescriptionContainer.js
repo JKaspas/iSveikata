@@ -9,6 +9,7 @@ import PrescriptionUsageListingItem from '../DoctorComponent/PrescriptionUsageLi
 
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 
@@ -40,11 +41,7 @@ export default class PatientPrescriptionContainer extends Component{
             info:''
         }
     }
-    componentDidCatch = (erorr, info) =>{
-        console.log(erorr)
-        console.log(info)
-    }
-   
+      
     componentWillMount = () =>{
         
         if(this.session === null || this.session.patient.loggedIn !== true){
@@ -78,8 +75,15 @@ export default class PatientPrescriptionContainer extends Component{
             }
             console.log(response.data)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -109,8 +113,15 @@ export default class PatientPrescriptionContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -142,7 +153,7 @@ export default class PatientPrescriptionContainer extends Component{
             
             if (response.data.length === 0){
                 this.setState({
-                    info:(<h3>Recepto panaudojimų nerasta</h3>)
+                    prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
                 })
             } else {
                     this.setState({
@@ -153,8 +164,15 @@ export default class PatientPrescriptionContainer extends Component{
             console.log(response.data)
         })
 
-        .catch((erorr) => {
-            //console.log(erorr)
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    prescriptionUsage:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -228,7 +246,7 @@ export default class PatientPrescriptionContainer extends Component{
 
                             {this.state.viewContent}
                                 {this.showPagination()}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

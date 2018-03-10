@@ -11,6 +11,7 @@ axios.defaults.withCredentials = true;
 class UserLoginContainer extends Component {
   constructor(props) {
     super(props);
+    this.logoutInfo = JSON.parse(sessionStorage.getItem("401"))
     this.state = {
       userName: "",
       password: "",
@@ -24,8 +25,24 @@ class UserLoginContainer extends Component {
       fieldState: { userName: "is-empty", password: "is-empty" },
       userNameValid: false,
       passwordValid: false,
-      formValid: false
+      formValid: false,
+
+      logoutUserName:null,
     };
+  }
+
+  componentWillMount = () =>{
+    if(this.logoutInfo !== null){
+      this.setState({
+        userName:this.logoutInfo.userName,
+        userNameValid:true,
+        infoState:(<div className="alert alert-info">
+                      <strong>{this.logoutInfo.info}</strong>
+                    </div>)
+      })
+      sessionStorage.setItem("401", null)
+      
+    }
   }
 
   submitHandler = e => {
@@ -49,12 +66,14 @@ class UserLoginContainer extends Component {
           this.handleUserRedirect(response.data.role);
         })
         .catch(error => {
-          if (error.response.data.status = "401") {
+          if(error.response.data.status > 400 && error.response.data.status < 500 ){
             this.setState({
-              infoState: (
-                <div className="alert alert-danger"> <strong>Vartotojas nerastas</strong></div>
-              )
-            });
+                infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko, patikrinkite prisijungimo duomenis ir bandykite dar karta</strong></div>)
+            })
+          }else{
+              this.setState({
+                  infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko dėl serverio klaidos, bandykite dar karta veliau</strong></div>)
+              })
           }
         });
     } else {

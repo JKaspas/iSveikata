@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordDto;
-import lt.vtvpmc.ems.isveikata.medical_record.MedicalRecordService;
 import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 
 @RestController
@@ -27,9 +26,6 @@ public class PatientController {
 
 	@Autowired
 	private PatientService patientService;
-
-	@Autowired
-	private MedicalRecordService medicalRecordService;
 	
 	/**
 	 * Gets all active patients URL: /api/patient
@@ -115,7 +111,6 @@ public class PatientController {
 		return patientService.getPatientPrescriptionListAfterDate(patientId);
 	}
 
-
 	/**
 	 * Change patient password in data base. URL: /{patient_id}/password
 	 * 
@@ -135,5 +130,5 @@ public class PatientController {
 				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
 				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
-
+	
 }

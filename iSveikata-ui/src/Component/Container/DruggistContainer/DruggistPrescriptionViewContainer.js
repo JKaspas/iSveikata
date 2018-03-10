@@ -7,6 +7,7 @@ import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 // var backgroundStyle = {     height: '100%', width: '100%', zIndex: '3',
 //                             position: 'fixed', top: '0', left: '0', background: 'rgba(255,255,255,0.8)', display:'none'}
@@ -28,8 +29,6 @@ class DruggistViewContainer extends Component{
             viewContent:'',
             allPrescription:null,
             contentType:'record',
-
-            listIsEmpty:false,
 
             infoDetails:null,
             infoHeader:"Recepto detali informacija",
@@ -53,20 +52,25 @@ class DruggistViewContainer extends Component{
             if(response.data.length === 0){
                 this.setState({
                     viewContent:this.state.info,
-                    listIsEmpty:true
                 })
             }else{
                 this.setState({
                     viewContent:<PrescriptionListView prescription={response.data.map(this.composePrescription)}/>,
                     allPrescription:response.data.content,
-                    listIsEmpty:false
                     })
             }
            
             console.log(response.status)
         })
-        .catch((erorr) => {
-            console.log(erorr)
+        .catch((error) => {
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
 
         })
     }
@@ -105,10 +109,15 @@ class DruggistViewContainer extends Component{
             document.getElementById('modalButton').click()
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            this.setState({
-                infoState:<div className="alert alert-success"><strong>{erorr.response.data}</strong></div>,
-            })
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -121,8 +130,15 @@ class DruggistViewContainer extends Component{
                 })
             console.log(response.status)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -175,7 +191,7 @@ class DruggistViewContainer extends Component{
                                 {this.state.infoState}
 
                                 {this.state.viewContent}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}

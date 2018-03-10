@@ -6,6 +6,7 @@ import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 
@@ -34,12 +35,7 @@ export default class PatientRecordContainer extends Component{
             infoHeader:'',
             
         }
-    }
-    componentDidCatch = (erorr, info) =>{
-        console.log(erorr)
-        console.log(info)
-    }
-   
+    } 
     componentWillMount = () =>{
             if(this.session === null || this.session.patient.loggedIn !== true){
             this.props.router.push('/pacientams');
@@ -80,20 +76,21 @@ export default class PatientRecordContainer extends Component{
             }
            
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    patientList:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
 
 
     composeRecords = (record,index) =>{
-         
-    //     var date = new Date(record.appointment.date)
-    //    var newDate =
-    //    date.getFullYear()
-    //    + '-'+ (date.getMonth()<10 ? 0+''+(date.getMonth()+1): (date.getMonth()+1))
-    //    + '-' + (date.getDate()<10? 0+''+date.getDate(): date.getDate()); 
         return(
             <RecordListingItem
                 key={index}
@@ -116,8 +113,15 @@ export default class PatientRecordContainer extends Component{
                 })
             console.log(response.data)
         })
-        .catch((erorr) =>{
-            console.log(erorr)
+        .catch((error) =>{
+            if(error.response.data.status > 400 && error.response.data.status < 500){
+                UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
+                this.props.router.push("/atsijungti")
+            }else{
+                this.setState({
+                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                })
+            }
         })
     }
 
@@ -153,9 +157,7 @@ export default class PatientRecordContainer extends Component{
             document.getElementById('modalButton').click()
         }
         this.loadSpecificRecord(rowId);
-        this.setState({
-            
-        })
+       
     }
 
 
@@ -206,7 +208,7 @@ export default class PatientRecordContainer extends Component{
                             <div className="col-sm-12">
                                 {this.state.viewContent}
                                 {this.showPagination()}
-                                <p id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></p>
+                                <a href="#" id="modalButton" data-toggle="modal" data-backdrop="false" data-target="#myModal" className="hidden" ></a>
                                 <DetailsModalView
                                     infoHeader={this.state.infoHeader}
                                     infoDetails={this.state.infoDetails}
