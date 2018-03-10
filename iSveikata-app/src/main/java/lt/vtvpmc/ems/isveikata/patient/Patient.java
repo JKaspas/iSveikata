@@ -68,4 +68,5 @@ public class Patient implements Serializable {
 	public void setPassword(String rawPassword) {
 		this.password = SHA256Encrypt.sswordEncoder.encode(rawPassword);
 	}
+
 }

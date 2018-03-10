@@ -80,8 +80,7 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/patient")
 	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
-		if (patientService.validateAddNewPatient(patient)) {
-			patientService.addNewPatient(patient);
+		if (patientService.addNewPatient(patient)) {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas pacientas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -183,7 +182,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor/{userName}/patient/csv")
 	@ResponseStatus(HttpStatus.OK)
-	private List<Object> getAllPagedPatientByDoctorForCsv(@PathVariable final String userName, Pageable pageable) {
+	private List<Object> getAllPagedPatientByDoctorForCsv(@PathVariable final String userName) {
 		return patientService.getAllPagedPatientByDoctorForCsv(userName);
 	}
 

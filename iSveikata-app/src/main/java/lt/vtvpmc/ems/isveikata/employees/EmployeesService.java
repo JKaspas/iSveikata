@@ -95,9 +95,17 @@ public class EmployeesService {
 
 		} else {
 			try {
-				employeesRepository.save(employee);
-				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
-						"created new employee with " + employee.getUserName() + " username");
+
+				if(validateUserExists(employee)){
+					employeesRepository.save(employee);
+					IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+							"created new employee with " + employee.getUserName() + " username");
+				}else{
+					IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+							"new employee not created because it exists with  " + employee.getUserName() + " username");
+					return false;
+				}
+
 			} catch (Exception e) {
 				IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
 						"employee not created... " + e);
@@ -210,11 +218,10 @@ public class EmployeesService {
 	 *            the employee
 	 * @return false if is
 	 */
-	// public boolean validateAddNewUser(Employee employee) {
-	// Employee employeeDb =
-	// employeesRepository.findByUserName(employee.getUserName());
-	// return employeeDb == null;
-	// }
+	 public boolean validateUserExists(Employee employee) {
+		 Employee employeeDb = employeesRepository.findByUserName(employee.getUserName());
+		 return employeeDb == null;
+	 }
 
 	/**
 	 * Validates if patient not bind to doctor.
