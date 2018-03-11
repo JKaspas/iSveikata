@@ -30,13 +30,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
 
@@ -57,9 +53,8 @@ public class EmployeesControllerTest {
     private EmployeesService employeesService;
 
     @Before
-    public void setUp() throws Exception{
+    public void init() throws Exception{
         mockMvc = MockMvcBuilders.standaloneSetup(employeesController)
-                .apply(springSecurity())
                 .build();
     }
 

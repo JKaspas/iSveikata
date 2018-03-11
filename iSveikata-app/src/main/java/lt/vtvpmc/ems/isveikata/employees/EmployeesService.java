@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -67,52 +69,100 @@ public class EmployeesService {
 	 * @param objectMap
 	 *            the employee, specialization
 	 */
-	public boolean addEmployee(Map<String, Object> objectMap) {
-		final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+	public ResponseEntity<String> addEmployee(Map<String, Object> objectMap) {
+        final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
 
-		final Employee employee = mapper.convertValue(objectMap.get("employee"), Employee.class);
-		final String specializationTitle = mapper.convertValue(objectMap.get("specialization"), String.class);
-		Specialization specialization = null;
-		if (specializationTitle != null) {
-			if (specializationRepository.findByTitle(specializationTitle) == null) {
-				specialization = new Specialization();
-				specialization.setTitle(specializationTitle);
-				specialization = specializationRepository.save(specialization);
-			} else {
-				specialization = specializationRepository.findByTitle(specializationTitle);
-			}
+        final Employee employee = mapper.convertValue(objectMap.get("employee"), Employee.class);
+        String specializationTitle = mapper.convertValue(objectMap.get("specialization"), String.class);
+        Specialization specialization = null;
+        if (employee instanceof Doctor) {
+            if (specializationTitle != null) {
+                if (specializationRepository.findByTitle(specializationTitle) == null) {
+                    specialization = new Specialization();
+                    specialization.setTitle(specializationTitle);
+                    specialization = specializationRepository.save(specialization);
+                } else {
+                    specialization = specializationRepository.findByTitle(specializationTitle);
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body("Gydytojas privalo turėti specializaciją");
+            }
 
+            try {
+
+                Doctor doctor = (Doctor) employee;
+                doctor.setSpecialization(specialization);
+                if (validateUserExists(doctor)) {
+                    employeesRepository.save(doctor);
+                    IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                            "created new doctor with " + doctor.getUserName() + " username");
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
+                } else {
+                    IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                            "new doctor not created because it exists " + doctor.getUserName() + " username");
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
+                }
+
+            } catch (IllegalArgumentException e) {
+                IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
+                        "Doctor or specialization exeption... " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body("Vartotojas negali buti sukurtas su tokiais duomenimis...");
+            }
+
+        }else if(employee instanceof Druggist){
+            Druggist druggist = null;
+            try{
+                druggist = (Druggist) employee;
+
+                if(druggist.getDrugStore() != null) {
+                    if(validateUserExists(druggist)){
+                        employeesRepository.save(druggist);
+                        IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                                "created new druggist with " + druggist.getUserName() + " username");
+                        return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
+                    }else{
+                        IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                                "new druggist not created because it exists with  " + druggist.getUserName() + " username");
+                        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                                .body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
+                    }
+                }else{
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                            .body("Vaistininkas privalo turėti darbovietę");
+                }
+            }catch (Exception e){
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body("Vartotojas negali buti sukurtas su tokiais duomenimis...");
+            }
+
+
+
+        }else {
 			try {
-				Doctor doctor = (Doctor) employeesRepository.save(employee);
-				doctor.setSpecialization(specialization);
-				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
-						"created new doctor with " + doctor.getUserName() + " username");
-			} catch (IllegalArgumentException e) {
-				IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-						"Doctor or specialization exeption... " + e.getMessage());
-				return false;
-			}
-
-		} else {
-			try {
-
 				if(validateUserExists(employee)){
 					employeesRepository.save(employee);
 					IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
 							"created new employee with " + employee.getUserName() + " username");
+					return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 				}else{
 					IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
 							"new employee not created because it exists with  " + employee.getUserName() + " username");
-					return false;
+					return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+							.body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
 				}
 
 			} catch (Exception e) {
 				IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
 						"employee not created... " + e.getMessage());
-				return false;
+				return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+						.body("Vartotojas negali buti sukurtas su tokiais duomenimis...");
 			}
 		}
-		return true;
+
+
 	}
 
 	/**
