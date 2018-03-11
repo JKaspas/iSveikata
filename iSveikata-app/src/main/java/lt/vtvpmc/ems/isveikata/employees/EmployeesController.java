@@ -53,21 +53,13 @@ public class EmployeesController {
 	 * Insert user. Insert new user into data base with unique userName. Return
 	 * response if userName is not unique. URL: /api/admin/new/user
 	 *
-	 * @param <T>
-	 *            the generic type
 	 * @param map
 	 *            map with two object Employee and Specialization
 	 * @return the response entity
 	 */
 	@PostMapping("/admin/new/user")
-	private <T extends Object> ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
-		if (employeesService.addEmployee(map)) {
-			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
-		} else {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-					.body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
-		}
-
+	private ResponseEntity<String> insertUserValid(@RequestBody Map<String, Object> map) {
+		return employeesService.addEmployee(map);
 	}
 
 	/**
@@ -80,8 +72,7 @@ public class EmployeesController {
 	 */
 	@PostMapping("/admin/new/patient")
 	private ResponseEntity<String> insertPatientValid(@RequestBody Patient patient) {
-		if (patientService.validateAddNewPatient(patient)) {
-			patientService.addNewPatient(patient);
+		if (patientService.addNewPatient(patient)) {
 			return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas pacientas");
 		} else {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -183,7 +174,7 @@ public class EmployeesController {
 	 */
 	@GetMapping("/doctor/{userName}/patient/csv")
 	@ResponseStatus(HttpStatus.OK)
-	private List<Object> getAllPagedPatientByDoctorForCsv(@PathVariable final String userName, Pageable pageable) {
+	private List<Object> getAllPagedPatientByDoctorForCsv(@PathVariable final String userName) {
 		return patientService.getAllPagedPatientByDoctorForCsv(userName);
 	}
 

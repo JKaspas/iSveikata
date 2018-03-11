@@ -8,15 +8,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class IsveikataApplication {
-	
+
 	private static Logger LOGGER = Logger.getLogger(IsveikataApplication.class.getName());
 
 	public static void main(String[] args) {
 		SpringApplication.run(IsveikataApplication.class, args);
 	}
-	
+
 	public static void loggMsg(Level lev, String user, String role, String msg) {
-		LOGGER.log(lev, "User:"+ user + role + " - " + msg);
+		LOGGER.log(lev, "User:" + user + " " + role + " - " + msg);
 	}
-	
+
 }

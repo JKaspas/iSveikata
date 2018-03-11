@@ -44,10 +44,9 @@ public class AuthenticationService implements UserDetailsService {
 				password = user.getPassword();
 				role = "ROLE_" + user.getClass().getSimpleName();
 			}
-			IsveikataApplication.loggMsg(Level.INFO, fullName, role, " sucessfuly loged in");
 
 		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, "", "", " user name " + userName + " not found\r\n" + e);
+			IsveikataApplication.loggMsg(Level.WARNING, "", "", " user name " + userName + " not found\r\n" + e.getMessage());
 			throw new UsernameNotFoundException(userName + " not found.");
 		}
 

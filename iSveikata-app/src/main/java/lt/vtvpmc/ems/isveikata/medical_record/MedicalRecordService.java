@@ -79,7 +79,7 @@ public class MedicalRecordService {
 			IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "created new medical record");
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]",
-					"Error creating new record " + map.toString() + "\r\n" + e);
+					"Error creating new record " + map.toString() + "\r\n" + e.getMessage());
 		}
 
 	}
@@ -91,7 +91,7 @@ public class MedicalRecordService {
 			return mapper.medicalRecordToDto(jpaMedicalRecordRepository.findOne(medicalRecordId));
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching medical record id:" + medicalRecordId + "\r\n" + e);
+					"Error fetching medical record id:" + medicalRecordId + "\r\n" + e.getMessage());
 			return null;
 		}
 	}
@@ -105,7 +105,7 @@ public class MedicalRecordService {
 			return jpaMedicalRecordRepository.getDoctorWorkDaysStatistic(doctorId, dateFrom, dateTill);
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching doctor working days statistic  from " + dateFrom + " to " + dateTill + "\r\n" + e);
+					"Error fetching doctor working days statistic  from " + dateFrom + " to " + dateTill + "\r\n" + e.getMessage());
 			return null;
 		}
 
@@ -128,7 +128,7 @@ public class MedicalRecordService {
 			return newList;
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]",
-					"Error fetching public tlk satatistics " + e);
+					"Error fetching public tlk satatistics " + e.getMessage());
 			return null;
 		}
 
