@@ -328,14 +328,14 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.timeOut = setTimeout(() =>{
                     this.getDoctorPatientBySearchValue(
                         0, 
-                        (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1)).trim())  
+                        (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1).toLowerCase()).trim())  
                 } , 500 )
                 
             }else{
                 this.timeOut =  setTimeout(() =>{
                     this.getAllPatientBySearchValue(
                         0,
-                        this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1).trim())          
+                        (this.state.searchValue.charAt(0).toUpperCase() + this.state.searchValue.slice(1).toLowerCase()).trim())    
                 } , 500 )
             }
         }else if(this.state.searchValue.length === 0){

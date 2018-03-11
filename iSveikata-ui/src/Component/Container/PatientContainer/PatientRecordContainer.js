@@ -108,7 +108,7 @@ export default class PatientRecordContainer extends Component{
                     infoDetails:this.composeSpecificRecord(response.data),
                     infoHeader: this.composeSpecificRecordHeader(response.data)
                 })
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){

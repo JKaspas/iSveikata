@@ -69,6 +69,7 @@ export default class AdminCreatePatientContainer extends Component{
                 })
             })
             .catch((error) => {
+                console.log(error.response)
                 if(error.response.data.status > 400 && error.response.data.status < 500){
                     UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                     this.props.router.push("/atsijungti")

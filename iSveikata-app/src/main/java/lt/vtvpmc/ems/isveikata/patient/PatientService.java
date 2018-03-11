@@ -64,13 +64,23 @@ public class PatientService {
 	private JpaPrescriptionRepository prescriptionRepository;
 
 	private String getUserName() {
-		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return loggedUser.getUsername();
+		try {
+			User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			return loggedUser.getUsername();
+		}catch (ClassCastException e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private String getUserRole() {
-		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return loggedUser.getAuthorities().toString();
+		try {
+			User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			return loggedUser.getAuthorities().toString();
+		}catch (ClassCastException e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -306,14 +316,20 @@ public class PatientService {
 	 *            the patient
 	 */
 	@PreAuthorize("hasRole('Admin')")
-	public void addNewPatient(Patient patient) {
+	public boolean addNewPatient(Patient patient) {
 		try {
-			patientRepository.save(patient);
-			IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
-					"created new patient with id " + patient.getPatientId());
+			if (validateAddNewPatient(patient)) {
+				patientRepository.save(patient);
+				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+						"created new patient with id " + patient.getPatientId());
+				return true;
+			}else{
+				return false;
+			}
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
 					"Error creating patient " + patient.getPatientId() + e.getMessage());
+			return false;
 		}
 	}
 
@@ -350,10 +366,13 @@ public class PatientService {
 	public boolean validateAddNewPatient(Patient patient) {
 		try {
 			if (patientRepository.exists(patient.getPatientId())) {
-				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "patient can be created");
+				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
+						"patient can not be created");
 				return false;
 			} else {
-				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "patient can't be created");
+				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
+						"patient can be created");
+
 				return true;
 			}
 		} catch (Exception e) {

@@ -70,7 +70,7 @@ export default class PatientPrescriptionContainer extends Component{
                     listLength:response.data.content.length,
                     })
             }
-            console.log(response.data)
+            console.log(response.status)
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
