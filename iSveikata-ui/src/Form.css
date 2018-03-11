@@ -56,6 +56,10 @@ h3 {
 	text-align: center;
 }
 
+#signin-img {
+	width: 300px;
+}
+
 .help-block {
 	text-align: left;
 }

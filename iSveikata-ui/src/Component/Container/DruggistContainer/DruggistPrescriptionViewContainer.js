@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-import {connect} from 'react-redux'
+import React, {Component} from 'react';
+import axios from 'axios';
+import {connect} from 'react-redux';
 
 //import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -14,8 +14,6 @@ import { UnauthorizedComponent } from '../UnauthorizedComponent';
 // var recordDetailWindowStyle = {  height: '60%', width: '60%',  border: '2px solid black', zIndex: '4',
 //                                 position: 'fixed', top: '20%', left: '20%', background: 'white', display:'block'}
 
-
-
 class DruggistViewContainer extends Component{
     constructor(props){
         super(props)
@@ -24,7 +22,7 @@ class DruggistViewContainer extends Component{
         this.state = {
             prescriptions:null,
             infoState:'',
-            info:(<h3>Pacientui išrašytų receptų nerasta</h3>),
+            info:(<h3>Pacientui išrašytų receptų nerasta.</h3>),
 
             viewContent:'',
             allPrescription:null,
@@ -68,7 +66,7 @@ class DruggistViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    viewContent:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
 
@@ -115,7 +113,7 @@ class DruggistViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -136,7 +134,7 @@ class DruggistViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoDetails:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -147,10 +145,10 @@ class DruggistViewContainer extends Component{
        
         return (<div>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
+                <p>Receptas galioja iki: {prescription.expirationDate}</p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-                <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Vaisto veiklioji medžiaga: {prescription.apiTitle}</p>
+                <p>Veikliosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
                 <button id="prescriptionUsageSubmit" onClick={() => this.prescriptionUsageSubmit(prescriptionId) }className='btn btn-default'>Pažymėti pirkimo faktą</button>
@@ -165,7 +163,7 @@ class DruggistViewContainer extends Component{
     }
     searchHandler = (e) =>{
         e.preventDefault()
-       console.log("Searcrh search..."+ this.state.searchValue)
+       console.log("Search..."+ this.state.searchValue)
     }
 
 

@@ -1,14 +1,11 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-
+import React, {Component} from 'react';
+import axios from 'axios';
 
 import RecordListingItem from '../DoctorComponent/RecordListingItem';
 import RecordListView from '../DoctorComponent/RecordListView';
 import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
-
-
 
 export default class PatientRecordContainer extends Component{
     constructor(props){
@@ -17,7 +14,7 @@ export default class PatientRecordContainer extends Component{
         this.patientInfo = JSON.parse(sessionStorage.getItem('patientInfo'))
         this.state = {
             records:null,
-            notFoundRecord:(<h3>Ligos istorija tuščia</h3>),
+            notFoundRecord:(<h3>Ligos istorija tuščia.</h3>),
             recordDetails:'',
             patient:'',
             opendRecordRow:'',
@@ -58,7 +55,7 @@ export default class PatientRecordContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            patientList:(<h3>Pacientų nėrasta</h3>)
+                            patientList:(<h3>Pacientų nerasta.</h3>)
                         })
                     }
                     return ''
@@ -82,7 +79,7 @@ export default class PatientRecordContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientList:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patientList:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -119,7 +116,7 @@ export default class PatientRecordContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoDetails:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })

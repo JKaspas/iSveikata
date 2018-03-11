@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem';
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -23,8 +23,8 @@ export default class DoctorPatientViewContainer extends Component{
         this.state = {
             patient:'',
             recordDetails:'',
-            notFoundRecord:(<h3>Ligos istorija tuščia</h3>),
-            notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi</h3>),
+            notFoundRecord:(<h3>Ligos istorija tuščia.</h3>),
+            notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi.</h3>),
             viewContent:'',
             contentType:'record',
 
@@ -80,7 +80,7 @@ export default class DoctorPatientViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    viewContent:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -119,7 +119,7 @@ export default class DoctorPatientViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    viewContent:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -174,7 +174,7 @@ export default class DoctorPatientViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoDetails:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -190,7 +190,7 @@ export default class DoctorPatientViewContainer extends Component{
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
                 <p>Ligos kodo aprašymas: {record.icdDescription}</p>
-                <p>Ligos aprasymas: {record.icdDescription}</p>
+                <p>Ligos aprašymas: {record.icdDescription}</p>
                 <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
                 <p>Vizito trukmė: {record.appoitmentDuration}</p>
                 <p>Vizitas kompensuojamas? {compensable}</p>
@@ -216,7 +216,7 @@ export default class DoctorPatientViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoDetails:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -226,11 +226,11 @@ export default class DoctorPatientViewContainer extends Component{
        
         return (<div>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
+                <p>Receptas galioja iki: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
-                <p>Vaisto aktyvioji medžiaga: {prescription.apiTitle}</p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Vaisto veiklioji medžiaga: {prescription.apiTitle}</p>
+                <p>Veikliosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
         </div>)
@@ -241,7 +241,7 @@ export default class DoctorPatientViewContainer extends Component{
         .then((response)=>{
             if(response.data.length === 0){
                 this.setState({
-                    prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
+                    prescriptionUsage:(<p><b>Receptas nepanaudotas.</b></p>)
                 })
             }
             else{
@@ -258,7 +258,7 @@ export default class DoctorPatientViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    prescriptionUsage:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    prescriptionUsage:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -364,12 +364,12 @@ export default class DoctorPatientViewContainer extends Component{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                        <h3>Paciento kortele</h3>
+                        <h3>Paciento kortelė</h3>
                         <div className="text-center">
                         <NewRecordLink  patientId={this.patientInfo.id} />
                         <NewPrescriptionLink  patientId={this.patientInfo.id}/>
                         </div>
-                        <h4>Klientas: {this.patientInfo.fullName}</h4>
+                        <h4>Pacientas: {this.patientInfo.fullName}</h4>
                         <p>Gimimo data: {this.patientInfo.birthDate}</p>
                         <p>Asmens kodas: {this.patientInfo.id}</p>
                        

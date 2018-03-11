@@ -153,7 +153,7 @@ export default class AdminCreateUserContainer extends Component{
                     this.props.router.push("/atsijungti")
                 }else{
                     this.setState({
-                        infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                        infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                     })
                 }
             })
@@ -201,7 +201,7 @@ export default class AdminCreateUserContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoState:(<h3>Serverio klaida, nepavyko gauti specializacijų</h3>)
+                    infoState:(<h3>Serverio klaida. Nepavyko gauti specializacijų sąrašo.</h3>)
                 })
             }
         })

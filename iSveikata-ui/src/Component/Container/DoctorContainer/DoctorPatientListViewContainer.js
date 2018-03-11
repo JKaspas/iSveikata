@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 import {CSVLink} from 'react-csv';
 
-import PatientListingItem from '../AdminComponent/PatientListingItem'
-import PatientListView from '../AdminComponent/PatientListView'
-import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
+import PatientListingItem from '../AdminComponent/PatientListingItem';
+import PatientListView from '../AdminComponent/PatientListView';
+import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { DoctorViewPatientLink } from '../LinksAndButtons/DoctorViewPatientLink';
-import {NewRecordLink} from '../LinksAndButtons/NewRecordLink'
+import {NewRecordLink} from '../LinksAndButtons/NewRecordLink';
 import { NewPrescriptionLink } from '../LinksAndButtons/NewPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
@@ -14,10 +14,10 @@ import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class DoctorPatientListViewContainer extends Component{
     constructor(props){
-        super(props)
-        this.timeOut= ''
-        this.session = JSON.parse(sessionStorage.getItem('session'))
-        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor'))
+        super(props),
+        this.timeOut= '',
+        this.session = JSON.parse(sessionStorage.getItem('session')),
+        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor')),
         this.state = {
             patientListView:null,
            
@@ -73,7 +73,7 @@ export default class DoctorPatientListViewContainer extends Component{
             patientType:true,
             searchValue:'',
             searchOn:false,
-            patientTypeName:'Matyti visus pacientus',
+            patientTypeName:'Vaizduoti visus pacientus.',
         })
     }
 
@@ -88,19 +88,19 @@ export default class DoctorPatientListViewContainer extends Component{
             let date = new Date()
             if(response.data.length === 0 ){
                 this.setState({
-                    CSVButtonTitle:"Priskirtų pacientų  nerasta"
+                    CSVButtonTitle:"Priskirtų pacientų nerasta."
                 })
             }else{
                 this.setState({
                     CSVData:data,
-                    CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV formatu)',
+                    CSVButtonTitle:'Generuoti priskirtų pacientų sąrašą (CSV formatu).',
                     downloadCSV:(<CSVLink 
                                 className="btn btn-default pull-right" data={data} 
-                                filename={'Pacientų sarašas_' + 
+                                filename={'Pacientų sąrašas_' + 
                                 date.getFullYear() + '-' + 
                                 (date.getMonth() + 1) + '-' + 
                                 date.getDay() + '.csv'} >
-                                    Atsisiusti sarašą
+                                    Atsisiųsti sąrašą
                                 </CSVLink>)
                 })
             }
@@ -111,16 +111,16 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    CSVButtonTitle:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    CSVButtonTitle:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
     }
 
     composeCSVData = (data, index) =>{
-        return {"Vardas": data[0], "Pavardė": data[1], "Asmen kodas": data[2], "Gimimo data": data[3] }
+        return {"Vardas": data[0], "Pavardė": data[1], "Asmens kodas": data[2], "Gimimo data": data[3] }
     }
-    //sen request for a list of patient wich ir bind to doctor userName and some paging info
+    //send request for a list of patient wich ir bind to doctor userName and some paging info
     getDoctorPatient = (activePage) =>{
         axios.get('http://localhost:8080/api/doctor/'+this.session.user.userName+'/patient?page='+activePage+'&size='+this.state.itemsPerPage)
         .then((response)=>{
@@ -132,7 +132,7 @@ export default class DoctorPatientListViewContainer extends Component{
                     return ''
                 }
                 this.setState({
-                    patientListView:(<h3>Jūs neturite priskirtų pacientų</h3>),
+                    patientListView:(<h3>Jūs neturite priskirtų pacientų.</h3>),
                 })                
             }else{
                 this.setState({
@@ -149,7 +149,7 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patientListView:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -167,7 +167,7 @@ export default class DoctorPatientListViewContainer extends Component{
                     return ''
                 }
                 this.setState({
-                    patientListView:(<h3>Sistemos klaida, pacientų nėra</h3>),
+                    patientListView:(<h3>Sistemos klaida, pacientų nėra.</h3>),
                 })
             }else{
                 this.setState({
@@ -186,7 +186,7 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patientListView:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -237,13 +237,13 @@ export default class DoctorPatientListViewContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            patientListView:(<h3>Tokių pacientų nerasta</h3>)
+                            patientListView:(<h3>Tokių pacientų nerasta.</h3>)
                         })
                     }
                     return ''
                 }
                 this.setState({
-                    patientListView:(<h3>Tokių pacientų nerasta</h3>),
+                    patientListView:(<h3>Tokių pacientų nerasta.</h3>),
                     listLength:0
                 })
             }else{  
@@ -263,7 +263,7 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patientListView:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -280,13 +280,13 @@ export default class DoctorPatientListViewContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            patientListView:(<h3>Tokių pacientų nerasta</h3>)
+                            patientListView:(<h3>Tokių pacientų nerasta.</h3>)
                         })
                     }
                     return ''
                 }
                 this.setState({
-                    patientListView:(<h3>Tokių pacientų nerasta</h3>),
+                    patientListView:(<h3>Tokių pacientų nerasta.</h3>),
                     
                 })
             }else{  
@@ -305,7 +305,7 @@ export default class DoctorPatientListViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patientListView:(<h3>Serverio klaida, bandykite dar kartą vėliau.</h3>)
                 })
             }
         })

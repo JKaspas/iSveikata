@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
-import PatientListView from '../AdminComponent/PatientListView'
-import PatientListingItem from '../AdminComponent/PatientListingItem'
+import PatientListView from '../AdminComponent/PatientListView';
+import PatientListingItem from '../AdminComponent/PatientListingItem';
 import { PatientBindLink } from '../LinksAndButtons/PatientBindLink';
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
@@ -49,7 +49,7 @@ export default class AdminBindUserPartContainer extends Component{
            finalRequestLink = allPatientRequestLink
         }else{
             this.setState({
-                patientList:(<h3>Įveskit bent 3 simbolius</h3>),
+                patientList:(<h3>Įveskite bent 3 simbolius.</h3>),
             })
             return ''
         }
@@ -63,13 +63,13 @@ export default class AdminBindUserPartContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            patientList:(<h3>Pacientų nėrasta</h3>)
+                            patientList:(<h3>Pacientų nerasta.</h3>)
                         })
                     }
                     return ''
                 }
                 this.setState({
-                    patientList:(<h3>Pacientų nėrasta</h3>),
+                    patientList:(<h3>Pacientų nerasta.</h3>),
                 })
             }else{
                 this.setState({
@@ -86,7 +86,7 @@ export default class AdminBindUserPartContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientList:(<h3>Serverio klaida</h3>)
+                    patientList:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -104,7 +104,7 @@ export default class AdminBindUserPartContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patientList:(<h3>Serverio klaida</h3>)
+                    patientList:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -196,7 +196,7 @@ export default class AdminBindUserPartContainer extends Component{
                         <div className="panel-body">
                             {this.state.infoState}
                             <div className="col-sm-12">
-                                <h4 className="text-center" >Prašome įvesti bent 3 simbolius</h4>
+                                <h4 className="text-center" >Prašome įvesti bent 3 simbolius.</h4>
                                 <SearchFieldForm
                                         searchHandler={this.searchdHandler}
                                         fielddHandler={this.fielddHandler}

@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 
-import DoctorListView from '../AdminComponent/DoctorListView'
-import DoctorListingItem from '../AdminComponent/DoctorListingItem'
-import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink'
+import DoctorListView from '../AdminComponent/DoctorListView';
+import DoctorListingItem from '../AdminComponent/DoctorListingItem';
+import {DoctorBindLink} from '../../Container/LinksAndButtons/DoctorBindLink';
 import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
@@ -54,7 +54,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            doctorList:(<h3>Pacientų nėrasta</h3>)
+                            doctorList:(<h3>Pacientų nerasta.</h3>)
                         })
                     }
                     return ''
@@ -80,7 +80,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    doctorList:(<h3>Serverio klaida</h3>)
+                    doctorList:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -99,14 +99,14 @@ export default class AdminBindDoctorPartContainer extends Component{
                     })
                     if(this.state.searchValue > 2){
                         this.setState({
-                            doctorList:(<h3>Pacientų nėrasta</h3>)
+                            doctorList:(<h3>Pacientų nerasta.</h3>)
                         })
                     }
                     return ''
                 }
                 //if active page is 0 so no doctor found by search value
                 this.setState({
-                    doctorList:(<h3>Tokio gydytojo nėra</h3>),
+                    doctorList:(<h3>Tokio gydytojo sistemoje nėra.</h3>),
                 })
             }else{
                 this.setState({
@@ -123,7 +123,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    doctorList:(<h3>Serverio klaida</h3>)
+                    doctorList:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -156,7 +156,7 @@ export default class AdminBindDoctorPartContainer extends Component{
         }else{
             //if searchValue is too short give a message about it
             this.setState({
-                doctorList:(<h3>Įveskite bent 3 simbolius</h3>),
+                doctorList:(<h3>Įveskite bent 3 simbolius.</h3>),
             })
         }
 
@@ -222,7 +222,7 @@ export default class AdminBindDoctorPartContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                            <h4 className="text-center" >Prašome įvesti bent 3 simbolius</h4>
+                            <h4 className="text-center" >Prašome įvesti bent 3 simbolius.</h4>
                             <SearchFieldForm
                                     searchHandler={this.searchdHandler}
                                     fielddHandler={this.fielddHandler}

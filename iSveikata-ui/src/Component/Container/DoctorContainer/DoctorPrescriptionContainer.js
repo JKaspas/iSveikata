@@ -124,7 +124,7 @@ export default class DoctorPrescriptionContainer extends Component{
                     this.props.router.push("/atsijungti")
                 }else{
                     this.setState({
-                        infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                        infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                     })
                 }
             })
@@ -284,7 +284,7 @@ export default class DoctorPrescriptionContainer extends Component{
                     patientFullName={this.state.patient.fullName}
                     date={this.state.patient.birthDate}
                     patientId={this.state.patient.id}
-                    slogan={"Recepto išrašymo formą"}
+                    slogan={"Recepto išrašymo forma"}
                     form={
                         <PrescriptionForm 
                         classNameDescription={this.state.fieldState.description}

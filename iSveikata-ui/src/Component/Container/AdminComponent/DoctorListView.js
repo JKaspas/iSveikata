@@ -9,7 +9,7 @@ const DoctorListView = (props) =>{
         <table className="table table-hover">
             <thead>
                 <tr>
-                    <th>Vardas Pavardė</th>
+                    <th>Vardas, pavardė</th>
                     <th>Vartotojo vardas</th>
                     <th>Specializacija</th>
                 </tr>

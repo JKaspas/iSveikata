@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 
 import {AdminNavigation, PublicNavigation, DoctorNavigation, DruggistNavigation, PatientNavigation} from './NavigationComponents';

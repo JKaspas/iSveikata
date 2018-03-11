@@ -1,7 +1,7 @@
-import {Component} from 'react'
-import axios from 'axios'
+import {Component} from 'react';
+import axios from 'axios';
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import { userLoggedOut, patientLoggedOut } from './_action/index';
 
 class LogoutContainer extends Component{
@@ -15,7 +15,7 @@ class LogoutContainer extends Component{
             JSON.stringify({
                 userName:session.user.userName,
                 patientId:session.patient.patientId,
-                info:"Sėkmingai atsijungėte"
+                info:"Sėkmingai atsijungėte."
             }))
         }
         this.logout()

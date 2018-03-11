@@ -66,7 +66,7 @@ var RecordForm = (props) =>{
                 </div>   
                 <div className="form-group">        
                     <div className="col-sm-offset-3 col-sm-9">
-                        {props.formValid ? <button type="submit" className="btn btn-success">Sukurti įrašą</button> : <button type="submit" className="btn btn-default">Validuoti</button>}
+                        {props.formValid ? <button type="submit" className="btn btn-success">Sukurti įrašą</button> : <button type="submit" className="btn btn-default">Patvirtinti</button>}
                     </div>
                 </div>
             </form>

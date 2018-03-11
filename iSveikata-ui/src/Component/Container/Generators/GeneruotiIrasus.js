@@ -1,7 +1,5 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-
-
+import React, {Component} from 'react';
+import axios from 'axios';
 
 export default class GeneruotiIrasus extends Component {
     constructor(props){
@@ -291,7 +289,7 @@ export default class GeneruotiIrasus extends Component {
     }
 
     getConsoleData = () =>{
-        console.log("Nera ka rodit ;/")
+        console.log("Nothing to show")
     }
 
     onChange = (e) =>{
@@ -325,14 +323,14 @@ export default class GeneruotiIrasus extends Component {
         return (
             <div className="container">
                 <section>
-                    <div >Generuoti irasus</div>
-                    <button onClick={this.generateRecords}>Generuoti irasus →</button>
+                    <div >Generuoti įrašus</div>
+                    <button onClick={this.generateRecords}>Generuoti įrašus →</button>
                     <input onChange={this.onChange} placeholder="kiek?"/>
                     <button onClick={this.generatePrescriptions}>← Generuoti receptus</button>
-                    <button onClick={this.getConsoleData}>Console</button>
-                    <input onChange={this.onChangePage} placeholder="pacientu puslapis..."/>
+                    <button onClick={this.getConsoleData}>Konsolė</button>
+                    <input onChange={this.onChangePage} placeholder="pacientų puslapis"/>
                     <button onClick={this.getData}>Gauti duomenis</button>
-                    <button onClick={() => this.getPatient(this.state.page)}>Gauti patient</button>
+                    <button onClick={() => this.getPatient(this.state.page)}>Gauti paciento duomenis</button>
 
 
                 </section>

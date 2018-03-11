@@ -42,7 +42,7 @@ var RouteComponent = () =>{
             <Route path="/statistika" component={PublicStatisticContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
 
-            <Route path="/vartotojams" component={UserLoginContainer} /> 
+            <Route path="/vartotojams" component={UserLoginContainer} />  
           
             <Route path="/atsijungti" component={LogoutContainer} />
             <Route path="/generuoti" component={GeneruotiIrasus} />

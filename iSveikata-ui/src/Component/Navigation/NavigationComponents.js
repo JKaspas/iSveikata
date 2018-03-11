@@ -1,10 +1,12 @@
-import React from 'react'
+import React from 'react';
+import icon from '../images/icon.png';
+import '../../Frontpage.css';
 
 var AdminNavigation = (props) =>{
     return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
         <div className="container">
-            <a className="navbar-brand" id="admin" href="#admin">iSveikata</a>
+            <a className="navbar-brand" id="admin" href="#admin"><img src={icon} alt="Pagrindinis" id="icon"/></a>
             <ul className="nav navbar-nav navbar-left">
               <li><a className="" id="adminCreatePatient" href="#admin/create/patient">Registruoti naują pacientą</a></li>
               <li><a className="" id="adminCreateUser" href="#admin/create/user">Registruoti naują vartotoją</a></li>
@@ -23,10 +25,10 @@ var AdminNavigation = (props) =>{
     return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
-        <a className="navbar-brand" id="doctorDoctor" href="#gydytojas">iSveikata</a>
+        <a className="navbar-brand" id="doctorDoctor" href="#gydytojas"><img src={icon} alt="Pagrindinis" id="icon"/></a>
         <ul className="nav navbar-nav navbar-left">
             <li><a className="" id="doctorPatient" href="#gydytojas/pacientai">Pacientai</a></li>
-            <li><a className="" id="doctorStatistic" href="#gydytojas/statistika">Darbo statistika</a></li>
+            <li><a className="" id="doctorStatistic" href="#gydytojas/statistika">Darbo dienų statistika</a></li>
             <li><a className="" id="doctorPassword" href="#gydytojas/slaptazodis">Keisti slaptažodį</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
@@ -42,7 +44,7 @@ var AdminNavigation = (props) =>{
     return (
       <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
-        <a className="navbar-brand" id="druggist" href="#druggist">iSveikata</a>
+        <a className="navbar-brand" id="druggist" href="#druggist"><img src={icon} alt="Pagrindinis" id="icon"/></a>
         <ul className="nav navbar-nav navbar-left">
             <li><a className="" id="druggistPassword" href="#druggist/password">Keisti slaptažodį</a></li>
         </ul>
@@ -57,7 +59,7 @@ var PatientNavigation = (props) =>{
   return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
     <div className="container">
-      <a className="navbar-brand" id="patient" href="#patient">iSveikata</a>
+      <a className="navbar-brand" id="patient" href="#patient"><img src={icon} alt="Pagrindinis" id="icon"/></a>
       <ul className="nav navbar-nav navbar-left">
             <li><a className="" id="patientRecord" href="#patient/record"><strong>Mano ligos istorijos įrašai</strong></a></li>
             <li><a className="" id="patientPrescription" href="#patient/prescription"><strong>Mano receptai</strong></a></li>
@@ -76,7 +78,7 @@ var PublicNavigation = (props) =>{
     return (
       <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
-        <a className="navbar-brand" id="homeHome" href="#">iSveikata</a>
+        <a className="navbar-brand" id="homeHome" href="#"><img src={icon} alt="Pagrindinis" id="icon"/></a>
         <ul className="nav navbar-nav">
 	        <li><a className="" id="publicStatistic" href="#statistika">Vieša statistika</a></li>
         </ul>

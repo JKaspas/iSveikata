@@ -5,9 +5,9 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'react-dates/initialize';
 //import 'react-dates/lib/css/_datepicker.css';
 
-import RouteComponent from './Component/Navigation/RouterComponent'
+import RouteComponent from './Component/Navigation/RouterComponent';
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 
 

@@ -74,7 +74,7 @@ export default class AdminCreatePatientContainer extends Component{
                     this.props.router.push("/atsijungti")
                 }else{
                     this.setState({
-                        infoState:(<h3>Serverio klaida</h3>)
+                        infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                     })
                 }
             })

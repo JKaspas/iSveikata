@@ -1,11 +1,11 @@
-import React, {Component} from 'react'
-import axios from 'axios'
+import React, {Component} from 'react';
+import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DateRangePicker,isInclusivelyBeforeDay } from 'react-dates';
 
 
 import moment from 'moment';
-import 'moment/locale/lt'
+import 'moment/locale/lt';
 
 
 import 'react-dates/initialize';
@@ -70,7 +70,7 @@ export default class DoctorStatisticContainer extends Component{
         .then((response) =>{
             if(response.data.length === 0){
                 this.setState({
-                    chart:(<h3>Šiomis dienomis gydytojas neturi sukurtu ligos įrašu</h3>),
+                    chart:(<h3>Šiomis dienomis nebuvo sukurta jokių ligos įrašų.</h3>),
                     total:null,
                     totalPatient: 0,
                     totalTime:0
@@ -89,7 +89,7 @@ export default class DoctorStatisticContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    chart:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    chart:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
           });
@@ -122,13 +122,13 @@ export default class DoctorStatisticContainer extends Component{
                         <CartesianGrid strokeDasharray="3 3"/>
                         <Tooltip/>
                         <Legend verticalAlign="top" height={36} iconSize={20} />
-                        <Line type="monotone" dataKey="patient" name="Pacientai per diena" stroke="#8884d8" activeDot={{r: 8}}/>
-                        <Line type="monotone" dataKey="time" name="Bendras dienos vizitų laikas" unit=" min" stroke="#82ca9d" />
+                        <Line type="monotone" dataKey="patient" name="Per dieną priimti pacientai" stroke="#8884d8" activeDot={{r: 8}}/>
+                        <Line type="monotone" dataKey="time" name="Bendra dienos vizitų trukmė" unit=" min" stroke="#82ca9d" />
                         </LineChart>
                     </ResponsiveContainer>),
             total:(<div>
-                    <p><strong>Per pasirinkta laikotarpi priimta <i> {this.state.totalPatient}</i> pacientų </strong></p>
-                    <p><strong>Bendra pasirinkto laikotarpio vizitų trukmė sudarė <i> {hours} h {minutes} min </i></strong></p>
+                    <p><strong>Per pasirinktą laikotarpį priimta <i> {this.state.totalPatient}</i> pacientų.</strong></p>
+                    <p><strong>Bendra pasirinkto laikotarpio vizitų trukmė: <i> {hours} h {minutes} min.</i></strong></p>
                 </div>)  
         })
         
@@ -151,7 +151,7 @@ export default class DoctorStatisticContainer extends Component{
                     
                            
                             <div className="text-center">
-                            <h4>Pasirinkite intervala darbo dienu statistikai pateikti</h4>
+                            <h4>Nurodykite laikotarpį darbo dienų statistikai pateikti:</h4>
                             <DateRangePicker
                                 startDate={this.state.startDate}
                                 endDate={this.state.endDate}
@@ -166,7 +166,7 @@ export default class DoctorStatisticContainer extends Component{
                                 />
                             </div>
                             <div className="text-center">
-                                <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-default" type="submit" >Pateikti statistika</button> 
+                                <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-default" type="submit" >Pateikti statistiką</button> 
                             </div>
                             
                            {/* <form onSubmit={this.submitHandler}>

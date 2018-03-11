@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
+import React, {Component} from 'react';
+import axios from 'axios';
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
-import PublicViewComponent from './PublicComponent/PublicViewComponent'
+import PublicViewComponent from './PublicComponent/PublicViewComponent';
 
 export default class PublicStatisticContainer extends Component{
     constructor(props){
@@ -16,8 +16,8 @@ export default class PublicStatisticContainer extends Component{
             apiStatistic:null,
             apiData:null,
 
-            showHideIcdButton:"Pateikti duomenis lentėje",
-            showHideApiButton:"Pateikti duomenis lentėje",
+            showHideIcdButton:"Pateikti duomenis lentelėje",
+            showHideApiButton:"Pateikti duomenis lentelėje",
             icdButton:null,
             apiButton:null,
 
@@ -36,7 +36,7 @@ export default class PublicStatisticContainer extends Component{
                 if(response.data.length === 0){
                     this.setState({
                         apiButton:null,
-                        apiStatistic:(<h4>Statistiniu duomenų apie dažniausiai naudojamas vaistų aktyviasias medžiagas nėra</h4>),
+                        apiStatistic:(<h4>Statistinių duomenų apie dažniausiai vartojamas vaistų aktyviąsias medžiagas nėra.</h4>),
                         tlkButtonDisabled:true
                     })
                 }else{
@@ -55,7 +55,7 @@ export default class PublicStatisticContainer extends Component{
                 if(response.data.length === 0){
                     this.setState({
                        icdButton:null,
-                       icdStatistic:(<h4>Statistiniu duomenų apie dažniausiai sergamas ligas nėra</h4>),
+                       icdStatistic:(<h4>Statistinių duomenų apie ligas, kuriomis sergama dažniausiai, nėra.</h4>),
                        icdButtonDisabled:true,
             
                     })
@@ -81,19 +81,19 @@ export default class PublicStatisticContainer extends Component{
     }
 
     showIcdTable = () =>{
-        if(this.state.showHideIcdButton === "Paslepti lentelę"){
+        if(this.state.showHideIcdButton === "Paslėpti lentelę"){
             this.setState({
-                showHideIcdButton:"Pateikti duomenis lentele",
+                showHideIcdButton:"Pateikti duomenis lentelėje",
                 icdStatisticTable:null
             })
         }else{
             this.setState({
-                showHideIcdButton:"Paslepti lentelę",
+                showHideIcdButton:"Paslėpti lentelę",
                 icdStatisticTable:(<table className="table table-hover">
                 <thead>
                     <tr>
-                        <th>Ligos kodo panaudojimai</th>
-                        <th>Ligos kodo panaudojimai procentaliai</th>
+                        <th>Susirgimų skaičius</th>
+                        <th>Procentinė dalis nuo visų susirgimų</th>
                         <th>Ligos kodas ir pavadinimas</th>
                     </tr>
                 </thead>
@@ -107,14 +107,14 @@ export default class PublicStatisticContainer extends Component{
 
     showApiTable = () =>{
         
-        if(this.state.showHideApiButton === "Paslepti lentelę"){
+        if(this.state.showHideApiButton === "Paslėpti lentelę"){
             this.setState({
-                showHideApiButton:"Pateikti duomenis lentele",
+                showHideApiButton:"Pateikti duomenis lentelėje",
                 apiStatisticTable:null
             })
         }else{
             this.setState({
-                showHideApiButton:"Paslepti lentelę",
+                showHideApiButton:"Paslėpti lentelę",
                 apiStatisticTable:(<table className="table table-hover">
                 <thead>
                     <tr>
@@ -131,7 +131,7 @@ export default class PublicStatisticContainer extends Component{
     }
     composeIcdTable = (icd, index) =>{
         return(<tr key={icd.icd}>
-            <td>{icd.count} kartai</td>
+            <td>{icd.count}</td>
             <td>{icd.proc} %</td>
             <td>{icd.icd}</td>
             </tr>)
@@ -155,7 +155,7 @@ export default class PublicStatisticContainer extends Component{
             this.setState({
                 apiStatistic: (
                     <div className="col-sm-12">
-                        <h4>Pateikiama 10 dažniausiai panaudojamų vaisto veikliūjų medžiagų statistika</h4>
+                        <h4>10 dažniausiai vartojamų vaistų veikliųjų medžiagų</h4>
                     <ResponsiveContainer height={300}>
                         <BarChart width={800} height={300}  data={this.state.apiData}
                         margin={{top: 5, right: 30, left: 20, bottom: 5}}>
@@ -186,7 +186,7 @@ export default class PublicStatisticContainer extends Component{
             this.setState({
                 icdStatistic: (
                     <div className="col-sm-12">
-                        <h4>Pateikiama 10 dažniausiai pasitaikančių ligų pagal TLK-10 kodus</h4>
+                        <h4>10 dažniausiai pasitaikančių ligų</h4>
                     <ResponsiveContainer height={300}>
                         <BarChart width={800} height={300}  data={this.state.icdData}
                         margin={{top: 5, right: 30, left: 20, bottom: 5}}>
@@ -196,8 +196,8 @@ export default class PublicStatisticContainer extends Component{
                         <Tooltip/>
                         <Legend verticalAlign="top" height={36} iconSize={20} />
                         <Bar stackId="one"  legendType="none" dataKey="title" barSize={40} fill="none" background={true} name="Ligos pavadinimas"  />
-                        <Bar stackId="one" dataKey="proc" barSize={40} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" %" />
-                        <Bar stackId="one"  legendType="none" dataKey="count" barSize={40} fill="#8884d8" background={true} name="Ligos kodo dažnumas" unit=" kartai" />
+                        <Bar stackId="one" dataKey="proc" barSize={40} fill="#8884d8" background={true} name="Susirgimų dažnumas" unit=" %" />
+                        <Bar stackId="one"  legendType="none" dataKey="count" barSize={40} fill="#8884d8" background={true} name="Susirgimų dažnumas" unit=" kartai" />
                         </BarChart>
                     </ResponsiveContainer>
                     </div>),

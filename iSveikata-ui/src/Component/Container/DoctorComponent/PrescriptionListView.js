@@ -10,7 +10,7 @@ const PrescriptionListView = (props) =>{
                 <tr>
                     <th>Išrašymo data</th>
                     <th>Galiojimo data</th>
-                    <th>Vaisto aktyvioji medžiaga</th>
+                    <th>Vaisto veiklioji medžiaga</th>
                     {props.useAmountColumnName}
                 </tr>
             </thead>

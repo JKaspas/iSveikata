@@ -11,12 +11,12 @@ var PrescriptionForm = (props) =>{
                 <label className="control-label col-sm-3" htmlFor="daysToExpiration">Recepto galiojimo trukmė:</label>
                 <div className="col-sm-9">          
                     <select className="form-control" id="daysToExpiration" name="daysToExpiration" value={props.daysToExpiration} onChange={props.fieldHandler} onFocus={props.fieldOnFocusHandler}>
-                        <option value="select">Pasirinkite</option>
+                        <option value="select">PASIRINKITE</option>
                         <option value="5">5 dienos</option>
                         <option value="10">10 dienų</option>
                         <option value="30">30 dienų</option>
                         <option value="180">180 dienų</option>
-                        <option value="36500">neterminuotas</option>
+                        <option value="36500">Neterminuotas</option>
                     </select>
                     <span className={props.daysToExpiration === "select" ? 'form-control-feedback' : 'glyphicon glyphicon-ok form-control-feedback'}></span>
                     <span className="help-block"></span>
@@ -26,7 +26,7 @@ var PrescriptionForm = (props) =>{
                 <label className="control-label col-sm-3" htmlFor="expirationDate">Galioja iki:</label>
                 <div className="col-sm-9">
                     <input type="text" className="form-control" id="expirationDate" name="expirationDate" readOnly required
-                    value={props.daysToExpiration === "360" ? "NETERMINUOTAS" : props.generateExpirationDate} 
+                    value={props.daysToExpiration === "36500" ? "Neterminuotas" : props.generateExpirationDate} 
                     placeholder="yyyy-MM-dd" />
                     <span className="help-block"></span>
                 </div>
@@ -79,7 +79,7 @@ var PrescriptionForm = (props) =>{
             </div>   
             <div className="form-group">        
                 <div className="col-sm-offset-3 col-sm-9">
-                    {props.formValid ? <button type="submit" className="btn btn-success">Išrašyti receptą</button> : <button type="submit" className="btn btn-default">Validuoti</button>}
+                    {props.formValid ? <button type="submit" className="btn btn-success">Išrašyti receptą</button> : <button type="submit" className="btn btn-default">Patvirtinti</button>}
                 </div>
             </div>
         </form>   

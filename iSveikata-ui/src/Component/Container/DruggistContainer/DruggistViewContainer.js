@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-import {connect} from 'react-redux'
+import React, {Component} from 'react';
+import axios from 'axios';
+import {connect} from 'react-redux';
 
-import PatientListingItem from '../AdminComponent/PatientListingItem'
-import PatientListView from '../AdminComponent/PatientListView'
-import SearchFieldForm from '../DoctorComponent/SearchFieldForm'
+import PatientListingItem from '../AdminComponent/PatientListingItem';
+import PatientListView from '../AdminComponent/PatientListView';
+import SearchFieldForm from '../DoctorComponent/SearchFieldForm';
 import { DruggistPrescriptionLink } from '../LinksAndButtons/DruggistPrescriptionLink';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
@@ -16,9 +16,7 @@ class DruggistViewContainer extends Component{
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             patient:'',
-            searchValue:'',
-            
-          
+            searchValue:'',  
         }
     }
 
@@ -35,7 +33,7 @@ class DruggistViewContainer extends Component{
             
             if(response.data.length === 0){
                 this.setState({
-                    patient:(<h3>Klientų su tokiu asmens kodu nėra</h3>)
+                    patient:(<h3>Klientų su tokiu asmens kodu nėra.</h3>)
                 })
             }else{
                 this.setState({
@@ -52,7 +50,7 @@ class DruggistViewContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    patient:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    patient:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -87,7 +85,7 @@ class DruggistViewContainer extends Component{
             } , 500 )
         }else{
             this.setState({
-                patient:(<h3>Įveskite taisyklingą asmens kodą</h3>)
+                patient:(<h3>Įveskite taisyklingą asmens kodą.</h3>)
             })
         }
     }

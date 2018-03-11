@@ -1,0 +1,84 @@
+header {
+    background-color: rgb(255, 255, 255);
+    background: url(./Component/images/bg_left.jpg) left center no-repeat, url(./Component/images/bg_right.jpg) right center no-repeat;
+    height: 300px;
+    padding: 50px;
+    text-align: center;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    background-color: #222222;
+    color: #9d9d9d;
+    height: 50px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#footerLink {
+    float: left;
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+#footerText {
+    float: right;
+    padding-right: 20px;
+    margin: 18px 0;
+}
+
+#lrlogo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+#imgLink:hover {
+    background-color:  #222222;
+}
+
+#imgLink:active {
+    background-color:  #222222;
+}
+
+.inline {
+    display: inline-block;
+  }
+
+a:link {
+    color: #293180;
+    background-color: transparent;
+    text-decoration: none;   
+}
+
+a:visited {
+    color: #7a7c8c;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff;
+    background-color: #293180;
+    text-decoration: none;
+}
+
+a:active {
+    color: #ffffff;
+    background-color: #118e38;
+    text-decoration: underline;
+}
+
+#logo {
+    width: 800px;
+}
+
+#icon {
+    height: 40px;
+    padding-top: 5px;
+}
+
+#homeHome {
+    padding: 0;
+}

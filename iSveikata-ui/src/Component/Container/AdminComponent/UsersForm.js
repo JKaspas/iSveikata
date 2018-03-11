@@ -63,7 +63,7 @@ const UsersForm = (props) =>{
             {props.drugStoreInput}
             <div className="form-group">        
                 <div className="col-sm-offset-3 col-sm-9">
-                    {props.formValid ? <button type="submit" className="btn btn-success">Registruoti</button> : <button type="submit" className="btn btn-primary">Validuoti</button>}
+                    {props.formValid ? <button type="submit" className="btn btn-success">Registruoti</button> : <button type="submit" className="btn btn-primary">Patvirtinti</button>}
                 </div>
             </div>
         </form>

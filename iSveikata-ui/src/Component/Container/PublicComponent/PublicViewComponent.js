@@ -1,6 +1,4 @@
-import React from 'react'
-
-
+import React from 'react';
 
 var PublicViewComponent = (props) =>{
     return(
@@ -10,20 +8,20 @@ var PublicViewComponent = (props) =>{
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            <h3>Susirgimų statistika</h3>
+                            <h3>Susirgimų ir vaistų vartojimo statistika</h3>
                         </div>
                         <div className="panel-body">
-                        <div className="col-sm-12">
-                            <button className="btn btn-default" disabled={props.icdButtonDisabled} onClick={props.showIcdStatistic}>Pateikti dažniausias sergamų ligų statistiką pagal TLK-10 </button>
-                            <button className="btn btn-default pull-right" disabled={props.tlkButtonDisabled} onClick={props.showApiStatistic}>Pateikti vaisto aktyviu medžiagu panaudojimo statistiką</button>
-                        </div>
-                           {props.icdStatistic}
+                            <div className="col-sm-12">
+                                <button className="btn btn-default" disabled={props.icdButtonDisabled} onClick={props.showIcdStatistic}>Peržiūrėti dažniausiai pasitaikančių ligų statistiką</button>
+                                <button className="btn btn-default pull-right" disabled={props.tlkButtonDisabled} onClick={props.showApiStatistic}>Peržiūrėti dažniausiai vartojamų vaistų veikliųjų medžiagų statistiką</button>
+                            </div>
+                            {props.icdStatistic}
                             {props.icdButton}
-                           {props.icdTable}
-                           
-                           {props.apiStatistic}
+                            {props.icdTable}
+                            
+                            {props.apiStatistic}
                             {props.apiButton}
-                           {props.apiTable}
+                            {props.apiTable}
                         </div> 
                     </div> 
                 </div>           

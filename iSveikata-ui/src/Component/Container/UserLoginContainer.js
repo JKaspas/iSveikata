@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import LoginForm from '../LoginForm/LoginForm';
 import { userLoggedIn } from './_action/index';
-import {doctorApiList, doctorIcdList} from '../Container/_action'
+import {doctorApiList, doctorIcdList} from '../Container/_action';
 
 axios.defaults.withCredentials = true;
 
@@ -68,11 +68,11 @@ class UserLoginContainer extends Component {
         .catch(error => {
           if(error.response.data.status > 400 && error.response.data.status < 500 ){
             this.setState({
-                infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko, patikrinkite prisijungimo duomenis ir bandykite dar karta</strong></div>)
+                infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko. Patikrinkite prisijungimo duomenis ir bandykite dar kartą.</strong></div>)
             })
           }else{
               this.setState({
-                  infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko dėl serverio klaidos, bandykite dar karta veliau</strong></div>)
+                  infoState:(<div className="alert alert-danger"><strong> Prisijungti nepavyko dėl serverio klaidos, bandykite dar kartą vėliau.</strong></div>)
               })
           }
         });
@@ -81,13 +81,13 @@ class UserLoginContainer extends Component {
         clearTimeout(this.loginTimer)
         this.setState({
           infoState: (<div className="alert alert-info">
-                        <strong>Prisijungti nepavyko, Bandykite dar karta po 15 sekundžių.</strong>
+                        <strong>Prisijungti nepavyko. Po 15 sekundžių bandykite dar kartą.</strong>
                       </div>)})
         this.loginTimer = setTimeout(()=>
           this.setState({
             loginCount:0,
             infoState:(<div className="alert alert-info">
-                        <strong>Galite bandyt prisijungti</strong>
+                        <strong>Galite prisijungti.</strong>
                       </div>)
           })
         , 15000)
@@ -117,7 +117,7 @@ class UserLoginContainer extends Component {
       this.setState({
         infoState: (
           <div className="alert alert-danger">
-            <strong>Tokių vartotoju sitemoje nėra...</strong>
+            <strong>Tokio vartotojo sistemoje nėra.</strong>
           </div>
         )
       });

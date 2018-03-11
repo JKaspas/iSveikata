@@ -1,6 +1,5 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-
+import React, {Component} from 'react';
+import axios from 'axios';
 
 import PrescriptionListingItem from '../DoctorComponent/PrescriptionListingItem'; 
 import PrescriptionListView from '../DoctorComponent/PrescriptionListView';
@@ -11,8 +10,6 @@ import { DetailsModalView } from '../DoctorComponent/DetailsModalView';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
-
-
 export default class PatientPrescriptionContainer extends Component{
     constructor(props){
         super(props)
@@ -22,7 +19,7 @@ export default class PatientPrescriptionContainer extends Component{
             prescriptions:null,
             recordDetails:'',
             patient:'',
-            notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi</h3>),
+            notFoundPrescription:(<h3>Išrašytų receptų pacientas neturi.</h3>),
             opendRecordRow:'',
             viewContent:'',
             contentType:'record',
@@ -81,7 +78,7 @@ export default class PatientPrescriptionContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    viewContent:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    viewContent:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -119,7 +116,7 @@ export default class PatientPrescriptionContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    infoDetails:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    infoDetails:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })
@@ -135,11 +132,11 @@ export default class PatientPrescriptionContainer extends Component{
     composeSpecificPrescription = (prescription) => {
        
         return (<div>
-                <p>Vaisto aktyvioji medžiaga: <strong> {prescription.apiTitle}</strong></p>
-                <p>Aktyviosios medžiagos kiekis dozėje: {prescription.amount}</p>
+                <p>Vaisto veiklioji medžiaga: <strong> {prescription.apiTitle}</strong></p>
+                <p>Veikliosios medžiagos kiekis dozėje: {prescription.amount}</p>
                 <p>Matavimo vienetai: {prescription.apiUnits}</p>
                 <p>Recepto išrašymo data: {prescription.prescriptionDate}</p>
-                <p>Recepto galiojimo data: {prescription.expirationDate}</p>
+                <p>Receptas galioja iki: {prescription.expirationDate}</p>
                 <p>Receptą išrašęs gydytojas: {prescription.doctorFullName} </p>
                 <p>Recepto panaudojimų skaičius: {prescription.useAmount}</p>
                 <p>Vartojimo aprašymas: {prescription.description}</p>
@@ -153,7 +150,7 @@ export default class PatientPrescriptionContainer extends Component{
             
             if (response.data.length === 0){
                 this.setState({
-                    prescriptionUsage:(<p><b>Receptas nepanaudotas</b></p>)
+                    prescriptionUsage:(<p><b>Receptas nepanaudotas.</b></p>)
                 })
             } else {
                     this.setState({
@@ -170,7 +167,7 @@ export default class PatientPrescriptionContainer extends Component{
                 this.props.router.push("/atsijungti")
             }else{
                 this.setState({
-                    prescriptionUsage:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                    prescriptionUsage:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
                 })
             }
         })

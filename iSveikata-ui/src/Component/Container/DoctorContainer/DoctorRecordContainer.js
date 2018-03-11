@@ -108,7 +108,7 @@ export default class DoctorRecordContainer extends Component{
         .then(response => {
           console.log(response.status);
           this.setState({
-            infoState:<div className="alert alert-success"><strong>Naujas įrašas sėkmingai sukurtas</strong></div>,
+            infoState:<div className="alert alert-success"><strong>Naujas įrašas sėkmingai sukurtas.</strong></div>,
             
             icdCode: "select",
             description: "",
@@ -132,7 +132,7 @@ export default class DoctorRecordContainer extends Component{
             this.props.router.push("/atsijungti")
         }else{
             this.setState({
-                infoState:(<h3>Serverio klaida, bandykite dar kartą vėliau</h3>)
+                infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
             })
         }
         });
