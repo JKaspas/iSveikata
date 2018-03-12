@@ -66,8 +66,9 @@ public class MedicalRecordService {
 			Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
 			MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
 			Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
-			if (!medicalRecord.isRepetitive())
+			if (!medicalRecord.isRepetitive()) {
 				icd.setCounter(icd.getCounter() + 1);
+			}
 			medicalRecord.setIcd(icd);
 			medicalRecord.setAppointment(appointment);
 			medicalRecord.setDoctor((Doctor) jpaEmployeesRepository
