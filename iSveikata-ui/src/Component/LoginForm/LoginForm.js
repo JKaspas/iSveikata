@@ -1,7 +1,7 @@
 import React from 'react';
 
 import '../../Form.css';
-import patients_login from '../images/patients_login.jpg';
+import patients_login from '../images/patients_login.png';
 import system_users from '../images/system_users.png';
 
 var LoginForm = (props) =>{
