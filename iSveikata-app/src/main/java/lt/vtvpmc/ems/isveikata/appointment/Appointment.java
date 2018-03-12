@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,7 +25,8 @@ public class Appointment implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
-
+	
+	@Column(length=1024)
 	private String description;
 
 	private int duration;

@@ -104,7 +104,7 @@ class UserLoginContainer extends Component {
 
   handleUserRedirect = (role) => {
     if (role === "admin") {
-      this.props.router.push("/admin/");
+      this.props.router.push("/administratorius/");
     } else if (role === "doctor") {
       //get API list
       doctorApiList();
@@ -112,7 +112,7 @@ class UserLoginContainer extends Component {
       doctorIcdList();
       this.props.router.push("/gydytojas/");
     } else if (role === "druggist") {
-      this.props.router.push("/druggist/");
+      this.props.router.push("/vaistininkas/");
     } else {
       this.setState({
         infoState: (
