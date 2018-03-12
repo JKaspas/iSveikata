@@ -65,7 +65,7 @@ public class MedicalRecordCreationTest {
 
     @Test
     public void medicalRecordCanBeCreated() throws Exception{
-
+        Random rand = new Random();
 
         Map<String, Object> appointmentMap = new HashMap<>();
         appointmentMap.put("description", "Aprasymas");
@@ -73,8 +73,8 @@ public class MedicalRecordCreationTest {
         appointmentMap.put("date", new Date());
 
         Map<String, Object> recordMap = new HashMap<>();
-        recordMap.put("isCompensable", true);
-        recordMap.put("isRepetitive", true);
+        recordMap.put("isCompensable", rand.nextInt(1) == 0 ? false : true);
+        recordMap.put("isRepetitive",  rand.nextInt(1) == 0 ? false : true);
 
         Map<String, Object> objectMap = new HashMap<>();
         objectMap.put("icdCode", getRandomIcdCode());

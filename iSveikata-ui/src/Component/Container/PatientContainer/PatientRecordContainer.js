@@ -127,7 +127,7 @@ export default class PatientRecordContainer extends Component{
 
     composeSpecificRecordHeader = (record) => {  
         return  (<div>
-                    <p>"Ligos įrašo detali informacija"</p>
+                    <p>Ligos įrašo detali informacija</p>
                 </div>)
                 
     }

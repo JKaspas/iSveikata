@@ -4,12 +4,12 @@ var AdminNavigation = (props) =>{
     return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
         <div className="container">
-            <a className="navbar-brand" id="admin" href="#admin">iSveikata</a>
+            <a className="navbar-brand" id="admin" href="#administratorius">iSveikata</a>
             <ul className="nav navbar-nav navbar-left">
-              <li><a className="" id="adminCreatePatient" href="#admin/create/patient">Registruoti naują pacientą</a></li>
-              <li><a className="" id="adminCreateUser" href="#admin/create/user">Registruoti naują vartotoją</a></li>
-              <li><a className="" id="adminBind" href="#admin/bind">Priskirti gydytojui pacientą</a></li>
-              <li><a className="" href="#admin/password">Keisti slaptažodį</a></li>
+              <li><a className="" id="adminCreatePatient" href="#administratorius/kurti/pacienta">Registruoti naują pacientą</a></li>
+              <li><a className="" id="adminCreateUser" href="#administratorius/kurti/vartotoja">Registruoti naują vartotoją</a></li>
+              <li><a className="" id="adminBind" href="#administratorius/vartotoju-apjungimas">Priskirti gydytojui pacientą</a></li>
+              <li><a className="" href="#administratorius/slaptazodis">Keisti slaptažodį</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
             <li><a className="" id="logout" href="#atsijungti">Atsijungti</a></li>
@@ -42,9 +42,9 @@ var AdminNavigation = (props) =>{
     return (
       <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
       <div className="container">
-        <a className="navbar-brand" id="druggist" href="#druggist">iSveikata</a>
+        <a className="navbar-brand" id="druggist" href="#vaistininkas">iSveikata</a>
         <ul className="nav navbar-nav navbar-left">
-            <li><a className="" id="druggistPassword" href="#druggist/password">Keisti slaptažodį</a></li>
+            <li><a className="" id="druggistPassword" href="#vaistininkas/slaptazodis">Keisti slaptažodį</a></li>
         </ul>
         <ul className="nav navbar-nav navbar-right">
         	<li><a className="" id="logout" href="#atsijungti">Atsijungti</a></li>
@@ -57,11 +57,11 @@ var PatientNavigation = (props) =>{
   return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
     <div className="container">
-      <a className="navbar-brand" id="patient" href="#patient">iSveikata</a>
+      <a className="navbar-brand" id="patient" href="#pacientas">iSveikata</a>
       <ul className="nav navbar-nav navbar-left">
-            <li><a className="" id="patientRecord" href="#patient/record"><strong>Mano ligos istorijos įrašai</strong></a></li>
-            <li><a className="" id="patientPrescription" href="#patient/prescription"><strong>Mano receptai</strong></a></li>
-            <li><a className="" id="patientPassword" href="#patient/password">Keisti slaptažodį</a></li>
+            <li><a className="" id="patientRecord" href="#pacientas/ligos-irasai"><strong>Mano ligos istorijos įrašai</strong></a></li>
+            <li><a className="" id="patientPrescription" href="#pacientas/receptai"><strong>Mano receptai</strong></a></li>
+            <li><a className="" id="patientPassword" href="#pacientas/slaptazodis">Keisti slaptažodį</a></li>
       </ul>
       <ul className="nav navbar-nav navbar-right">
         <li><a className="" id="logout" href="#atsijungti">Atsijungti</a></li>

@@ -161,7 +161,7 @@ export default class PatientPrescriptionContainer extends Component{
                                             usage={response.data.map(this.composeUsage)}/>
                 })
             }
-            console.log(response.data)
+            console.log(response.status)
         })
 
         .catch((error) => {
@@ -196,7 +196,6 @@ export default class PatientPrescriptionContainer extends Component{
         
         this.loadSpecificPrescription(rowId);
         this.getPrescriptionUsage(rowId);
-        console.log(rowId)
     }
 
      //handle paggination page changes 

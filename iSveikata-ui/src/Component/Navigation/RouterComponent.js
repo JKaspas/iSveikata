@@ -48,15 +48,14 @@ var RouteComponent = () =>{
             <Route path="/generuoti" component={GeneruotiIrasus} />
           </Route>
 
-          <Route path="/admin" component={InitialAdminApp} >
+          <Route path="/administratorius" component={InitialAdminApp} >
             <IndexRoute component={AdminViewContainer} />
-            <Route path="/admin/create/user" component={AdminCreateUserContainer} />
-            <Route path="/admin/create/patient" component={AdminCreatePatientContainer} />
-            <Route path="/admin/edit" component={NoMatch} />
-            <Route path="/admin/bind" component={AdminBindDoctorPartContainer} />
-            <Route path="/admin/bind/:userName" component={AdminBindUserPartContainer} />
+            <Route path="/administratorius/kurti/vartotoja" component={AdminCreateUserContainer} />
+            <Route path="/administratorius/kurti/pacienta" component={AdminCreatePatientContainer} />
+            <Route path="/administratorius/vartotoju-apjungimas" component={AdminBindDoctorPartContainer} />
+            <Route path="/administratorius/vartotoju-apjungimas/:userName" component={AdminBindUserPartContainer} />
 
-            <Route path="/admin/password" component={UserPasswordContainer} /> 
+            <Route path="/administratorius/slaptazodis" component={UserPasswordContainer} /> 
          
 
             <Route path="*" component={NoMatch}/>
@@ -66,25 +65,25 @@ var RouteComponent = () =>{
             <IndexRoute component={DoctorViewContainer} />
             <Route path="/gydytojas/pacientai" component={DoctorPatientListViewContainer} />
             <Route path="/gydytojas/statistika" component={DoctorStatisticContainer} />
-            <Route path="/doctor/patient/record" component={DoctorRecordContainer} />
-            <Route path="/doctor/patient/prescription" component={DoctorPrescriptionContainer} />
-            <Route path="/gydytojas/pacientas/perziura" component={DoctorPatientViewContainer} />
+            <Route path="/gydytojas/naujas/ligos-irasas" component={DoctorRecordContainer} />
+            <Route path="/gydytojas/naujas/receptas" component={DoctorPrescriptionContainer} />
+            <Route path="/gydytojas/paciento/perziura" component={DoctorPatientViewContainer} />
             <Route path="/gydytojas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
 
-          <Route path="/druggist" component={InitialDruggistApp} >
+          <Route path="/vaistininkas" component={InitialDruggistApp} >
             <IndexRoute component={DruggistViewContainer} />
-            <Route path="/druggist" component={DruggistViewContainer} />
-            <Route path="/vaistininkas/pacientas/:patientId/receptai" component={DruggistPrescriptionViewContainer} />
-            <Route path="/druggist/password" component={UserPasswordContainer} />
+            <Route path="/vaistininkas" component={DruggistViewContainer} />
+            <Route path="/vaistininkas/klientas/:patientId/receptai" component={DruggistPrescriptionViewContainer} />
+            <Route path="/vaistininkas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
-          <Route path="/patient" component={InitialPatientApp} >
+          <Route path="/pacientas" component={InitialPatientApp} >
             <IndexRoute component={PatientRecordContainer} />
-            <Route path="/patient/record" component={PatientRecordContainer} />
-            <Route path="/patient/prescription" component={PatientPrescriptionContainer} />
-            <Route path="/patient/password" component={PatientPasswordContainer} />
+            <Route path="/pacientas/ligos-irasai" component={PatientRecordContainer} />
+            <Route path="/pacientas/receptai" component={PatientPrescriptionContainer} />
+            <Route path="/pacientas/slaptazodis" component={PatientPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
       </Router>)

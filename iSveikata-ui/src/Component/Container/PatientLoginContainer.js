@@ -57,7 +57,7 @@ class PatientLoginContainer extends Component{
             axios.post('http://localhost:8080/api/login', userData, {headers:{'Content-type':'application/x-www-form-urlencoded'}})
             .then((response) => {
                 this.props.dispatch(patientLoggedIn(this.state.patientId, response.data.fullName))
-                this.props.router.push('/patient/');
+                this.props.router.push('/pacientas');
                 console.log(response.status)
             })
             .catch((error) => {
