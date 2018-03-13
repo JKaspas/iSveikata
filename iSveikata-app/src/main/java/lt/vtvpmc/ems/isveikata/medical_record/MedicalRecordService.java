@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.patient.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -87,27 +88,47 @@ public class MedicalRecordService {
 	 * @param map the map with keys of "icdCode", "medicalRecord", "appointment"
 	 */
 	@PreAuthorize("hasRole('Doctor')")
-	public void createNewRecord(Map<String, Object> map) {
+	public boolean createNewRecord(Map<String, Object> map) {
 		try {
 			final ObjectMapper mapper = new ObjectMapper();
+
+			if(map.get("icdCode") == null ||
+                   map.get("medicalRecord") == null ||
+                                   map.get("appointment") == null ||
+                                               map.get("userName") == null ||
+                                                            map.get("patientId") == null){
+			    throw new Exception("NullPointerException on creating medicalRecord");
+            }
+
+
+			if(jpaEmployeesRepository.findByUserName(mapper.convertValue(map.get("userName"), String.class)) == null ||
+					jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), String.class)) == null){
+				throw new Exception("MedicalRecord creation -> given Doctor or patient not found");
+			}
+
 			Icd icd = jpaIcdRepository.findOne(mapper.convertValue(map.get("icdCode"), String.class));
 			MedicalRecord medicalRecord = mapper.convertValue(map.get("medicalRecord"), MedicalRecord.class);
 			Appointment appointment = mapper.convertValue(map.get("appointment"), Appointment.class);
 			if (!medicalRecord.isRepetitive()) {
 				icd.setCounter(icd.getCounter() + 1);
 			}
+
 			medicalRecord.setIcd(icd);
 			medicalRecord.setAppointment(appointment);
 			medicalRecord.setDoctor((Doctor) jpaEmployeesRepository
 					.findByUserName(mapper.convertValue(map.get("userName"), String.class)));
 			medicalRecord
-					.setPatient(jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), String.class)));
+					.setPatient(
+							jpaPatientRepository.findOne(mapper.convertValue(map.get("patientId"), String.class)));
 			jpaMedicalRecordRepository.save(medicalRecord);
 			jpaAppointmentRepository.save(appointment);
 			IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "created new medical record");
+			return true;
 		} catch (Exception e) {
+
 			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]",
 					"Error creating new record " + map.toString() + "\r\n" + e.getMessage());
+			return false;
 		}
 
 	}

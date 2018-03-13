@@ -231,8 +231,10 @@ export default class PatientPrescriptionContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent fullName={this.session.patient.fullName} />
-                <div className="panel-group">
+            <UserDetailsComponent fullName={this.session.user.fullName}
+            other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
+        />
+                        <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
                         <h3> Receptai</h3>

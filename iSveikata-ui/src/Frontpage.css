@@ -3,7 +3,7 @@ header {
     /* background: url(./Component/images/bg_left.png) left bottom no-repeat, url(./Component/images/bg_right.png) right bottom no-repeat; */
     background: url(./Component/images/bg_right.png) right bottom no-repeat;
     height: 350px;
-    padding-top: 100px;
+    padding-top: 50px;
     text-align: center;
 }
 
@@ -104,7 +104,7 @@ a:active {
 }
 
 #logo {
-    width: 700px;
+    /* width: 700px; */
 }
 
 #icon {
@@ -112,7 +112,7 @@ a:active {
     padding-top: 5px;
 }
 
-#homeHome {
+#homeHome, #admin, #doctorDoctor, #druggist, #patient {
     padding: 0;
 }
 
@@ -136,4 +136,16 @@ a:active {
     text-align: center;
     text-decoration: none;
     display: inline-block;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: white;
+    border: 1px solid #dcd7d4;
 }

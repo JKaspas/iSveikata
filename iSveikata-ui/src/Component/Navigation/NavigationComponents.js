@@ -20,6 +20,7 @@ var AdminNavigation = (props) =>{
     </nav>
     )
   }
+  
 
   var DoctorNavigation = (props) =>{
     return (
