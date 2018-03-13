@@ -65,7 +65,7 @@ class DoctorViewContainer extends Component{
                             Lietuvos Respublikos sveikatos apsaugos ministerija
                         </p>
                         <p className="inline" id="footerText">
-                            Sprendimas: DTFG
+                            Sprendimas: DTFG, 2018
                         </p>    
                     </div>
                 </footer>
