@@ -146,12 +146,16 @@ export default class DoctorPrescriptionContainer extends Component{
                     substanceUnit: substanceUnit,
                     substanceValid: substanceValid}, this.validateForm); 
                 break;
+            case 'substanceAmount':
+                let substanceAmount = this.state.substanceAmount;
+                substanceAmount = value.replace(/[^\d,.]/g, "");
+                this.setState({ substanceAmount: substanceAmount});   
+                break;  
             default:
                 this.setState({[name]: value}); 
                 break;
         }
-
-        
+   
     }
 
     fieldOnFocusHandler = (e) => {
@@ -220,13 +224,24 @@ export default class DoctorPrescriptionContainer extends Component{
         return generatedExpirationDate;
     }
 
+    /* replaceSubstanceAmount = () => {
+        if(this.state.substanceAmountValid) {
+            let substanceAmount = this.state.substanceAmount;
+            replacedSubstanceAmount = substanceAmount.replace(/,/g, ".");   
+        }
+        return replacedSubstanceAmount;
+    } */
+
      //Formos laukų validacija:
      validateField = (fieldName, value) => {
         let fieldValidationErrors = this.state.formErrors;
         let fieldValidationState = this.state.fieldState;
+
         let descriptionValid = this.state.descriptionValid;
         let substanceAmountValid = this.state.substanceAmountValid;
-      
+        
+        let substanceAmount = this.state.substanceAmount;
+
         switch (fieldName) {
             case 'description':
                 descriptionValid = value.length >= 3;
@@ -237,9 +252,10 @@ export default class DoctorPrescriptionContainer extends Component{
                 //Čia "is-valid" ir "is-invalid" yra formos elemento id. Spalvinimas aprašytas Form.css faile. 
                 break;
             case 'substanceAmount':
-                substanceAmountValid = value.match(/^(([1-9]{1})([\d]{0,})|([0-9]{1})([.]{1})([\d]{0,})([1-9]{1}))$/g);
+                substanceAmount = value.replace(/,/g, ".");
+                substanceAmountValid = substanceAmount.match(/^(([1-9]{1})(\d{0,})(.{0,1})(\d{0,})|(\d{1})(.{1})(\d{0,})([1-9]{1}))$/g);
                 // ^ Tikrina ar įrašytas teigiamas skaičius. Jei pirmas skaičius nulis, po jo būtinai turi eiti "," ir bent vienas už nulį didesnis skaičius.
-                fieldValidationErrors.substanceAmount = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį (teigiamas skaičius).';
+                fieldValidationErrors.substanceAmount = substanceAmountValid ? '': 'Įveskite veikliosios medžiagos kiekį.';
                 fieldValidationState.substanceAmount = substanceAmountValid ? 'has-success' : 'has-error';
                 break;
             default:
@@ -248,6 +264,7 @@ export default class DoctorPrescriptionContainer extends Component{
         this.setState({formErrors: fieldValidationErrors,
                     fieldState: fieldValidationState,
                     descriptionValid: descriptionValid,
+                    substanceAmount: substanceAmount,
                     substanceAmountValid: substanceAmountValid,
                     }, this.validateForm);
     }

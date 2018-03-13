@@ -46,8 +46,8 @@ var PrescriptionForm = (props) =>{
                 <div className={'has-feedback ' + props.classNameSubstanceAmount}>
                     <label className="control-label col-sm-3" htmlFor="substanceAmount">Vaisto stiprumas:</label>
                     <div className="col-sm-7">
-                        <input type="number" className="form-control" id="substanceAmount" name="substanceAmount"
-                        placeholder="Veikliosios medž. kiekis dozėje" value={props.substanceAmount}
+                        <input type="text" className="form-control" id="substanceAmount" name="substanceAmount"
+                        value={props.substanceAmount} placeholder="Veikliosios medž. kiekis dozėje" maxLength="9" autoComplete="off" 
                         onChange={props.fieldHandler}
                         onFocus={props.fieldOnFocusHandler}
                         onBlur={props.fieldValidationHandler} />

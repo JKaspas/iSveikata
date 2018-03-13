@@ -106,7 +106,7 @@ export default class AdminCreatePatientContainer extends Component{
                 break; 
             case 'lastName':
                 let lastName = this.state.lastName;
-                lastName = value.replace(/[^a-z ąčęėįšųūž]/gi, "");
+                lastName = value.replace(/[^a-z ąčęėįšųūž-]/gi, "");
                 this.setState({lastName: lastName});   
                 break;   
             default:
@@ -233,7 +233,7 @@ export default class AdminCreatePatientContainer extends Component{
                 break;
             case 'lastName':
                 lastName = this.capitalizeFirstLetter(value.trim());
-                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
+                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}(-[a-ząčęėįšųūž]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
                 fieldValidationState.lastName = lastNameValid ? 'has-success' : 'has-error';
