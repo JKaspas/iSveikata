@@ -1,12 +1,18 @@
 package lt.vtvpmc.ems.isveikata;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.security.auth.UserPrincipal;
-import lt.vtvpmc.ems.isveikata.employees.Doctor;
-import lt.vtvpmc.ems.isveikata.employees.Employee;
-import lt.vtvpmc.ems.isveikata.patient.Patient;
-import lt.vtvpmc.ems.isveikata.patient.PatientService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,34 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.Cookie;
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import lt.vtvpmc.ems.isveikata.patient.Patient;
+import lt.vtvpmc.ems.isveikata.patient.PatientService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -161,9 +152,6 @@ public class EmployeesControllerTestWithSecurity {
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(objectMap)))
             .andExpect(status().isCreated());
-
-
-
     }
 
 
@@ -206,7 +194,6 @@ public class EmployeesControllerTestWithSecurity {
             .andDo(print())
             .andExpect(status().is4xxClientError())
             .andExpect(content().string("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja"));
-
     }
 
     @Test
@@ -232,7 +219,6 @@ public class EmployeesControllerTestWithSecurity {
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Gydytojas privalo turėti specializaciją"));
-
     }
 
     @Test
@@ -240,7 +226,6 @@ public class EmployeesControllerTestWithSecurity {
         performAdminLogin();
 
         Random rand = new Random();
-
 
         Map<String, Object> employeeMap = new HashMap<>();
         Map<String, Object> objectMap = new HashMap<>();
@@ -259,7 +244,6 @@ public class EmployeesControllerTestWithSecurity {
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Vaistininkas privalo turėti darbovietę"));
-
     }
 
     public static String asJsonString(final Object obj) {
