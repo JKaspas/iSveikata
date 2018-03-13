@@ -29,7 +29,8 @@ var LoginForm = (props) =>{
                             value={props.password} placeholder="Slaptažodis" maxLength="15" autoComplete="off"
                             onChange={props.fieldHandler}
                             onFocus={props.fieldOnFocusHandler}
-                            onBlur={props.fieldValidationHandler} />
+                            onBlur={props.fieldValidationHandler}
+                            onKeyDown={props.activateFieldValidationHandler} />
                             <span className=""></span>
                             <span className="help-block">{props.errorMessagePassword}</span>  
                         </div>

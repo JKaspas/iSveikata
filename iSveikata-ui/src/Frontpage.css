@@ -79,25 +79,25 @@ footer {
     display: inline-block;
   }
 
-frontPagePanel a:link {
+.homepage:link {
     color: #293180;
     background-color: transparent;
     text-decoration: none;   
 }
 
-frontPagePanel a:visited {
+.homepage:visited {
     color: #7a7c8c;
     background-color: transparent;
     text-decoration: none;
 }
 
-frontPagePanel a:hover {
+.homepage:hover {
     color: #ffffff;
     background-color: #293180;
     text-decoration: none;
 }
 
-a:active {
+.homepage:active {
     color: #ffffff;
     background-color: #118e38;
     text-decoration: none;

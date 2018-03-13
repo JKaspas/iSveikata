@@ -160,6 +160,12 @@ class UserLoginContainer extends Component {
     this.setState({ fieldState: fieldValidationState, infoState: "", formValid: false});
   };
 
+  activateFieldValidationHandler = e => {
+    if (e.keyCode === 13) {
+      this.fieldValidationHandler(e);
+    }
+  };
+
   fieldValidationHandler = e => {
     // e === event
     const name = e.target.name;
@@ -259,6 +265,7 @@ class UserLoginContainer extends Component {
         password={this.state.password}
 
         fieldValidationHandler={this.fieldValidationHandler}
+        activateFieldValidationHandler={this.activateFieldValidationHandler}
         fieldHandler={this.fieldHandler}
         fieldOnFocusHandler={this.fieldOnFocusHandler}
         submitHandler={this.submitHandler}

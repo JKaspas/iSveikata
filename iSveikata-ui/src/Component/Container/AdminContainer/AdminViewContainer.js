@@ -32,19 +32,19 @@ class AdminViewContainer extends Component{
                     </div>
                 </header>
                     <div className="container">
-                        <div className="row frontPagePanel">
+                        <div className="row">
                             <div className="col-sm-4">
-                                <a href="#administratorius/kurti/pacienta" id="adminRegisterPatient" className="thumbnail">
+                                <a href="#administratorius/kurti/pacienta" id="adminRegisterPatient" className="thumbnail homepage">
                                 <h4 className="text-center">Registruoti naują pacientą</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
-                                <a href="#administratorius/kurti/vartotoja" id="adminRegisterUser" className="thumbnail">
+                                <a href="#administratorius/kurti/vartotoja" id="adminRegisterUser" className="thumbnail homepage">
                                 <h4 className="text-center">Registruoti naują vartotoją</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
-                                <a href="#administratorius/vartotoju-apjungimas" id="adminBindDoctorPatient" className="thumbnail">
+                                <a href="#administratorius/vartotoju-apjungimas" id="adminBindDoctorPatient" className="thumbnail homepage">
                                 <h4 className="text-center">Priskirti gydytojui pacientą</h4>
                                 </a>
                             </div>   
