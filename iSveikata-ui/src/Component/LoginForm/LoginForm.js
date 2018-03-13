@@ -15,7 +15,7 @@ var LoginForm = (props) =>{
                         <div className="form-group">        
                             {props.infoState}
                         </div>
-                        <div className={'form-group form-group-lg has-feedback ' + (props.loginValue.length === 0 ? 'is-empty' : props.classNameLoginValue)}>
+                        <div className={'form-group form-group-lg has-feedback ' + props.classNameLoginValue}>
                             <input id="loginFormFirstInput" type="text" className="form-control" name={props.loginValueName} 
                             value={props.loginValue} placeholder={props.loginPlaceholder} maxLength="11" autoComplete="off"
                             onChange={props.fieldHandler}
@@ -24,7 +24,7 @@ var LoginForm = (props) =>{
                             <span className=""></span>
                             <span className="help-block">{props.errorMessageLoginValue}</span>  
                         </div>
-                        <div className={'form-group form-group-lg has-feedback ' + (props.password.length === 0 ? 'is-empty' : props.classNamePassword)}>
+                        <div className={'form-group form-group-lg has-feedback ' + props.classNamePassword}>
                             <input id="loginFormSecondInput" type="password" className="form-control" name="password"
                             value={props.password} placeholder="Slaptažodis" maxLength="15" autoComplete="off"
                             onChange={props.fieldHandler}
@@ -34,7 +34,7 @@ var LoginForm = (props) =>{
                             <span className="help-block">{props.errorMessagePassword}</span>  
                         </div>
                         <div className="form-group">        
-                            <button id="loginFomrSubmit" className="btn btn-primary btn-lg btn-block" type="submit">Prisijungti</button>
+                            {props.formValid ? <button type="submit" className="btn btn-success btn-lg btn-block">Prisijungti</button> : <button type="submit" className="btn btn-primary btn-lg btn-block">Prisijungti</button>}
                         </div>
                     </form>
                 </div>
