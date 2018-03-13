@@ -7,7 +7,7 @@ export const UserFormSpecOtherInput = (props) =>{
             <label className="control-label col-sm-3" htmlFor="newTitle">Įrašykite:</label>
             <div className="col-sm-9">
                 <input type="text" className="form-control" id="newTitle" name="newTitle"
-                value={props.newTitle} placeholder="Specializacija" maxLength="225" autoComplete="off" 
+                value={props.newTitle} placeholder="Specializacija" maxLength="225" autoComplete="specialization" 
                 onChange={props.fieldHandler}
                 onFocus={props.fieldOnFocusHandler}
                 onBlur={props.fieldValidationHandler} />

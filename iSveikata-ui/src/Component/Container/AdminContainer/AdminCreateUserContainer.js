@@ -151,6 +151,10 @@ export default class AdminCreateUserContainer extends Component{
                 if(error.response.data.status > 400 && error.response.data.status < 500){
                     UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                     this.props.router.push("/atsijungti")
+                }else if(error.response.status === 422){
+                    this.setState({
+                        infoState:(<h3>{error.response.data}</h3>)
+                    })
                 }else{
                     this.setState({
                         infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
@@ -246,7 +250,7 @@ export default class AdminCreateUserContainer extends Component{
 
      //Užtikrina, kad darbovietės pavadinimas būtų iš didžiosios raidės, jei įvesta mažosiomis.
      capitalizeFirstLetterOfString(string) { 
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
     
     //Slapyvardis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus. 
@@ -453,7 +457,7 @@ export default class AdminCreateUserContainer extends Component{
                         }, this.validateForm);
                 break;
             case 'newTitle':
-                newTitle = value.trim().toUpperCase();
+                newTitle = this.capitalizeFirstLetter(value.trim());
                 newTitleValid = newTitle.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.newTitle = newTitleValid ? '' : 'Įveskite specializaciją.';

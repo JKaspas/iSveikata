@@ -20,8 +20,8 @@ export const UserFormDrugStoreInput = (props) =>{
             </div>
             <div className={'has-feedback ' + props.classNameCompanyName}>
                 <div className="col-sm-7">  
-                    <input type="text" className="form-control" id="companyName" name="companyName"
-                    value={props.companyName} placeholder="Pavadinimas" maxLength="225" autoComplete="off" 
+                    <input type="text" className="form-control" id="companyName" name="companyName" 
+                    value={props.companyName} placeholder="Pavadinimas" maxLength="225" autoComplete="organization" 
                     onChange={props.fieldHandler}
                     onFocus={props.fieldOnFocusHandler}
                     onBlur={props.fieldValidationHandler} />

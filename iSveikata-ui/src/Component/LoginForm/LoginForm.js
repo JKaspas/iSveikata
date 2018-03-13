@@ -9,7 +9,7 @@ var LoginForm = (props) =>{
         <div className="container">
             <section>
                 <div className="col-sm-4 col-sm-offset-4 signin-form">
-                    {props.loginValueName === "userName" ? <img src={system_users} alt="log in image" className="img-responsive"/> : <img src={patients_login} alt="log in image" className="img-responsive"/>}
+                    {props.loginValueName === "userName" ? <img src={system_users} alt="iSveikata" className="img-responsive"/> : <img src={patients_login} alt="iSveikata" className="img-responsive"/>}
                     <h2>Prašome prisijungti</h2>
                     <form className="form-horizontal" onSubmit={props.submitHandler}>
                         <div className="form-group">        

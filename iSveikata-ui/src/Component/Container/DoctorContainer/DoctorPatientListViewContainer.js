@@ -14,10 +14,10 @@ import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class DoctorPatientListViewContainer extends Component{
     constructor(props){
-        super(props),
-        this.timeOut= '',
-        this.session = JSON.parse(sessionStorage.getItem('session')),
-        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor')),
+        super(props)
+        this.timeOut= ''
+        this.session = JSON.parse(sessionStorage.getItem('session'))
+        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor'))
         this.state = {
             patientListView:null,
            
