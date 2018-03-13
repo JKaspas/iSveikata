@@ -54,7 +54,7 @@ public class Prescription implements Serializable {
     @OneToMany(mappedBy = "prescription")
     private List<PrescriptionUsage> prescriptionUsage;
 
-    private long ingredientAmount;
+    private double ingredientAmount;
     private String description;
     private long useAmount;
 	public void addUsage() {

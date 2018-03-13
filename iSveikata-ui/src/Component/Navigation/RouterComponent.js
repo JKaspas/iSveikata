@@ -30,6 +30,7 @@ import {InitialAdminApp, InitialPublicApp, InitialDoctorApp, InitialDruggistApp,
 import LogoutContainer from '../Container/LogoutContainer';
 
 import GeneruotiIrasus from '../Container/Generators/GeneruotiIrasus'
+import PatientViewContainer from '../Container/PatientContainer/PatientViewContainer';
 
 
 
@@ -76,7 +77,7 @@ var RouteComponent = () =>{
           </Route>
           
           <Route path="/pacientas" component={InitialPatientApp} >
-            <IndexRoute component={PatientRecordContainer} />
+            <IndexRoute component={PatientViewContainer} />
             <Route path="/pacientas/ligos-irasai" component={PatientRecordContainer} />
             <Route path="/pacientas/receptai" component={PatientPrescriptionContainer} />
             <Route path="/pacientas/slaptazodis" component={PatientPasswordContainer} />

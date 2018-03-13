@@ -1,7 +1,7 @@
 import React from 'react';
 
-
 import {AdminNavigation, PublicNavigation, DoctorNavigation, DruggistNavigation, PatientNavigation} from './NavigationComponents';
+import { FooterComponent } from './FooterComponent';
 
 
 
@@ -12,6 +12,7 @@ var InitialPublicApp = (props) =>{
     <div>
       <PublicNavigation />
       {props.children}
+      <FooterComponent />
     </div>)
   }
   
@@ -20,6 +21,7 @@ var InitialPublicApp = (props) =>{
     <div>
       <AdminNavigation />
       {props.children}
+      <FooterComponent />
     </div>)
   }
   var InitialDoctorApp = (props) =>{
@@ -27,6 +29,7 @@ var InitialPublicApp = (props) =>{
     <div>
       <DoctorNavigation />
       {props.children}
+      <FooterComponent />
     </div>)
   }
   var InitialDruggistApp = (props) =>{
@@ -34,6 +37,7 @@ var InitialPublicApp = (props) =>{
     <div>
       <DruggistNavigation />
       {props.children}
+      <FooterComponent />
     </div>)
   }
   var InitialPatientApp = (props) =>{
@@ -41,6 +45,7 @@ var InitialPublicApp = (props) =>{
     <div>
       <PatientNavigation />
       {props.children}
+      <FooterComponent />
     </div>)
   }
   var NoMatch = () =>{

@@ -34,7 +34,6 @@ class DoctorViewContainer extends Component{
                         <img  src={logo} alt="iSveikata" id="logo" className="img-responsive center-block"/>
                     </div>
                 </header>
-                <body>
                     <div className="container">
                         <div className="row frontPagePanel">
 
@@ -59,18 +58,6 @@ class DoctorViewContainer extends Component{
 
                         </div>
                     </div>
-                </body>
-                <footer>
-                    <div>
-                        <p className="inline" id="footerLink">
-                            <a href="http://sam.lrv.lt" id="imgLink"><img src={lr_logo} alt="SAM" id="lrlogo"/></a>
-                            Lietuvos Respublikos sveikatos apsaugos ministerija
-                        </p>
-                        <p className="inline" id="footerText">
-                            Sprendimas: DTFG, 2018
-                        </p>    
-                    </div>
-                </footer>
             </div>
         )
     }
