@@ -30,19 +30,19 @@ class PublicViewContainer extends Component{
                         <div className="row">
                             <div className="col-sm-4">
                                 <a href="#pacientams" id="publicPatient" className="thumbnail">
-                                <img  src={patients} alt="Prisijungimas pacientams" id="patients"/>
+                                <img  src={patients} alt=""/>
                                 <h4 className="text-center">Prisijungimas pacientams</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
                                 <a href="#statistika" id="publicStatistic" className="thumbnail">
-                                <img  src={statistics} alt="Vieša statistika" id="statistics"/>
+                                <img  src={statistics} alt=""/>
                                 <h4 className="text-center">Vieša statistika</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
                                 <a href="#vartotojams" id="publicUsers" className="thumbnail">
-                                <img  src={system_users} alt="Prisijungimas sistemos vartotojams" id="users"/>
+                                <img  src={system_users} alt=""/>
                                 <h4 className="text-center">Prisijungimas sistemos vartotojams</h4>
                                 </a>
                             </div>    

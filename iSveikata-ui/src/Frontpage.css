@@ -21,6 +21,7 @@ header {
 
 .infoText {
     text-align: justify;
+    text-justify: distribute;
     font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     font-size: 16px;
 }
@@ -95,7 +96,7 @@ a:hover {
 a:active {
     color: #ffffff;
     background-color: #118e38;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 #logo {
@@ -109,4 +110,10 @@ a:active {
 
 #homeHome {
     padding: 0;
+}
+
+#patientRecords, #stats, #passwordChange {
+   width: 250px;
+   padding-bottom: 30px;
+   padding-top: 30px;
 }
