@@ -1,9 +1,37 @@
 header {
     background-color: rgb(255, 255, 255);
-    background: url(./Component/images/bg_left.jpg) left center no-repeat, url(./Component/images/bg_right.jpg) right center no-repeat;
-    height: 300px;
-    padding: 50px;
+    /* background: url(./Component/images/bg_left.png) left bottom no-repeat, url(./Component/images/bg_right.png) right bottom no-repeat; */
+    background: url(./Component/images/bg_right.png) right bottom no-repeat;
+    height: 350px;
+    padding-top: 100px;
     text-align: center;
+}
+
+#custom2 {
+    border-bottom: solid 20px #118e38;
+    height: 260px;
+    overflow-y: auto;
+}
+
+#custom1, #custom3 {
+    border-bottom: solid 20px #293180;
+    height: 260px;
+    overflow-y: auto;
+}
+
+.infoText {
+    text-align: justify;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 16px;
+}
+
+.left {
+    text-align: left;
+}
+
+h4 {
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-weight: bold;
 }
 
 footer {
@@ -71,7 +99,7 @@ a:active {
 }
 
 #logo {
-    width: 800px;
+    width: 700px;
 }
 
 #icon {

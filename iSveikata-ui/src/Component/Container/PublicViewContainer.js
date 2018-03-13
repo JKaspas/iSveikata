@@ -25,32 +25,62 @@ class PublicViewContainer extends Component{
                         {/* <button className="btn btn-success" onClick={this.load}>Load</button> */}
                     </div>
                 </header>
-                <section>
+                <body>
                     <div className="container">
                         <div className="row">
-                            <div className="col-sm-12 ">
-                                <div className="col-sm-4">
-                                    <a href="#pacientams" id="publicPatient" className="thumbnail">
-                                    <img  src={patients} alt="Prisijungimas pacientams" id="patients"/>
-                                    <h4 className="text-center">Prisijungimas pacientams</h4>
-                                    </a>
-                                </div>
-                                <div className="col-sm-4">
-                                    <a href="#statistika" id="publicStatistic" className="thumbnail">
-                                    <img  src={statistics} alt="Vieša statistika" id="statistics"/>
-                                    <h4 className="text-center">Vieša statistika</h4>
-                                    </a>
-                                </div>
-                                <div className="col-sm-4">
-                                    <a href="#vartotojams" id="publicUsers" className="thumbnail">
-                                    <img  src={system_users} alt="Prisijungimas sistemos vartotojams" id="users"/>
-                                    <h4 className="text-center">Prisijungimas sistemos vartotojams</h4>
-                                    </a>
-                                </div>    
+                            <div className="col-sm-4">
+                                <a href="#pacientams" id="publicPatient" className="thumbnail">
+                                <img  src={patients} alt="Prisijungimas pacientams" id="patients"/>
+                                <h4 className="text-center">Prisijungimas pacientams</h4>
+                                </a>
+                            </div>
+                            <div className="col-sm-4">
+                                <a href="#statistika" id="publicStatistic" className="thumbnail">
+                                <img  src={statistics} alt="Vieša statistika" id="statistics"/>
+                                <h4 className="text-center">Vieša statistika</h4>
+                                </a>
+                            </div>
+                            <div className="col-sm-4">
+                                <a href="#vartotojams" id="publicUsers" className="thumbnail">
+                                <img  src={system_users} alt="Prisijungimas sistemos vartotojams" id="users"/>
+                                <h4 className="text-center">Prisijungimas sistemos vartotojams</h4>
+                                </a>
+                            </div>    
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-4" id="custom1">
+                                <p className="infoText">
+                                Prisijungę galite pasiekti visą savo medicininę informaciją.
+                                Peržiūrėkite savo ligos istoriją bei išrašytus receptus tada, kada patogu Jums!
+                                </p>
+                            </div>
+                            <div className="col-sm-4" id="custom2">
+                                <p className="infoText left">
+                                Pateikiame susirgimų ir vaistų vartojimo statistiką.
+                                </p> 
+                                <p className="infoText">
+                                Sužinokite kokios ligos ar negalavimai pasitaiko dažniausiai, 
+                                bei kokių vaistų, pagal jų veikliąją medžiagą, vartojama daugiausiai.
+                                </p>
+                            </div>
+                            <div className="col-sm-4" id="custom3">
+                                <p className="infoText">
+                                <strong>Gydytojams. </strong>
+                                Registruokite pacientų vizitus, peržiūrėkite ligos istorijas, išrašykite receptus,
+                                sekite savo darbo dienų statistiką bei naudokitės kitais sistemos funkcionalumais.
+                                </p>
+                                <p className="infoText">
+                                <strong>Vaistininkams. </strong>
+                                Peržiūrėkite galiojančius kliento receptus ir pažymėkite vaisto pirkimo faktą.
+                                </p>
+                                <p className="infoText">
+                                <strong>Administratoriams. </strong>
+                                Kurkite paskyras visiems sistemos vartotojams. Priskirkite pacientus gydytojams.
+                                </p>
                             </div>
                         </div>
                     </div>
-                </section>
+                </body>
                 {/* <PublicViewComponent/> */}
                 <footer>
                     <div>
