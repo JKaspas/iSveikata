@@ -170,8 +170,9 @@ public class MedicalRecordService {
 				objectMap.put("totalProc", (long) icd.getCounter() * (double) 100 / total);
 				objectMap.put("totalCount", icd.getCounter());
 				newList.add(objectMap);
-				IsveikataApplication.loggMsg(Level.INFO, "public", "[public]", "fetching tlk statistics");
 			}
+			IsveikataApplication.loggMsg(Level.INFO, "public", "[public]", "fetching tlk statistics");
+
 			return newList;
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, "public", "[public]",
