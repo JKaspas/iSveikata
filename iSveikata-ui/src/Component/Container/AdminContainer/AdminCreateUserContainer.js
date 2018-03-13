@@ -244,8 +244,8 @@ export default class AdminCreateUserContainer extends Component{
         return string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
-     //Užtikrina, kad darbovietės pavadinimas būtų iš didžiosios raidės, jei įvesta mažosiomis.
-     capitalizeFirstLetterOfString(string) { 
+    //Užtikrina, kad darbovietės pavadinimas būtų iš didžiosios raidės, jei įvesta mažosiomis.
+    capitalizeFirstLetterOfString(string) { 
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     
@@ -323,7 +323,7 @@ export default class AdminCreateUserContainer extends Component{
                 break; 
             case 'lastName':
                 let lastName = this.state.lastName;
-                lastName = value.replace(/[^a-z ąčęėįšųūž]/gi, "");
+                lastName = value.replace(/[^a-z ąčęėįšųūž-]/gi, "");
                 this.setState({lastName: lastName});   
                 break;
             case 'newTitle':
@@ -333,7 +333,7 @@ export default class AdminCreateUserContainer extends Component{
                 break; 
             case 'companyName':
                 let companyName = this.state.companyName;
-                companyName = value.replace(/[^a-z ąčęėįšųūž\d]/gi, "");
+                companyName = value.replace(/[^a-z ąčęėįšųūž\d-]/gi, "");
                 this.setState({companyName: companyName});   
                 break; 
             default:
@@ -442,7 +442,7 @@ export default class AdminCreateUserContainer extends Component{
                 break;
             case 'lastName':
                 lastName = this.capitalizeFirstLetter(value.trim());
-                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
+                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}(-[a-ząčęėįšųūž]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
                 fieldValidationState.lastName = lastNameValid ? 'has-success' : 'has-error';
@@ -466,7 +466,7 @@ export default class AdminCreateUserContainer extends Component{
                 break;
             case 'companyName':
                 companyName = this.capitalizeFirstLetterOfString(value.trim());
-                companyNameValid = companyName.match(/^[a-ząčęėįšųūž\d]{1,}( [a-ząčęėįšųūž\d]+)*$/gi);
+                companyNameValid = companyName.match(/^[a-ząčęėįšųūž\d]{1,}([ -]{1}[a-ząčęėįšųūž\d]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės bei skaičiai ir ne mažiau kaip viena(s). Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.companyName = companyNameValid ? '' : 'Įveskite darbovietės pavadinimą.';
                 fieldValidationState.companyName = companyNameValid ? 'has-success' : 'has-error';
