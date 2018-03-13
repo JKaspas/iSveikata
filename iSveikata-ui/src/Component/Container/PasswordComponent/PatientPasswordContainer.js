@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 import { ChangePasswordForm } from './ChangePasswordForm';
+import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+
 
 export default class PatientPasswordContainer extends Component{
     constructor(props){
@@ -199,7 +201,10 @@ export default class PatientPasswordContainer extends Component{
     render(){
         return( 
             <div className='container'>
-                <section>     
+                <section>   
+                <UserDetailsComponent fullName={this.session.user.fullName}
+              other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
+          />  
                     <ChangePasswordForm
                     classNameOldPassword={this.state.fieldState.oldPassword}
                     classNameNewPassword={this.state.fieldState.newPassword}

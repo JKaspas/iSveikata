@@ -96,7 +96,11 @@ class DruggistViewContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent fullName={this.session.user.fullName} />
+            <UserDetailsComponent  fullName={this.session.user.fullName} other={
+                    <li className="navbar-text">
+                    <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+                    </li>
+                }/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
@@ -104,7 +108,8 @@ class DruggistViewContainer extends Component{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                            <h4 className="text-center">Įveskite kliento asmens kodą</h4>
+                            <h4 className="text-center">Įveskite kliento asmens kodą:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                            
                                 <SearchFieldForm 
                                     searchType={"number"}
                                     searchHandler={this.searchHandler}

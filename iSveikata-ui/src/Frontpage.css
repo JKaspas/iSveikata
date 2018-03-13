@@ -112,7 +112,7 @@ a:active {
     padding-top: 5px;
 }
 
-#homeHome {
+#homeHome, #admin, #doctorDoctor, #druggist, #patient {
     padding: 0;
 }
 
@@ -122,6 +122,21 @@ a:active {
    padding-top: 30px;
 }
 
+.statBtn:hover {
+    background-color: #ddd;
+}
+.statBtn:active {
+    background-color: #ccc;
+    box-shadow: inset 0 0 30px 5px #aaa;
+}
+.statBtn {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
 ::-webkit-scrollbar {
     width: 10px;
 }

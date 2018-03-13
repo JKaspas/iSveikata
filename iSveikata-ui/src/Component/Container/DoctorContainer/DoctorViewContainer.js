@@ -37,24 +37,26 @@ class DoctorViewContainer extends Component{
                 <body>
                     <div className="container">
                         <div className="row">
-                            <div className="col-sm-4">
-                                <a href="#gydytojas/pacientai" id="doctorViewPatient" className="thumbnail">
+
+                            <div className="col-md-4">
+                                <a href="#gydytojas/pacientai" id="doctorViewPatient" className="thumbnail ">
                                 <img  src={patient_records} alt="" id="patientRecords"/>
                                 <h4 className="text-center">Peržiūrėti pacientų duomenis</h4>
                                 </a>
                             </div>
-                            <div className="col-sm-4">
-                                <a href="#gydytojas/statistika" id="doctorViewStatistic" className="thumbnail">
+                            <div className="col-md-4">
+                                <a href="#gydytojas/statistika" id="doctorViewStatistic" className="thumbnail ">
                                 <img  src={stats} alt="" id="stats"/>
                                 <h4 className="text-center">Peržiūrėti darbo dienų statistiką</h4>
                                 </a>
                             </div>
-                            <div className="col-sm-4">
-                                <a href="#gydytojas/slaptazodis" id="doctorChangePassword" className="thumbnail">
+                            <div className="col-md-4">
+                                <a href="#gydytojas/slaptazodis" id="doctorChangePassword" className="thumbnail ">
                                 <img  src={password_change} alt="" id="passwordChange"/>
                                 <h4 className="text-center">Keisti slaptažodį</h4>
                                 </a>
                             </div> 
+
                         </div>
                     </div>
                 </body>

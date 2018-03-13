@@ -41,9 +41,7 @@ var RouteComponent = () =>{
             <Route path="/" component={PublicViewContainer} />
             <Route path="/statistika" component={PublicStatisticContainer} />
             <Route path="/pacientams" component={PatientLoginContainer} />
-
             <Route path="/vartotojams" component={UserLoginContainer} />
-          
             <Route path="/atsijungti" component={LogoutContainer} />
             <Route path="/generuoti" component={GeneruotiIrasus} />
           </Route>
@@ -54,10 +52,7 @@ var RouteComponent = () =>{
             <Route path="/administratorius/kurti/pacienta" component={AdminCreatePatientContainer} />
             <Route path="/administratorius/vartotoju-apjungimas" component={AdminBindDoctorPartContainer} />
             <Route path="/administratorius/vartotoju-apjungimas/:userName" component={AdminBindUserPartContainer} />
-
             <Route path="/administratorius/slaptazodis" component={UserPasswordContainer} /> 
-         
-
             <Route path="*" component={NoMatch}/>
           </Route>
 
@@ -79,6 +74,7 @@ var RouteComponent = () =>{
             <Route path="/vaistininkas/slaptazodis" component={UserPasswordContainer} />
             <Route path="*" component={NoMatch}/>
           </Route>
+          
           <Route path="/pacientas" component={InitialPatientApp} >
             <IndexRoute component={PatientRecordContainer} />
             <Route path="/pacientas/ligos-irasai" component={PatientRecordContainer} />

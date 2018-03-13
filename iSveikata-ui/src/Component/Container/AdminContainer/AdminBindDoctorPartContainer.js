@@ -214,7 +214,11 @@ export default class AdminBindDoctorPartContainer extends Component{
         return(
         <div className="container">
             <section>  
-            <UserDetailsComponent  fullName={this.session.user.fullName} />
+            <UserDetailsComponent  fullName={this.session.user.fullName} other={
+            <li className="navbar-text">
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+            </li>
+            }/>
                 <div className="panel-group">
                     <div className="panel panel-default">
                         <div className="panel-heading">
