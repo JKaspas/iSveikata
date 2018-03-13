@@ -9,20 +9,22 @@ header {
 
 #custom2 {
     border-bottom: solid 20px #118e38;
-    height: 260px;
+    height: 280px;
     overflow-y: auto;
 }
 
 #custom1, #custom3 {
     border-bottom: solid 20px #293180;
-    height: 260px;
+    height: 280px;
     overflow-y: auto;
 }
 
 .infoText {
     text-align: justify;
     text-justify: distribute;
-    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-family: "Didact Gothic";
+    font-style: normal;
+	font-variant: normal;
     font-size: 16px;
 }
 
@@ -31,8 +33,10 @@ header {
 }
 
 h4 {
-    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-family: "Didact Gothic";
     font-weight: bold;
+    font-style: normal;
+	font-variant: normal;
 }
 
 footer {
