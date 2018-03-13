@@ -117,7 +117,7 @@ a:active {
 }
 
 #patientRecords, #stats, #passwordChange {
-   width: 250px;
+   width: 100px;
    padding-bottom: 30px;
    padding-top: 30px;
 }
