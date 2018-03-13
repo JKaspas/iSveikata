@@ -321,7 +321,11 @@ export default class AdminCreatePatientContainer extends Component{
             <div className="container">
                
                 <section>     
-                <UserDetailsComponent fullName={this.session.user.fullName} />
+                <UserDetailsComponent fullName={this.session.user.fullName} other={
+            <li className="navbar-text">
+            <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+            </li>
+            } />
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             <h3>Naujo paciento registravimo forma</h3>

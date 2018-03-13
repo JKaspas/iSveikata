@@ -57,18 +57,20 @@ var AdminNavigation = (props) =>{
 }
 var PatientNavigation = (props) =>{
   return (
-    <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">
+    <nav className="navbar  navbar-inverse navbar-fixed-top navbar-expand-lg" id="mainNav">
+    
     <div className="container">
       <a className="navbar-brand" id="patient" href="#pacientas"><img src={icon} alt="Pagrindinis" id="icon"/></a>
-      <ul className="nav navbar-nav navbar-left">
-            <li><a className="" id="patientRecord" href="#pacientas/ligos-irasai"><strong>Mano ligos istorijos įrašai</strong></a></li>
-            <li><a className="" id="patientPrescription" href="#pacientas/receptai"><strong>Mano receptai</strong></a></li>
-            <li><a className="" id="patientPassword" href="#pacientas/slaptazodis">Keisti slaptažodį</a></li>
-      </ul>
-      <ul className="nav navbar-nav navbar-right">
-        <li><a className="" id="logout" href="#atsijungti">Atsijungti</a></li>
-      </ul>
-    </div>
+
+        <ul className="nav navbar-nav navbar-left">
+              <li><a className="" id="patientRecord" href="#pacientas/ligos-irasai"><strong>Mano ligos istorijos įrašai</strong></a></li>
+              <li><a className="" id="patientPrescription" href="#pacientas/receptai"><strong>Mano receptai</strong></a></li>
+              <li><a className="" id="patientPassword" href="#pacientas/slaptazodis">Keisti slaptažodį</a></li>
+        </ul>
+        <ul className="nav navbar-nav navbar-right">
+          <li><a className="" id="logout" href="#atsijungti">Atsijungti</a></li>
+        </ul>
+      </div>
   </nav>
   )
 }

@@ -35,17 +35,17 @@ class AdminViewContainer extends Component{
                     <div className="container">
                         <div className="row">
                             <div className="col-sm-4">
-                                <a href="#admin/create/patient" id="adminRegisterPatient" className="thumbnail">
+                                <a href="#/administratorius/kurti/pacienta" id="adminRegisterPatient" className="thumbnail">
                                 <h4 className="text-center">Registruoti naują pacientą</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
-                                <a href="#admin/create/user" id="adminRegisterUser" className="thumbnail">
+                                <a href="#/administratorius/kurti/vartotoja" id="adminRegisterUser" className="thumbnail">
                                 <h4 className="text-center">Registruoti naują vartotoją</h4>
                                 </a>
                             </div>
                             <div className="col-sm-4">
-                                <a href="#admin/bind" id="adminBindDoctorPatient" className="thumbnail">
+                                <a href="#/administratorius/vartotoju-apjungimas" id="adminBindDoctorPatient" className="thumbnail">
                                 <h4 className="text-center">Priskirti gydytojui pacientą</h4>
                                 </a>
                             </div>   
