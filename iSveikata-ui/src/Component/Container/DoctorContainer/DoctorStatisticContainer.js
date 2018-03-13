@@ -58,7 +58,7 @@ export default class DoctorStatisticContainer extends Component{
         .then((response) =>{
             if(response.data.length === 0){
                 this.setState({
-                    chart:(<h3>Šiomis dienomis nebuvo sukurta jokių ligos įrašų.</h3>),
+                    chart:(<h3>Šiomis dienomis gydytojas neturi sukurtų ligos įrašų</h3>),
                     total:null,
                     totalPatient: 0,
                     totalTime:0

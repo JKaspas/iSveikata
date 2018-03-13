@@ -127,7 +127,7 @@ public class PatientController {
 		boolean passwordChangeIsValid = patientService.updatePatientPassword(fields.get("oldPassword"),
 				fields.get("newPassword"), patientId);
 		return passwordChangeIsValid
-				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sekmingai")
+				? ResponseEntity.status(HttpStatus.ACCEPTED).body("Slaptažodis pakeistas sėkmingai")
 				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Neteisingas slaptažodis");
 	}
 	

@@ -288,7 +288,7 @@ export default class PatientPrescriptionContainer extends Component {
       <div className="container">
         <section>
           <UserDetailsComponent
-            fullName={this.session.user.fullName}
+            fullName={this.session.patient.fullName}
             other={
               <button
                 onClick={() => this.props.router.goBack()}

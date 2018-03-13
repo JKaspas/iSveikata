@@ -33,7 +33,7 @@ export default class DoctorPatientListViewContainer extends Component{
 
             CSVData:'',
             downloadCSV:'',
-            CSVButtonTitle:'Generuoti priskirtų pacientų sąrasą (CSV)'
+            CSVButtonTitle:'Generuoti priskirtų pacientų sąrašą (CSV)'
         }
     }
 
@@ -472,7 +472,7 @@ export default class DoctorPatientListViewContainer extends Component{
                                     searchPlaceHolder={"Pacientų paieška"}
                                     searchType={"text"}
                                 />
-                                <button id="doctorResetPatientList" className='btn btn-default pull-left' onClick={this.resetDoctorInfoSession}>Atnaujinti pacientų sąrasą</button>
+                                <button id="doctorResetPatientList" className='btn btn-default pull-left' onClick={this.resetDoctorInfoSession}>Atnaujinti pacientų sąrašą</button>
                                 <button id="doctorChangePatientList" className='btn btn-default pull-right' onClick={this.changePatients}>{this.state.patientTypeName}</button>
                                
                             </div>

@@ -5,7 +5,7 @@
 
 	<groupId>lt.vtvpmc.ems</groupId>
 	<artifactId>isveikata</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>1.0-RELEASE</version>
 	<packaging>war</packaging>
 
 	<name>isveikata</name>

@@ -326,13 +326,12 @@ public class PatientService {
 		try {
 			Patient pat = patientRepository.findOne(patientId);
 			if (SHA256Encrypt.sswordEncoder.matches(oldPassword, pat.getPassword())) {
-				pat.setPassword(SHA256Encrypt.sswordEncoder.encode(newPassword));
+				pat.setPassword(newPassword);
 				patientRepository.save(pat);
-				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "change password sucess.");
+				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "change password success.");
 				return true;
 			} else {
-				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "change password fail.");
-
+				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(), "change password faill.");
 				return false;
 			}
 		} catch (Exception e) {

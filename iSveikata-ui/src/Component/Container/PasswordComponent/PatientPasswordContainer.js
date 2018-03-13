@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { ChangePasswordForm } from './ChangePasswordForm';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
+import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 
 export default class PatientPasswordContainer extends Component{
@@ -37,7 +38,11 @@ export default class PatientPasswordContainer extends Component{
     submitHandler = (e) =>{
 
         e.preventDefault();
-
+        console.log({
+            oldPassword:this.state.oldPassword,
+            newPassword:this.state.newPassword,
+            patientId:this.session.patient.patientId
+        })
         if(this.state.formValid){
             axios.put('http://localhost:8080/api/patient/'+this.session.patient.patientId+'/password', {
                 oldPassword:this.state.oldPassword,
@@ -46,14 +51,28 @@ export default class PatientPasswordContainer extends Component{
             .then((response)=>{
                 
                 this.setState({
-                    infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
+                    infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
+                    oldPassword:'',
+                    newPassword:'',
+                    newPasswordRepeat:'',
                 })
             })
-            .catch((erorr) => {
+            .catch((error) => {
+                if (
+                    error.response.data.status > 400 &&
+                    error.response.data.status < 500
+                  ) {
+                    UnauthorizedComponent(
+                      this.session.user.userName,
+                      this.session.patient.patientId
+                    );
+                    this.props.router.push("/atsijungti");
+                  } else {
+                    this.setState({
+                        infoState:<div className="alert alert-danger"><strong>{error.response.data}</strong></div>
+                    })
+                  }
                 
-                this.setState({
-                    infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
-                })
             })
         }else{
             this.setState({
@@ -202,7 +221,7 @@ export default class PatientPasswordContainer extends Component{
         return( 
             <div className='container'>
                 <section>   
-                <UserDetailsComponent fullName={this.session.user.fullName}
+                <UserDetailsComponent fullName={this.session.patient.fullName}
               other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
           />  
                     <ChangePasswordForm
