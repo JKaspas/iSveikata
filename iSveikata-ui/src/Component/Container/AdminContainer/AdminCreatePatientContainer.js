@@ -49,7 +49,6 @@ export default class AdminCreatePatientContainer extends Component{
                 password:this.generatePassword()   
             })
             .then((response)=>{
-                console.log(response.status)
                 this.setState({
                     infoState:<div className="alert alert-success"><strong>Naujo paciento paskyra sėkmingai sukurta.</strong></div>,
 

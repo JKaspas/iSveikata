@@ -71,7 +71,7 @@ export default class DoctorPatientViewContainer extends Component{
                     viewContent:<RecordListViewDemo records={response.data.content.map(this.composeRecords)} />,
                     listLength:response.data.content.length,
                 })
-                console.log(response.status)
+                
             }
         })
         .catch((error) =>{
@@ -93,7 +93,7 @@ export default class DoctorPatientViewContainer extends Component{
         .then((response) => {
             if(response.data.content.length === 0){
                 if(activePage !== 0){
-                    console.log()
+                    
                     this.setState({
                         activePage:activePage - 1
                     })
@@ -111,7 +111,7 @@ export default class DoctorPatientViewContainer extends Component{
                     listLength:response.data.content.length,                   
                 })
             }
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -166,7 +166,7 @@ export default class DoctorPatientViewContainer extends Component{
                 infoDetails:this.composeSpecificRecord(response.data),
                 infoHeader:"Ligos įrašo detali informacija"
                 })
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -208,7 +208,7 @@ export default class DoctorPatientViewContainer extends Component{
                     infoDetails:this.composeSpecificPrescription(response.data),
                     infoHeader:"Recepto detali informacija"
                 })
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -250,7 +250,7 @@ export default class DoctorPatientViewContainer extends Component{
                                         usage={response.data.map(this.composeUsage)}/>
                 })
             }     
-            console.log(response.status)
+            
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){

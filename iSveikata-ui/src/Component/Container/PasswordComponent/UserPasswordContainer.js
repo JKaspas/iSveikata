@@ -41,13 +41,13 @@ export default class UserPasswordContainer extends Component{
                 newPassword:this.state.newPassword
             })
             .then((response)=>{
-                console.log(response.status)
+                
                 this.setState({
                     infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>
                 })
             })
             .catch((erorr) => {
-                console.log(erorr)
+                
                 this.setState({
                     infoState:<div className="alert alert-danger"><strong>{erorr.response.data}</strong></div>
                 })

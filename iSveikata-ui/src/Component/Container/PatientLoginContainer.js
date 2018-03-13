@@ -58,7 +58,7 @@ class PatientLoginContainer extends Component{
             .then((response) => {
                 this.props.dispatch(patientLoggedIn(this.state.patientId, response.data.fullName))
                 this.props.router.push('/pacientas');
-                console.log(response.status)
+                
             })
             .catch((error) => {
                 if(error.response.data.status > 400 && error.response.data.status < 500 ){

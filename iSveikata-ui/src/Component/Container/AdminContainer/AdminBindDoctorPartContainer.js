@@ -71,7 +71,6 @@ export default class AdminBindDoctorPartContainer extends Component{
                     listLength:response.data.content.length,
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             //if server response as 401 (Unauthorized) redirect to logout page
@@ -115,7 +114,6 @@ export default class AdminBindDoctorPartContainer extends Component{
                     listLength:response.data.content.length,
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){

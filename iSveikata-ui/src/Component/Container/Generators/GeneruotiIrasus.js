@@ -47,7 +47,7 @@ export default class GeneruotiIrasus extends Component {
         if(this.state.recordTotal > 10000){
             let page = parseInt(this.state.page, 10) + 1
             this.getPatient(page)
-            console.log("Next patient page" + page)
+            
             this.setState({
                 recordTotal:0,
                 page:page
@@ -56,7 +56,7 @@ export default class GeneruotiIrasus extends Component {
         }
 
         if(this.state.years === 2018 && this.state.month === 2 && this.state.day === 30){
-            console.log("Jau 2018;/")
+            
             this.setState({
                 years:2010
             })
@@ -79,10 +79,10 @@ export default class GeneruotiIrasus extends Component {
                     userName: this.state.doctor[Math.floor(Math.random() * this.state.doctor.length)].userName
                 })
                 .then(() => {
-                    console.log("All good :)")
+                    
                 })
                 .catch((erorr) => {
-                    console.log(erorr)
+                    
                 })
 
         if(this.state.recordPerDay < 5001){
@@ -124,7 +124,7 @@ export default class GeneruotiIrasus extends Component {
         if(this.state.recordTotal > 20000){
             let page = parseInt(this.state.page, 10) + 1
             this.getPatient(page)
-            console.log("Next patient page " + page)
+            
             this.setState({
                 recordTotal:0,
                 page:page
@@ -134,7 +134,7 @@ export default class GeneruotiIrasus extends Component {
       
     
         if(this.state.years === 2018 && this.state.month === 2 && this.state.day === 30){
-            console.log("Jau 2018;/")
+            
             this.setState({
                 years:2010,
             })
@@ -172,10 +172,10 @@ export default class GeneruotiIrasus extends Component {
                 apiTitle:this.state.api[Math.floor(Math.random() * this.state.api.length)].apiTitle,
             })
             .then(() => {
-                console.log("All good :)")
+                
             })
             .catch((erorr) => {
-                console.log(erorr)
+                
             })
 
 
@@ -226,10 +226,10 @@ export default class GeneruotiIrasus extends Component {
             this.setState({
                 api:response.data.map(this.composeApi)
             })
-            console.log(response.data)
+            
         })
         .catch((erorr) => {
-            console.log(erorr)
+            
         })
     }
 
@@ -243,10 +243,10 @@ export default class GeneruotiIrasus extends Component {
             this.setState({
                 icd:response.data.map(this.composeIcd)
             })
-            console.log(response.data)
+            
         })
         .catch((erorr) => {
-            console.log(erorr)
+            
         })
     }
 
@@ -260,10 +260,10 @@ export default class GeneruotiIrasus extends Component {
             this.setState({
                 patient:response.data.content.map(this.composePatients)
             })
-            console.log(response.data.content)
+            
         })
         .catch((erorr) => {
-            console.log(erorr)
+            
         })
     }
 
@@ -277,10 +277,10 @@ export default class GeneruotiIrasus extends Component {
             this.setState({
                 doctor:response.data.content.map(this.composeDoctors)
             })
-            console.log(response.data.content)
+            
         })
         .catch((erorr) => {
-            console.log(erorr)
+            
         })
     }
 
@@ -289,7 +289,7 @@ export default class GeneruotiIrasus extends Component {
     }
 
     getConsoleData = () =>{
-        console.log("Nothing to show")
+        
     }
 
     onChange = (e) =>{
@@ -310,10 +310,10 @@ export default class GeneruotiIrasus extends Component {
                 this.setState({
                     ipsum:response.data
                 })
-                //console.log(response.data)
+                //
             })
             .catch((erorr) => {
-                console.log(erorr)
+                
             })
     
     }

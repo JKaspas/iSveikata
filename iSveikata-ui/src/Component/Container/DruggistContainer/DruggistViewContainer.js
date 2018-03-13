@@ -42,7 +42,7 @@ class DruggistViewContainer extends Component{
                 sessionStorage.setItem("patientInfo", JSON.stringify(response.data))
             }
                   
-            console.log(response.status)
+            
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
