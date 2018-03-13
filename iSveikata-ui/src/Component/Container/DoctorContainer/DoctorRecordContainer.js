@@ -87,7 +87,7 @@ export default class DoctorRecordContainer extends Component{
     let currentDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     
     e.preventDefault();
-    console.log(currentDate);
+    
 
     if(this.state.formValid){
       console.log({
@@ -120,7 +120,7 @@ export default class DoctorRecordContainer extends Component{
           userName: this.state.userName
         })
         .then(response => {
-          console.log(response.status);
+          
           this.setState({
             infoState:<div className="alert alert-success"><strong>Naujas įrašas sėkmingai sukurtas.</strong></div>,
             

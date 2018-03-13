@@ -107,15 +107,12 @@ export default class AdminCreateUserContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            console.log({user:this.userObjectByType(), type:this.state.specialization}); 
-            //console.log(this.fullCompanyName());
 
             axios.post('http://localhost:8080/api/admin/new/user', {
                 employee:this.userObjectByType() ,
                 specialization:this.state.type === "doctor" ? this.state.specialization : null
             })
             .then((response)=>{
-                console.log(response.status);
                 this.setState({
                     infoState:<div className="alert alert-success"><strong>Naujo vartotojo paskyra sėkmingai sukurta.</strong></div>,
                     
@@ -197,7 +194,6 @@ export default class AdminCreateUserContainer extends Component{
             this.setState({
                 specializations: response.data.map(this.composerSpecialization)
             })
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -344,9 +340,6 @@ export default class AdminCreateUserContainer extends Component{
                 this.setState({[name]: value});  
                 break;
         }
-               
-        // console.log("Input field name: " + name);
-        // console.log("Input field value: " + value);
     }
 
     fieldOnFocusHandler = (e) => {

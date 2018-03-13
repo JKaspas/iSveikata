@@ -8,7 +8,6 @@ export const adminSpecializationList = () =>{
             dispatch({ type:'FETCH_SPECIALIZATION_LIST', payload:response.data})
         })
         .catch((erorr) =>{
-            console.log(erorr)
         })     
     })
 }
