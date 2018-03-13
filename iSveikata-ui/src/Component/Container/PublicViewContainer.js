@@ -21,7 +21,7 @@ class PublicViewContainer extends Component{
             <div>
                 <header className="text-black">
                     <div className="container">
-                        <img  src={logo} alt="iSveikata" id="logo"/>
+                        <img  src={logo} alt="iSveikata" id="logo" className="img-responsive center-block"/>
                         {/* <button className="btn btn-success" onClick={this.load}>Load</button> */}
                     </div>
                 </header>
@@ -55,7 +55,7 @@ class PublicViewContainer extends Component{
                                 </p>
                             </div>
                             <div className="col-sm-4" id="custom2">
-                                <p className="infoText left">
+                                <p className="infoText">
                                 Pateikiame susirgimų ir vaistų vartojimo statistiką.
                                 </p> 
                                 <p className="infoText">

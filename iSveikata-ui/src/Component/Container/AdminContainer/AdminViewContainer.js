@@ -28,7 +28,7 @@ class AdminViewContainer extends Component{
             <div>
                 <header className="text-black">
                     <div className="container">
-                        <img  src={logo} alt="iSveikata" id="logo"/>
+                        <img  src={logo} alt="iSveikata" id="logo" className="img-responsive center-block"/>
                     </div>
                 </header>
                 <body>

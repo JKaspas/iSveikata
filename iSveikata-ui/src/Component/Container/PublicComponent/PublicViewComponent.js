@@ -12,8 +12,8 @@ var PublicViewComponent = (props) =>{
                         </div>
                         <div className="panel-body">
                             <div className="col-sm-12">
-                                <button className="btn btn-default" disabled={props.icdButtonDisabled} onClick={props.showIcdStatistic}>Peržiūrėti dažniausiai pasitaikančių ligų statistiką</button>
-                                <button className="btn btn-default pull-right" disabled={props.tlkButtonDisabled} onClick={props.showApiStatistic}>Peržiūrėti dažniausiai vartojamų vaistų veikliųjų medžiagų statistiką</button>
+                                <button className="btn btn-default btn-lg btn-block" disabled={props.icdButtonDisabled} onClick={props.showIcdStatistic}>Peržiūrėti dažniausiai pasitaikančių ligų statistiką</button>
+                                <button className="btn btn-default btn-lg btn-block" disabled={props.tlkButtonDisabled} onClick={props.showApiStatistic}>Peržiūrėti dažniausiai vartojamų vaistų veikliųjų medžiagų statistiką</button>
                             </div>
                             {props.icdStatistic}
                             {props.icdButton}
