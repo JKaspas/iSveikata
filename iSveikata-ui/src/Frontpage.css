@@ -79,19 +79,19 @@ footer {
     display: inline-block;
   }
 
-a:link {
+frontPagePanel a:link {
     color: #293180;
     background-color: transparent;
     text-decoration: none;   
 }
 
-a:visited {
+frontPagePanel a:visited {
     color: #7a7c8c;
     background-color: transparent;
     text-decoration: none;
 }
 
-a:hover {
+frontPagePanel a:hover {
     color: #ffffff;
     background-color: #293180;
     text-decoration: none;
@@ -112,7 +112,7 @@ a:active {
     padding-top: 5px;
 }
 
-#homeHome, #admin, #doctorDoctor, #druggist, #patient {
+#homeHome{
     padding: 0;
 }
 

@@ -195,7 +195,7 @@ export default class PatientRecordContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent fullName={this.session.user.fullName}
+            <UserDetailsComponent fullName={this.session.patient.fullName}
             other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
         />
                         <div className="panel-group">

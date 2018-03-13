@@ -6,10 +6,7 @@ import lt.vtvpmc.ems.isveikata.employees.Druggist;
 import lt.vtvpmc.ems.isveikata.prescription.Prescription;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 

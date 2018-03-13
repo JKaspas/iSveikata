@@ -90,6 +90,20 @@ export default class DoctorRecordContainer extends Component{
     console.log(currentDate);
 
     if(this.state.formValid){
+      console.log({
+        appointment: {
+          duration: this.state.duration,
+          description: this.state.description,
+          date: currentDate
+        },
+        medicalRecord: {
+          compensable: this.state.isCompensable,
+          repetitive: this.state.isRepetitive
+        },
+        icdCode: this.state.icdCode,
+        patientId: this.state.patient.id,
+        userName: this.state.userName
+      })
       axios
         .post("http://localhost:8080/api/doctor/new/record", {
           appointment: {

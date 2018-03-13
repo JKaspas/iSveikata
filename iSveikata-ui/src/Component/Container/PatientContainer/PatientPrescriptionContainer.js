@@ -178,7 +178,7 @@ export default class PatientPrescriptionContainer extends Component{
              <PrescriptionUsageListingItem
                 key={index}
                 date={usage.usageDate}
-                druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
+                druggistName={usage.druggistFullName}
             />
         )
     }
@@ -231,7 +231,7 @@ export default class PatientPrescriptionContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent fullName={this.session.user.fullName}
+            <UserDetailsComponent fullName={this.session.patient.fullName}
             other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
         />
                         <div className="panel-group">

@@ -189,7 +189,6 @@ export default class DoctorPatientViewContainer extends Component{
         return (<div>
                 <p>Ligos įrašo data: {record.appointmentDate}</p>
                 <p>Ligos kodas: {record.icdCode}</p>
-                <p>Ligos kodo aprašymas: {record.icdDescription}</p>
                 <p>Ligos aprašymas: {record.icdDescription}</p>
                 <p>Ligos įrašą padaręs gydytojas: {record.doctorFullName} </p>
                 <p>Vizito trukmė: {record.appoitmentDuration}</p>
@@ -268,7 +267,7 @@ export default class DoctorPatientViewContainer extends Component{
              <PrescriptionUsageListingItem
                 key={index}
                 date={usage.usageDate}
-                druggistName={usage.druggist.firstName + ' ' + usage.druggist.lastName}
+                druggistName={usage.druggistFullName}
             />
         )
     }
