@@ -20,17 +20,16 @@ export default class DoctorStatisticContainer extends Component{
         this.session = JSON.parse(sessionStorage.getItem('session'))
         this.state = {
             dateFrom: '2010-02-01',
-            dateTill: '2010-04-13',
+            dateTill: '2010-04-14',
             data:[],
             chart:null,
             totalPatient:0,
             totalTime:0,
             total:null,
             
-            
             startDate: null,
             endDate: null,
-            focusedInput: null,
+             focusedInput: null,
              
         }
     }
@@ -46,7 +45,9 @@ export default class DoctorStatisticContainer extends Component{
         console.log({
             userName:this.session.user.userName,
             dateFrom:this.state.dateFrom,
-            dateTill:this.state.dateTill
+            dateTill:this.state.dateTill,
+            datePickerFrom:this.state.startDate,
+            datePickerTo:this.state.endDate            
         })
 
         let start = new Date(this.state.startDate._d)
@@ -153,8 +154,8 @@ export default class DoctorStatisticContainer extends Component{
                             <div className="text-center">
                             <h4>Nurodykite laikotarpį darbo dienų statistikai pateikti:</h4>
                             <DateRangePicker
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
+                                startDate={moment().startOf('month')} 
+                                endDate={moment()}
                                 startDatePlaceholderText="Pradžios data"
                                 endDatePlaceholderText="Pabaigos data"
                                 displayFormat="YYYY-MM-DD"
@@ -163,6 +164,7 @@ export default class DoctorStatisticContainer extends Component{
                                 onFocusChange={(focusedInput) => { this.setState({ focusedInput })}}
                                 isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                 numberOfMonths={1}
+                                
                                 />
                             </div>
                             <div className="text-center">
