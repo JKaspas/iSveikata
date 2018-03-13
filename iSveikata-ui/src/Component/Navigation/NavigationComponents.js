@@ -20,8 +20,8 @@ var AdminNavigation = (props) =>{
     </nav>
     )
   }
-
   
+
   var DoctorNavigation = (props) =>{
     return (
     <nav className="navbar  navbar-inverse navbar-fixed-top" id="mainNav">

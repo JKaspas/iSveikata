@@ -112,7 +112,7 @@ a:active {
     padding-top: 5px;
 }
 
-#homeHome {
+#homeHome, #admin, #doctorDoctor, #druggist, #patient {
     padding: 0;
 }
 
