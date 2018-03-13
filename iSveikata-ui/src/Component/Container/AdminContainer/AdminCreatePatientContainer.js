@@ -68,11 +68,14 @@ export default class AdminCreatePatientContainer extends Component{
                     generatedNumber: (Math.floor(Math.random() * (99 - 10 +1)) + 10).toString()                      
                 })
             })
-            .catch((error) => {
-                console.log(error.response)
+            .catch((error) => {             
                 if(error.response.data.status > 400 && error.response.data.status < 500){
                     UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                     this.props.router.push("/atsijungti")
+                }else if(error.response.status === 422){
+                    this.setState({
+                        infoState:(<h3>{error.response.data}</h3>)
+                    })
                 }else{
                     this.setState({
                         infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)

@@ -129,7 +129,16 @@ class UserLoginContainer extends Component {
     const name = e.target.name;
     const value = e.target.value;
 
-    this.setState({ [name]: value });
+    switch (name) {
+      case 'userName':
+          let userName = this.state.userName;
+          userName = value.replace(/[^a-ząčęėįšųūž\d]/gi, "");
+          this.setState({userName: userName});   
+          break; 
+      default:
+          this.setState({[name]: value});  
+          break;
+    }
   };
 
   fieldOnFocusHandler = e => {
@@ -148,7 +157,7 @@ class UserLoginContainer extends Component {
       default:
         break;
     }
-    this.setState({ fieldState: fieldValidationState, infoState: "" });
+    this.setState({ fieldState: fieldValidationState, infoState: "", formValid: false});
   };
 
   fieldValidationHandler = e => {
@@ -185,17 +194,16 @@ class UserLoginContainer extends Component {
   validateField = (fieldName, value) => {
     let fieldValidationErrors = this.state.formErrors;
     let fieldValidationState = this.state.fieldState;
+
     let userNameValid = this.state.userNameValid;
     let passwordValid = this.state.passwordValid;
 
     switch (fieldName) {
       case "userName":
-        //userNameValid = (value.length === 9) || (value === "root");
-        //fieldValidationErrors.userName = userNameValid ? '' : 'Patikrinkite ar gerai įvedėte vartotojo vardą.';
-        // ARBA
-        userNameValid = value.match(/^[a-zA-Z0-9]+$/g); //|| (value === "root");
+        userNameValid = value.match(/^[a-ząčęėįšųūž]{6}\d{3}$/gi) || value === "root";
+        //userNameValid = value.match(/^(([A-Z]{1})([a-z]{2})){2}(\d{3})$/g) || (value === "root");
         // ^ Tikrina ar įrašytas teisingo formato vartotojo vardas. Sistemoje jis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus.
-        //Išimtis: administratoriaus vartotojo vardas.
+        //Išimtis: laikinas administratoriaus vartotojo vardas.
         fieldValidationErrors.userName = userNameValid
           ? ""
           : "Patikrinkite ar gerai įvedėte vartotojo vardą.";
@@ -207,8 +215,8 @@ class UserLoginContainer extends Component {
         //Čia "has-success" / "has-error" yra viena iš formos elemento klasių.
         break;
       case "password":
-        passwordValid = value.length >= 3;
-        // ^ Tikrina ar įrašyta ne mažiau kaip 8 (ir formoje leidžiama įvesti ne daugiau kaip 15 simbolių). Išimtis: administratoriaus slaptažodis.
+        passwordValid = value.length >= 8 || value === "123";
+        // ^ Tikrina ar įrašyta ne mažiau kaip 8 (ir formoje leidžiama įvesti ne daugiau kaip 15 simbolių). Išimtis: laikinas administratoriaus slaptažodis.
         fieldValidationErrors.password = passwordValid
           ? ""
           : "Slaptažodis per trumpas.";
@@ -245,12 +253,16 @@ class UserLoginContainer extends Component {
         errorMessageLoginValue={this.state.formErrors.userName}
         errorMessagePassword={this.state.formErrors.password}
         infoState={this.state.infoState}
+        formValid={this.state.formValid}
+
         loginValue={this.state.userName}
         password={this.state.password}
+
         fieldValidationHandler={this.fieldValidationHandler}
         fieldHandler={this.fieldHandler}
         fieldOnFocusHandler={this.fieldOnFocusHandler}
         submitHandler={this.submitHandler}
+        
         loginPlaceholder={"Vartotojo vardas"}
         loginValueName={"userName"}
       />

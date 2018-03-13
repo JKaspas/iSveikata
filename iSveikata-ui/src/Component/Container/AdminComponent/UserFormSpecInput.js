@@ -7,7 +7,8 @@ export const UserFormSpecInput = (props) =>{
             <div className={'form-group ' + (props.title === "select" ? 'is-empty' : 'has-success has-feedback')}>
                 <label className="control-label col-sm-3" htmlFor="title">Specializacija:</label>
                 <div className="col-sm-9">          
-                    <select className="form-control" id="title" name="title" value={props.title} onChange={props.fieldHandler} onFocus={props.selectOnFocusHandler}>
+                    <select className="form-control" id="title" name="title" autoComplete="specialization-name" 
+                    value={props.title} onChange={props.fieldHandler} onFocus={props.selectOnFocusHandler}>
                         <option value="select">PASIRINKITE</option>
                         {props.specializations}
                         <option value="kita">KITA</option>
