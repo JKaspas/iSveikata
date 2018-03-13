@@ -1,0 +1,6 @@
+#FileLock
+#Tue Mar 13 16:00:49 EET 2018
+hostName=daiva-VirtualBox
+id=1621fa9ddefe4f767650ef52b2d710a07eca257345d
+method=file
+server=127.0.1.1\:42199
