@@ -141,7 +141,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     searchOn:false
                  })
             } 
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -178,7 +177,6 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })  
             }         
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -255,7 +253,6 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -297,7 +294,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     searchOn:true
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){

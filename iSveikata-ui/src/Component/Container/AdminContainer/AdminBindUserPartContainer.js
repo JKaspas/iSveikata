@@ -78,7 +78,6 @@ export default class AdminBindUserPartContainer extends Component{
                     listLength:response.data.content.length,
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -95,7 +94,6 @@ export default class AdminBindUserPartContainer extends Component{
     bindClick = (patient_id) =>{
         axios.post("http://localhost:8080/api/admin/new/bind/"+this.props.params.userName+"/to/"+patient_id)
         .then((response)=>{
-            console.log(response.status)
             this.getPatientList(this.state.searchValue, this.state.activePage);  
         })
         .catch((error) => {

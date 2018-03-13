@@ -75,17 +75,7 @@ export default class DoctorPrescriptionContainer extends Component{
         let currentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
         let expDate = this.generateExpirationDate();
         e.preventDefault();
-        console.log({
-            prescription:{
-                expirationDate:expDate,
-                prescriptionDate:currentDate,
-                description:this.state.description.toString(),
-                ingredientAmount:this.state.substanceAmount
-            },
-            patientId: this.state.patient.id,
-            userName: this.state.userName,
-            apiTitle: this.state.substance
-        })
+        
         if(this.state.formValid){
             axios.post('http://localhost:8080/api/doctor/new/prescription', {
                 prescription:{
@@ -99,7 +89,7 @@ export default class DoctorPrescriptionContainer extends Component{
                 apiTitle: this.state.substance
             })
             .then((response)=>{
-                console.log(response.status)
+                
                 this.setState({
                     infoState:<div className="alert alert-success"><strong>Naujas receptas sėkmingai sukurtas.</strong></div>,
                     

@@ -36,7 +36,7 @@ class DoctorViewContainer extends Component{
                 </header>
                 <body>
                     <div className="container">
-                        <div className="row">
+                        <div className="row frontPagePanel">
 
                             <div className="col-md-4">
                                 <a href="#gydytojas/pacientai" id="doctorViewPatient" className="thumbnail ">

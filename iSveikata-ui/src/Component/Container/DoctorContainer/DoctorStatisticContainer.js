@@ -2,17 +2,12 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { DateRangePicker,isInclusivelyBeforeDay } from 'react-dates';
-
-
 import moment from 'moment';
 import 'moment/locale/lt';
-
-
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { UserDetailsComponent } from '../AdminComponent/UserDetailsComponent';
 import { UnauthorizedComponent } from '../UnauthorizedComponent';
-
 
 export default class DoctorStatisticContainer extends Component{
     constructor(props){
@@ -27,10 +22,9 @@ export default class DoctorStatisticContainer extends Component{
             totalTime:0,
             total:null,
             
-            startDate: null,
-            endDate: null,
-             focusedInput: null,
-             
+            startDate: moment().startOf('month'),
+            endDate: moment(),
+            focusedInput: null,
         }
     }
 
@@ -42,13 +36,6 @@ export default class DoctorStatisticContainer extends Component{
         }  
     }
     submitHandler = () =>{
-        console.log({
-            userName:this.session.user.userName,
-            dateFrom:this.state.dateFrom,
-            dateTill:this.state.dateTill,
-            datePickerFrom:this.state.startDate,
-            datePickerTo:this.state.endDate            
-        })
 
         let start = new Date(this.state.startDate._d)
         let end = new Date(this.state.endDate._d)
@@ -82,7 +69,6 @@ export default class DoctorStatisticContainer extends Component{
                 })
                 this.showStatistic()
             }
-            console.log(response.status)
         })
         .catch(error => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -101,7 +87,6 @@ export default class DoctorStatisticContainer extends Component{
             totalPatient: parseInt(this.state.totalPatient, 10) + data[1],
             totalTime: parseInt(this.state.totalTime, 10) + data[2]
         })
-
         return {date:data[0], patient:data[1], time:data[2]}
     }
     
@@ -141,9 +126,9 @@ export default class DoctorStatisticContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent  fullName={this.session.user.fullName} other={
+                <UserDetailsComponent  fullName={this.session.user.fullName} other={
                     <li className="navbar-text">
-                    <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
+                        <button onClick={() =>  this.props.router.goBack()} className="btn btn-default"> Atgal </button>
                     </li>
                 }/>
             
@@ -152,14 +137,13 @@ export default class DoctorStatisticContainer extends Component{
                         <div className="panel-heading">
                             <h3>Gydytojo darbo dienų statistika</h3>
                         </div>
+
                         <div className="panel-body">
-                    
-                           
                             <div className="text-center">
                             <h4>Nurodykite laikotarpį darbo dienų statistikai pateikti:</h4>
                             <DateRangePicker
-                                startDate={moment().startOf('month')} 
-                                endDate={moment()}
+                                startDate={this.state.startDate}
+                                endDate={this.state.endDate}
                                 startDatePlaceholderText="Pradžios data"
                                 endDatePlaceholderText="Pabaigos data"
                                 displayFormat="YYYY-MM-DD"
@@ -168,22 +152,17 @@ export default class DoctorStatisticContainer extends Component{
                                 onFocusChange={(focusedInput) => { this.setState({ focusedInput })}}
                                 isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                 numberOfMonths={1}
-                                
                                 />
                             </div>
                             <div className="text-center">
                                 <button id="showDoctorStatisticButton" onClick={this.submitHandler} className="btn btn-default" type="submit" >Pateikti statistiką</button> 
                             </div>
-                            
-                           {/* <form onSubmit={this.submitHandler}>
-                           <input type="date" name="dateFrom" onChange={this.fieldHandler}/>
-                           <input type="date" name="dateTill" onChange={this.fieldHandler} />
-                           <input className="btn btn-primary" type="submit" value="Pateikti statistika"/>                            </form> */}
+        
                             <div> 
                             {this.state.total}
                             {this.state.chart}
                             </div>
-                          
+                            
                         </div> 
                     </div> 
                 </div>           

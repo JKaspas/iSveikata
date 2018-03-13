@@ -33,7 +33,7 @@ class AdminViewContainer extends Component{
                 </header>
                 <body>
                     <div className="container">
-                        <div className="row">
+                        <div className="row frontPagePanel">
                             <div className="col-sm-4">
                                 <a href="#administratorius/kurti/pacienta" id="adminRegisterPatient" className="thumbnail">
                                 <h4 className="text-center">Registruoti naują pacientą</h4>
