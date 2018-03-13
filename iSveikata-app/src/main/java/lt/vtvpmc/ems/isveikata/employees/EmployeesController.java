@@ -224,6 +224,7 @@ public class EmployeesController {
 	 *            the user name
 	 */
 	@DeleteMapping("/admin/delete/user/{userName}")
+	@ResponseStatus(HttpStatus.OK)
 	private void deleteUser(@PathVariable String userName) {
 		employeesService.deactivateUser(userName);
 	}
@@ -235,6 +236,7 @@ public class EmployeesController {
 	 *            the patient id
 	 */
 	@DeleteMapping("/admin/delete/patient/{patientId}")
+	@ResponseStatus(HttpStatus.OK)
 	private void deletePatient(@PathVariable String patientId) {
 		patientService.deactivatePatient(patientId);
 	}
