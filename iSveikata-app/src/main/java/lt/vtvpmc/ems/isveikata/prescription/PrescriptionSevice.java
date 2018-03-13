@@ -7,6 +7,8 @@ import java.util.logging.Level;
 
 import javax.transaction.Transactional;
 
+import lt.vtvpmc.ems.isveikata.mappers.PrescriptionUsageMapper;
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,6 +63,10 @@ public class PrescriptionSevice {
 	/** The mapper. */
 	@Autowired
 	private PrescriptionMapper mapper;
+
+	/** The prescriptionUsage mapper */
+	@Autowired
+	private PrescriptionUsageMapper prescriptionUsageMapper;
 
 	/**
 	 * Gets the logged user name for logger.
@@ -139,10 +145,10 @@ public class PrescriptionSevice {
 	 * @return the all prescription usages
 	 */
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
-	public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
+	public List<PrescriptionUsageDto> getAllPrescriptionUsages(Long prescriptionId) {
 		try {
 			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching all prescription usages");
-			return prescriptionRepository.findOne(prescriptionId).getPrescriptionUsage();
+			return prescriptionUsageMapper.prescriptionUsagesToDto(prescriptionUsageRepository.findByPrescriptionUsages(prescriptionId));
 
 		} catch (Exception e) {
 			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),

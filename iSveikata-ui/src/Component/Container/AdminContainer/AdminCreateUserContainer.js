@@ -107,15 +107,12 @@ export default class AdminCreateUserContainer extends Component{
         e.preventDefault();
 
         if(this.state.formValid){
-            console.log({user:this.userObjectByType(), type:this.state.specialization}); 
-            //console.log(this.fullCompanyName());
 
             axios.post('http://localhost:8080/api/admin/new/user', {
                 employee:this.userObjectByType() ,
                 specialization:this.state.type === "doctor" ? this.state.specialization : null
             })
             .then((response)=>{
-                console.log(response.status);
                 this.setState({
                     infoState:<div className="alert alert-success"><strong>Naujo vartotojo paskyra sėkmingai sukurta.</strong></div>,
                     
@@ -151,6 +148,10 @@ export default class AdminCreateUserContainer extends Component{
                 if(error.response.data.status > 400 && error.response.data.status < 500){
                     UnauthorizedComponent(this.session.user.userName, this.session.patient.patientId)
                     this.props.router.push("/atsijungti")
+                }else if(error.response.status === 422){
+                    this.setState({
+                        infoState:(<h3>{error.response.data}</h3>)
+                    })
                 }else{
                     this.setState({
                         infoState:(<h3>Serverio klaida. Bandykite dar kartą vėliau.</h3>)
@@ -193,7 +194,6 @@ export default class AdminCreateUserContainer extends Component{
             this.setState({
                 specializations: response.data.map(this.composerSpecialization)
             })
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -246,7 +246,7 @@ export default class AdminCreateUserContainer extends Component{
 
      //Užtikrina, kad darbovietės pavadinimas būtų iš didžiosios raidės, jei įvesta mažosiomis.
      capitalizeFirstLetterOfString(string) { 
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
     
     //Slapyvardis sudaromas iš trijų pirmų vardo raidžių, trijų pirmų pavardės raidžių ir atsitiktinio triženklio skaičiaus. 
@@ -323,7 +323,7 @@ export default class AdminCreateUserContainer extends Component{
                 break; 
             case 'lastName':
                 let lastName = this.state.lastName;
-                lastName = value.replace(/[^a-z ąčęėįšųūž]/gi, "");
+                lastName = value.replace(/[^a-z ąčęėįšųūž-]/gi, "");
                 this.setState({lastName: lastName});   
                 break;
             case 'newTitle':
@@ -333,16 +333,13 @@ export default class AdminCreateUserContainer extends Component{
                 break; 
             case 'companyName':
                 let companyName = this.state.companyName;
-                companyName = value.replace(/[^a-z ąčęėįšųūž\d]/gi, "");
+                companyName = value.replace(/[^a-z ąčęėįšųūž\d-]/gi, "");
                 this.setState({companyName: companyName});   
                 break; 
             default:
                 this.setState({[name]: value});  
                 break;
         }
-               
-        // console.log("Input field name: " + name);
-        // console.log("Input field value: " + value);
     }
 
     fieldOnFocusHandler = (e) => {
@@ -442,7 +439,7 @@ export default class AdminCreateUserContainer extends Component{
                 break;
             case 'lastName':
                 lastName = this.capitalizeFirstLetter(value.trim());
-                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
+                lastNameValid = lastName.match(/^[a-ząčęėįšųūž]{3,}(-[a-ząčęėįšųūž]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.lastName = lastNameValid ? '' : 'Įveskite pavardę.';
                 fieldValidationState.lastName = lastNameValid ? 'has-success' : 'has-error';
@@ -453,7 +450,7 @@ export default class AdminCreateUserContainer extends Component{
                         }, this.validateForm);
                 break;
             case 'newTitle':
-                newTitle = value.trim().toUpperCase();
+                newTitle = this.capitalizeFirstLetter(value.trim());
                 newTitleValid = newTitle.match(/^[a-ząčęėįšųūž]{3,}( [a-ząčęėįšųūž]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės ir ne mažiau kaip trys. Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.newTitle = newTitleValid ? '' : 'Įveskite specializaciją.';
@@ -466,7 +463,7 @@ export default class AdminCreateUserContainer extends Component{
                 break;
             case 'companyName':
                 companyName = this.capitalizeFirstLetterOfString(value.trim());
-                companyNameValid = companyName.match(/^[a-ząčęėįšųūž\d]{1,}( [a-ząčęėįšųūž\d]+)*$/gi);
+                companyNameValid = companyName.match(/^[a-ząčęėįšųūž\d]{1,}([ -]{1}[a-ząčęėįšųūž\d]+)*$/gi);
                 // ^ Tikrina ar įrašytos tik raidės bei skaičiai ir ne mažiau kaip viena(s). Tarp žodžių leidžiamas vienas tarpas.
                 fieldValidationErrors.companyName = companyNameValid ? '' : 'Įveskite darbovietės pavadinimą.';
                 fieldValidationState.companyName = companyNameValid ? 'has-success' : 'has-error';

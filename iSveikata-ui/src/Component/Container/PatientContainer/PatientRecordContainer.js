@@ -69,7 +69,7 @@ export default class PatientRecordContainer extends Component{
                     listInfo:response.data,
                     listLength:response.data.content.length,
                 })
-                console.log(response.status)
+                
             }
            
         })
@@ -108,7 +108,7 @@ export default class PatientRecordContainer extends Component{
                     infoDetails:this.composeSpecificRecord(response.data),
                     infoHeader: this.composeSpecificRecordHeader(response.data)
                 })
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -195,7 +195,7 @@ export default class PatientRecordContainer extends Component{
         return (
             <div className="container">
             <section>
-            <UserDetailsComponent fullName={this.session.user.fullName}
+            <UserDetailsComponent fullName={this.session.patient.fullName}
             other={<button onClick={() =>  this.props.router.goBack()} className="btn btn-default navbar-text"> Atgal </button>} 
         />
                         <div className="panel-group">

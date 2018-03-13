@@ -14,7 +14,6 @@ export const doctorApiList = () =>{
             dispatch({ type:'FETCH_API_LIST', payload:response.data})
         })
         .catch((erorr) =>{
-            console.log(erorr)
         })     
     })
 }
@@ -26,7 +25,6 @@ export const doctorIcdList = () =>{
             dispatch({ type:'FETCH_ICD_LIST', payload:response.data})
         })
         .catch((erorr) =>{
-            console.log(erorr)
         })     
     })
 }

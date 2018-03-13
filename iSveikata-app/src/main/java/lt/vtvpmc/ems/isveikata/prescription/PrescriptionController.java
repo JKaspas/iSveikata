@@ -4,6 +4,7 @@ package lt.vtvpmc.ems.isveikata.prescription;
 import java.util.List;
 import java.util.Map;
 
+import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class PrescriptionController {
 
     @GetMapping(value = "/{prescriptionId}/usages")
     @ResponseStatus(HttpStatus.OK)
-    private List<PrescriptionUsage> getAllPrescriptionUsages(@PathVariable final Long prescriptionId){
+    private List<PrescriptionUsageDto> getAllPrescriptionUsages(@PathVariable final Long prescriptionId){
         return prescriptionSevice.getAllPrescriptionUsages(prescriptionId);
     }
 

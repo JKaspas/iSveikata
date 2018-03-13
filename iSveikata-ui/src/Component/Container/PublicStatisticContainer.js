@@ -45,7 +45,7 @@ export default class PublicStatisticContainer extends Component{
                         tlkButtonDisabled:false                      
                     })
                 }
-                console.log(response.status)               
+                
             })
     }
 
@@ -66,7 +66,7 @@ export default class PublicStatisticContainer extends Component{
                     })
                     
                 }
-                console.log(response.status)               
+                
             })
     }
 

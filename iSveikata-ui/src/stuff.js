@@ -48,10 +48,10 @@ import {Link} from 'react-router'
         this.setState({
             trains:response.data.map(this.composeTrains)
         })
-        console.log(response.status)
+        
     })
     .catch((erorr) => {
-        console.log(erorr)
+        
     })
 }
 
@@ -71,8 +71,8 @@ constructor(props){
 
 fieldHandler = (e) =>{
   this.setState({[e.target.name]: e.target.value})
-  console.log("Input field name: " + e.target.name)
-  console.log("Input field value: " + e.target.value)
+  
+  
 }
 
 setFields = (e) => {
@@ -89,13 +89,13 @@ setFields = (e) => {
         number:this.state.number,
     })
     .then((response)=>{
-        console.log(response.status)
+        
         this.setState({
             number:'',
         })
     })
     .catch((erorr) => {
-        console.log(erorr)
+        
     })
 }
 
@@ -191,5 +191,5 @@ showDetails = (rowIndex) =>{
           opendRecordRow:rowIndex
       })
   }
-  console.log(rowIndex)
+  
 }

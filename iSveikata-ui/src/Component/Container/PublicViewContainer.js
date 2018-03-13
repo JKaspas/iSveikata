@@ -25,9 +25,9 @@ class PublicViewContainer extends Component{
                         {/* <button className="btn btn-success" onClick={this.load}>Load</button> */}
                     </div>
                 </header>
-                <body>
+                <div>
                     <div className="container">
-                        <div className="row">
+                        <div className="row frontPagePanel">
                             <div className="col-sm-4">
                                 <a href="#pacientams" id="publicPatient" className="thumbnail">
                                 <img  src={patients} alt=""/>
@@ -80,7 +80,7 @@ class PublicViewContainer extends Component{
                             </div>
                         </div>
                     </div>
-                </body>
+                </div>
                 {/* <PublicViewComponent/> */}
                 <footer>
                     <div>

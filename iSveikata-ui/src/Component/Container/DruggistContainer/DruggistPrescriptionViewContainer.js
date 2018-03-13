@@ -58,7 +58,7 @@ class DruggistViewContainer extends Component{
                     })
             }
            
-            console.log(response.status)
+            
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -105,7 +105,7 @@ class DruggistViewContainer extends Component{
                 infoState:<div className="alert alert-success"><strong>{response.data}</strong></div>,
             })
             document.getElementById('modalButton').click()
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -126,7 +126,7 @@ class DruggistViewContainer extends Component{
             this.setState({
                     infoDetails:this.composeSpecificPrescription(response.data, prescriptionId),
                 })
-            console.log(response.status)
+            
         })
         .catch((error) =>{
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -163,7 +163,7 @@ class DruggistViewContainer extends Component{
     }
     searchHandler = (e) =>{
         e.preventDefault()
-       console.log("Search..."+ this.state.searchValue)
+       
     }
 
 

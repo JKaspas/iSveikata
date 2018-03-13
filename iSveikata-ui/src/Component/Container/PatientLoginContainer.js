@@ -58,7 +58,7 @@ class PatientLoginContainer extends Component{
             .then((response) => {
                 this.props.dispatch(patientLoggedIn(this.state.patientId, response.data.fullName))
                 this.props.router.push('/pacientas');
-                console.log(response.status)
+                
             })
             .catch((error) => {
                 if(error.response.data.status > 400 && error.response.data.status < 500 ){
@@ -99,7 +99,16 @@ class PatientLoginContainer extends Component{
         const name = e.target.name;
         const value = e.target.value;
     
-        this.setState({[name]: value});
+        switch (name) {
+            case 'patientId':
+                let patientId = this.state.patientId;
+                patientId = value.replace(/[^\d]/g, "");
+                this.setState({patientId: patientId});   
+                break; 
+            default:
+                this.setState({[name]: value});  
+                break;
+          }
     }
 
     fieldOnFocusHandler = (e) => {
@@ -118,7 +127,7 @@ class PatientLoginContainer extends Component{
             default:
                 break;
         }
-        this.setState({fieldState: fieldValidationState, infoState: ''});
+        this.setState({fieldState: fieldValidationState, infoState: '', formValid: false});
     }
 
     fieldValidationHandler = (e) => {
@@ -152,6 +161,7 @@ class PatientLoginContainer extends Component{
     validateField = (fieldName, value) => {
         let fieldValidationErrors = this.state.formErrors;
         let fieldValidationState = this.state.fieldState;
+
         let patientIdValid = this.state.patientIdValid;
         let passwordValid = this.state.passwordValid;
       
@@ -247,6 +257,7 @@ class PatientLoginContainer extends Component{
             errorMessageLoginValue={this.state.formErrors.patientId}
             errorMessagePassword={this.state.formErrors.password}
             infoState={this.state.infoState}
+            formValid={this.state.formValid}
 
             loginValue={this.state.patientId}
             password={this.state.password}

@@ -58,11 +58,6 @@ var PrescriptionForm = (props) =>{
                 <div className="col-sm-2">  
                     <input type="text" className="form-control" name="substanceUnit" readOnly 
                     value={props.substanceUnit} />
-                {/* <select className="form-control" name="substanceUnit" value={props.substanceUnit} onChange={props.fieldHandler}>
-                        <option value="mg">mg</option>
-                        <option value="mcg">mcg</option>
-                        <option value="tv">t.v.</option>
-                    </select> */}
                 </div>
             </div>
             <div className={'form-group has-feedback ' + props.classNameDescription}>

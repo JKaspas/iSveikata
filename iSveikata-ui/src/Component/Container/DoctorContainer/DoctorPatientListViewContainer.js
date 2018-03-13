@@ -14,10 +14,10 @@ import { UnauthorizedComponent } from '../UnauthorizedComponent';
 
 export default class DoctorPatientListViewContainer extends Component{
     constructor(props){
-        super(props),
-        this.timeOut= '',
-        this.session = JSON.parse(sessionStorage.getItem('session')),
-        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor')),
+        super(props)
+        this.timeOut= ''
+        this.session = JSON.parse(sessionStorage.getItem('session'))
+        this.doctorInfo = JSON.parse(sessionStorage.getItem('doctor'))
         this.state = {
             patientListView:null,
            
@@ -141,7 +141,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     searchOn:false
                  })
             } 
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -178,7 +177,6 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })  
             }         
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -255,7 +253,6 @@ export default class DoctorPatientListViewContainer extends Component{
 
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){
@@ -297,7 +294,6 @@ export default class DoctorPatientListViewContainer extends Component{
                     searchOn:true
                 })
             }
-            console.log(response.status)
         })
         .catch((error) => {
             if(error.response.data.status > 400 && error.response.data.status < 500){

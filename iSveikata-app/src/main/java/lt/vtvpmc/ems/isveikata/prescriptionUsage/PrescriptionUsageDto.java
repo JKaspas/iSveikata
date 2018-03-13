@@ -9,8 +9,8 @@ import lt.vtvpmc.ems.isveikata.prescription.PrescriptionDto;
 @Data
 public class PrescriptionUsageDto {
 
-    private PrescriptionDto prescriptionDto;
-    private Druggist druggist;
-    private Date usageDate;
 
+    private String druggistFullName;
+
+    private Date usageDate;
 }

@@ -115,7 +115,7 @@ public class EmployeesService {
                             "created new doctor with " + doctor.getUserName() + " username");
                     return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
                 } else {
-                    IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                    IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
                             "new doctor not created because it exists " + doctor.getUserName() + " username");
                     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                             .body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
@@ -140,7 +140,7 @@ public class EmployeesService {
                                 "created new druggist with " + druggist.getUserName() + " username");
                         return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
                     }else{
-                        IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+                        IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
                                 "new druggist not created because it exists with  " + druggist.getUserName() + " username");
                         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                                 .body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");
@@ -164,7 +164,7 @@ public class EmployeesService {
 							"created new employee with " + employee.getUserName() + " username");
 					return ResponseEntity.status(HttpStatus.CREATED).body("Sukurtas naujas vartotojas");
 				}else{
-					IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
+					IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
 							"new employee not created because it exists with  " + employee.getUserName() + " username");
 					return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
 							.body("Vartotojas su tokiu prisijungimo slapyvardžiu jau egzistuoja");

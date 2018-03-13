@@ -148,3 +148,7 @@ td:hover{
 .DateInput{
   width: 180px !important
 }
+
+#homeHome, #admin, #doctorDoctor, #druggist, #patient {
+  padding: 0;
+}

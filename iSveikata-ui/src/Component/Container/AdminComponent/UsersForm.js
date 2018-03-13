@@ -22,7 +22,8 @@ const UsersForm = (props) =>{
                 <label className="control-label col-sm-3" htmlFor="firstName">Vardas:</label>
                 <div className="col-sm-9">
                     <input type="text" className="form-control" id="firstName" name="firstName"
-                    value={props.firstName} placeholder="Vardas" maxLength="225" autoComplete="off" 
+                    value={props.firstName} placeholder="Vardas" maxLength="225"
+                    autoComplete='given-name'
                     onChange={props.fieldHandler}
                     onFocus={props.fieldOnFocusHandler}
                     onBlur={props.fieldValidationHandler} />
@@ -34,7 +35,8 @@ const UsersForm = (props) =>{
                 <label className="control-label col-sm-3" htmlFor="lastName">Pavardė:</label>
                 <div className="col-sm-9">
                     <input type="text" className="form-control" id="lastName" name="lastName"
-                    value={props.lastName} placeholder="Pavardė" maxLength="225" autoComplete="off" 
+                    value={props.lastName} placeholder="Pavardė" maxLength="225" 
+                    autoComplete='family-name'
                     onChange={props.fieldHandler}
                     onFocus={props.fieldOnFocusHandler}
                     onBlur={props.fieldValidationHandler} />
@@ -53,7 +55,7 @@ const UsersForm = (props) =>{
             <div className="form-group">
                 <label className="control-label col-sm-3" htmlFor="password">Slaptažodis:</label>
                 <div className="col-sm-9">
-                    <input type={props.passwordMasked ? "password" : "text"} className="form-control" id="password" name="password" readOnly required
+                    <input type={props.passwordMasked ? "password" : "text"} className="form-control" id="password" name="password" readOnly required autoComplete="off"
                     value={props.formValid ? props.password : ""} placeholder="Slaptažodis"
                     onClick={props.handlePasswordMasking} />
                     <span className="help-block"></span>
