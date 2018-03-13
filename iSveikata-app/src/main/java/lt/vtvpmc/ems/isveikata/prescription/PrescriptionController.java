@@ -32,11 +32,11 @@ public class PrescriptionController {
      * @return List of all prescriptions
      */
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    private List<PrescriptionDto> getAllPrescriptions(){
-        return prescriptionSevice.getAllPrescriptions();
-    }
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    private List<PrescriptionDto> getAllPrescriptions(){
+//        return prescriptionSevice.getAllPrescriptions();
+//    }
 
     /**
      * Get all specific prescription prescriptionUsages

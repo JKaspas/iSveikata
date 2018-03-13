@@ -27,38 +27,65 @@ import lt.vtvpmc.ems.isveikata.icd.JpaIcdRepository;
 import lt.vtvpmc.ems.isveikata.mappers.MedicalRecordMapper;
 import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 
+/**
+ * The Class MedicalRecordService.
+ * @author DTFG
+ * @version 1.0
+ * @since 2018
+ */
 @Service
 @Transactional
 public class MedicalRecordService {
 
+	/** The jpa medical record repository. */
 	@Autowired
 	private JpaMedicalRecordRepository jpaMedicalRecordRepository;
 
+	/** The jpa appointment repository. */
 	@Autowired
 	private JpaAppointmentRepository jpaAppointmentRepository;
 
+	/** The jpa employees repository. */
 	@Autowired
 	private JpaEmployeesRepository<Doctor> jpaEmployeesRepository;
 
+	/** The jpa patient repository. */
 	@Autowired
 	private JpaPatientRepository jpaPatientRepository;
 
+	/** The jpa icd repository. */
 	@Autowired
 	private JpaIcdRepository jpaIcdRepository;
 
+	/** The mapper. */
 	@Autowired
 	private MedicalRecordMapper mapper;
 
+	/**
+	 * Gets the logged user name for logger.
+	 *
+	 * @return the user name
+	 */
 	private String getUserName() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getUsername();
 	}
 
+	/**
+	 * Gets the logged user role for logger.
+	 *
+	 * @return the user role
+	 */
 	private String getUserRole() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getAuthorities().toString();
 	}
 
+	/**
+	 * Creates the new record.
+	 *
+	 * @param map the map with keys of "icdCode", "medicalRecord", "appointment"
+	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public void createNewRecord(Map<String, Object> map) {
 		try {
@@ -85,6 +112,12 @@ public class MedicalRecordService {
 
 	}
 
+	/**
+	 * Gets the medical record.
+	 *
+	 * @param medicalRecordId the medical record id
+	 * @return the medical record
+	 */
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public MedicalRecordDto getMedicalRecord(Long medicalRecordId) {
 		try {
@@ -97,6 +130,14 @@ public class MedicalRecordService {
 		}
 	}
 
+	/**
+	 * Gets the doctor work days statistic.
+	 *
+	 * @param userName the user name
+	 * @param dateFrom the date from
+	 * @param dateTill the date till
+	 * @return the doctor work days statistic
+	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public List<Object> getDoctorWorkDaysStatistic(String userName, String dateFrom, String dateTill) {
 		try {
@@ -112,6 +153,11 @@ public class MedicalRecordService {
 
 	}
 
+	/**
+	 * Public ICD (TLK) statistics.
+	 *
+	 * @return the list size of 10 of statistical ICD objects 
+	 */
 	public List<Map<String, Object>> publicTlkStatistics() {
 		try {
 			List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();

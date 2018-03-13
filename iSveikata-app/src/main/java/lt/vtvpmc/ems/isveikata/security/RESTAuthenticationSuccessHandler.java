@@ -18,6 +18,7 @@ import lt.vtvpmc.ems.isveikata.IsveikataApplication;
 @Component
 public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+// adds json formatted response with logged user name and role
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {

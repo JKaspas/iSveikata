@@ -28,38 +28,65 @@ import lt.vtvpmc.ems.isveikata.patient.JpaPatientRepository;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.JpaPrescriptionUsageRepository;
 import lt.vtvpmc.ems.isveikata.prescriptionUsage.PrescriptionUsage;
 
+/**
+ * The Class PrescriptionSevice.
+ * @author DTFG  
+ * @version 1.0
+ * @since 2018
+ */
 @Service
 @Transactional
 public class PrescriptionSevice {
 
+	/** The prescription repository. */
 	@Autowired
 	private JpaPrescriptionRepository prescriptionRepository;
 
+	/** The prescription usage repository. */
 	@Autowired
 	private JpaPrescriptionUsageRepository prescriptionUsageRepository;
 
+	/** The patient repository. */
 	@Autowired
 	private JpaPatientRepository patientRepository;
 
+	/** The employees repository. */
 	@Autowired
 	private JpaEmployeesRepository<?> employeesRepository;
 
+	/** The api repository. */
 	@Autowired
 	private JpaApiRepository apiRepository;
 
+	/** The mapper. */
 	@Autowired
 	private PrescriptionMapper mapper;
 
+	/**
+	 * Gets the logged user name for logger.
+	 *
+	 * @return the user name
+	 */
 	private String getUserName() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getUsername();
 	}
 
+	/**
+	 * Gets the logged user role for logger.
+	 *
+	 * @return the user role
+	 */
 	private String getUserRole() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getAuthorities().toString();
 	}
 
+	/**
+	 * Creates the new prescription.
+	 *
+	 * @param map the map wit key names of "prescription", "apiTitle", "patientId"
+	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public void createNewPrescription(Map<String, Object> map) {
 		try {
@@ -87,19 +114,30 @@ public class PrescriptionSevice {
 
 	}
 
-	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
-	public List<PrescriptionDto> getAllPrescriptions() {
-		try {
-			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching all prescriptions");
-			return mapper.prescriptionsToDto(prescriptionRepository.findAll());
+//	/**
+//	 * Gets the all prescriptions.
+//	 *
+//	 * @return the all prescriptions
+//	 */
+//	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
+//	public List<PrescriptionDto> getAllPrescriptions() {
+//		try {
+//			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching all prescriptions");
+//			return mapper.prescriptionsToDto(prescriptionRepository.findAll());
+//
+//		} catch (Exception e) {
+//			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
+//					"Error fetching all prescriptions:" + e.getMessage());
+//			return null;
+//		}
+//	}
 
-		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching all prescriptions:" + e.getMessage());
-			return null;
-		}
-	}
-
+	/**
+	 * Gets the all prescription usages.
+	 *
+	 * @param prescriptionId the prescription id
+	 * @return the all prescription usages
+	 */
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient')")
 	public List<PrescriptionUsage> getAllPrescriptionUsages(Long prescriptionId) {
 		try {
@@ -113,6 +151,12 @@ public class PrescriptionSevice {
 		}
 	}
 
+	/**
+	 * Gets the prescription.
+	 *
+	 * @param prescriptionId the prescription id
+	 * @return the prescription
+	 */
 	@PreAuthorize("hasRole('Doctor') OR hasRole('Patient') OR hasRole('Druggist')")
 	public PrescriptionDto getPrescription(Long prescriptionId) {
 		try {
@@ -126,6 +170,13 @@ public class PrescriptionSevice {
 		}
 	}
 
+	/**
+	 * Creates the usage for prescription.
+	 *
+	 * @param map the map
+	 * @param prescriptionId the prescription id
+	 * @return true, if successful
+	 */
 	@PreAuthorize("hasRole('Druggist')")
 	public boolean createUsageForPrescription(Map<String, Object> map, Long prescriptionId) {
 		try {
@@ -158,6 +209,11 @@ public class PrescriptionSevice {
 
 	}
 
+	/**
+	 * Gets the public api statistics.
+	 *
+	 * @return the public api statistics
+	 */
 	public List<ApiStatDto> getPublicApiStatistics() {
 		try {
 			List<ApiStatDto> stat = new ArrayList<ApiStatDto>();

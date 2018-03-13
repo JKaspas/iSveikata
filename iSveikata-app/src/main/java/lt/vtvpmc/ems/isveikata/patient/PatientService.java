@@ -1,6 +1,5 @@
 package lt.vtvpmc.ems.isveikata.patient;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +32,10 @@ import lt.vtvpmc.ems.isveikata.security.SHA256Encrypt;
 
 /**
  * The Class PatientService.
+ * 
+ * @author DTFG 
+ * @version 1.0
+ * @since 2018
  */
 @Service
 @Transactional
@@ -50,12 +53,15 @@ public class PatientService {
 	@Autowired
 	private JpaMedicalRecordRepository medicalRecordRepository;
 
+	/** The patient mapper. */
 	@Autowired
 	private PatientMapper patientMapper;
 
+	/** The medical record mapper. */
 	@Autowired
 	private MedicalRecordMapper medicalRecordMapper;
 
+	/** The prescription mapper. */
 	@Autowired
 	private PrescriptionMapper prescriptionMapper;
 
@@ -63,31 +69,42 @@ public class PatientService {
 	@Autowired
 	private JpaPrescriptionRepository prescriptionRepository;
 
+	/**
+	 * Gets the logged user name for logger.
+	 *
+	 * @return the user name
+	 */
 	private String getUserName() {
 		try {
 			User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			return loggedUser.getUsername();
-		}catch (ClassCastException e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private String getUserRole() {
-		try {
-			User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			return loggedUser.getAuthorities().toString();
-		}catch (ClassCastException e){
+		} catch (ClassCastException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	/**
-	 * Get all patient (paged list)
+	 * Gets the logged user role for logger.
+	 *
+	 * @return the user role
+	 */
+	private String getUserRole() {
+		try {
+			User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			return loggedUser.getAuthorities().toString();
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get all active patients paged list
 	 * 
 	 * @param pageable
-	 * @return
+	 *            the pageable
+	 * @return page of patients list
 	 */
 	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedActivePatient(Pageable pageable) {
@@ -107,10 +124,13 @@ public class PatientService {
 	}
 
 	/**
-	 * Get all patient (paged list)
+	 * Get all active patients paged list searched by part of patient id
 	 * 
 	 * @param pageable
-	 * @return
+	 *            the pageable
+	 * @param patientId
+	 *            the patient id
+	 * @return page of patients list
 	 */
 	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<Patient> getAllPatientByPatientId(String patientId, Pageable pageable) {
@@ -127,11 +147,13 @@ public class PatientService {
 	}
 
 	/**
-	 * Get all patient by doctor userName (paged list)
+	 * Get all active patients by doctor user name paged list
 	 *
 	 * @param pageable
+	 *            the pageable
 	 * @param userName
-	 * @return Page<List> of patient
+	 *            the user name of a doctor
+	 * @return Page of patients list
 	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctor(Pageable pageable, String userName) {
@@ -149,6 +171,13 @@ public class PatientService {
 		}
 	}
 
+	/**
+	 * Gets the all active patients by doctor for csv formation.
+	 *
+	 * @param userName
+	 *            the user name of a doctor
+	 * @return the all patients
+	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public List<Object> getAllPagedPatientByDoctorForCsv(String userName) {
 		try {
@@ -166,22 +195,23 @@ public class PatientService {
 
 	}
 
-	/**
-	 * Gets the patient list.
-	 *
-	 * @return the patient list
-	 */
-	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
-	public List<PatientDto> getActivePatientList() {
-		try {
-			IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "fetching active patient list");
-			return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
-		} catch (Exception e) {
-			IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
-					"Error fetching active patient list" + e.getMessage());
-			return null;
-		}
-	}
+	// /**
+	// * Gets the active patients list.
+	// *
+	// * @return the patients list
+	// */
+	// @PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
+	// public List<PatientDto> getActivePatientList() {
+	// try {
+	// IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
+	// "fetching active patient list");
+	// return patientMapper.patiensToDto(patientRepository.findByIsActiveTrue());
+	// } catch (Exception e) {
+	// IsveikataApplication.loggMsg(Level.WARNING, getUserName(), getUserRole(),
+	// "Error fetching active patient list" + e.getMessage());
+	// return null;
+	// }
+	// }
 
 	/**
 	 * Gets the patient.
@@ -208,7 +238,9 @@ public class PatientService {
 	 *
 	 * @param patientId
 	 *            the patient id
-	 * @return the patient record list
+	 * @param pageable
+	 *            the pageable
+	 * @return the page of patient record list
 	 */
 	@PreAuthorize("hasRole('Patient') OR hasRole('Doctor')")
 	public Page<MedicalRecordDto> getPatientRecordList(String patientId, Pageable pageable) {
@@ -231,7 +263,9 @@ public class PatientService {
 	 *
 	 * @param patientId
 	 *            the patient id
-	 * @return the patient prescription list
+	 * @param pageable
+	 *            the pageable
+	 * @return the page of patients prescription list
 	 */
 	@PreAuthorize("hasRole('Patient') OR hasRole('Doctor') OR hasRole('Druggist')")
 	public Page<PrescriptionDto> getPatientPrescriptionList(String patientId, Pageable pageable) {
@@ -252,7 +286,7 @@ public class PatientService {
 	}
 
 	/**
-	 * Gets the patient prescription list.
+	 * Gets the patient after date prescription list.
 	 *
 	 * @param patientId
 	 *            the patient id
@@ -280,12 +314,12 @@ public class PatientService {
 	 *
 	 *
 	 * @param oldPassword
+	 *            raw old password
 	 * @param newPassword
-	 *            the password
+	 *            raw new password
 	 * @param patientId
 	 *            the patient id
-	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 * @return boolean confirmation
 	 */
 	@PreAuthorize("hasRole('Patient')")
 	public boolean updatePatientPassword(String oldPassword, final String newPassword, String patientId) {
@@ -314,6 +348,7 @@ public class PatientService {
 	 *
 	 * @param patient
 	 *            the patient
+	 * @return boolean true if sucess
 	 */
 	@PreAuthorize("hasRole('Admin')")
 	public boolean addNewPatient(Patient patient) {
@@ -323,7 +358,7 @@ public class PatientService {
 				IsveikataApplication.loggMsg(Level.INFO, getUserName(), getUserRole(),
 						"created new patient with id " + patient.getPatientId());
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		} catch (Exception e) {
@@ -335,8 +370,10 @@ public class PatientService {
 
 	/**
 	 * Gets the patient list without doctor.
-	 *
-	 * @return the patient list without doctor
+	 * 
+	 * @param pageable
+	 *            the pageable
+	 * @return the page list of patients without doctor
 	 */
 	@PreAuthorize("hasRole('Admin')")
 	public Page<PatientDto> getPatientListWithoutDoctor(Pageable pageable) {
@@ -366,12 +403,10 @@ public class PatientService {
 	public boolean validateAddNewPatient(Patient patient) {
 		try {
 			if (patientRepository.exists(patient.getPatientId())) {
-				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
-						"patient can not be created");
+				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "patient can not be created");
 				return false;
 			} else {
-				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(),
-						"patient can be created");
+				IsveikataApplication.loggMsg(Level.FINE, getUserName(), getUserRole(), "patient can be created");
 
 				return true;
 			}
@@ -397,10 +432,11 @@ public class PatientService {
 	}
 
 	/**
-	 * Return patient status: active or not.
+	 * Return patient status.
 	 *
 	 * @param patientId
 	 *            the patient id
+	 * @return true if is active
 	 */
 	public boolean isPatientActive(String patientId) {
 		if (patientId.matches("\\d+")) {
@@ -412,17 +448,22 @@ public class PatientService {
 	}
 
 	/**
-	 * Return all active paged patient list by doctor userName and searchValue
-	 * (firstName, lastName, patientId)
-	 *
+	 * Return all active paged patients list by doctor and one of search value:
+	 * <ul>
+	 * <li>first name</li>
+	 * <li>last name</li>
+	 * <li>patient id</li>
+	 * <li>ICD code</li>
+	 * </ul>
+	 * 
 	 * @param pageable
-	 *
+	 *            the pageable
 	 * @param userName
-	 *            doctor userName
+	 *            doctors userName
 	 * @param searchValue
-	 *            searchable value (firstName, lastName, patientId)
+	 *            searchable value (firstName, lastName, patientId, icd code)
 	 *
-	 * @return paged list of patient
+	 * @return page list of patients
 	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctorAndBySearchValue(Pageable pageable, String userName,
@@ -450,19 +491,23 @@ public class PatientService {
 							+ " \r\n" + e.getMessage());
 			return null;
 		}
-
 	}
 
 	/**
-	 * Return all active paged patient list by searchValue (firstName, lastName)
-	 * patientId)
-	 *
+	 * Return all active paged patients list by one of search value:
+	 * <ul>
+	 * <li>first name</li>
+	 * <li>last name</li>
+	 * <li>patient id</li>
+	 * </ul>
+	 * 
 	 * @param pageable
+	 *            the pageable
 	 *
 	 * @param searchValue
 	 *            searchable value (firstName, lastName, patientId)
 	 *
-	 * @return paged list of patient
+	 * @return page list of patients
 	 */
 	@PreAuthorize("hasRole('Admin') OR hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientBySearchValue(Pageable pageable, String searchValue) {
@@ -489,15 +534,20 @@ public class PatientService {
 	}
 
 	/**
-	 * Return all active not bind patient by searchValue (firstName, lastName,
-	 * patientId) patientId)
-	 *
+	 * Return all active not bind patients by one of search value:
+	 * <ul>
+	 * <li>first name</li>
+	 * <li>last name</li>
+	 * <li>patient id</li>
+	 * </ul>
+	 * 
 	 * @param pageable
+	 *            the pageable
 	 *
 	 * @param searchValue
 	 *            searchable value (firstName, lastName, patientId)
 	 *
-	 * @return paged list of patient
+	 * @return page list of patients
 	 */
 	@PreAuthorize("hasRole('Admin')")
 	public Page<PatientDto> getPatientListWithoutDoctorBySearchValue(String searchValue, Pageable pageable) {
@@ -518,10 +568,28 @@ public class PatientService {
 
 	}
 
+	/**
+	 * Gets the page from.
+	 *
+	 * @param pageable
+	 *            the pageable
+	 * @return the page from
+	 */
 	private int getPageFrom(Pageable pageable) {
 		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
 	}
 
+	/**
+	 * Gets the all paged patients by doctor and icd code.
+	 *
+	 * @param pageable
+	 *            the pageable
+	 * @param userName
+	 *            the user name
+	 * @param icdCode
+	 *            the icd code
+	 * @return the page list of patients by doctor and icd code
+	 */
 	@PreAuthorize("hasRole('Doctor')")
 	public Page<PatientDto> getAllPagedPatientByDoctorAndIcdCode(Pageable pageable, String userName, String icdCode) {
 		try {

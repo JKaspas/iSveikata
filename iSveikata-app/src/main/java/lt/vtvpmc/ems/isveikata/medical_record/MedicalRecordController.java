@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The Class MedicalRecordController.
+ * @author DTFG 2018
+ */
 @RestController
 @RequestMapping(value = "/api/record")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MedicalRecordController {
 
+	/** The medical record service. */
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 
@@ -35,6 +40,14 @@ public class MedicalRecordController {
 	}
 
 
+	/**
+	 * Gets the doctor work days statistic.
+	 *
+	 * @param userName the user name
+	 * @param dateFrom the date from
+	 * @param dateTill the date till
+	 * @return the doctor work days statistic
+	 */
 	@GetMapping(value = "/doctor/{userName}/statistic/{dateFrom}/{dateTill}")
 	@ResponseStatus(HttpStatus.OK)
 	private List<Object> getDoctorWorkDaysStatistic(@PathVariable final String userName, @PathVariable final String dateFrom, @PathVariable final String dateTill){

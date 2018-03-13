@@ -28,6 +28,9 @@ import lt.vtvpmc.ems.isveikata.specialization.Specialization;
 
 /**
  * The Class EmployeesService.
+ * @author DTFG 
+ * @version 1.0
+ * @since 2018
  */
 @Service
 @Transactional
@@ -50,28 +53,41 @@ public class EmployeesService {
 	@Autowired
 	private JpaSpecializationRepository specializationRepository;
 
+	/** The doctor mapper. */
 	@Autowired
 	private DoctorMapper doctorMapper;
 
+	/**
+	 * Gets the logged user name for logger.
+	 *
+	 * @return the user name
+	 */
 	private String getUserName() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getUsername();
 	}
 
+	/**
+	 * Gets the logged user role for logger.
+	 *
+	 * @return the user role
+	 */
 	private String getUserRole() {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loggedUser.getAuthorities().toString();
 	}
 
 	/**
-	 * Adds new user.
+	 * Adds new employee to database. <br>
+	 * Checks the received object for correct type, detects the employee type, validates it and saves to database
 	 * 
 	 * @param objectMap
 	 *            the employee, specialization
+	 *            
+	 * @return String message for UI with http status code
 	 */
 	public ResponseEntity<String> addEmployee(Map<String, Object> objectMap) {
-        final ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
-
+        final ObjectMapper mapper = new ObjectMapper(); 
         final Employee employee = mapper.convertValue(objectMap.get("employee"), Employee.class);
         String specializationTitle = mapper.convertValue(objectMap.get("specialization"), String.class);
         Specialization specialization = null;
@@ -190,8 +206,8 @@ public class EmployeesService {
 	}
 
 	/**
-	 * Gets the active doctors list.
-	 *
+	 * Gets the active doctors paged list.
+	 *@param pageable the pageable
 	 * @return the active doctors list
 	 */
 	@PreAuthorize("hasRole('Admin')")
@@ -209,12 +225,12 @@ public class EmployeesService {
 	}
 
 	/**
-	 * Get active Doctor list (paged) by searchValue (firstName, lastName)
+	 * Get active Doctor paged list by search value
 	 * 
 	 * @param searchValue
-	 *            (firstName or lastName)
-	 *
-	 * @return the active doctor list by searchValue
+	 *            first or last doctor's name
+	 *@param pageable the pageable
+	 * @return the active doctor paged list
 	 */
 	public Page<DoctorDto> getActiveDoctorBySearchValue(String searchValue, Pageable pageable) {
 		try {
@@ -233,14 +249,15 @@ public class EmployeesService {
 	}
 
 	/**
-	 * Update user password.
+	 * Update user password. <br> Hashes and updates user password if stored in database matches entered as old one.
 	 *
 	 * @param oldPassword
-	 *            old password
+	 *            old raw password
 	 * @param newPassword
-	 *            new password
+	 *            new raw password 
 	 * @param userName
 	 *            the user name
+	 * @return boolean confirmation 
 	 */
 	@PreAuthorize("hasRole('Admin') or hasRole('Doctor') or hasRole('Druggist')")
 	public boolean updateUserPassword(String oldPassword, final String newPassword, String userName) {
@@ -298,6 +315,7 @@ public class EmployeesService {
 	 * @param userName
 	 *            the user name
 	 */
+	@PreAuthorize("hasRole('Admin')")
 	public void deactivateUser(String userName) {
 		try {
 			Employee emp = employeesRepository.findByUserName(userName);
@@ -313,11 +331,23 @@ public class EmployeesService {
 
 	}
 
-	public boolean isUserActive(String userNanme) {
-		Employee employee = employeesRepository.findByUserName(userNanme);
+	/**
+	 * Checks if is user active.
+	 *
+	 * @param userName the user name
+	 * @return true, if is user active
+	 */
+	public boolean isUserActive(String userName) {
+		Employee employee = employeesRepository.findByUserName(userName);
 		return employee != null ? employee.isActive() : false;
 	}
 
+	/**
+	 * Gets the from page.
+	 *
+	 * @param pageable the pageable
+	 * @return the from page as integer value
+	 */
 	private int getPageFrom(Pageable pageable) {
 		return pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() * pageable.getPageSize();
 	}
