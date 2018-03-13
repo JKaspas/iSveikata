@@ -115,9 +115,14 @@ public class EmployeesController {
 	 *            userName
 	 */
 	@PostMapping("/doctor/new/record")
-	@ResponseStatus(HttpStatus.CREATED)
-	private <T extends Object> void createRecord(@RequestBody Map<String, Object> map) {
-		medicalRecordService.createNewRecord(map);
+	private <T extends Object> ResponseEntity<String> createRecord(@RequestBody Map<String, Object> map) {
+		if(medicalRecordService.createNewRecord(map)){
+			return ResponseEntity.status(HttpStatus.CREATED).body(
+					"Ligos įrašas buvo skemingai sukurtas");
+		}else {
+			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
+					"Ligos įrašas nebuvo sukurtas, dėl netinkamų duomenų");
+		}
 	}
 
 	/**
