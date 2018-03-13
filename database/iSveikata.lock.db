@@ -1,0 +1,6 @@
+#FileLock
+#Tue Mar 13 09:28:01 EET 2018
+hostName=JK
+id=1621e42423c7607c9d35583837cd06dbbc8dbde0e59
+method=file
+server=127.0.1.1\:46331
