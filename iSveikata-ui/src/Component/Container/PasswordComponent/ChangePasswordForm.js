@@ -9,7 +9,7 @@ export const ChangePasswordForm = (props) =>{
                 <div className="form-group">        
                     {props.infoState}
                 </div>
-                <div className={'form-group ' + (props.oldPassword.length === 0 ? 'is-empty' : (props.classNameOldPassword + ' has-feedback'))}>
+                <div className={'form-group has-feedback ' + props.classNameOldPassword}>
                     <label className="control-label col-sm-3" htmlFor="oldPassword">Dabartinis slaptažodis:</label>
                     <div className="col-sm-9">
                         <input  type="password" className="form-control" id="oldPassword" name="oldPassword" 
@@ -21,11 +21,11 @@ export const ChangePasswordForm = (props) =>{
                         onCopy={props.disableActions}
                         // onPaste={props.disableActions}
                         onCut={props.disableActions} />
-                        <span className={props.classNameOldPassword !== 'is-empty' ? (props.classNameOldPassword === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : ''}></span>
+                        <span className={props.classNameOldPassword !== 'is-empty' ? (props.classNameOldPassword === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
                         <span className="help-block">{props.errorMessageOldPassword}</span>
                     </div>
                 </div>
-                <div className={'form-group ' + (props.newPassword.length === 0 ? 'is-empty' : (props.classNameNewPassword + ' has-feedback'))}>
+                <div className={'form-group has-feedback ' + props.classNameNewPassword}>
                     <label className="control-label col-sm-3" htmlFor="newPassword">Naujas slaptažodis:</label>
                     <div className="col-sm-9">
                         <input  type="password" className="form-control" id="newPassword" name="newPassword" 
@@ -37,11 +37,11 @@ export const ChangePasswordForm = (props) =>{
                         onCopy={props.disableActions}
                         onPaste={props.disableActions}
                         onCut={props.disableActions} />
-                        <span className={props.classNameNewPassword !== 'is-empty' ? (props.classNameNewPassword === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : ''}></span>
+                        <span className={props.classNameNewPassword !== 'is-empty' ? (props.classNameNewPassword === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
                         <span className="help-block">{props.errorMessageNewPassword}</span>
                     </div>
                 </div>
-                <div className={'form-group ' + (props.newPasswordRepeat.length === 0 ? 'is-empty' : (props.classNameNewPasswordRepeat + ' has-feedback'))}>
+                <div className={'form-group has-feedback ' + props.classNameNewPasswordRepeat}>
                     <label className="control-label col-sm-3" htmlFor="newPasswordRepeat">Pakartokite naują slaptažodį:</label>
                     <div className="col-sm-9">
                         <input  type="password" className="form-control" id="newPasswordRepeat" name="newPasswordRepeat" 
@@ -53,13 +53,13 @@ export const ChangePasswordForm = (props) =>{
                         onCopy={props.disableActions}
                         onPaste={props.disableActions}
                         onCut={props.disableActions} />
-                        <span className={props.classNameNewPasswordRepeat !== 'is-empty' ? (props.classNameNewPasswordRepeat === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : ''}></span>
+                        <span className={props.classNameNewPasswordRepeat !== 'is-empty' ? (props.classNameNewPasswordRepeat === 'has-success' ? 'glyphicon glyphicon-ok form-control-feedback' : 'glyphicon glyphicon-remove form-control-feedback') : 'form-control-feedback'}></span>
                         <span className="help-block">{props.errorMessageNewPasswordRepeat}</span>
                     </div>
                 </div>
                 <div className="form-group">        
                     <div className="col-sm-offset-3 col-sm-9">
-                        <button id="pasFormNSubmit"type="submit" className="btn btn-primary">Pakeisti</button>
+                        {props.formValid ? <button id="pasFormNSubmit" type="submit" className="btn btn-success">Pakeisti</button> : <button id="pasFormNSubmit" type="submit" className="btn btn-primary">Patvirtinti</button>}
                     </div>
                 </div>
             </form>

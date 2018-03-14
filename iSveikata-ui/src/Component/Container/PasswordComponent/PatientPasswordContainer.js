@@ -55,6 +55,13 @@ export default class PatientPasswordContainer extends Component{
                     oldPassword:'',
                     newPassword:'',
                     newPasswordRepeat:'',
+        
+                    formErrors: {oldPassword: '', newPassword: '', newPasswordRepeat: ''},
+                    fieldState: {oldPassword: 'is-empty', newPassword: 'is-empty', newPasswordRepeat: 'is-empty'},
+                    oldPasswordValid: false,
+                    newPasswordValid: false, 
+                    newPasswordRepeatValid: false,
+                    formValid: false
                 })
             })
             .catch((error) => {
@@ -91,11 +98,26 @@ export default class PatientPasswordContainer extends Component{
         const name = e.target.name;
         const value = e.target.value;
 
-       // if(name === 'newPassword' && this.state.newPasswordRepeat.length !== 0 && this.state.newPasswordRepeat !== value) {
-       //     this.setState({newPassword: value, newPasswordRepeat: ''});
-       // } else {
-            this.setState({[name]: value});
-       // }
+        switch (name) {
+            case 'oldPassword':
+                let oldPassword = this.state.oldPassword;
+                oldPassword = value.replace(/ /g, "");
+                this.setState({oldPassword: oldPassword});   
+                break;
+            case 'newPassword':
+                let newPassword = this.state.newPassword;
+                newPassword = value.replace(/ /g, "");
+                this.setState({newPassword: newPassword});   
+                break; 
+            case 'newPasswordRepeat':
+                let newPasswordRepeat = this.state.newPasswordRepeat;
+                newPasswordRepeat = value.replace(/ /g, "");
+                this.setState({newPasswordRepeat: newPasswordRepeat});   
+                break;   
+            default:
+                this.setState({[name]: value});  
+                break;
+        }
     }
 
     fieldOnFocusHandler = (e) => {
@@ -117,7 +139,7 @@ export default class PatientPasswordContainer extends Component{
             default:
                 break;
         }
-        this.setState({fieldState: fieldValidationState, infoState: ''});
+        this.setState({fieldState: fieldValidationState, infoState: '', formValid: false});
     }
 
     fieldValidationHandler = (e) => {
@@ -232,6 +254,7 @@ export default class PatientPasswordContainer extends Component{
                     errorMessageNewPassword={this.state.formErrors.newPassword}
                     errorMessageNewPasswordRepeat={this.state.formErrors.newPasswordRepeat}
                     infoState={this.state.infoState}
+                    formValid={this.state.formValid}
 
                     oldPassword={this.state.oldPassword}
                     newPassword={this.state.newPassword}
